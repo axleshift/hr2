@@ -2,6 +2,7 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBell,
+  cilBriefcase,
   cilCalculator,
   cilChartPie,
   cilCursor,
@@ -25,6 +26,16 @@ const _nav = [
       color: 'info',
       text: 'NEW',
     },
+  },
+  {
+    component: CNavTitle,
+    name: 'Recruitment',
+  },
+  {
+    component: CNavItem,
+    name: 'Jobposting',
+    to: '/recruitment/jobposting',
+    icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
