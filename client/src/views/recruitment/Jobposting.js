@@ -18,7 +18,8 @@ import {
   CFormTextarea,
   CFormCheck,
   CFormFeedback,
-  CCollapse
+  CCollapse,
+  CButtonGroup,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cibFacebook, cibTwitter, cilChevronBottom, cilChevronTop, cilChevronLeft, cilChevronDoubleLeft, cilChevronRight, cilChevronDoubleRight, cilLocationPin, cilMoney, cilReload, cilIndentDecrease, cilTrash, cilPencil } from '@coreui/icons'
@@ -29,6 +30,7 @@ const Jobposting = () => {
   const [isFormExpanded, setIsFormExpanded] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+  const [isStatus, setStatus] = useState('active')
 
   //
   const [allData, setAllData] = useState([])
@@ -98,7 +100,8 @@ const Jobposting = () => {
     jpfPlatFB: z.boolean().optional(),
     jpfPlatTW: z.boolean().optional(),
     jpfSchedStart: z.preprocess((val) => new Date(val), z.date().min(yesterday, { message: 'Start Date must be today or later' })),
-    jpfSchedEnd: z.preprocess((val) => new Date(val), z.date().min(new Date(), { message: 'End Date must be in the future' }))
+    jpfSchedEnd: z.preprocess((val) => new Date(val), z.date().min(new Date(), { message: 'End Date must be in the future' })),
+    jpfStatus: z.enum(['active', 'inactive'], { message: 'Status is required' }),
 
   })
     .refine((data) => {
@@ -120,12 +123,12 @@ const Jobposting = () => {
     handleSubmit: formHandleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(formSchema),
-    // resolver: async (data, context, options) => {
-    //   const result = await zodResolver(formSchema)(data, context, options);
-    //   console.log("Validation result:", result);
-    //   return result;
-    // },
+    // resolver: zodResolver(formSchema),
+    resolver: async (data, context, options) => {
+      const result = await zodResolver(formSchema)(data, context, options);
+      console.log("Validation result:", result);
+      return result;
+    },
 
   });
 
@@ -150,6 +153,7 @@ const Jobposting = () => {
         facebook: data.jpfPlatFB || false,
         // facebook: false,
         twitter: data.jpfPlatTW || false,
+        status: data.jpfStatus || "active",
       }
       console.log("ID:", data.jpf_id);
       const response = isEdit
@@ -157,7 +161,11 @@ const Jobposting = () => {
         : await post('/jobposting', formattedData)
       console.log(response)
       if (response.status === 200) {
-        alert('Jobposting created successfully')
+        isEdit
+          ? alert('Jobposting updated successfully')
+          : alert('Jobposting created successfully')
+        getAllJobPosting(1,)
+
         formReset()
       }
 
@@ -190,6 +198,7 @@ const Jobposting = () => {
           jpfPlatTW: res.data.twitter,
           jpfSchedStart: formattedDate(res.data.schedule_start),
           jpfSchedEnd: formattedDate(res.data.schedule_end),
+          jpfStatus: res.data.status,
         }
         formReset(formattedData)
       } else {
@@ -218,6 +227,7 @@ const Jobposting = () => {
       jpfPlatTW: false,
       jpfSchedStart: new Date(),
       jpfSchedEnd: new Date(),
+      jpfStatus: 'active',
     }
     formReset(emptyFormData)
   }
@@ -617,57 +627,89 @@ const Jobposting = () => {
                     </CRow>
 
                     {/* Deployment Platform */}
-                    <CRow>
-                      <div>
-                        <strong>Deployment Platform</strong>
-                        <p className='text-muted small'>If leaved empty, will default to Twitter.</p>
-                      </div>
-                    </CRow>
-
-                    <CRow>
-                      <div className='d-flex flex-row gap-3'>
-
-                        {/* <div className='my-3 d-flex justify-content-start align-items-center'>
-                          <input type="checkbox" id='jpfPlatTW' className='btn-check' defaultChecked={false} {...formRegister('jpfPlatTW')} />
-                          <label
-                            htmlFor="jpfPlatTW"
-                            className='btn btn-outline-primary'
-                          >
-                            <span className='px-2'>Twitter</span>
-                            <CIcon icon={cibTwitter}></CIcon>
-                          </label>
-                        </div> */}
-
-
-                        {platformItems.map((item) => (
-                          <div key={item.id}>
-                            <div className='my-3 d-flex justify-content-start align-items-center'>
-                              <input
-                                type='checkbox'
-                                id={item.name}
-                                autoComplete='off'
-                                className='btn-check'
-                                {...formRegister(item.id)} // This should register the checkbox with the correct id
-                                defaultChecked={item.checked} // Reflect the initial state
-                              />
-                              <label
-                                htmlFor={item.name}
-                                className='btn btn-outline-primary'
-                              >
-                                <span className='px-2'>{item.label}</span>
-                                <CIcon icon={item.icon}></CIcon>
-                              </label>
+                    <CRow className='d-flex align-items-center'>
+                      <CCol>
+                        <div>
+                          <strong>Deployment Platform</strong>
+                          <p className='text-muted small'>If leaved empty, will default to Twitter.</p>
+                        </div>
+                        <div className='d-flex flex-row gap-3'>
+                          {platformItems.map((item) => (
+                            <div key={item.id}>
+                              <div className='d-flex justify-content-start align-items-center'>
+                                <input
+                                  type='checkbox'
+                                  id={item.name}
+                                  autoComplete='off'
+                                  className='btn-check'
+                                  {...formRegister(item.id)} // This should register the checkbox with the correct id
+                                  defaultChecked={item.checked} // Reflect the initial state
+                                />
+                                <label
+                                  htmlFor={item.name}
+                                  className='btn btn-outline-primary'
+                                >
+                                  <span className='px-2'>{item.label}</span>
+                                  <CIcon icon={item.icon}></CIcon>
+                                </label>
+                              </div>
+                              {errors[item.id] && (
+                                <CFormFeedback invalid>
+                                  {errors[item.id].message}
+                                </CFormFeedback>
+                              )}
                             </div>
-                            {errors[item.id] && (
-                              <CFormFeedback invalid>
-                                {errors[item.id].message}
-                              </CFormFeedback>
-                            )}
-                          </div>
-                        ))}
+                          ))}
 
-                      </div>
+                        </div>
+                      </CCol>
+                      {
+                        isEdit && (
+                          <CCol>
+                            <div>
+                              <strong>Status</strong>
+                              <p className='text-muted small'>...</p>
+                            </div>
+                            <CButtonGroup role='group' >
+                              <CFormCheck
+                                type='radio'
+                                button={{ color: 'success', variant: 'outline' }}
+                                id="jdfStatusActive"
+                                autoComplete="off"
+                                label="Active"
+                                value="active"
+                                {
+                                ...formRegister('jpfStatus')
+                                }
+                                defaultChecked={formRegister('jpfStatus').value === 'active'}
+                                className='btn btn-primary'
+                              />
+                              <CFormCheck
+                                type='radio'
+                                button={{ color: 'danger', variant: 'outline' }}
+                                id="jdfStatusInactive"
+                                autoComplete="off"
+                                label="Inactive"
+                                value="inactive"
+                                {
+                                ...formRegister('jpfStatus')
+                                }
+                                defaultChecked={formRegister('jpfStatus').value === 'inactive'}
+                                className='btn btn-primary'
+                              />
+                            </CButtonGroup>
+                            {
+                              errors.jpfStatus && (
+                                <p >
+                                  {errors.jpfStatus.message}
+                                </p>
+                              )
+                            }
+                          </CCol>
+                        )
+                      }
                     </CRow>
+
                     <hr />
 
                     {/* Confirmation Check */}

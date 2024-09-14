@@ -218,11 +218,16 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
  */
 const updateJobposting = async (req: any, res: any, next: any) => {
   const { id } = req.params;
+  console.log(req.body);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
       message: "Invalid jobposting id",
     });
+  }
+  let defStatus = "active";
+  if (!req.body.status) {
+    defStatus = "active";
   }
 
   const {
