@@ -204,7 +204,22 @@ const Jobposting = () => {
   const handleEditReset = () => {
     setIsEdit(false)
     setIsFormExpanded(false)
-    formReset()
+    const emptyFormData = {
+      jpf_id: '',
+      jpfTitle: '',
+      jpfType: '',
+      jpfDesc: '',
+      jpfSalaryMin: 0,
+      jpfSalaryMax: 1,
+      jpfLoc: '',
+      jpfBnft: '',
+      jpfReq: '',
+      jpfPlatFB: false,
+      jpfPlatTW: false,
+      jpfSchedStart: new Date(),
+      jpfSchedEnd: new Date(),
+    }
+    formReset(emptyFormData)
   }
 
   const handleCheck = (event) => {
