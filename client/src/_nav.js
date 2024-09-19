@@ -4,6 +4,7 @@ import {
   cilBell,
   cilBriefcase,
   cilCalculator,
+  cilCalendar,
   cilChartPie,
   cilCursor,
   cilDescription,
@@ -15,6 +16,8 @@ import {
   cilStar,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBriefcase } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
   {
@@ -32,11 +35,35 @@ const _nav = [
     name: 'Recruitment',
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: 'Jobposting',
-    to: '/recruitment/jobposting',
-    icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+    // icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+    icon: <FontAwesomeIcon icon={faBriefcase} className='me-3' />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Create & Edit',
+        to: '/recruitment/jobposting',
+      },
+      {
+        component: CNavItem,
+        name: 'Schedules',
+        to: '/recruitment/schedules',
+      }
+    ]
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Jobposter',
+  //   to: '/recruitment/jobposter/66e6d0d7d88a6d191d73f310',
+  //   icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Schedules',
+  //   to: '/recruitment/schedules',
+  //   icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+  // },
   {
     component: CNavTitle,
     name: 'Theme',

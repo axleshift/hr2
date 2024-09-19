@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { set, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import dayjs from 'dayjs'
+import { post, put, get } from '../../api/axios';
+
 import {
   CButton,
   CCard,
@@ -21,11 +25,9 @@ import {
   CCollapse,
   CButtonGroup,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cibFacebook, cibTwitter, cilChevronBottom, cilChevronTop, cilChevronLeft, cilChevronDoubleLeft, cilChevronRight, cilChevronDoubleRight, cilLocationPin, cilMoney, cilReload, cilIndentDecrease, cilTrash, cilPencil } from '@coreui/icons'
-import dayjs from 'dayjs'
-import { post, put, get } from '../../api/axios';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown, faChevronUp, faChevronLeft, faCircleChevronLeft, faChevronRight, faCircleChevronRight, faLocationPin, faMoneyBill, faRefresh, faTrash, faPencil, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
 const Jobposting = () => {
   const [isFormExpanded, setIsFormExpanded] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
@@ -49,44 +51,10 @@ const Jobposting = () => {
   // Display mode
   const [displayMode, setDisplayMode] = useState('grid')
 
-  const [platformItems, setPlatformItems] = useState([
-    {
-      id: 'jpfPlatFB',
-      name: 'Facebook',
-      label: 'Facebook',
-      icon: cibFacebook,
-      checked: false,
-    },
-    {
-      id: 'jpfPlatTW',
-      name: 'Twitter',
-      label: 'Twitter',
-      icon: cibTwitter,
-      checked: true,
-    },
-  ])
-  const formattedDate = (date) => {
-    return dayjs(date).format('YYYY-MM-DD')
-  }
-
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
   const today = new Date()
   const tommorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
 
-  const trimString = (str, maxLength) => {
-    if (str.length > maxLength) {
-      return str.substring(0, maxLength) + '...';
-    }
-    return str;
-  };
-
-  const formatCurency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'PHP',
-      minimumFractionDigits: 0,
-    }).format(value);
-  };
   const formSchema = z.object({
     jpf_id: z.string().optional(),
     jpfTitle: z.string().min(1, { message: 'Job Title is required' }),
@@ -97,8 +65,6 @@ const Jobposting = () => {
     jpfLoc: z.string().min(1, { message: 'Location is required' }),
     jpfBnft: z.string().min(1, { message: 'Benefit is required' }),
     jpfReq: z.string().min(1, { message: 'Requirement is required' }),
-    jpfPlatFB: z.boolean().optional(),
-    jpfPlatTW: z.boolean().optional(),
     jpfSchedStart: z.preprocess((val) => new Date(val), z.date().min(yesterday, { message: 'Start Date must be today or later' })),
     jpfSchedEnd: z.preprocess((val) => new Date(val), z.date().min(new Date(), { message: 'End Date must be in the future' })),
     jpfStatus: z.enum(['active', 'inactive'], { message: 'Status is required' }),
@@ -147,12 +113,8 @@ const Jobposting = () => {
         requirements: data.jpfReq || "none",
         responsibilities: data.jpfResp || "none",
         benefits: data.jpfBnft || "none",
-        status: true,
         schedule_start: data.jpfSchedStart,
         schedule_end: data.jpfSchedEnd,
-        facebook: data.jpfPlatFB || false,
-        // facebook: false,
-        twitter: data.jpfPlatTW || false,
         status: data.jpfStatus || "active",
       }
       console.log("ID:", data.jpf_id);
@@ -194,13 +156,12 @@ const Jobposting = () => {
           jpfBnft: res.data.benefits,
           jpfReq: res.data.requirements,
           // jpfResp: res.data.responsibilities,
-          jpfPlatFB: res.data.facebook,
-          jpfPlatTW: res.data.twitter,
           jpfSchedStart: formattedDate(res.data.schedule_start),
           jpfSchedEnd: formattedDate(res.data.schedule_end),
           jpfStatus: res.data.status,
         }
         formReset(formattedData)
+        window.scrollTo(0, 0)
       } else {
         alert('Error getting jobposting')
       }
@@ -223,8 +184,6 @@ const Jobposting = () => {
       jpfLoc: '',
       jpfBnft: '',
       jpfReq: '',
-      jpfPlatFB: false,
-      jpfPlatTW: false,
       jpfSchedStart: new Date(),
       jpfSchedEnd: new Date(),
       jpfStatus: 'active',
@@ -249,9 +208,10 @@ const Jobposting = () => {
         console.log("All Date: ", res.data)
 
         setAllData(res.data)
-        setIsLoading(false)
         setCurrentPage(res.currentPage)
         setTotalPages(res.totalPages)
+        setIsLoading(false)
+
       } else {
         alert('Error getting jobposting')
         console.log("Error: ", res.data)
@@ -338,7 +298,7 @@ const Jobposting = () => {
 
   return (
     <>
-      <CContainer className='d-flex flex-column gap-3 my-3'>
+      <CContainer className='d-flex flex-column gap-3 mb-3'>
         <CRow>
           <CContainer>
             <CCard>
@@ -366,7 +326,7 @@ const Jobposting = () => {
                         onClick={() => handleEditReset()}
                         className='btn btn-danger w-30'
                       >
-                        <CIcon icon={cilTrash}></CIcon>
+                        <FontAwesomeIcon icon={faTrash} />
                       </CButton>
                     }
                     <CButton
@@ -374,7 +334,11 @@ const Jobposting = () => {
                       onClick={() => setIsFormExpanded(!isFormExpanded)}
                       className='btn btn-primary w-30'
                     >
-                      {isFormExpanded ? <CIcon icon={cilChevronTop} /> : <CIcon icon={cilChevronBottom} />}
+                      {
+                        isFormExpanded
+                          ? <FontAwesomeIcon icon={faChevronUp} />
+                          : <FontAwesomeIcon icon={faChevronDown} />
+                      }
                     </CButton>
 
                   </div>
@@ -593,7 +557,7 @@ const Jobposting = () => {
                       <CCol>
                         <div className='mb-3'>
                           <CFormLabel htmlFor='jpfSchedStart'>Start</CFormLabel>
-                          <CFormInput type='date' id='jpfSchedStart' value={formattedDate(today)} {
+                          <CFormInput type='date' id='jpfSchedStart' defaultValue={formattedDate(today)} {
                             ...formRegister('jpfSchedStart', { valueAsDate: true })
                           }
                             invalid={!!errors.jpfSchedStart}
@@ -610,7 +574,7 @@ const Jobposting = () => {
                       <CCol>
                         <div className='mb-3'>
                           <CFormLabel htmlFor='jpfSchedEnd'>Expire</CFormLabel>
-                          <CFormInput type='date' id='jpfSchedEnd' value={formattedDate(tommorrow)} {
+                          <CFormInput type='date' id='jpfSchedEnd' defaultValue={formattedDate(tommorrow)} {
                             ...formRegister('jpfSchedEnd', { valueAsDate: true })
                           }
                             invalid={!!errors.jpfSchedEnd}
@@ -625,93 +589,7 @@ const Jobposting = () => {
                         </div>
                       </CCol>
                     </CRow>
-
-                    {/* Deployment Platform */}
-                    <CRow className='d-flex align-items-center'>
-                      <CCol>
-                        <div>
-                          <strong>Deployment Platform</strong>
-                          <p className='text-muted small'>If leaved empty, will default to Twitter.</p>
-                        </div>
-                        <div className='d-flex flex-row gap-3'>
-                          {platformItems.map((item) => (
-                            <div key={item.id}>
-                              <div className='d-flex justify-content-start align-items-center'>
-                                <input
-                                  type='checkbox'
-                                  id={item.name}
-                                  autoComplete='off'
-                                  className='btn-check'
-                                  {...formRegister(item.id)} // This should register the checkbox with the correct id
-                                  defaultChecked={item.checked} // Reflect the initial state
-                                />
-                                <label
-                                  htmlFor={item.name}
-                                  className='btn btn-outline-primary'
-                                >
-                                  <span className='px-2'>{item.label}</span>
-                                  <CIcon icon={item.icon}></CIcon>
-                                </label>
-                              </div>
-                              {errors[item.id] && (
-                                <CFormFeedback invalid>
-                                  {errors[item.id].message}
-                                </CFormFeedback>
-                              )}
-                            </div>
-                          ))}
-
-                        </div>
-                      </CCol>
-                      {
-                        isEdit && (
-                          <CCol>
-                            <div>
-                              <strong>Status</strong>
-                              <p className='text-muted small'>...</p>
-                            </div>
-                            <CButtonGroup role='group' >
-                              <CFormCheck
-                                type='radio'
-                                button={{ color: 'success', variant: 'outline' }}
-                                id="jdfStatusActive"
-                                autoComplete="off"
-                                label="Active"
-                                value="active"
-                                {
-                                ...formRegister('jpfStatus')
-                                }
-                                defaultChecked={formRegister('jpfStatus').value === 'active'}
-                                className='btn btn-primary'
-                              />
-                              <CFormCheck
-                                type='radio'
-                                button={{ color: 'danger', variant: 'outline' }}
-                                id="jdfStatusInactive"
-                                autoComplete="off"
-                                label="Inactive"
-                                value="inactive"
-                                {
-                                ...formRegister('jpfStatus')
-                                }
-                                defaultChecked={formRegister('jpfStatus').value === 'inactive'}
-                                className='btn btn-primary'
-                              />
-                            </CButtonGroup>
-                            {
-                              errors.jpfStatus && (
-                                <p >
-                                  {errors.jpfStatus.message}
-                                </p>
-                              )
-                            }
-                          </CCol>
-                        )
-                      }
-                    </CRow>
-
                     <hr />
-
                     {/* Confirmation Check */}
                     <CRow>
                       <div className='ml-5 mb-3 d-flex justify-content-end'>
@@ -778,7 +656,7 @@ const Jobposting = () => {
                     Search
                   </CButton>
                   <CButton onClick={() => resetData()} type='button' className='btn btn-primary'>
-                    <CIcon icon={cilReload}></CIcon>
+                    <FontAwesomeIcon icon={faRefresh} />
                   </CButton>
                 </CForm>
 
@@ -824,13 +702,19 @@ const Jobposting = () => {
                                           <CCardBody>
                                             <div className='d-flex flex-column justify-content-between'>
                                               <div className='d-flex flex-row gap-2 justify-content-start'>
-                                                <CIcon icon={cilLocationPin} />
+                                                <FontAwesomeIcon icon={faLocationPin} />
                                                 <p>
-                                                  {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                                                  {data.location}
                                                 </p>
                                               </div>
                                               <div className='d-flex flex-row gap-2 justify-content-start'>
-                                                <CIcon icon={cilMoney} />
+                                                <FontAwesomeIcon icon={faCalendar} />
+                                                <p>
+                                                  {formattedDateMMM(data.schedule_start)} - {formattedDateMMM(data.schedule_end)}
+                                                </p>
+                                              </div>
+                                              <div className='d-flex flex-row gap-2 justify-content-start'>
+                                                <FontAwesomeIcon icon={faMoneyBill} />
                                                 <p>
                                                   {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
                                                 </p>
@@ -848,7 +732,7 @@ const Jobposting = () => {
                                           <CCardFooter>
                                             <div className='d-flex justify-content-end'>
                                               <CButton onClick={() => handleEdit(data._id)} className='btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center' >
-                                                <CIcon icon={cilPencil} />
+                                                <FontAwesomeIcon icon={faPencil} />
                                                 Edit
                                               </CButton>
                                             </div>
@@ -884,13 +768,19 @@ const Jobposting = () => {
                                         </p>
                                       </div>
                                       <div className='d-flex flex-row gap-2 justify-content-start'>
-                                        <CIcon icon={cilLocationPin} />
+                                        <FontAwesomeIcon icon={faLocationPin} />
+                                        <div>
+                                          {data.location}
+                                        </div>
+                                      </div>
+                                      <div className='d-flex flex-row gap-2 justify-content-start'>
+                                        <FontAwesomeIcon icon={faCalendar} />
                                         <p>
-                                          {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                                          {formattedDateMMM(data.schedule_start)} - {formattedDateMMM(data.schedule_end)}
                                         </p>
                                       </div>
                                       <div className='d-flex flex-row gap-2 justify-content-start'>
-                                        <CIcon icon={cilMoney} />
+                                        <FontAwesomeIcon icon={faMoneyBill} />
                                         <p>
                                           {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
                                         </p>
@@ -906,7 +796,7 @@ const Jobposting = () => {
                                       <div className='d-flex justify-content-end'>
                                         <div className='d-flex justify-content-end'>
                                           <CButton onClick={() => handleEdit(data._id)} className='btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center' >
-                                            <CIcon icon={cilPencil} />
+                                            <FontAwesomeIcon icon={faPencil} />
                                             Edit
                                           </CButton>
                                         </div>
@@ -927,21 +817,21 @@ const Jobposting = () => {
               </CCardBody>
               <CCardFooter className='d-flex flex-row gap-2 justify-content-center align-items-center'>
                 <CButton onClick={() => handlePageChange('firstPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
-                  <CIcon icon={cilChevronDoubleLeft} />
+                  <FontAwesomeIcon icon={faCircleChevronLeft} />
                 </CButton>
 
                 <CButton onClick={() => handlePageChange('prevPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
-                  <CIcon icon={cilChevronLeft} />
+                  <FontAwesomeIcon icon={faChevronLeft} />
                 </CButton>
                 <p>
                   Page {currentPage} of {totalPages}
                 </p>
 
                 <CButton onClick={() => handlePageChange('nextPage')} disabled={currentPage === totalPages && true} className='btn btn-outline-primary'>
-                  <CIcon icon={cilChevronRight} />
+                  <FontAwesomeIcon icon={faChevronRight} />
                 </CButton>
                 <CButton onClick={() => handlePageChange('lastPage')} disabled={currentPage === totalPages && true} className='btn btn-outline-primary'>
-                  <CIcon icon={cilChevronDoubleRight} />
+                  <FontAwesomeIcon icon={faCircleChevronRight} />
                 </CButton>
               </CCardFooter>
             </CCard>

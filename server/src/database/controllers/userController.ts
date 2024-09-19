@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { Document, Types } from "mongoose";
 import { hasher } from "../../utils/hasher";
 
 import User from "../models/userModel";
@@ -91,6 +90,9 @@ const verifyUser = async (req: any, res: any, next: any) => {
     };
     console.log(data);
 
+    // Store the token in the session
+    req.session.jwt = token;
+
     res.status(200).json({
       status: 200,
       message: "User verified successfully",
@@ -105,27 +107,4 @@ const verifyUser = async (req: any, res: any, next: any) => {
   }
 };
 
-/**
- * Verifies the validity of a JWT token.
- *
- * @param req - The HTTP request object.
- * @param res - The HTTP response object.
- * @param next - The next middleware function.
- * @returns - If the token is valid, a 200 status response with a "Authenticated" message. If the token is invalid, a 401 status response with an "Invalid credentials" message. If an error occurs, a 500 status response with an "Internal Server Error" message.
- */
-const checkToken = async (req: any, res: any, next: any) => {
-  const token = req.body.token;
-  try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (decodedToken) {
-      res.status(200).json({ status: 200, message: "Authenticated" });
-    } else {
-      res.status(401).json({ message: "Invalid credentials" });
-    }
-  } catch (error) {
-    console.error("Error executing query:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
-export { createUser, verifyUser, checkToken };
+export { createUser, verifyUser };

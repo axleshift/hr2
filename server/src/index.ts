@@ -1,4 +1,5 @@
 import express, { Express, Request, Response, Application } from "express";
+import session from "express-session";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
@@ -6,8 +7,13 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import fs from "fs";
 import path from "path";
-import verifyJWT from "./middleware/verifyJWT";
+// import verifyJWT from "./middleware/verifyJWT";
 import mongoose from "mongoose";
+import pinoHttp from "pino-http";
+import logger from "./middleware/logger";
+import verifySession from "./middleware/verifySession";
+import { encryptRes, decryptReq } from "./middleware/bfEncryption";
+import startJobs from "./jobs";
 
 //For env File
 dotenv.config();
@@ -29,7 +35,19 @@ initializeFolders();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "defaultSessionSecret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 app.use(helmet());
+app.use(pinoHttp({ logger }));
 /**
  * VERY IMPORTANT:
  * Configures a rate limiter middleware for the Express application.
@@ -57,24 +75,25 @@ mongoose
   .connect(process.env.MONGODB_URI!)
   .then(() => {
     // import routes in routes folder
-
     const routeFolder = path.join(__dirname, "routes");
-    const jwtExceptions = ["login", "register", "check-auth"];
+    const sessionExceptions = ["login", "register", "check-auth"];
     try {
       fs.readdirSync(routeFolder).forEach((file) => {
         const routePath = path.join(routeFolder, file);
         const route = require(routePath);
         const filename = path.basename(routePath, ".ts");
-        app.use(`/${filename}`, route.default);
-        // if (jwtExceptions.includes(filename)) {
-        //   app.use(`/${filename}`, route.default);
-        // } else {
-        //   app.use(`/${filename}`, verifyJWT, route.default);
-        // }
-        console.log(`Route ${filename} loaded`);
+        // app.use(`/${filename}`, route.default);
+        if (
+          sessionExceptions.includes(filename) ||
+          process.env.NODE_ENV !== "production"
+        ) {
+          app.use(`/${filename}`, route.default);
+        } else {
+          app.use(`/${filename}`, verifySession, route.default);
+        }
+        logger.info(`Route ${filename} loaded`);
       });
     } catch (error) {
-      console.log(`Error: ${error}`);
       fs.writeFileSync(
         path.join(logFolder, `${date}.log`),
         `Error: ${error}\n`,
@@ -83,11 +102,12 @@ mongoose
         }
       );
     }
-    console.log("Connected to MongoDB");
+    logger.info("Connected to MongoDB");
+    startJobs();
     app.listen(port, () => {
-      console.log(`Server is Fire at http://localhost:${port}`);
+      logger.info(`Server is Fire at http://localhost:${port}`);
     });
   })
   .catch((err) => {
-    console.log(err);
+    logger.error(err);
   });

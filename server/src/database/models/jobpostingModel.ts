@@ -54,16 +54,6 @@ const jobpostingSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    facebook: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    twitter: {
-      type: Boolean,
-      required: true,
-      default: true,
-    },
   },
   {
     timestamps: true,

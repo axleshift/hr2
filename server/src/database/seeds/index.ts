@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import logger from "../../middleware/logger";
 
 const currentDir = __dirname;
 
@@ -19,7 +20,7 @@ const runSeeds = async () => {
         await module.default();
       }
     }
-    console.log("All seeds executed successfully");
+    logger.info("Seeds ran successfully");
   } catch (error) {
     console.error("Error running seeds:", error);
   }

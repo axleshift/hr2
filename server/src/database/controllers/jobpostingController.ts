@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Jobposting from "../models/jobpostingModel";
+import logger from "../../middleware/logger";
 
 /**
  * Creates a new job posting in the database.
@@ -24,8 +25,6 @@ const createJobposting = async (req: any, res: any, next: any) => {
     status,
     schedule_start,
     schedule_end,
-    facebook,
-    twitter,
   } = req.body;
 
   try {
@@ -43,8 +42,6 @@ const createJobposting = async (req: any, res: any, next: any) => {
       status,
       schedule_start,
       schedule_end,
-      facebook,
-      twitter,
     });
     res.status(200).json({
       status: 200,
@@ -52,7 +49,7 @@ const createJobposting = async (req: any, res: any, next: any) => {
       jobposting,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error creating jobposting:", error);
     res.status(500).json({
       status: 500,
       message: "Error creating jobposting",
@@ -61,6 +58,14 @@ const createJobposting = async (req: any, res: any, next: any) => {
   }
 };
 
+/**
+ * Searches for job postings in the database based on the search query.
+ *
+ * @param req - The HTTP request object containing the search query.
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the search results.
+ */
 const searchJobpostings = async (req: any, res: any, next: any) => {
   const searchQuery = req.query.query;
   const page = parseInt(req.query.page) || 1;
@@ -97,7 +102,7 @@ const searchJobpostings = async (req: any, res: any, next: any) => {
       currentPage: page,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error retrieving jobpostings:", error);
     res.status(500).json({
       status: 500,
       message: "Error retrieving jobpostings",
@@ -131,7 +136,7 @@ const getAllJobpostings = async (req: any, res: any, next: any) => {
       currentPage: page,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error retrieving job postings:", error);
     res.status(500).json({
       status: 500,
       message: "Error retrieving job postings",
@@ -140,37 +145,76 @@ const getAllJobpostings = async (req: any, res: any, next: any) => {
   }
 };
 
-const getAllSheduledJobpostings = async (req: any, res: any, next: any) => {
+/**
+ * Retrieves job postings from the database with sorting and filtering based on status.
+ *
+ * @param req - The HTTP request object containing query parameters:
+ *              - start: The start date for filtering job postings.
+ *              - end: The end date for filtering job postings.
+ *              - page: The current page for pagination (defaults to 1).
+ *              - limit: The maximum number of results per page (defaults to 9).
+ *              - sort: Sorting order, either 'asc' or 'desc' (defaults to 'asc').
+ *              - filter: Job status filter, either 'all', 'active', or 'inactive' (defaults to 'all').
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the filtered, sorted, and paginated job postings.
+ */
+
+const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
   try {
+    // Extracting query parameters
+    // I prolly should do more commenting so I don't forget what I did lol
+    // also, for whoever is reading this, I'm sorry for the mess
+    const startDate = req.query.start || new Date();
+    const endDate = req.query.end || new Date();
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 9;
     const skip = (page - 1) * limit;
-    // const startDate = req.query.startDate;
-    // const endDate = req.query.endDate;
-    const today = new Date();
 
-    const totalJobpostings = await Jobposting.countDocuments({
-      schedule_start: { $lte: today },
-      schedule_end: { $gte: today },
+    // Sorting order: 1 for 'asc', -1 for 'desc'
+    const sortOrder = req.query.sort === "desc" ? -1 : 1;
+    // Filter by job status (default: 'all') with Enim: ['active', 'inactive', 'all']
+    const filter = req.query.filter || "all";
+
+    // Build the filter query based on statuss
+    let statusFilter: any = {};
+    if (filter !== "all") {
+      statusFilter = { status: filter };
+    }
+
+    // Query the total number of filtered job postings
+    const totalJobPostings = await Jobposting.countDocuments({
+      schedule_start: { $gte: startDate },
+      schedule_end: { $lte: endDate },
+      ...statusFilter,
     });
 
+    // Query the filtered, sorted, and paginated job postings
     const data = await Jobposting.find({
-      schedule_start: { $lte: today },
-      schedule_end: { $gte: today },
+      schedule_start: { $gte: startDate },
+      schedule_end: { $lte: endDate },
+      ...statusFilter,
     })
+      .sort({ schedule_start: sortOrder }) // Sorting by schedule_start
       .skip(skip)
       .limit(limit);
 
+    // Sending the response
     res.status(200).json({
       status: 200,
       message: "Job postings retrieved successfully",
+      startDate,
+      endDate,
       data,
-      total: totalJobpostings,
-      totalPages: Math.ceil(totalJobpostings / limit),
+      total: totalJobPostings,
+      totalPages: Math.ceil(totalJobPostings / limit),
       currentPage: page,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error retrieving job postings:", error);
+    res
+      .status(500)
+      .json({ status: 500, message: "Error retrieving job postings" });
   }
 };
 
@@ -184,7 +228,6 @@ const getAllSheduledJobpostings = async (req: any, res: any, next: any) => {
  */
 const getJobpostingById = async (req: any, res: any, next: any) => {
   const { id } = req.params;
-  console.log(id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
       message: "Invalid jobposting id",
@@ -199,7 +242,7 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
       data: jobposting,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error retrieving jobposting:", error);
     res.status(500).json({
       status: 500,
       message: "Error retrieving jobposting",
@@ -218,7 +261,6 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
  */
 const updateJobposting = async (req: any, res: any, next: any) => {
   const { id } = req.params;
-  console.log(req.body);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
@@ -244,8 +286,6 @@ const updateJobposting = async (req: any, res: any, next: any) => {
     status,
     schedule_start,
     schedule_end,
-    facebook,
-    twitter,
   } = req.body;
   try {
     const jobposting = await Jobposting.findByIdAndUpdate(
@@ -264,8 +304,6 @@ const updateJobposting = async (req: any, res: any, next: any) => {
         status,
         schedule_start,
         schedule_end,
-        facebook,
-        twitter,
       },
       { new: true }
     );
@@ -275,7 +313,6 @@ const updateJobposting = async (req: any, res: any, next: any) => {
       jobposting: jobposting,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       status: 500,
       message: "Error updating jobposting",
@@ -284,6 +321,14 @@ const updateJobposting = async (req: any, res: any, next: any) => {
   }
 };
 
+/**
+ * Deletes a job posting from the database.
+ *
+ * @param req - The HTTP request object, which should contain the `id` parameter in the URL path.
+ * @param res - The HTTP response object, which will be used to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response indicating whether the job posting was deleted successfully.
+ */
 const deleteJobposting = async (req: any, res: any, next: any) => {
   const { id } = req.params;
 
@@ -301,7 +346,7 @@ const deleteJobposting = async (req: any, res: any, next: any) => {
       jobposting: jobposting,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error deleting jobposting:", error);
     res.status(500).json({
       status: 500,
       message: "Error deleting jobposting",
@@ -314,7 +359,7 @@ export {
   createJobposting,
   searchJobpostings,
   getAllJobpostings,
-  getAllSheduledJobpostings,
+  getAllScheduledJobpostings,
   getJobpostingById,
   updateJobposting,
   deleteJobposting,

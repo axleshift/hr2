@@ -1,17 +1,14 @@
-import { scrypt } from "node:crypto";
+import logger from "../middleware/logger";
+import bcrypt from "bcryptjs";
 
-const hasher = async (string: string, salt: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    scrypt(string, salt, 64, (err, derivedKey) => {
-      if (err) {
-        console.error("Error hashing string:", err);
-        reject(err);
-        return;
-      }
-      const hashedString = derivedKey.toString("hex");
-      // console.log("Hashed String:", hashedString);
-      resolve(hashedString);
-    });
-  });
+const hasher = async (password: string, salt: string) => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+  } catch (error) {
+    logger.error("Error hashing password:", error);
+    throw new Error("Error hashing password");
+  }
 };
+
 export { hasher };

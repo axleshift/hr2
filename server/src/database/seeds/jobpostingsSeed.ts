@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { faker } from "@faker-js/faker";
 import JobPosting from "../models/jobpostingModel";
+import JobPoster from "../models/jobposterModel";
+import logger from "../../middleware/logger";
 
 dotenv.config();
 
@@ -40,8 +42,6 @@ const createFakeJobPosting = () => {
     status: "inactive",
     schedule_start: faker.date.soon(),
     schedule_end: faker.date.future(),
-    facebook: faker.datatype.boolean(),
-    twitter: faker.datatype.boolean(),
   };
 };
 
@@ -50,16 +50,17 @@ const multiplier = 100;
 const seedJobposting = async () => {
   try {
     await JobPosting.deleteMany();
+    await JobPoster.deleteMany();
     const fakeJobPostings = Array.from(
       { length: multiplier },
       createFakeJobPosting
     );
     await JobPosting.insertMany(fakeJobPostings);
-    console.log("Jobposting seeded successfully!");
+    logger.info(`Seeded ${multiplier} job postings`);
     mongoose.connection.close();
     return true;
   } catch (error) {
-    console.error("Error seeding Jobposting:", error);
+    logger.error("Error seeding job postings:", error);
     mongoose.connection.close();
     return false;
   }

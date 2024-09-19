@@ -1,0 +1,474 @@
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { post, get } from '../../api/axios';
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardText,
+  CCardHeader,
+  CCardFooter,
+  CContainer,
+  CRow,
+  CCol,
+  CForm,
+  CFormInput,
+  CFormLabel,
+  CFormTextarea,
+  CFormCheck,
+  CFormFeedback,
+  CCollapse,
+  CButtonGroup,
+  CBadge,
+  CTooltip,
+  CNav,
+  CNavItem,
+} from '@coreui/react'
+
+import { faChevronDown, faChevronUp, faChevronLeft, faCircleChevronLeft, faChevronRight, faCircleChevronRight, faLocationPin, faMoneyBill, faRefresh, faTrash, faPencil, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { formatCurency, formattedDateMMM, trimString } from '../../utils';
+
+const Jobposter = () => {
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [trackerData, setTrackerData] = useState([]);
+  const [expand, setExpand] = useState({
+    jobposting: true,
+    jobposter: true,
+    schedules: false,
+  })
+  const [edit, setEdit] = useState({
+    twitter: false,
+    facebook: false,
+  });
+
+  const handleExpand = (card) => {
+    setExpand({ ...expand, [card]: !expand[card] });
+  }
+
+  const getData = async () => {
+    try {
+      setIsLoading(true);
+      const res = await get(`/jobposting/${id}`);
+      console.log(res.data);
+      setData(res.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTrackerData = async () => {
+    try {
+      const res = await get(`/jobposter/${id}`);
+      console.log("getTrackerData:", res.data);
+      if (res.status === 200) {
+        setTrackerData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteTrackerData = async (id) => {
+    try {
+      const res = await post(`/jobposter/${id}/delete`);
+      console.log("deleteTrackerData:", res);
+      if (res.status === 200) {
+        alert('Deleted successfully');
+        getData();
+        getTrackerData();
+      } else {
+        alert('Failed to delete');
+      }
+      getTrackerData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const twitterFormSchema = z.object({
+    twitterText: z.string()
+      .min(1, { message: 'Please enter a valid text' })
+      .max(280, { message: 'Max of 280 characters' })
+      .optional(),
+  });
+
+  const {
+    register: twitterRegister,
+    reset: twitterReset,
+    handleSubmit: twitterHandleSubmit,
+    formState: { errors: twitterErrors }
+  } = useForm({
+    resolver: async (data, context, options) => {
+      const result = await zodResolver(twitterFormSchema)(data, context, options);
+      console.log("Validation result:", result);
+      return result;
+    },
+  });
+
+  const facebookFormSchema = z.object({
+    text: z.string()
+      .min(1, { message: 'Please enter a valid text' })
+      .optional(),
+  });
+
+  const {
+    register: facebookRegister,
+    handleSubmit: facebookHandleSubmit,
+    formState: { errors: facebookErrors }
+  } = useForm({
+    resolver: async (data, context, options) => {
+      const result = await zodResolver(facebookFormSchema)(data, context, options);
+      console.log("Validation result:", result);
+      return result;
+    },
+  });
+
+  const submitSummary = async (data) => {
+    try {
+      const content = {
+        twitter: data.twitterText,
+        facebook: data.facebookText,
+      }
+      const res = await post(`/jobposter/${id}/post`, content);
+      if (res.status === 200) {
+        alert('Posted successfully');
+        getData();
+        getTrackerData();
+      } else {
+        console.log('submitSummary: ', res);
+        alert('Failed to post');
+      }
+    } catch (error) {
+      // console.log("ERROR", error);
+      alert('Failed to post');
+    }
+  }
+
+  const editSummary = async (item, platform) => {
+    try {
+      if (platform === 'twitter') {
+        const content = {
+          twitterText: item.content,
+        }
+        setEdit((prevEdit) => ({ ...prevEdit, twitter: true }));
+        twitterReset(content);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    getData();
+    getTrackerData();
+  }, []);
+
+  return (
+    <>
+      {
+        isLoading
+          ? <div>Loading...</div>
+          : <CContainer className='d-flex flex-column gap-2 mb-3'>
+            <CRow>
+              <CCol>
+                <CCard>
+                  <CCardHeader className='d-flex flex-row justify-content-between align-items-center'>
+                    <strong>
+                      Jobposter
+                    </strong>
+                    <CButton color="primary" onClick={() => handleExpand('jobposting')}>
+                      <FontAwesomeIcon icon={expand.jobposting ? faChevronUp : faChevronDown} />
+                    </CButton>
+                  </CCardHeader>
+                  <CCollapse visible={expand.jobposting}>
+                    <CCardBody className='d-flex flex-column gap-2'>
+                      <CRow>
+                        {
+                          data.status?.toLowerCase() === 'active'
+                            ? (
+                              <p style={{ fontSize: '10px' }} className='text-muted'>
+                                This is an
+                                <CBadge color='success' shape='rounded-pill' className='mx-2'>
+                                  Active
+                                </CBadge>
+                                job posting.
+                                This means that the job is currently open and accepting applications and already posted on the job board.
+                              </p>
+                            )
+                            : (
+                              <p style={{ fontSize: '10px' }} className='text-muted'>
+                                This is an
+                                <CBadge color='danger' shape='rounded-pill' className='mx-2'>
+                                  Inactive
+                                </CBadge>
+                                job posting.
+                                This means that the job posting is currently closed and not accepting applications.
+                              </p>
+                            )
+                        }
+                      </CRow>
+                      <CRow>
+                        <div className='h5'>
+                          {data.title}
+                        </div>
+                        <div className='d-flex flex-row gap-2 align-items-center'>
+                          <FontAwesomeIcon icon={faLocationPin} />
+                          <div>
+                            {data.location}
+                          </div>
+                        </div>
+                      </CRow>
+                      <CRow>
+                        <div className='d-flex flex-row gap-2 align-items-center'>
+                          <FontAwesomeIcon icon={faMoneyBill} />
+                          <div>
+                            {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                          </div>
+                        </div>
+                      </CRow>
+                      <CRow>
+                        <div className='d-flex flex-row gap-2 align-items-center'>
+                          <FontAwesomeIcon icon={faCalendar} />
+                          <div>
+                            {formattedDateMMM(data.schedule_start)} - {formattedDateMMM(data.schedule_end)}
+                          </div>
+                        </div>
+                      </CRow>
+                      <hr />
+                      <CRow>
+                        <div>
+                          <strong>
+                            Description
+                          </strong>
+                          <div>
+                            {data.description}
+                          </div>
+                        </div>
+                      </CRow>
+                      <CRow>
+                        <div>
+                          <strong>
+                            Requirements
+                          </strong>
+                          <div>
+                            {data.requirements}
+                          </div>
+                        </div>
+                      </CRow>
+                      <CRow>
+                        <div>
+                          <strong>
+                            Benefits
+                          </strong>
+                          <div>
+                            {data.benefits}
+                          </div>
+                        </div>
+                      </CRow>
+
+                    </CCardBody>
+                  </CCollapse>
+                </CCard>
+              </CCol>
+            </CRow>
+
+            <CRow>
+              <CCol>
+                <CCard>
+                  <CCardHeader className='d-flex flex-row justify-content-between align-items-center'>
+                    <strong>
+                      Create Post
+                    </strong>
+                    <CButton color="primary" onClick={() => handleExpand('jobposter')}>
+                      <FontAwesomeIcon icon={expand.jobposter ? faChevronUp : faChevronDown} />
+                    </CButton>
+                  </CCardHeader>
+                  <CCollapse visible={expand.jobposter}>
+                    <CCardBody>
+                      {/* Twitter Post */}
+                      <CForm
+                        onSubmit={twitterHandleSubmit(submitSummary)}
+                        className='d-flex flex-column gap-2'
+                      >
+                        <div>
+                          <strong>
+                            Review Post
+                          </strong>
+                          <p className='text-muted'>
+                            If left blank, the default text will be used.
+                          </p>
+                        </div>
+                        <div>
+                          <CFormLabel className='d-flex flex-row gap-2 justify-items-center'>
+                            <FontAwesomeIcon icon={faTwitter} className='text-info' />
+                            <strong>
+                              Create Twitter Post (280 characters)
+                            </strong>
+                          </CFormLabel>
+                          <CFormTextarea
+                            id='twitterText'
+                            name='twitterText'
+                            placeholder='Twitter Post description..'
+                            defaultValue={
+                              `NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurency(data.salary_min)} - ${formatCurency(data.salary_max)}\n=====\nPM me for more details!`
+                            }
+                            {...twitterRegister('twitterText')}
+                            invalid={!!twitterErrors.twitterText}
+                            className='mh-100'
+                          />
+                          <div style={{ fontSize: '10px' }} className='text-muted mb-3'>
+                            This summary will be posted on <span className='text-info'>
+                              twitter</span>, with a character limit of 280 characters. Due to this limitation, we recommend keeping the summary short and sweet.
+                          </div>
+                          {twitterErrors.twitterText && <CFormFeedback invalid>{twitterErrors.twitterText.message}</CFormFeedback>}
+                        </div>
+                        <div className='d-flex justify-content-end'>
+                          <CButton
+                            color='primary'
+                            type='submit'
+                            className='mb-3'
+                          >
+                            Post Tweet
+                          </CButton>
+                        </div>
+                      </CForm>
+                      {/* Facebook Post */}
+                      {/* <CForm
+                        onSubmit={facebookHandleSubmit(submitSummary)}
+                        className='d-flex flex-column gap-2'
+                      >
+                        <div>
+                          <CFormLabel className='d-flex flex-row gap-2 justify-items-center'>
+                            <FontAwesomeIcon icon={faFacebook} className='text-primary' />
+                            <strong>
+                              Create Facebook Post
+                            </strong>
+                          </CFormLabel>
+                          <CFormTextarea
+                            id='facebookText'
+                            name='facebookText'
+                            placeholder='Facebook Post description..'
+                            defaultValue={
+                              `NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurency(data.salary_min)} - ${formatCurency(data.salary_max)}\n=====\nPM me for more details!`
+                            }
+                            {...facebookRegister('facebookText')}
+                            invalid={!!errors.text}
+                            className='mh-100'
+                          />
+                          <div style={{ fontSize: '10px' }} className='text-muted mb-3'>
+                            This summary will be posted on <span className='text-primary'>
+                              facebook</span>, with no character limit. Due to this limitation, we recommend keeping the summary short and sweet.
+                          </div>
+                          {errors.facebookText && <CFormFeedback invalid>{errors.facebookText.message}</CFormFeedback>}
+                        </div>
+                        <div className='d-flex justify-content-end'>
+                          <CButton
+                            color='primary'
+                            type='submit'
+                            className='mb-3 '
+                          >
+                            Post
+                          </CButton>
+                        </div>
+                      </CForm> */}
+                    </CCardBody>
+                  </CCollapse>
+                </CCard>
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol>
+                <CCard>
+                  <CCardHeader className='d-flex flex-row justify-content-between align-items-center'>
+                    <strong>
+                      Tracker
+                    </strong>
+                    <CButton color="primary" onClick={() => handleExpand('tracker')}>
+                      <FontAwesomeIcon icon={expand.tracker ? faChevronUp : faChevronDown} />
+                    </CButton>
+                  </CCardHeader>
+                  <CCollapse visible={expand.tracker}>
+                    <CCardBody>
+                      <CContainer>
+                        <CRow xs={{ cols: 1 }} md={{ cols: 3 }} className='g-3'>
+                          {
+                            trackerData.map((item, index) => {
+                              if (!item) return null;
+                              return (
+                                <CCol key={item._id}>
+                                  <CCard className='mb-3 h-100'>
+                                    <CCardHeader className='d-flex flex-row gap-2 align-items-center'>
+                                      <div>
+
+                                        <FontAwesomeIcon icon={
+                                          item.platform === 'twitter'
+                                            ? faTwitter
+                                            : faFacebook
+                                        }
+                                          className={
+                                            item.platform === 'twitter'
+                                              ? 'text-info'
+                                              : 'text-primary'
+                                          }
+                                        />
+                                      </div>
+                                      <strong className='text-uppercase'>
+                                        {item.platform}
+                                      </strong>
+                                    </CCardHeader>
+                                    <CCardBody>
+                                      <div>
+                                        <p>
+                                          Expires at <span className='text-info'>
+                                            {formattedDateMMM(item.expiresAt)}
+                                          </span>
+                                        </p>
+
+                                      </div>
+                                      <div>
+                                        <p>
+                                          {item.content}
+                                        </p>
+                                      </div>
+                                    </CCardBody>
+                                    <CCardFooter>
+                                      <CButtonGroup>
+                                        <CButton
+                                          color='danger'
+                                          onClick={() => deleteTrackerData(item._id)}
+
+                                        >
+                                          <FontAwesomeIcon icon={faTrash} />
+                                        </CButton>
+                                      </CButtonGroup>
+                                    </CCardFooter>
+                                  </CCard>
+                                </CCol>
+                              )
+                            })
+                          }
+                        </CRow>
+                      </CContainer>
+                    </CCardBody>
+                  </CCollapse>
+                </CCard>
+              </CCol>
+            </CRow>
+          </CContainer>
+      }
+    </>
+  )
+}
+export default Jobposter

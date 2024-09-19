@@ -8,7 +8,7 @@ import {
   createJobposting,
   searchJobpostings,
   getAllJobpostings,
-  getAllSheduledJobpostings,
+  getAllScheduledJobpostings,
   getJobpostingById,
   updateJobposting,
   deleteJobposting,
@@ -17,7 +17,7 @@ import {
 router.post("/", createJobposting);
 router.get("/search", searchJobpostings);
 router.get("/", getAllJobpostings);
-router.get("/scheduled", getAllSheduledJobpostings)
+router.get("/scheduled", getAllScheduledJobpostings);
 router.get("/:id", getJobpostingById);
 router.put("/:id", updateJobposting);
 router.delete("/:id", deleteJobposting);
