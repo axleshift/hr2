@@ -200,6 +200,9 @@ const Applicant = () => {
 
   const handleDelete = async (data) => {
     try {
+      if (!confirm('Are you sure you want to delete this record?')) {
+        return
+      }
       const res = await del(`/applicant/${data}`)
       if (res.success === true) {
         alert('Success')
@@ -657,7 +660,7 @@ const Applicant = () => {
                   </label>
                 </div>
               </div>
-              <CButton color='primary' onClick={() => handleUpload()} disabled={isFormChecked}>
+              <CButton color='primary' onClick={() => handleUpload()} disabled={!isFormChecked}>
                 {
                   isEdit ? 'Update' : 'Submit'
                 }
