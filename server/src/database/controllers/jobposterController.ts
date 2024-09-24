@@ -21,7 +21,8 @@ const createJobposter = async (req: any, res: any) => {
     const jobposting = await JobPosting.findById(ref_id);
     if (!jobposting) {
       return res.status(404).json({
-        status: 404,
+        statusCode: 404,
+        success: false,
         message: `Jobposting with id ${ref_id} not found`,
       });
     }
@@ -67,7 +68,8 @@ const createJobposter = async (req: any, res: any) => {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        statusCode: 500,
+        success: false,
         message: "Error posting to Twitter",
         error,
       });
@@ -76,8 +78,9 @@ const createJobposter = async (req: any, res: any) => {
     // if (contentFB) await jobposterFB.save();
     if (contentTW) await jobposterTW.save();
 
-    res.status(200).json({
-      status: 200,
+    res.status(201).json({
+      statusCode: 201,
+      success: true,
       message: "Jobposting posted",
       data: {
         facebook: jobposterFB,
@@ -87,7 +90,8 @@ const createJobposter = async (req: any, res: any) => {
   } catch (error) {
     logger.error(error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error posting jobposting",
       error,
     });
@@ -104,12 +108,13 @@ const getJobposterById = async (req: any, res: any) => {
     });
     if (!jobposter) {
       res.status(404).json({
-        status: 404,
+        statusCode: 404,
+        success: false,
         message: "Jobposter not found",
       });
     } else {
       res.status(200).json({
-        status: 200,
+        statusCode: 200,
         message: "Jobposter found",
         data: jobposter,
       });
@@ -117,7 +122,8 @@ const getJobposterById = async (req: any, res: any) => {
   } catch (error) {
     logger.error(error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error getting jobposter",
       error,
     });
@@ -131,7 +137,8 @@ const removeJobposter = async (req: any, res: any) => {
     const jobposter = await Jobposter.findById(id);
     if (!jobposter) {
       res.status(404).json({
-        status: 404,
+        statusCode: 404,
+        success: false,
         message: "Jobposter not found",
       });
     } else {
@@ -166,14 +173,16 @@ const removeJobposter = async (req: any, res: any) => {
         });
       }
       res.status(200).json({
-        status: 200,
+        statusCode: 200,
+        success: true,
         message: "Jobposter deleted",
       });
     }
   } catch (error) {
     logger.error(error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error deleting jobposter",
       error,
     });

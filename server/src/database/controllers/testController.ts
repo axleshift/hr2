@@ -9,13 +9,17 @@ const createTest = async (req: any, res: any, next: any) => {
       repetition: 1,
     });
 
-    res.status(200).json({
+    res.status(201).json({
+      statusCode: 201,
+      success: true,
       message: "Test created successfully",
       test,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error creating test",
       error,
     });
@@ -26,17 +30,22 @@ const getAllTests = async (req: any, res: any, next: any) => {
   try {
     const tests = await Test.find();
     res.status(200).json({
+      statusCode: 200,
+      success: true,
       message: "Tests retrieved successfully",
       tests: tests,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error retrieving tests",
       error,
     });
   }
 };
+
 const incrementTestRepetition = async (req: any, res: any, next: any) => {
   const { id } = req.params;
 
@@ -49,17 +58,23 @@ const incrementTestRepetition = async (req: any, res: any, next: any) => {
 
     if (updatedTest) {
       res.status(200).json({
+        statusCode: 200,
+        success: true,
         message: "Repetition incremented successfully",
         test: updatedTest,
       });
     } else {
       res.status(404).json({
+        statusCode: 404,
+        success: false,
         message: "Test not found",
       });
     }
   } catch (error) {
     console.error("Error incrementing repetition:", error);
     res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error incrementing repetition",
       error,
     });

@@ -102,21 +102,10 @@ const Schedule = () => {
   const getAllScheduled = async (page, limit) => {
     try {
       setIsLoading(true);
-      console.log("Params: ", params);
       const filterer = Object.keys(filter).find((key) => filter[key] === true);
-      console.log("Filter: ", filterer);
       const sort = 'desc';
       const res = await get(`/jobposting/scheduled?start=${params.today}&end=${params.nextWeek}&page=${page}&limit=${limit}&sort=${sort}&filter=${filterer}`);
-      console.log("Response: ", res);
-      // if (filter.activeOnly) {
-      //   setAllData(res.data.filter((data) => data.status === 'active'));
-      // }
-      // else if (filter.inactiveOnly) {
-      //   setAllData(res.data.filter((data) => data.status === 'inactive'));
-      // }
-      // else {
-      //   setAllData(res.data);
-      // }
+
       setAllData(res.data);
       setCurrentPage(res.currentPage);
       setTotalPages(res.totalPages);

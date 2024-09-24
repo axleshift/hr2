@@ -43,15 +43,17 @@ const createJobposting = async (req: any, res: any, next: any) => {
       schedule_start,
       schedule_end,
     });
-    res.status(200).json({
-      status: 200,
+    res.status(201).json({
+      statusCode: 201,
+      success: true,
       message: "Jobposting created successfully",
       jobposting,
     });
   } catch (error) {
     logger.error("Error creating jobposting:", error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error creating jobposting",
       error,
     });
@@ -94,7 +96,8 @@ const searchJobpostings = async (req: any, res: any, next: any) => {
       .limit(limit);
 
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "Jobpostings retrieved successfully",
       data,
       total: totalJobpostings,
@@ -104,7 +107,8 @@ const searchJobpostings = async (req: any, res: any, next: any) => {
   } catch (error) {
     logger.error("Error retrieving jobpostings:", error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error retrieving jobpostings",
       error,
     });
@@ -128,7 +132,8 @@ const getAllJobpostings = async (req: any, res: any, next: any) => {
     const jobpostings = await Jobposting.find().skip(skip).limit(limit);
 
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "Job postings retrieved successfully",
       data: jobpostings,
       total: totalJobpostings,
@@ -138,7 +143,48 @@ const getAllJobpostings = async (req: any, res: any, next: any) => {
   } catch (error) {
     logger.error("Error retrieving job postings:", error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
+      message: "Error retrieving job postings",
+      error,
+    });
+  }
+};
+
+/**
+ * Retrieves all upcoming job postings from the database.
+ *
+ * @param req - The HTTP request object.
+ * @param res - The HTTP response object.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing all the upcoming job postings.
+ */
+const getAllUpcomingJobpostings = async (req: any, res: any, next: any) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const skip = (page - 1) * limit;
+    const totalJobpostings = await Jobposting.countDocuments();
+    const jobpostings = await Jobposting.find({
+      schedule_start: { $gte: new Date() },
+    })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: "Upcoming Job postings retrieved successfully",
+      data: jobpostings,
+      total: totalJobpostings,
+      totalPages: Math.ceil(totalJobpostings / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    logger.error("Error retrieving job postings:", error);
+    res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error retrieving job postings",
       error,
     });
@@ -201,7 +247,8 @@ const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
 
     // Sending the response
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "Job postings retrieved successfully",
       startDate,
       endDate,
@@ -212,9 +259,11 @@ const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
     });
   } catch (error) {
     logger.error("Error retrieving job postings:", error);
-    res
-      .status(500)
-      .json({ status: 500, message: "Error retrieving job postings" });
+    res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Error retrieving job postings",
+    });
   }
 };
 
@@ -230,6 +279,8 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
+      statusCode: 400,
+      success: false,
       message: "Invalid jobposting id",
     });
   }
@@ -237,14 +288,16 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
   try {
     const jobposting = await Jobposting.findById(id);
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "Jobposting retrieved successfully",
       data: jobposting,
     });
   } catch (error) {
     logger.error("Error retrieving jobposting:", error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error retrieving jobposting",
       error,
     });
@@ -264,6 +317,8 @@ const updateJobposting = async (req: any, res: any, next: any) => {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
+      statusCode: 400,
+      success: false,
       message: "Invalid jobposting id",
     });
   }
@@ -307,14 +362,16 @@ const updateJobposting = async (req: any, res: any, next: any) => {
       },
       { new: true }
     );
-    res.status(200).json({
-      status: 200,
+    res.status(201).json({
+      statusCode: 201,
+      success: true,
       message: "Jobposting updated successfully",
       jobposting: jobposting,
     });
   } catch (error) {
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error updating jobposting",
       error,
     });
@@ -334,6 +391,8 @@ const deleteJobposting = async (req: any, res: any, next: any) => {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
+      statusCode: 400,
+      success: false,
       message: "Invalid jobposting id",
     });
   }
@@ -341,14 +400,16 @@ const deleteJobposting = async (req: any, res: any, next: any) => {
   try {
     const jobposting = await Jobposting.findByIdAndDelete(id);
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "Jobposting deleted successfully",
       jobposting: jobposting,
     });
   } catch (error) {
     logger.error("Error deleting jobposting:", error);
     res.status(500).json({
-      status: 500,
+      statusCode: 500,
+      success: false,
       message: "Error deleting jobposting",
       error,
     });
@@ -359,6 +420,7 @@ export {
   createJobposting,
   searchJobpostings,
   getAllJobpostings,
+  getAllUpcomingJobpostings,
   getAllScheduledJobpostings,
   getJobpostingById,
   updateJobposting,

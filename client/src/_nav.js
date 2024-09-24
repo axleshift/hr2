@@ -17,7 +17,7 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase } from '@fortawesome/free-solid-svg-icons'
+import { faBriefcase, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
   {
@@ -34,16 +34,38 @@ const _nav = [
     component: CNavTitle,
     name: 'Recruitment',
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Application Tracking',
+  //   to: '/recruitment/ats',
+  //   icon: <FontAwesomeIcon icon={faStar} className='me-3' size='lg' />,
+  // },
   {
     component: CNavGroup,
-    name: 'Jobposting',
-    // icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
-    icon: <FontAwesomeIcon icon={faBriefcase} className='me-3' />,
+    name: 'Jobpostings',
+    icon: <FontAwesomeIcon icon={faBriefcase} size='lg' fixedWidth className='me-2' />,
     items: [
       {
         component: CNavItem,
         name: 'Create & Edit',
         to: '/recruitment/jobposting',
+      },
+      {
+        component: CNavItem,
+        name: 'Schedules',
+        to: '/recruitment/schedules',
+      }
+    ]
+  },
+  {
+    component: CNavGroup,
+    name: 'Applicants',
+    icon: <FontAwesomeIcon icon={faFile} size='lg' fixedWidth className='me-2' />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Create & Edit',
+        to: '/applicant/create',
       },
       {
         component: CNavItem,

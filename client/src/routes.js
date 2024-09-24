@@ -1,9 +1,15 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+
+// Recruitment | HR2
+const ApplicationTracking = React.lazy(() => import('./views/recruitment/ats'))
 const Jobposting = React.lazy(() => import('./views/recruitment/Jobposting'))
 const Jobposter = React.lazy(() => import('./views/recruitment/Jobposter'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
+const Applicant = React.lazy(() => import('./views/recruitment/Applicant'))
+
+// Theme
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -57,9 +63,14 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  // Recruitment | HR2
+  { path: '/recruitment/ats', name: 'Application Tracking', element: ApplicationTracking },
   { path: '/recruitment/jobposting', name: 'Jobposting', element: Jobposting },
   { path: '/recruitment/jobposter/:id', name: 'Jobposter', element: Jobposter },
   { path: '/recruitment/schedules', name: 'Schedules', element: Schedules },
+  { path: '/applicant/create', name: 'Resume Create', element: Applicant },
+
+  // Theme
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },

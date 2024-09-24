@@ -33,12 +33,16 @@ const createUser = async (req: any, res: any, next: any) => {
     });
 
     res.status(201).json({
+      statusCode: 201,
+      success: true,
       message: "User created successfully",
       user,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error creating user",
       error,
     });
@@ -67,7 +71,10 @@ const verifyUser = async (req: any, res: any, next: any) => {
 
     if (!storedHashedPassword || !storedSalt) {
       return res.status(401).json({
+        statusCode: 401,
+        success: false,
         message: "Invalid credentials",
+        error: "Invalid credentials",
       });
     }
     const hashedPassword = await hasher(password, storedSalt);
@@ -78,6 +85,8 @@ const verifyUser = async (req: any, res: any, next: any) => {
     const isPasswordValid = hashedPassword === storedHashedPassword;
     if (!isPasswordValid) {
       return res.status(401).json({
+        statusCode: 401,
+        success: false,
         message: "Invalid credentials",
       });
     }
@@ -94,13 +103,16 @@ const verifyUser = async (req: any, res: any, next: any) => {
     req.session.jwt = token;
 
     res.status(200).json({
-      status: 200,
+      statusCode: 200,
+      success: true,
       message: "User verified successfully",
       data,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      statusCode: 500,
+      success: false,
       message: "Error verifying user",
       error,
     });

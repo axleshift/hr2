@@ -40,18 +40,18 @@ const Jobposter = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [trackerData, setTrackerData] = useState([]);
-  const [expand, setExpand] = useState({
+  const [isExpanded, setIsExpanded] = useState({
     jobposting: true,
     jobposter: true,
-    schedules: false,
+    tracker: true,
   })
   const [edit, setEdit] = useState({
     twitter: false,
     facebook: false,
   });
 
-  const handleExpand = (card) => {
-    setExpand({ ...expand, [card]: !expand[card] });
+  const handleExpand = (key) => {
+    setIsExpanded({ ...isExpanded, [key]: !isExpanded[key] });
   }
 
   const getData = async () => {
@@ -69,8 +69,8 @@ const Jobposter = () => {
   const getTrackerData = async () => {
     try {
       const res = await get(`/jobposter/${id}`);
-      console.log("getTrackerData:", res.data);
-      if (res.status === 200) {
+      console.log("getTrackerData:", res);
+      if (res.success === true) {
         setTrackerData(res.data);
       }
     } catch (error) {
@@ -82,7 +82,7 @@ const Jobposter = () => {
     try {
       const res = await post(`/jobposter/${id}/delete`);
       console.log("deleteTrackerData:", res);
-      if (res.status === 200) {
+      if (res.success === true) {
         alert('Deleted successfully');
         getData();
         getTrackerData();
@@ -189,10 +189,10 @@ const Jobposter = () => {
                       Jobposter
                     </strong>
                     <CButton color="primary" onClick={() => handleExpand('jobposting')}>
-                      <FontAwesomeIcon icon={expand.jobposting ? faChevronUp : faChevronDown} />
+                      <FontAwesomeIcon icon={isExpanded.jobposting ? faChevronUp : faChevronDown} />
                     </CButton>
                   </CCardHeader>
-                  <CCollapse visible={expand.jobposting}>
+                  <CCollapse visible={isExpanded.jobposting}>
                     <CCardBody className='d-flex flex-column gap-2'>
                       <CRow>
                         {
@@ -292,10 +292,10 @@ const Jobposter = () => {
                       Create Post
                     </strong>
                     <CButton color="primary" onClick={() => handleExpand('jobposter')}>
-                      <FontAwesomeIcon icon={expand.jobposter ? faChevronUp : faChevronDown} />
+                      <FontAwesomeIcon icon={isExpanded.jobposter ? faChevronUp : faChevronDown} />
                     </CButton>
                   </CCardHeader>
-                  <CCollapse visible={expand.jobposter}>
+                  <CCollapse visible={isExpanded.jobposter}>
                     <CCardBody>
                       {/* Twitter Post */}
                       <CForm
@@ -396,10 +396,10 @@ const Jobposter = () => {
                       Tracker
                     </strong>
                     <CButton color="primary" onClick={() => handleExpand('tracker')}>
-                      <FontAwesomeIcon icon={expand.tracker ? faChevronUp : faChevronDown} />
+                      <FontAwesomeIcon icon={isExpanded.tracker ? faChevronUp : faChevronDown} />
                     </CButton>
                   </CCardHeader>
-                  <CCollapse visible={expand.tracker}>
+                  <CCollapse visible={isExpanded.tracker}>
                     <CCardBody>
                       <CContainer>
                         <CRow xs={{ cols: 1 }} md={{ cols: 3 }} className='g-3'>

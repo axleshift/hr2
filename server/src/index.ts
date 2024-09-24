@@ -1,6 +1,5 @@
 import express, { Express, Request, Response, Application } from "express";
 import session from "express-session";
-import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -12,21 +11,26 @@ import mongoose from "mongoose";
 import pinoHttp from "pino-http";
 import logger from "./middleware/logger";
 import verifySession from "./middleware/verifySession";
-import { encryptRes, decryptReq } from "./middleware/bfEncryption";
 import startJobs from "./jobs";
+import { config } from "./config";
 
-//For env File
-dotenv.config();
+// For env File
 
 const app: Application = express();
 const port = process.env.PORT || 8000;
 
-const logFolder = path.join(__dirname, "logs/express");
+// Folders and other variables
+// Modify locations however you want
+// const logFolder = path.join(__dirname, "logs/express");
+// const exposeDir = path.join(__dirname, "../dist/docs");
+// const routeFolder = path.join(__dirname, "routes");
+// const sessionExceptions = ["login", "register", "check-auth"];
+
 const date = new Date().toISOString().split("T")[0];
 
 const initializeFolders = () => {
-  if (!fs.existsSync(logFolder)) {
-    fs.mkdirSync(logFolder, { recursive: true });
+  if (!fs.existsSync(config.logFolder)) {
+    fs.mkdirSync(config.logFolder, { recursive: true });
   }
 };
 initializeFolders();
@@ -37,11 +41,11 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "defaultSessionSecret",
+    secret: config.env.sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: config.env.environment === "production",
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
@@ -71,21 +75,21 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript Server");
 });
 
+app.use("/public", express.static(path.join(__dirname, "public")));
+logger.info(`Serving static file: ${path.join(__dirname, "public")}`);
+
 mongoose
   .connect(process.env.MONGODB_URI!)
   .then(() => {
-    // import routes in routes folder
-    const routeFolder = path.join(__dirname, "routes");
-    const sessionExceptions = ["login", "register", "check-auth"];
     try {
-      fs.readdirSync(routeFolder).forEach((file) => {
-        const routePath = path.join(routeFolder, file);
+      fs.readdirSync(config.routeFolder).forEach((file) => {
+        const routePath = path.join(config.routeFolder, file);
         const route = require(routePath);
         const filename = path.basename(routePath, ".ts");
         // app.use(`/${filename}`, route.default);
         if (
-          sessionExceptions.includes(filename) ||
-          process.env.NODE_ENV !== "production"
+          config.sessionExceptions.includes(filename) ||
+          config.env.environment === "development"
         ) {
           app.use(`/${filename}`, route.default);
         } else {
@@ -95,7 +99,7 @@ mongoose
       });
     } catch (error) {
       fs.writeFileSync(
-        path.join(logFolder, `${date}.log`),
+        path.join(config.logFolder, `${date}.log`),
         `Error: ${error}\n`,
         {
           flag: "a",

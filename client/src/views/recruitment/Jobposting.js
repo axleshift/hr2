@@ -118,11 +118,11 @@ const Jobposting = () => {
         status: data.jpfStatus || "active",
       }
       console.log("ID:", data.jpf_id);
-      const response = isEdit
+      const res = isEdit
         ? await put(`/jobposting/${data.jpf_id}`, formattedData)
         : await post('/jobposting', formattedData)
-      console.log(response)
-      if (response.status === 200) {
+      console.log(res)
+      if (res.success === true) {
         isEdit
           ? alert('Jobposting updated successfully')
           : alert('Jobposting created successfully')
@@ -141,7 +141,7 @@ const Jobposting = () => {
   const handleEdit = async (id) => {
     try {
       const res = await get(`/jobposting/${id}`)
-      if (res.status === 200) {
+      if (res.success === true) {
         setIsEdit(true)
         setIsFormExpanded(true)
         console.log("Edit: ", res.data)
@@ -204,7 +204,7 @@ const Jobposting = () => {
         ? await get(`/jobposting/search?query=${searchInput}&page=${page}&limit=${limit}`)
         : await get(`/jobposting?page=${page}&limit=${limit}`)
 
-      if (res.status === 200) {
+      if (res.success === true) {
         console.log("All Date: ", res.data)
 
         setAllData(res.data)
