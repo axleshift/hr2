@@ -122,4 +122,6 @@ now click or copy the link in the terminal and paste it in your browser.
 
 Not much to say here, but if you have any features you want to add, please feel free to submit an issue using the ISSUE_TEMPLATE.
 
+https://trello.com/invite/b/66f4e3ebeddcacce9a664ca5/ATTI9d29af124fb1c294754ab401d9fafee4BD718819/hr2
+
 No Registration feature and I assume there will never be, that's the ADMIN's job to do.
