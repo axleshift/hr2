@@ -46,4 +46,14 @@ const trimString = (str, maxLength) => {
     return str;
 };
 
-export { formattedDate, formattedDateMMM, formatCurency, trimString }
+/**
+ * Capitalize first letter of a string
+ * @param {string} str
+ * @returns string with first letter capitalized
+ */
+
+const firstLetterUppercase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export { formattedDate, formattedDateMMM, formatCurency, trimString, firstLetterUppercase };
