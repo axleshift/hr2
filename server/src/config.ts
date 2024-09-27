@@ -10,6 +10,7 @@ export const config = {
   exposeDir: path.join(__dirname, "public"),
   routeFolder: path.join(__dirname, "routes"),
   sessionExceptions: ["login", "register", "check-auth"],
+  mongoDbUri: process.env.MONGODB_URI || "",
 
   env: {
     environment: process.env.NODE_ENV || "development",
