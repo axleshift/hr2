@@ -163,6 +163,11 @@ const Applicant = () => {
     }
   }
 
+  const handlePreviewClose = () => {
+    setIsPreview(false)
+    setIsFormChecked(false)
+  }
+
   const handleUpload = async () => {
     try {
       console.log("ID: ", data.id)
@@ -1069,7 +1074,7 @@ const Applicant = () => {
           scrollable={true}
           alignment='center'
           visible={isPreview}
-          onClose={() => setIsPreview(false)}
+          onClose={() => handlePreviewClose()}
           size='xl'
         >
           <CModalHeader>
@@ -1237,10 +1242,9 @@ const Applicant = () => {
         <CModal
           alignment='center'
           visible={isTagModalVisible}
-          onClose={() => {
+          onClose={() =>
             setTagModalVisible(false)
-            setIsFormChecked(false)
-          }}
+          }
           size='sm'
         >
           <CModalHeader>
