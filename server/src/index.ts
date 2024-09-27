@@ -91,9 +91,9 @@ mongoose
           config.sessionExceptions.includes(filename) ||
           config.env.environment === "development"
         ) {
-          app.use(`/${filename}`, route.default);
+          app.use(`/api/${filename}`, route.default);
         } else {
-          app.use(`/${filename}`, verifySession, route.default);
+          app.use(`/api/${filename}`, verifySession, route.default);
         }
         logger.info(`Route ${filename} loaded`);
       });
