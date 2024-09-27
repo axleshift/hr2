@@ -45,12 +45,19 @@ const addNewResume = (req: any, res: any) => {
       }`;
 
       const data = {
-        firstName: req.body.firstname || "N/A",
-        middleName: req.body.middlename || "N/A",
-        lastName: req.body.lastname || "N/A",
+        firstname: req.body.firstname || "N/A",
+        middlename: req.body.middlename || "N/A",
+        lastname: req.body.lastname || "N/A",
         email: req.body.email || "N/A",
         phone: req.body.phone || "N/A",
         address: req.body.address || "N/A",
+        portfolioURL: req.body.portfoliourl || "N/A",
+        professionalSummary: req.body.professionalsummary || "N/A",
+        skills: req.body.skills || "N/A",
+        workExperience: req.body.workexperience || "N/A",
+        education: req.body.education || "N/A",
+        certifications: req.body.certifications || "N/A",
+        tags: req.body.tags || "N/A",
         resumeFileLoc: file.filename,
       };
 
@@ -104,13 +111,22 @@ const updateResume = async (req: any, res: any) => {
         });
       }
 
+      logger.info("File uploaded: ", req.body);
+
       const data = {
-        firstName: req.body.firstname || "N/A",
-        middleName: req.body.middlename || "N/A",
-        lastName: req.body.lastname || "N/A",
+        firstname: req.body.firstname || "N/A",
+        middlename: req.body.middlename || "N/A",
+        lastname: req.body.lastname || "N/A",
         email: req.body.email || "N/A",
         phone: req.body.phone || "N/A",
         address: req.body.address || "N/A",
+        portfolioURL: req.body.portfoliourl || "N/A",
+        professionalSummary: req.body.professionalsummary || "N/A",
+        skills: req.body.skills || "N/A",
+        workExperience: req.body.workExperience || "N/A",
+        education: req.body.education || "N/A",
+        certifications: JSON.parse(req.body.certifications) || ["N/A"],
+        tags: JSON.parse(req.body.tags) || ["N/A"],
         resumeFileLoc: file.filename,
       };
 
