@@ -141,7 +141,7 @@ const Jobposter = () => {
         facebook: data.facebookText,
       }
       const res = await post(`/jobposter/${id}/post`, content);
-      if (res.status === 200) {
+      if (res.success === true) {
         alert('Posted successfully');
         getData();
         getTrackerData();

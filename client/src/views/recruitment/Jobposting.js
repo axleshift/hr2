@@ -24,6 +24,7 @@ import {
   CFormFeedback,
   CCollapse,
   CButtonGroup,
+  CTooltip
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp, faChevronLeft, faCircleChevronLeft, faChevronRight, faCircleChevronRight, faLocationPin, faMoneyBill, faRefresh, faTrash, faPencil, faCalendar } from '@fortawesome/free-solid-svg-icons'
@@ -329,21 +330,24 @@ const Jobposting = () => {
                         <FontAwesomeIcon icon={faTrash} />
                       </CButton>
                     }
-                    <CButton
-                      type='button'
-                      onClick={() => setIsFormExpanded(!isFormExpanded)}
-                      className='btn btn-primary w-30'
+                    <CTooltip
+                      content={isFormExpanded ? 'Collapse' : 'Expand'}
+                      placement='top'
                     >
-                      {
-                        isFormExpanded
-                          ? <FontAwesomeIcon icon={faChevronUp} />
-                          : <FontAwesomeIcon icon={faChevronDown} />
-                      }
-                    </CButton>
-
+                      <CButton
+                        type='button'
+                        onClick={() => setIsFormExpanded(!isFormExpanded)}
+                        className='btn btn-primary w-30'
+                      >
+                        {
+                          isFormExpanded
+                            ? <FontAwesomeIcon icon={faChevronUp} />
+                            : <FontAwesomeIcon icon={faChevronDown} />
+                        }
+                      </CButton>
+                    </CTooltip>
                   </div>
                 </div>
-
               </CCardHeader>
               <CCollapse visible={isFormExpanded}>
                 <CCardBody>
@@ -627,7 +631,7 @@ const Jobposting = () => {
               </CCollapse>
             </CCard>
           </CContainer>
-        </CRow >
+        </CRow>
         <CRow>
           <CContainer>
             <CCard>
@@ -659,7 +663,6 @@ const Jobposting = () => {
                     <FontAwesomeIcon icon={faRefresh} />
                   </CButton>
                 </CForm>
-
               </CCardHeader>
               <CCardBody>
                 {
@@ -801,7 +804,6 @@ const Jobposting = () => {
                                           </CButton>
                                         </div>
                                       </div>
-
                                     </li>
                                   )
                                 })
@@ -810,23 +812,19 @@ const Jobposting = () => {
                           )
                         }
                       </div>
-
                     )
                 }
-
               </CCardBody>
               <CCardFooter className='d-flex flex-row gap-2 justify-content-center align-items-center'>
                 <CButton onClick={() => handlePageChange('firstPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
                   <FontAwesomeIcon icon={faCircleChevronLeft} />
                 </CButton>
-
                 <CButton onClick={() => handlePageChange('prevPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
                   <FontAwesomeIcon icon={faChevronLeft} />
                 </CButton>
                 <p>
                   Page {currentPage} of {totalPages}
                 </p>
-
                 <CButton onClick={() => handlePageChange('nextPage')} disabled={currentPage === totalPages && true} className='btn btn-outline-primary'>
                   <FontAwesomeIcon icon={faChevronRight} />
                 </CButton>

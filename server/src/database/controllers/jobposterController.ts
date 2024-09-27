@@ -57,11 +57,13 @@ const createJobposter = async (req: any, res: any) => {
     let jobposterTW;
     try {
       const tweetResponse = await tweet(contentTW);
+      logger.info("Tweet response:");
+      logger.info(tweetResponse);
       jobposterTW = new Jobposter({
         ref_id: ref_id,
         platform: "twitter",
         isPosted: true,
-        post_id: tweetResponse.id,
+        post_id: tweetResponse.id || "",
         content: contentTW,
         expiresAt: jobposting.schedule_end,
         status: "active",
@@ -115,6 +117,7 @@ const getJobposterById = async (req: any, res: any) => {
     } else {
       res.status(200).json({
         statusCode: 200,
+        success: true,
         message: "Jobposter found",
         data: jobposter,
       });
