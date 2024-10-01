@@ -63,10 +63,12 @@ const createJobposter = async (req: req, res: res) => {
       jobposterTW = new Jobposter({
         ref_id: ref_id,
         platform: "twitter",
-        isPosted: false,
-        isApproved: true,
         post_id: "",
         content: contentTW,
+        isPosted: false,
+        isApproved: true,
+        isDeleted: false,
+        postAt: jobposting.schedule_start,
         expiresAt: jobposting.schedule_end,
         status: "active",
       });
@@ -167,6 +169,7 @@ const removeJobposter = async (req: req, res: res) => {
         await tweet(jobposter.post_id);
       }
       await Jobposter.findByIdAndUpdate(id, {
+        status: "inactive",
         isPosted: false,
         isDeleted: true,
       });

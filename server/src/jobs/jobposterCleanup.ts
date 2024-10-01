@@ -36,28 +36,30 @@ const fetchExpiredJobposters = async () => {
   return expiredJobposters;
 };
 
-const postApprovedJobposter = async () => {
-  const jobposters = await Jobposter.find({
-    platform: "twitter",
-    isApproved: true,
-    isPosted: false,
-  });
+const fetchScheduledJobposters = async () => {
+  const scheduledJobposters = (await Jobposter.find({
+    postAt: { $lt: now },
+  })) as JobposterType[];
+  return scheduledJobposters;
+};
 
+const postApprovedJobposter = async () => {
+  const jobposters = await fetchScheduledJobposters();
   for (const jobposter of jobposters) {
     try {
       const tweet = (await createTweet(jobposter.content)) as TweetType;
       await Jobposter.updateOne(
         { _id: jobposter._id },
-        { post_id: (tweet as TweetType).id_str, isPosted: true }
+        { post_id: (tweet as TweetType).id_str, isPosted: true },
       );
       const jobposting = (await Jobposting.findById(
-        jobposter.ref_id
+        jobposter.ref_id,
       )) as JobpostingType;
       await Jobposting.updateOne({ _id: jobposting._id }, { status: "active" });
     } catch (error) {
       logger.error(
         `Error posting tweet for jobposter ${jobposter._id}:`,
-        error
+        error,
       );
     }
   }
@@ -66,7 +68,7 @@ const postApprovedJobposter = async () => {
 const updateExpiredJobposters = async (expiredJobposters: JobposterType[]) => {
   const updatedJobposters = await Jobposter.updateMany(
     { _id: { $in: expiredJobposters.map((jobposter) => jobposter._id) } },
-    { status: "expired" }
+    { status: "expired" },
   );
   return updatedJobposters;
 };

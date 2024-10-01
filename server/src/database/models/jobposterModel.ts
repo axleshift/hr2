@@ -10,10 +10,6 @@ const jobposterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isPosted: {
-      type: Boolean,
-      required: true,
-    },
     post_id: {
       type: String,
       // required: true,
@@ -22,10 +18,11 @@ const jobposterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    expiresAt: {
-      type: Date,
-      required: false,
+    isPosted: {
+      type: Boolean,
+      required: true,
     },
+
     isApproved: {
       type: Boolean,
       required: true,
@@ -34,9 +31,17 @@ const jobposterSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    postAt: {
+      type: Date,
+      required: false,
+    },
+    expiresAt: {
+      type: Date,
+      required: false,
+    },
     status: {
       type: String,
-      enum: ["active", "inactive", "expired"],
+      enum: ["active", "inactive"],
       required: true,
     },
   },

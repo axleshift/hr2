@@ -220,6 +220,7 @@ const getAllScheduledJobpostings = async (req: req, res: res) => {
     // Extracting query parameters
     // I prolly should do more commenting so I don't forget what I did lol
     // also, for whoever is reading this, I'm sorry for the mess
+    const searchQuery = req.query.query;
     const startDate = req.query.start || new Date();
     const endDate = req.query.end || new Date();
     const page =
@@ -238,21 +239,28 @@ const getAllScheduledJobpostings = async (req: req, res: res) => {
     if (filter !== "all") {
       statusFilter = { status: filter };
     }
+    // if search query is provided, filter by search query
+    let searchFilter = {};
+    if (searchQuery) {
+      searchFilter = {
+        $or: [{ title: { $regex: searchQuery, $options: "i" } }],
+      };
+    }
 
-    // Query the total number of filtered job postings
     const totalJobPostings = await Jobposting.countDocuments({
+      ...statusFilter,
+      ...searchFilter,
       schedule_start: { $gte: startDate },
       schedule_end: { $lte: endDate },
-      ...statusFilter,
     });
 
-    // Query the filtered, sorted, and paginated job postings
     const data = await Jobposting.find({
+      ...statusFilter,
+      ...searchFilter,
       schedule_start: { $gte: startDate },
       schedule_end: { $lte: endDate },
-      ...statusFilter,
     })
-      .sort({ schedule_start: sortOrder }) // Sorting by schedule_start
+      .sort({ schedule_start: sortOrder })
       .skip(skip)
       .limit(limit);
 
@@ -366,7 +374,7 @@ const updateJobposting = async (req: req, res: res) => {
         schedule_start,
         schedule_end,
       },
-      { new: true }
+      { new: true },
     );
     res.status(201).json({
       statusCode: 201,
