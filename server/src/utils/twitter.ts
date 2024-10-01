@@ -10,14 +10,6 @@ const client = new TwitterApi({
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
-const readOnlyClient = client.readOnly;
-
-const formatSalary = (number: number) => {
-  return number.toLocaleString("en-US", {
-    style: "currency",
-    currency: "PHP",
-  });
-};
 
 const createTweet = async (content: string) => {
   try {
