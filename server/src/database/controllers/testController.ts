@@ -1,6 +1,7 @@
 import Test from "../models/testModel";
+import { Request as req, Response as res } from "express";
 
-const createTest = async (req: any, res: any, next: any) => {
+const createTest = async (req: req, res: res) => {
   const { title, content } = req.body;
   try {
     const test = await Test.create({
@@ -26,7 +27,7 @@ const createTest = async (req: any, res: any, next: any) => {
   }
 };
 
-const getAllTests = async (req: any, res: any, next: any) => {
+const getAllTests = async (req: req, res: res) => {
   try {
     const tests = await Test.find();
     res.status(200).json({
@@ -46,7 +47,7 @@ const getAllTests = async (req: any, res: any, next: any) => {
   }
 };
 
-const incrementTestRepetition = async (req: any, res: any, next: any) => {
+const incrementTestRepetition = async (req: req, res: res) => {
   const { id } = req.params;
 
   try {

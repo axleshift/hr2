@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
 import Jobposter from "../models/jobposterModel";
 import JobPosting from "../models/jobpostingModel";
-import { createTweet, removeTweet } from "../../utils/twitter";
+import { removeTweet } from "../../utils/twitter";
 import logger from "../../middleware/logger";
+import { Request as req, Response as res } from "express";
 
 /**
  * Creates a new job poster in the database and post the job posting to the specified platforms.
@@ -13,7 +13,7 @@ import logger from "../../middleware/logger";
  * @returns A JSON response with the created job posting.
  */
 
-const createJobposter = async (req: any, res: any) => {
+const createJobposter = async (req: req, res: res) => {
   const ref_id = req.params.id;
   const contentFB = req.body.facebook;
   const contentTW = req.body.twitter;
@@ -30,40 +30,42 @@ const createJobposter = async (req: any, res: any) => {
     const jobposterFB = new Jobposter({
       ref_id: ref_id,
       platform: "facebook",
-      isPosted: false,
       post_id: "",
       content: contentFB,
       expiresAt: jobposting.schedule_end,
+      isPosted: false,
+      isApproved: true,
       status: "active",
     });
-
-    const tweet = async (content: any) => {
-      try {
-        const tweet = content;
-        const res: any = await createTweet(tweet);
-        if (res.errors) {
-          throw new Error(res.errors);
-        }
-        await JobPosting.findByIdAndUpdate(ref_id, {
-          status: "active",
-        });
-        return res.data;
-      } catch (error) {
-        logger.error("Error posting tweet:", error);
-        throw error;
-      }
-    };
+    // will not be posting to twitter
+    // const tweet = async (content: any) => {
+    //   try {
+    //     const tweet = content;
+    //     const res: any = await createTweet(tweet);
+    //     if (res.errors) {
+    //       throw new Error(res.errors);
+    //     }
+    //     await JobPosting.findByIdAndUpdate(ref_id, {
+    //       status: "active",
+    //     });
+    //     return res.data;
+    //   } catch (error) {
+    //     logger.error("Error posting tweet:", error);
+    //     throw error;
+    //   }
+    // };
 
     let jobposterTW;
     try {
-      const tweetResponse = await tweet(contentTW);
-      logger.info("Tweet response:");
-      logger.info(tweetResponse);
+      // const tweetResponse = await tweet(contentTW);
+      // logger.info("Tweet response:");
+      // logger.info(tweetResponse);
       jobposterTW = new Jobposter({
         ref_id: ref_id,
         platform: "twitter",
-        isPosted: true,
-        post_id: tweetResponse.id || "",
+        isPosted: false,
+        isApproved: true,
+        post_id: "",
         content: contentTW,
         expiresAt: jobposting.schedule_end,
         status: "active",
@@ -72,7 +74,7 @@ const createJobposter = async (req: any, res: any) => {
       return res.status(500).json({
         statusCode: 500,
         success: false,
-        message: "Error posting to Twitter",
+        message: "Error creating jobposter",
         error,
       });
     }
@@ -100,13 +102,11 @@ const createJobposter = async (req: any, res: any) => {
   }
 };
 
-const getJobposterById = async (req: any, res: any) => {
+const getJobposterById = async (req: req, res: res) => {
   const { id } = req.params;
   try {
     const jobposter = await Jobposter.find({
       ref_id: id,
-      isPosted: true,
-      status: "active",
     });
     if (!jobposter) {
       res.status(404).json({
@@ -133,9 +133,15 @@ const getJobposterById = async (req: any, res: any) => {
   }
 };
 
-const removeJobposter = async (req: any, res: any) => {
+interface ITweet {
+  data: {
+    id: string;
+  };
+  errors?: unknown;
+}
+
+const removeJobposter = async (req: req, res: res) => {
   const { id } = req.params;
-  let ref_id;
   try {
     const jobposter = await Jobposter.findById(id);
     if (!jobposter) {
@@ -145,10 +151,9 @@ const removeJobposter = async (req: any, res: any) => {
         message: "Jobposter not found",
       });
     } else {
-      const tweet = async (post_id: any) => {
+      const tweet = async (post_id: string) => {
         try {
-          const res: any = await removeTweet(post_id);
-
+          const res = (await removeTweet(post_id)) as ITweet;
           if (res.errors) {
             return res;
           }
@@ -158,10 +163,12 @@ const removeJobposter = async (req: any, res: any) => {
           return error;
         }
       };
-      await tweet(jobposter.post_id);
+      if (jobposter.post_id) {
+        await tweet(jobposter.post_id);
+      }
       await Jobposter.findByIdAndUpdate(id, {
         isPosted: false,
-        status: "inactive",
+        isDeleted: true,
       });
 
       // check if there are no more jobposters for the jobposting that is active and if none exist,

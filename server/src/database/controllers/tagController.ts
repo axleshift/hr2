@@ -1,6 +1,7 @@
 import Tag from "../models/tagModel";
+import { Request as req, Response as res } from "express";
 
-const createTag = async (req: any, res: any, next: any) => {
+const createTag = async (req: req, res: res) => {
   const { name, category, description } = req.body;
   try {
     const tag = await Tag.create({
@@ -26,7 +27,7 @@ const createTag = async (req: any, res: any, next: any) => {
   }
 };
 
-const getAllTags = async (req: any, res: any, next: any) => {
+const getAllTags = async (req: req, res: res) => {
   try {
     const tags = await Tag.find();
     res.status(200).json({
@@ -46,7 +47,7 @@ const getAllTags = async (req: any, res: any, next: any) => {
   }
 };
 
-const getTagById = async (req: any, res: any, next: any) => {
+const getTagById = async (req: req, res: res) => {
   const { id } = req.params;
 
   try {
@@ -77,7 +78,7 @@ const getTagById = async (req: any, res: any, next: any) => {
   }
 };
 
-const getTagByCategory = async (req: any, res: any, next: any) => {
+const getTagByCategory = async (req: req, res: res) => {
   const { category } = req.params;
 
   try {
@@ -88,7 +89,7 @@ const getTagByCategory = async (req: any, res: any, next: any) => {
         statusCode: 200,
         success: true,
         message: "Tags retrieved successfully",
-        tags,
+        data: tags,
       });
     } else {
       res.status(404).json({
@@ -108,7 +109,7 @@ const getTagByCategory = async (req: any, res: any, next: any) => {
   }
 };
 
-const updateTag = async (req: any, res: any, next: any) => {
+const updateTag = async (req: req, res: res) => {
   const { id } = req.params;
   const { name, category, description } = req.body;
 
@@ -146,7 +147,7 @@ const updateTag = async (req: any, res: any, next: any) => {
   }
 };
 
-const deleteTag = async (req: any, res: any, next: any) => {
+const deleteTag = async (req: req, res: res) => {
   const { id } = req.params;
 
   try {

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Jobposting from "../models/jobpostingModel";
 import logger from "../../middleware/logger";
+import { Request as req, Response as res } from "express";
 
 /**
  * Creates a new job posting in the database.
@@ -10,7 +11,8 @@ import logger from "../../middleware/logger";
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response with the created job posting.
  */
-const createJobposting = async (req: any, res: any, next: any) => {
+
+const createJobposting = async (req: req, res: res) => {
   const {
     title,
     type,
@@ -68,10 +70,12 @@ const createJobposting = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response containing the search results.
  */
-const searchJobpostings = async (req: any, res: any, next: any) => {
+const searchJobpostings = async (req: req, res: res) => {
   const searchQuery = req.query.query;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 9;
+  const page =
+    typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+  const limit =
+    typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
   const skip = (page - 1) * limit;
 
   try {
@@ -92,6 +96,7 @@ const searchJobpostings = async (req: any, res: any, next: any) => {
         { location: { $regex: searchQuery, $options: "i" } },
       ],
     })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -123,10 +128,12 @@ const searchJobpostings = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response containing all the job postings.
  */
-const getAllJobpostings = async (req: any, res: any, next: any) => {
+const getAllJobpostings = async (req: req, res: res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 9;
+    const page =
+      typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit =
+      typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
     const totalJobpostings = await Jobposting.countDocuments();
     const jobpostings = await Jobposting.find().skip(skip).limit(limit);
@@ -159,10 +166,12 @@ const getAllJobpostings = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response containing all the upcoming job postings.
  */
-const getAllUpcomingJobpostings = async (req: any, res: any, next: any) => {
+const getAllUpcomingJobpostings = async (req: req, res: res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 9;
+    const page =
+      typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit =
+      typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
     const totalJobpostings = await Jobposting.countDocuments();
     const jobpostings = await Jobposting.find({
@@ -206,15 +215,17 @@ const getAllUpcomingJobpostings = async (req: any, res: any, next: any) => {
  * @returns A JSON response containing the filtered, sorted, and paginated job postings.
  */
 
-const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
+const getAllScheduledJobpostings = async (req: req, res: res) => {
   try {
     // Extracting query parameters
     // I prolly should do more commenting so I don't forget what I did lol
     // also, for whoever is reading this, I'm sorry for the mess
     const startDate = req.query.start || new Date();
     const endDate = req.query.end || new Date();
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 9;
+    const page =
+      typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit =
+      typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
 
     // Sorting order: 1 for 'asc', -1 for 'desc'
@@ -223,7 +234,7 @@ const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
     const filter = req.query.filter || "all";
 
     // Build the filter query based on statuss
-    let statusFilter: any = {};
+    let statusFilter = {};
     if (filter !== "all") {
       statusFilter = { status: filter };
     }
@@ -275,7 +286,7 @@ const getAllScheduledJobpostings = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response containing the retrieved job posting.
  */
-const getJobpostingById = async (req: any, res: any, next: any) => {
+const getJobpostingById = async (req: req, res: res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
@@ -312,7 +323,7 @@ const getJobpostingById = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response containing the updated job posting.
  */
-const updateJobposting = async (req: any, res: any, next: any) => {
+const updateJobposting = async (req: req, res: res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -322,11 +333,6 @@ const updateJobposting = async (req: any, res: any, next: any) => {
       message: "Invalid jobposting id",
     });
   }
-  let defStatus = "active";
-  if (!req.body.status) {
-    defStatus = "active";
-  }
-
   const {
     title,
     type,
@@ -386,7 +392,7 @@ const updateJobposting = async (req: any, res: any, next: any) => {
  * @param next - The next middleware function in the request-response cycle.
  * @returns A JSON response indicating whether the job posting was deleted successfully.
  */
-const deleteJobposting = async (req: any, res: any, next: any) => {
+const deleteJobposting = async (req: req, res: res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { hasher } from "../../utils/hasher";
-
+import { Request as req, Response as res } from "express";
 import User from "../models/userModel";
 
 import dotenv from "dotenv";
@@ -16,7 +16,7 @@ const salt = Math.random().toString(36).substring(2, 15);
  * @param {Function} next - The next middleware function.
  * @returns {Promise<void>} - A promise that resolves when the user is created.
  */
-const createUser = async (req: any, res: any, next: any) => {
+const createUser = async (req: req, res: res) => {
   const { firstname, lastname, email, username, password, status, role } =
     req.body;
 
@@ -57,7 +57,7 @@ const createUser = async (req: any, res: any, next: any) => {
  * @param {Function} next - The next middleware function.
  * @returns {Promise<void>} - A promise that resolves when the user is verified.
  */
-const verifyUser = async (req: any, res: any, next: any) => {
+const verifyUser = async (req: req, res: res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
