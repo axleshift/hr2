@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl = import.meta.env.VITE_REACT_SERVER_URL;
-console.log(baseUrl);
+// console.log(baseUrl);
 
 const instance = axios.create({
   baseURL: baseUrl,
@@ -11,9 +11,7 @@ const instance = axios.create({
 
 const post = async (url, data) => {
   try {
-    console.log("LOG API: ", data)
     const response = await instance.post(url, data);
-    console.log("LOG API: ", response.data);
     return response.data;
   } catch (error) {
     console.log(error);
