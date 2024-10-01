@@ -3,7 +3,7 @@ import path from "path";
 import multer from "multer";
 import { config } from "../config";
 
-const dest = path.join(config.exposeDir, "uploads");
+const dest = path.join(config.resumes.fsDir, "uploads");
 
 // if uploads directory doesn't exist, create it
 if (!fs.existsSync(dest)) {

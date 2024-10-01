@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, Application } from "express";
+import express, { Request, Response, Application } from "express";
 import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
@@ -11,8 +11,9 @@ import mongoose from "mongoose";
 import pinoHttp from "pino-http";
 import logger from "./middleware/logger";
 import verifySession from "./middleware/verifySession";
-import startJobs from "./jobs";
+import startJobs from "./jobs/index";
 import { config } from "./config";
+import sanitize from "./middleware/sanitize";
 
 // For env File
 
@@ -48,7 +49,7 @@ app.use(
       secure: config.env.environment === "production",
       maxAge: 24 * 60 * 60 * 1000,
     },
-  })
+  }),
 );
 app.use(helmet());
 app.use(pinoHttp({ logger }));
@@ -68,25 +69,27 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
 app.use(limiter);
+app.use(sanitize);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript Server");
 });
 
-app.use("/public", express.static(path.join(__dirname, "public")));
-logger.info(`Serving static file: ${path.join(__dirname, "public")}`);
+app.use("/public", express.static(config.exposeDir));
+logger.info(`Serving static file: ${config.exposeDir}`);
 
+// Routes
 mongoose
   .connect(process.env.MONGODB_URI!)
-  .then(() => {
+  .then(async () => {
     try {
-      fs.readdirSync(config.routeFolder).forEach((file) => {
+      const files = fs.readdirSync(config.routeFolder);
+      for (const file of files) {
         const routePath = path.join(config.routeFolder, file);
-        const route = require(routePath);
+        const route = await import(routePath);
         const filename = path.basename(routePath, ".ts");
-        // app.use(`/${filename}`, route.default);
+
         if (
           config.sessionExceptions.includes(filename) ||
           config.env.environment === "development"
@@ -96,20 +99,20 @@ mongoose
           app.use(`/api/${filename}`, verifySession, route.default);
         }
         logger.info(`Route ${filename} loaded`);
-      });
+      }
     } catch (error) {
       fs.writeFileSync(
         path.join(config.logFolder, `${date}.log`),
         `Error: ${error}\n`,
         {
           flag: "a",
-        }
+        },
       );
     }
     logger.info("Connected to MongoDB");
     startJobs();
     app.listen(port, () => {
-      logger.info(`Server is Fire at http://localhost:${port}`);
+      logger.info(`Server is running at http://localhost:${port}`);
     });
   })
   .catch((err) => {

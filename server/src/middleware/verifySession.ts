@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { Session } from "express-session";
 
 declare module "express-session" {
   interface Session {
-    jwt?: any;
+    jwt?: string;
   }
 }
 
@@ -13,7 +12,7 @@ const verifySession = (req: Request, res: Response, next: NextFunction) => {
     return next();
   } else {
     // User is not authenticated, send an unauthorized response
-    
+
     res.status(401).json({ message: "Unauthorized" });
   }
 };
