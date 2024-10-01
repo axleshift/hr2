@@ -186,7 +186,7 @@ const Jobposter = () => {
                 <CCard>
                   <CCardHeader className='d-flex flex-row justify-content-between align-items-center'>
                     <strong>
-                      Jobposter
+                      Job Posting Details
                     </strong>
                     <CButton color="primary" onClick={() => handleExpand('jobposting')}>
                       <FontAwesomeIcon icon={isExpanded.jobposting ? faChevronUp : faChevronDown} />
@@ -411,7 +411,6 @@ const Jobposter = () => {
                                   <CCard className='mb-3 h-100'>
                                     <CCardHeader className='d-flex flex-row gap-2 align-items-center'>
                                       <div>
-
                                         <FontAwesomeIcon icon={
                                           item.platform === 'twitter'
                                             ? faTwitter
@@ -429,6 +428,26 @@ const Jobposter = () => {
                                       </strong>
                                     </CCardHeader>
                                     <CCardBody>
+                                      <div className='d-flex gap-2'>
+                                        <CBadge color={
+                                          item.status === 'posted'
+                                            ? 'success'
+                                            : 'danger'
+                                        }>
+                                          {
+                                            item.status === 'posted'
+                                              ? 'Posted'
+                                              : 'Not Posted'
+                                          }
+                                        </CBadge>
+                                        {
+                                          item.isDeleted && (
+                                            <CBadge color='danger'>
+                                              Deleted
+                                            </CBadge>
+                                          )
+                                        }
+                                      </div>
                                       <div>
                                         <p>
                                           Expires at <span className='text-info'>
@@ -445,13 +464,27 @@ const Jobposter = () => {
                                     </CCardBody>
                                     <CCardFooter>
                                       <CButtonGroup>
-                                        <CButton
-                                          color='danger'
-                                          onClick={() => deleteTrackerData(item._id)}
-
+                                        <CTooltip
+                                          content='Delete'
+                                          placement='top'
                                         >
-                                          <FontAwesomeIcon icon={faTrash} />
-                                        </CButton>
+                                          <CButton
+                                            color='danger'
+                                            onClick={() => deleteTrackerData(item._id)}
+                                          >
+                                            <FontAwesomeIcon icon={faTrash} />
+                                          </CButton>
+                                        </CTooltip>
+                                        <CTooltip
+                                          content='Use as Template'
+                                          placement='top'
+                                        >
+                                          <CButton
+                                            color='info'
+                                          >
+                                            <FontAwesomeIcon icon={faPencil} />
+                                          </CButton>
+                                        </CTooltip>
                                       </CButtonGroup>
                                     </CCardFooter>
                                   </CCard>

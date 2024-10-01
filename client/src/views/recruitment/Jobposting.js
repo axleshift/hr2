@@ -68,7 +68,7 @@ const Jobposting = () => {
     jpfReq: z.string().min(1, { message: 'Requirement is required' }),
     jpfSchedStart: z.preprocess((val) => new Date(val), z.date().min(yesterday, { message: 'Start Date must be today or later' })),
     jpfSchedEnd: z.preprocess((val) => new Date(val), z.date().min(new Date(), { message: 'End Date must be in the future' })),
-    jpfStatus: z.enum(['active', 'inactive'], { message: 'Status is required' }),
+    jpfStatus: z.optional()
 
   })
     .refine((data) => {
@@ -206,7 +206,7 @@ const Jobposting = () => {
         : await get(`/jobposting?page=${page}&limit=${limit}`)
 
       if (res.success === true) {
-        console.log("All Date: ", res.data)
+        // console.log("All Date: ", res.data)
 
         setAllData(res.data)
         setCurrentPage(res.currentPage)
@@ -224,6 +224,7 @@ const Jobposting = () => {
       console.log(error)
     }
   }
+
   // SEARCH JOB POSTING
   const searchSchema = z.object({
     jpSearchInput: z.string().min(1, { message: 'Search query is required' }),
@@ -261,14 +262,14 @@ const Jobposting = () => {
   }
 
 
-  // NOTE: useEffect auto fetch data on component mount, be very careful with this
   useEffect(() => {
-    console.log("useEffect: Current Page: ", currentPage);
-    console.log("useEffect: Items Per Page: ", itemsPerPage);
-    console.log("useEffect: Search Mode:  ", isSearchMode);
+    const delayDebounceFn = setTimeout(() => {
+      getAllJobPosting(currentPage, itemsPerPage)
+    }, 500);
+    return () => clearTimeout(delayDebounceFn)
+  }, [currentPage, itemsPerPage, isSearchMode, searchInput]);
 
-    getAllJobPosting(currentPage, itemsPerPage)
-  }, [currentPage, itemsPerPage, isSearchMode, searchInput])
+
 
   // Pagination handler
   const handlePageChange = (action) => {
@@ -681,7 +682,11 @@ const Jobposting = () => {
                                 {
                                   allData.map((data) => {
                                     if (!data) {
-                                      return null;
+                                      return (
+                                        <div key={Math.random()}>
+                                          Loading
+                                        </div>
+                                      );
                                     }
                                     return (
                                       <CCol key={data._id}>

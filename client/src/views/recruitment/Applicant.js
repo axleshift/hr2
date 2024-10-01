@@ -11,6 +11,7 @@ import {
   CCard,
   CCardHeader,
   CCardBody,
+  CCardFooter,
   CWidgetStatsA,
   CForm,
   CFormText,
@@ -29,14 +30,15 @@ import {
   CTooltip,
   CFormSelect,
   CInputGroup,
+  CBadge
 } from '@coreui/react'
 import { CChart } from "@coreui/react-chartjs";
 
 import { pdfjs, Document, Page } from 'react-pdf';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp, faMinus, faPlus, faTrash, faRefresh, faPencil } from '@fortawesome/free-solid-svg-icons';
-import { firstLetterUppercase } from '../../utils';
+import { faChevronDown, faChevronUp, faChevronLeft, faChevronRight, faMinus, faPlus, faTrash, faRefresh, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { firstLetterUppercase, formattedDateMMM } from '../../utils';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -62,16 +64,18 @@ const Applicant = () => {
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
 
-
+  // Data states
   const [data, setData] = useState({})
   const [allData, setAllData] = useState([])
-  const [searchInput, setSearchInput] = useState('')
-  const [searchMode, setSearchMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
-  const [isFormChecked, setIsFormChecked] = useState(false)
+
+  // Search states
+  const [searchInput, setSearchInput] = useState('')
+  const [isSearchMode, setSearchMode] = useState(false)
 
   // Form Elements states
+  const [isEdit, setIsEdit] = useState(false)
+  const [isFormChecked, setIsFormChecked] = useState(false)
   // Tags
   const [formTags, setFormTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
@@ -79,10 +83,15 @@ const Applicant = () => {
   const [isTagLoading, setTagLoading] = useState(false)
   const [isTagModalVisible, setTagModalVisible] = useState(false)
 
-  // Multiple fields
-  const [certifications, setCertifications] = useState([
-    ""
-  ])
+  // Certifications
+  const [certifications, setCertifications] = useState([])
+  const [isCertificationModalVisible, setCertificationModalVisible] = useState(false)
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalItems, setTotalItems] = useState(0)
 
   const [pdfScale, setPdfScale] = useState(1.0)
 
@@ -106,17 +115,26 @@ const Applicant = () => {
     skills: z.string().min(10).max(255),
     workExperience: z.string().min(10).max(255),
     education: z.string().min(10).max(255),
-    certifications: z.array(z.string()).optional(),
+    // certifications: z.array(z.string()).optional(),
     tags: z.array(z.string()).min(1, { message: 'At least one tag is required' }),
+    remarks: z.string().optional(),
     file: z
       .any()
-      .refine((file) => file.length > 0, {
-        message: 'File is required',
-      })
       // its a bird, its a plane, its a superRefine! 
       // Can't help but think of the Superfriends when I see this
 
       .superRefine((file, ctx) => {
+        // if editing, file is optional
+        if (isEdit) {
+          return
+        }
+        if (!file[0]) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'File is required',
+          });
+        }
+
         if (file[0]) {
           if (file[0].type !== 'application/pdf') {
             ctx.addIssue({
@@ -140,13 +158,13 @@ const Applicant = () => {
     reset: formReset,
     formState: { errors },
   } = useForm({
-    // resolver: zodResolver(fileSchema)
+    resolver: zodResolver(applicantSchema),
 
-    resolver: async (data, context, options) => {
-      const result = await zodResolver(applicantSchema)(data, context, options);
-      console.log("Validation result:", result);
-      return result;
-    },
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(applicantSchema)(data, context, options);
+    //   console.log("Validation result:", result);
+    //   return result;
+    // },
   })
 
   const handlePreview = (data) => {
@@ -170,55 +188,75 @@ const Applicant = () => {
 
   const handleUpload = async () => {
     try {
-      console.log("ID: ", data.id)
-      // parse certifications. remove empty strings
+      const filteredCertifications = certifications.length === 0 ? [] : certifications.map((cert) => {
+        return {
+          name: cert.name,
+          authority: cert.authority,
+          year: cert.year
+        }
+      });
 
-      const filteredCertifications = data.certifications.filter((cert) => cert !== '')
+      const formData = new FormData();
+      formData.append('firstname', data.firstname);
+      formData.append('lastname', data.lastname);
+      formData.append('middlename', data.middlename);
+      formData.append('email', data.email);
+      formData.append('phone', data.phone);
+      formData.append('address', data.address);
+      formData.append('portfolioUrl', data.portfolioUrl);
+      formData.append('professionalSummary', data.profSummary);
+      formData.append('skills', data.skills);
+      formData.append('workExperience', data.workExperience);
+      formData.append('education', data.education);
 
-      const formData = new FormData()
-      formData.append('firstname', data.firstname)
-      formData.append('lastname', data.lastname)
-      formData.append('middlename', data.middlename)
-      formData.append('email', data.email)
-      formData.append('phone', data.phone)
-      formData.append('address', data.address)
-      formData.append('portfolioUrl', data.portfolioUrl)
-      formData.append('professionalsummary', data.profSummary)
-      formData.append('skills', data.skills)
-      formData.append('workExperience', data.workExperience)
-      formData.append('education', data.education)
-      formData.append('certifications', JSON.stringify(filteredCertifications))
-      formData.append('tags', JSON.stringify(selectedTags.map((tag) => tag._id)))
-      formData.append('file', data.file)
+      // Convert certifications and tags arrays to JSON before appending
+      formData.append('certifications', JSON.stringify(filteredCertifications));
+      formData.append('tags', JSON.stringify(selectedTags.map((tag) => tag._id)));
+
+      // Append the file
+      formData.append('file', data.file);
+
+      // Log FormData for debugging
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
 
       const res = isEdit
         ? await put(`/applicant/${data.id}`, formData)
-        : await post(`/applicant`, formData)
-      console.log(res)
-      if (res.success === true) {
-        alert(res.message)
-        getAllData()
-        handleReset();
-        setIsPreview(false)
+        : await post(`/applicant`, formData);
 
+      console.log(res);
+      if (res.success === true) {
+        alert(res.message);
+        getAllData();
+        handleReset();
+        setIsPreview(false);
       } else {
-        console.log('Failed')
+        console.log('Failed');
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const getAllData = async () => {
+
+  const getAllData = async (page, limit) => {
     try {
       setIsLoading(true)
-      const res = await get('/applicant/all')
+      const res = isSearchMode
+        ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}`)
+        : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
       if (res.success === true) {
         setAllData(res.data)
+        setCurrentPage(res.currentPage)
+        setTotalPages(res.totalPages)
+        setTotalItems(res.totalItems)
         setIsLoading(false)
+
       } else {
         console.log('Failed')
         setIsLoading(false)
+        setSearchMode(false)
       }
     } catch (error) {
       console.log(error)
@@ -227,15 +265,17 @@ const Applicant = () => {
 
   const handleEdit = async (id) => {
     try {
+      handleReset()
+      setCertifications([])
       // console.log("Handle Edit: ", id)
       const res = await get(`/applicant/${id}`)
-      console.log("Edit Data: ", res)
+      // console.log("Edit Data: ", res)
       if (res.success === true) {
         formReset({
           id: res.data._id,
-          firstname: res.data.firstName,
-          lastname: res.data.lastName,
-          middlename: res.data.middleName,
+          firstname: res.data.firstname,
+          lastname: res.data.lastname,
+          middlename: res.data.middlename,
           email: res.data.email,
           phone: res.data.phone,
           address: res.data.address,
@@ -244,8 +284,8 @@ const Applicant = () => {
           skills: res.data.skills,
           workExperience: res.data.workExperience,
           education: res.data.education,
-          certifications: res.data.certifications.map(cert => cert),
-          tags: res.data.tags.map(tag => tag),
+          certifications: res.data.certifications,
+          tags: res.data.tags,
           file: ''
         })
         res.data.certifications.forEach((cert) => {
@@ -254,7 +294,7 @@ const Applicant = () => {
         // fetch tags data
         res.data.tags.map(async (tag) => {
           const res = await get(`/tags/${tag}`)
-          console.log("Tag: ", res)
+          // console.log("Tag: ", res)
           if (res.success === true) {
             setSelectedTags((prev) => [...prev, res.data])
           } else {
@@ -321,9 +361,9 @@ const Applicant = () => {
     name: z.string()
       .min(2, { message: "Tag must be at least 2 characters long" })
       .max(255, { message: "Tag must be at most 255 characters long" }),
-    category: z.string()
-      .min(2, { message: "Category must be at least 2 characters long" })
-      .max(255, { message: "Category must be at most 255 characters long" })
+    // category: z.string()
+    //   .min(2, { message: "Category must be at least 2 characters long" })
+    //   .max(255, { message: "Category must be at most 255 characters long" })
   })
 
   const {
@@ -331,20 +371,21 @@ const Applicant = () => {
     handleSubmit: tagHandleSubmit,
     formState: { errors: tagErrors }
   } = useForm({
-    resolver: async (data, context, options) => {
-      const result = await zodResolver(tagSchema)(data, context, options);
-      console.log("Validation result:", result);
-      return result;
-    },
+    resolver: zodResolver(tagSchema)
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(tagSchema)(data, context, options);
+    //   console.log("Validation result:", result);
+    //   return result;
+    // },
   })
 
   const getAllTagOptions = async () => {
     try {
       setTagLoading(true)
-      const res = await get('/tags/all')
+      const category = 'applicant'
+      const res = await get(`/tags/category/${category}`)
       if (res.success === true) {
         setFormTags(res.data)
-        console.log(res.data)
         setTagLoading(false)
       } else {
         console.log('Failed')
@@ -373,7 +414,7 @@ const Applicant = () => {
       console.log(data)
       const tag = {
         name: data.name,
-        category: data.category
+        category: 'applicant'
       }
       const res = await post('/tags', tag)
       if (res.success === true) {
@@ -388,58 +429,74 @@ const Applicant = () => {
     }
   }
 
+
+  // Certification Schema
+  const certificationSchema = z.object({
+    name: z.string()
+      .min(2, { message: "Certification must be at least 2 characters long" })
+      .max(255, { message: "Certification must be at most 255 characters long" }),
+    authority: z.string()
+      .min(2, { message: "Authority must be at least 2 characters long" })
+      .max(255, { message: "Authority must be at most 255 characters long" }),
+    year: z.string()
+      .min(4, { message: "Year must be at least 4 characters long" })
+      .max(4, { message: "Year must be at most 4 characters long" }),
+  })
+
+  const {
+    register: certRegister,
+    handleSubmit: certHandleSubmit,
+    formState: { errors: certErrors }
+  } = useForm({
+    resolver: zodResolver(certificationSchema)
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(certificationSchema)(data, context, options);
+    //   console.log("Validation result:", result);
+    //   return result;
+    // }
+  })
+
   // Certification Fields Manipulation
-  const handleAddCertField = () => {
-    setCertifications(prev => [...prev, ''])
+  const handleAddCertField = (data) => {
+    const newCert = {
+      id: certifications.length + 1,
+      name: data.name,
+      authority: data.authority,
+      year: data.year
+    }
+    // remove the empty certification field
+    setCertifications((prev) => [...prev, newCert])
   }
 
-  const handleRemoveCertField = (index) => {
-    console.log("Remove: ", index)
-    // remove cert field and its value
-    setCertifications(prev => prev.filter((_, i) => i !== index))
+  const handleRemoveCertField = (name) => {
+    if (certifications.length === 1)
+      return
 
-
-  }
-
-  const handleCertChange = (e, index) => {
-    const { value } = e.target
-    setCertifications(prev => {
-      return prev.map((item, i) => {
-        if (i === index) {
-          return value
-        }
-        return item
-      })
-    })
+    setCertifications((prev) => prev.filter((cert) => cert.name !== name))
   }
 
   // Search
   const searchSchema = z.object({
-    searchInput: z.string().min(2).max(255)
+    searchInput: z.string().min(1, { message: 'Search query is required' }),
   })
   const {
     register: searchRegister,
     handleSubmit: searchHandleSubmit,
     formState: { errors: searchErrors }
   } = useForm({
-    resolver: async (data, context, options) => {
-      const result = await zodResolver(searchSchema)(data, context, options);
-      console.log("Validation result:", result);
-      return result;
-    },
+    resolver: zodResolver(searchSchema)
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(searchSchema)(data, context, options);
+    //   console.log("Validation result:", result);
+    //   return result;
+    // },
   })
 
-  const searchSubmit = async (searchInput) => {
+  const searchSubmit = async (data) => {
     try {
-      setIsLoading(true)
-      const res = await get(`/applicant/search/${searchInput}`)
-      if (res.success === true) {
-        setAllData(res.data)
-        setIsLoading(false)
-      } else {
-        console.log('Failed')
-        setIsLoading(false)
-      }
+      setSearchMode(true)
+      setSearchInput(data.searchInput)
+      getAllData()
     } catch (error) {
       console.log(error)
     }
@@ -456,16 +513,43 @@ const Applicant = () => {
   }
 
 
-  useEffect(() => {
-    console.log("Selected tags: ", selectedTags)
-    console.log("Certifications: ", certifications)
-
-  }, [selectedTags, certifications])
 
   useEffect(() => {
-    getAllTagOptions()
-    getAllData()
-  }, [])
+    // 
+    const delayDebounceFn = setTimeout(() => {
+      getAllData()
+      getAllTagOptions()
+    }, 500)
+    return () => {
+      clearTimeout(delayDebounceFn)
+    }
+  }, [currentPage, totalPages, totalItems, searchInput, isSearchMode])
+
+  // Pagination handler
+  const handlePageChange = (action) => {
+    console.log("Action: ", action);
+
+    switch (action) {
+      case 'firstPage':
+        setCurrentPage(1);
+        break;
+
+      case 'prevPage':
+        setCurrentPage((prevPage) => prevPage - 1);
+        break;
+
+      case 'nextPage':
+        setCurrentPage((prevPage) => prevPage + 1)
+        break;
+
+      case 'lastPage':
+        setCurrentPage(totalPages)
+        break;
+
+      default:
+        console.warn('Unknown action:', action);
+    }
+  };
 
   return (
     <CContainer className='d-flex flex-column gap-2 mb-3'>
@@ -828,45 +912,88 @@ const Applicant = () => {
                         {
                           certifications.map((cert, index) => {
                             return (
-                              <CInputGroup key={index} className='my-2'>
-                                <CFormTextarea
-                                  type='text'
-                                  id={`certifications[${index}]`}
-                                  placeholder={
-                                    "Certification Name\n" +
-                                    "Certification Authority\n" +
-                                    "Certification Year\n"
-                                  }
-                                  onChange={(e) => handleCertChange(e, index)}
-                                  {...register(`certifications[${index}]`)}
-                                  invalid={
-                                    errors.certifications && errors.certifications[index]
-                                  }
-                                />
-                                <CButton
-                                  className='btn btn-outline-danger'
-                                  disabled={certifications.length === 1}
-                                  onClick={() => handleRemoveCertField(index)}
-                                >
-                                  <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-                                </CButton>
-                              </CInputGroup>
-                            )
-                          })
-                        }
-                        {
-                          errors.certifications && errors.certifications.map((error, index) => {
-                            return (
-                              <CFormFeedback key={index} className='text-danger'>
-                                {error.message}
-                              </CFormFeedback>
+                              <CRow key={index} className='d-flex flex-column gap-3 mb-3'>
+                                <CCol className='d-flex flex-column gap-2'>
+                                  <div>
+                                    <CFormInput
+                                      type='text'
+                                      id={`name[${index}]`}
+                                      placeholder='Certification Name'
+                                      value={cert.name}
+                                      readOnly
+                                      {...certRegister(`certifications[${index}].name`)}
+                                      invalid={!!certErrors.certifications && !!certErrors.certifications[index]}
+                                    />
+                                    {
+                                      certErrors.certifications && certErrors.certifications[index] &&
+                                      <CFormFeedback className='text-danger'>
+                                        {certErrors.certifications[index].message}
+                                      </CFormFeedback>
+                                    }
+                                  </div>
+                                  <div>
+                                    <CFormInput
+                                      type='text'
+                                      id={`authority[${index}]`}
+                                      placeholder='Certification Authority'
+                                      value={cert.authority}
+                                      readOnly
+                                      {...certRegister(`certifications[${index}].authority`)}
+                                      invalid={!!certErrors.certifications && !!certErrors.certifications[index]}
+                                    />
+                                    {
+                                      certErrors.certifications && certErrors.certifications[index] &&
+                                      <CFormFeedback className='text-danger'>
+                                        {certErrors.certifications[index].message}
+                                      </CFormFeedback>
+                                    }
+                                  </div>
+                                  <div>
+                                    <CFormInput
+                                      type='text'
+                                      id={`year[${index}]`}
+                                      placeholder='Certification Year'
+                                      value={cert.year}
+                                      readOnly
+                                      {...certRegister(`certifications[${index}].year`)}
+                                      invalid={!!certErrors.certifications && !!certErrors.certifications[index]}
+                                    />
+                                    {
+                                      certErrors.certifications && certErrors.certifications[index] &&
+                                      <CFormFeedback className='text-danger'>
+                                        {certErrors.certifications[index].message}
+                                      </CFormFeedback>
+                                    }
+                                  </div>
+                                </CCol>
+                                <CCol className='d-flex justify-content-end'>
+                                  <CTooltip
+                                    content='Remove Field'
+                                    placement='top'
+                                  >
+                                    <CButton
+                                      onClick={() => handleRemoveCertField(cert.name)}
+                                      className='btn btn-outline-danger'
+                                    >
+                                      <FontAwesomeIcon icon={faMinus}></FontAwesomeIcon>
+                                    </CButton>
+                                  </CTooltip>
+                                </CCol>
+                              </CRow>
                             )
                           })
                         }
                         <div className='d-flex justify-content-end'>
-                          <CButton className='btn btn-outline-success ' onClick={() => handleAddCertField()}>
-                            <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
-                          </CButton>
+
+                          <CTooltip
+                            content='Add Certification'
+                            placement='top'
+                          >
+                            <CButton className='btn btn-outline-success ' onClick={() => setCertificationModalVisible(true)}>
+                              <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
+                            </CButton>
+                          </CTooltip>
+
                         </div>
                       </div>
                     </CRow>
@@ -915,6 +1042,23 @@ const Applicant = () => {
                           errors.tags &&
                           <CFormFeedback className='text-danger'>
                             {errors.tags.message}
+                          </CFormFeedback>
+                        }
+                      </div>
+                    </CRow>
+                    <CRow>
+                      <div>
+                        <CFormTextarea
+                          id='remarks'
+                          placeholder='...'
+                          label='Remarks'
+                          {...register('remarks')}
+                          invalid={!!errors.remarks}
+                        />
+                        {
+                          errors.remarks &&
+                          <CFormFeedback className='text-danger'>
+                            {errors.remarks.message}
                           </CFormFeedback>
                         }
                       </div>
@@ -995,7 +1139,7 @@ const Applicant = () => {
                   )
                   : (
                     <div>
-                      <ul className='list-group'>
+                      {/* <ul className='list-group'>
                         {
                           allData.length === 0 ? (
                             <p>
@@ -1058,18 +1202,124 @@ const Applicant = () => {
                               })
                             )
                         }
-                      </ul>
+                      </ul> */}
+                      {
+                        allData.length === 0 ? (
+                          <p>
+                            No Data
+                          </p>
+                        )
+                          :
+                          (
+                            allData.map((item, index) => {
+                              return (
+                                <CCard key={index}>
+                                  <CCardBody>
+                                    <div className='d-flex gap-2'>
+                                      {/* expired? */}
+                                      {
+                                        item.expired < new Date().toISOString()
+                                          ? (
+                                            <CBadge color='danger' >
+                                              Expired
+                                            </CBadge>
+                                          )
+                                          : (
+                                            <CBadge color='success' >
+                                              Active
+                                            </CBadge>
+                                          )
+                                      }
+                                      {
+                                        item.tags.map((tag, index) => {
+                                          return (
+                                            <CBadge key={index} color='primary'>
+                                              {/* // get tag name from formtags */}
+                                              {
+                                                formTags.find((item) => item._id === tag) &&
+                                                formTags.find((item) => item._id === tag).name
+                                              }
+                                            </CBadge>
+                                          )
+                                        })
+                                      }
+                                    </div>
+                                    <div>
+                                      <div className='text-muted d-flex gap-2' style={{
+                                        fontSize: '0.8rem'
+                                      }}>
+                                        {item._id}
+                                      </div>
+                                      <div>
+                                        <strong>
+                                          {item.firstname}, {item.lastname} {item?.middlename}
+                                        </strong>
+                                      </div>
+                                    </div>
+
+                                    <div className='d-flex justify-content-end'>
+                                      <CButtonGroup>
+                                        <CTooltip
+                                          content='Edit'
+                                          placement='top'
+                                        >
+                                          <CButton
+                                            onClick={() => handleEdit(item._id)}
+                                            className='btn btn-outline-primary'
+                                          >
+                                            <FontAwesomeIcon icon={faPencil} />
+                                          </CButton>
+                                        </CTooltip>
+                                        <CTooltip
+                                          content='Delete'
+                                          placement='top'
+                                        >
+                                          <CButton
+                                            onClick={() => handleDelete(item._id)}
+                                            className='btn btn-outline-danger'
+                                          >
+                                            <FontAwesomeIcon icon={faTrash} />
+                                          </CButton>
+                                        </CTooltip>
+                                      </CButtonGroup>
+                                    </div>
+
+                                  </CCardBody>
+                                </CCard>
+                              )
+                            })
+                          )
+                      }
                     </div>
                   )
               }
             </CCardBody>
+            <CCardFooter className='d-flex flex-row gap-2 justify-content-center align-items-center'>
+              <CButton onClick={() => handlePageChange('firstPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </CButton>
+
+              <CButton onClick={() => handlePageChange('prevPage')} disabled={currentPage === 1 && true} className='btn btn-outline-primary'>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </CButton>
+              <p>
+                Page {currentPage} of {totalPages}
+              </p>
+
+              <CButton onClick={() => handlePageChange('nextPage')} disabled={currentPage === totalPages && true} className='btn btn-outline-primary'>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </CButton>
+              <CButton onClick={() => handlePageChange('lastPage')} disabled={currentPage === totalPages && true} className='btn btn-outline-primary'>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </CButton>
+            </CCardFooter>
           </CCard>
         </CCol>
       </CRow>
 
       {/* Modals */}
-      {/* Preview */}
       <CRow>
+        {/* Preview */}
         <CModal
           scrollable={true}
           alignment='center'
@@ -1090,114 +1340,229 @@ const Applicant = () => {
               <div className='h6 fw-bold'>
                 Please check the details before submitting.
               </div>
-              <div>
-                <div>
-                  <strong>
-                    First Name:
-                  </strong>
-                  <p>
-                    {data.firstname}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Last Name:
-                  </strong>
-                  <p>
-                    {data.lastname}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Middle Name:
-                  </strong>
-                  <p>
-                    {data.middlename}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Email:
-                  </strong>
-                  <p>
-                    {data.email}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Phone:
-                  </strong>
-                  <p>
-                    {data.phone}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Address:
-                  </strong>
-                  <p>
-                    {data.address}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Portfolio:
-                  </strong>
-                  <p>
-                    {data.portfolioUrl}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Professional Summary:
-                  </strong>
-                  <p>
-                    {data.profSummary}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Skills:
-                  </strong>
-                  <p>
-                    {data.skills}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Work Experience:
-                  </strong>
-                  <p>
-                    {data.workExperience}
-                  </p>
-                </div>
-                <div>
-                  <strong>
-                    Education:
-                  </strong>
-                  <p>
-                    {data.education}
-                  </p>
-                </div>
-                <div>
-                  <div>
-                    <strong>
-                      Certifications:
-                    </strong>
-                    <div>
-                      {
-                        data.certifications && data.certifications.map((cert, index) => {
-                          return (
-                            <div key={index}>
-                              {cert}
+              <CContainer className='d-flex flex-column gap-3'>
+                <CRow>
+                  <CCol
+                    md={5}
+                  >
+                    <CFormInput
+                      type='text'
+                      id='firstname'
+                      placeholder='John Sr.'
+                      label='First Name'
+                      readOnly
+                      value={data.firstname}
+                    />
+                  </CCol>
+                  <CCol md={5}>
+                    <CFormInput
+                      type='text'
+                      id='lastname'
+                      placeholder='Doe'
+                      label='Last Name'
+                      readOnly
+                      value={data.lastname}
+                    />
+                  </CCol>
+                  <CCol md={2}>
+                    <CFormInput
+                      type='text'
+                      id='middlename'
+                      placeholder='...'
+                      label='Middle Name'
+                      readOnly
+                      value={data.middlename}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormInput
+                      type='email'
+                      id='email'
+                      placeholder='user@mail.com'
+                      label='Email'
+                      readOnly
+                      value={data.email}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormInput
+                      type='text'
+                      id='phone'
+                      placeholder='1234567890'
+                      label='Phone'
+                      readOnly
+                      value={data.phone}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+                      id='address'
+                      placeholder='City, Country'
+                      label='Address'
+                      readOnly
+                      value={data.address}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormInput
+                      type='text'
+                      id='portfolioUrl'
+                      placeholder='https://www.github.com/example'
+                      label='Porfolio (URL)'
+                      readOnly
+                      value={data.portfolioUrl}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+                      type='text'
+                      id='profSummary'
+                      placeholder='...'
+                      label='Professional Summary'
+                      readOnly
+                      value={data.profSummary}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+                      type='text'
+                      id='skills'
+                      placeholder='...'
+                      label='Skills'
+                      readOnly
+                      value={data.skills}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+                      type='text'
+                      id='workExperience'
+                      placeholder={
+                        'Company Name\n' + 'Position\n' + 'Duration\n' + 'Description'
+                      }
+                      label='Work Experience'
+                      readOnly
+                      value={data.workExperience}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+
+                      type='text'
+                      id='education'
+                      placeholder={
+                        "School Name\n" + "Degree\n" + "Graduation Year\n"
+                      }
+                      label='Education'
+                      readOnly
+                      value={data.education}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormLabel htmlFor='certification'>
+                      Certification
+                    </CFormLabel>
+                    {
+                      certifications.map((cert, index) => {
+                        return (
+                          <div key={index} className='d-flex flex-column gap-2'>
+                            <div>
+                              <CFormInput
+                                type='text'
+                                id={`name[${index}]`}
+                                placeholder='Certification Name'
+                                value={cert.name}
+                                readOnly
+                              />
                             </div>
+                            <div>
+                              <CFormInput
+                                type='text'
+                                id={`authority[${index}]`}
+                                placeholder='Certification Authority'
+                                value={cert.authority}
+                                readOnly
+                              />
+                            </div>
+                            <div>
+                              <CFormInput
+                                type='text'
+                                id={`year[${index}]`}
+                                placeholder='Year'
+                                value={cert.year}
+                                readOnly
+                              />
+                            </div>
+                            <hr />
+
+                          </div>
+                        )
+                      })
+                    }
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormLabel htmlFor='tag'>
+                      Tags
+                    </CFormLabel>
+                    <CRow className='d-flex flex-row gap-2 justify-content-start'>
+                      {
+                        selectedTags.map((tag, index) => {
+                          return (
+                            <CCol key={tag._id}>
+                              <CInputGroup>
+                                <CButton
+                                  {
+                                  ...register(`tags[${index}]`)
+                                  }
+                                  className='btn btn-primary'
+                                  style={{
+                                    width: '100%'
+                                  }}
+                                >
+                                  {firstLetterUppercase(tag.name)}
+                                </CButton>
+                              </CInputGroup>
+                            </CCol>
                           )
                         })
                       }
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    </CRow>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CFormTextarea
+                      type='text'
+                      id='remarks'
+                      placeholder='...'
+                      label='Remarks'
+                      readOnly
+                      {...register('remarks')}
+                      invalid={!!errors.remarks}
+                    />
+                  </CCol>
+                </CRow>
+              </CContainer>
               <hr />
               {/* <div className='d-flex justify-content-end'>
                   <CButton type='button' onClick={() => setPdfScale(prev => prev + 0.1)}>
@@ -1249,7 +1614,7 @@ const Applicant = () => {
         >
           <CModalHeader>
             <CModalTitle>
-              Add Tags
+              Add Applicant Tag
             </CModalTitle>
           </CModalHeader>
           <CModalBody>
@@ -1270,7 +1635,7 @@ const Applicant = () => {
                   {tagErrors.name.message}
                 </CFormFeedback>
               }
-              <CFormInput
+              {/* <CFormInput
                 type='text'
                 id='category'
                 placeholder='Enter category'
@@ -1282,7 +1647,7 @@ const Applicant = () => {
                 <CFormFeedback className='text-danger'>
                   {tagErrors.category.message}
                 </CFormFeedback>
-              }
+              } */}
               <CButton type='submit' className='btn btn-success'>
                 Add Tag
               </CButton>
@@ -1290,6 +1655,70 @@ const Applicant = () => {
           </CModalBody>
         </CModal>
 
+        {/* add certifications modal */}
+        <CModal
+          alignment='center'
+          visible={isCertificationModalVisible}
+          onClose={() =>
+            setCertificationModalVisible(false)
+          }
+          size='sm'
+        >
+          <CModalHeader>
+            <CModalTitle>
+              Add Certifications
+            </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CForm
+              onSubmit={certHandleSubmit(handleAddCertField)}
+              className='d-flex flex-column gap-2'
+            >
+              <CFormInput
+                type='text'
+                id='name'
+                placeholder='Enter certification'
+                {...certRegister('name')}
+                invalid={!!certErrors.name}
+              />
+              {
+                certErrors.name &&
+                <CFormFeedback className='text-danger'>
+                  {certErrors.name.message}
+                </CFormFeedback>
+              }
+              <CFormInput
+                type='text'
+                id='authority'
+                placeholder='Enter authority'
+                {...certRegister('authority')}
+                invalid={!!certErrors.authority}
+              />
+              {
+                certErrors.authority &&
+                <CFormFeedback className='text-danger'>
+                  {certErrors.authority.message}
+                </CFormFeedback>
+              }
+              <CFormInput
+                type='number'
+                id='year'
+                placeholder='Enter year'
+                {...certRegister('year')}
+                invalid={!!certErrors.year}
+              />
+              {
+                certErrors.year &&
+                <CFormFeedback className='text-danger'>
+                  {certErrors.year.message}
+                </CFormFeedback>
+              }
+              <CButton type='submit' className='btn btn-success'>
+                Add Certification
+              </CButton>
+            </CForm>
+          </CModalBody>
+        </CModal>
       </CRow>
     </CContainer >
   )
