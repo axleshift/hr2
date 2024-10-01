@@ -1,27 +1,77 @@
 import cron from "node-cron";
 import Jobposter from "../database/models/jobposterModel";
-import { removeTweet } from "../utils/twitter";
+import Jobposting from "../database/models/jobpostingModel";
+import { removeTweet, createTweet } from "../utils/twitter";
 import logger from "../middleware/logger";
 
 const now = new Date();
 
+// I just hope this works as I instructed it to be done
+// haha, I'm just kidding, I'm sure it will work.. I hope
+
+interface JobposterType {
+  _id: string;
+  platform: string;
+  isApproved: boolean;
+  isPosted: boolean;
+  content: string;
+  post_id: string;
+  ref_id: string;
+}
+
+interface JobpostingType {
+  _id: string;
+  status: string;
+}
+
+interface TweetType {
+  id_str: string;
+}
+
 const fetchExpiredJobposters = async () => {
-  const expiredJobposters = await Jobposter.find({
+  const expiredJobposters = (await Jobposter.find({
     expiresAt: { $lt: now },
     status: "active",
-  });
+  })) as JobposterType[];
   return expiredJobposters;
 };
 
-const updateExpiredJobposters = async (expiredJobposters: any) => {
+const postApprovedJobposter = async () => {
+  const jobposters = await Jobposter.find({
+    platform: "twitter",
+    isApproved: true,
+    isPosted: false,
+  });
+
+  for (const jobposter of jobposters) {
+    try {
+      const tweet = (await createTweet(jobposter.content)) as TweetType;
+      await Jobposter.updateOne(
+        { _id: jobposter._id },
+        { post_id: (tweet as TweetType).id_str, isPosted: true }
+      );
+      const jobposting = (await Jobposting.findById(
+        jobposter.ref_id
+      )) as JobpostingType;
+      await Jobposting.updateOne({ _id: jobposting._id }, { status: "active" });
+    } catch (error) {
+      logger.error(
+        `Error posting tweet for jobposter ${jobposter._id}:`,
+        error
+      );
+    }
+  }
+};
+
+const updateExpiredJobposters = async (expiredJobposters: JobposterType[]) => {
   const updatedJobposters = await Jobposter.updateMany(
-    { _id: { $in: expiredJobposters.map((jobposter: any) => jobposter._id) } },
+    { _id: { $in: expiredJobposters.map((jobposter) => jobposter._id) } },
     { status: "expired" }
   );
   return updatedJobposters;
 };
 
-const removeFromTwitter = async (expiredJobposters: any) => {
+const removeFromTwitter = async (expiredJobposters: JobposterType[]) => {
   for (const jobposter of expiredJobposters) {
     if (jobposter.platform === "twitter") {
       try {
@@ -43,8 +93,11 @@ const removeExpiredJobposters = () => {
       logger.info(`Found ${expiredJobposters.length} expired jobposters`);
       if (expiredJobposters.length > 0) {
         await updateExpiredJobposters(expiredJobposters);
+        logger.info("Expired jobposters updated");
         await removeFromTwitter(expiredJobposters);
-        logger.info("Expired jobposters removed");
+        logger.info("Expired jobposters removed from Twitter");
+        await postApprovedJobposter();
+        logger.info("Approved jobposters posted to Twitter");
       }
     } catch (error) {
       logger.error("Error removing expired jobposters:", error);
