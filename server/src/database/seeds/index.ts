@@ -12,6 +12,7 @@ const seedModules = seedFiles.map((file) => {
   const modulePath = path.join(currentDir, file);
   return import(modulePath);
 });
+
 const runSeeds = async () => {
   try {
     const modules = await Promise.all(seedModules);
@@ -22,7 +23,7 @@ const runSeeds = async () => {
     }
     logger.info("Seeds ran successfully");
   } catch (error) {
-    console.error("Error running seeds:", error);
+    logger.error("Error running seeds:", error);
   }
 };
 

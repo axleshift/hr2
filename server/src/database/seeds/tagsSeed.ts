@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Tag from "../models/tagModel";
-import { faker } from "@faker-js/faker";
 import logger from "../../middleware/logger";
 import { config } from "../../config";
 
