@@ -63,24 +63,21 @@ const Schedule = () => {
       color: 'success',
       text: 'active',
       isChecked: filter.active,
-      onClick: () => setFilter({ active: true, inactive: false, all: false }),
     },
     {
       color: 'danger',
       text: 'inactive',
       isChecked: filter.inactive,
-      onClick: () => setFilter({ active: false, inactive: true, all: false }),
     }, {
       color: 'warning',
       text: 'both',
       isChecked: filter.all,
-      onClick: () => setFilter({ active: false, inactive: false, all: true }),
     }
   ]);
 
   const formSchema = z.object({
-    sdStartDate: z.date().optional(),
-    sdEndDate: z.date().optional(),
+    jpfSchedStart: z.date().optional(),
+    jpfSchedEnd: z.date().optional(),
   })
     .refine((data) => {
       console.log("Start Date:", data.jpfSchedStart, "End Date:", data.jpfSchedEnd);
@@ -122,6 +119,54 @@ const Schedule = () => {
   const handleReview = (id) => {
     navigate(`/recruitment/jobposter/${id}`);
     console.log("Reviewing: ", id);
+  }
+
+  const handleLegendOnLick = (text) => {
+    console.log("Legend: ", text);
+    let newFilter = {
+      active: false,
+      inactive: false,
+      all: false,
+    };
+
+    switch (text) {
+      case 'active':
+        newFilter = {
+          active: true,
+          inactive: false,
+          all: false,
+        };
+        break;
+
+      case 'inactive':
+        newFilter = {
+          active: false,
+          inactive: true,
+          all: false,
+        };
+        break;
+
+      case 'both':
+        newFilter = {
+          active: false,
+          inactive: false,
+          all: true,
+        };
+        break;
+
+      default:
+        console.warn('Unknown legend:', text);
+    }
+
+    setFilter(newFilter);
+    setLegends((prevLegends) => {
+      return prevLegends.map((legend) => {
+        return {
+          ...legend,
+          isChecked: legend.text === text,
+        };
+      });
+    });
   }
 
   useEffect(() => {
@@ -221,10 +266,10 @@ const Schedule = () => {
                       legends.map((legend, index) => (
                         <div key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
                           <CButton
-                            type='button'
-                            color={legend.color}
-                            variant='outline'
-                            onClick={legend.onClick}
+                            onClick={() => handleLegendOnLick(legend.text)}
+                            className={
+                              legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
+                            }
                           />
                           <div className='text-lowercase text-muted text-small'>
                             {legend.text}

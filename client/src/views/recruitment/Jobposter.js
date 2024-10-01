@@ -27,13 +27,15 @@ import {
   CTooltip,
   CNav,
   CNavItem,
+  CInputGroupText,
+  CInputGroup,
 } from '@coreui/react'
 
-import { faChevronDown, faChevronUp, faChevronLeft, faCircleChevronLeft, faChevronRight, faCircleChevronRight, faLocationPin, faMoneyBill, faRefresh, faTrash, faPencil, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faChevronLeft, faCircleChevronLeft, faChevronRight, faCircleChevronRight, faLocationPin, faMoneyBill, faRefresh, faTrash, faPencil, faCalendar, faCircle } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { formatCurency, formattedDateMMM, trimString } from '../../utils';
+import { firstLetterUppercase, formatCurency, formattedDate, formattedDateMMM, trimString } from '../../utils';
 
 const Jobposter = () => {
   const { id } = useParams();
@@ -193,90 +195,174 @@ const Jobposter = () => {
                     </CButton>
                   </CCardHeader>
                   <CCollapse visible={isExpanded.jobposting}>
-                    <CCardBody className='d-flex flex-column gap-2'>
-                      <CRow>
-                        {
-                          data.status?.toLowerCase() === 'active'
-                            ? (
-                              <p style={{ fontSize: '10px' }} className='text-muted'>
-                                This is an
-                                <CBadge color='success' shape='rounded-pill' className='mx-2'>
-                                  Active
-                                </CBadge>
-                                job posting.
-                                This means that the job is currently open and accepting applications and already posted on the job board.
-                              </p>
-                            )
-                            : (
-                              <p style={{ fontSize: '10px' }} className='text-muted'>
-                                This is an
-                                <CBadge color='danger' shape='rounded-pill' className='mx-2'>
-                                  Inactive
-                                </CBadge>
-                                job posting.
-                                This means that the job posting is currently closed and not accepting applications.
-                              </p>
-                            )
-                        }
-                      </CRow>
-                      <CRow>
-                        <div className='h5'>
-                          {data.title}
-                        </div>
-                        <div className='d-flex flex-row gap-2 align-items-center'>
-                          <FontAwesomeIcon icon={faLocationPin} />
-                          <div>
-                            {data.location}
-                          </div>
-                        </div>
-                      </CRow>
-                      <CRow>
-                        <div className='d-flex flex-row gap-2 align-items-center'>
-                          <FontAwesomeIcon icon={faMoneyBill} />
-                          <div>
-                            {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
-                          </div>
-                        </div>
-                      </CRow>
-                      <CRow>
-                        <div className='d-flex flex-row gap-2 align-items-center'>
-                          <FontAwesomeIcon icon={faCalendar} />
-                          <div>
-                            {formattedDateMMM(data.schedule_start)} - {formattedDateMMM(data.schedule_end)}
-                          </div>
-                        </div>
-                      </CRow>
-                      <hr />
-                      <CRow>
-                        <div>
-                          <strong>
-                            Description
-                          </strong>
-                          <div>
-                            {data.description}
-                          </div>
-                        </div>
-                      </CRow>
-                      <CRow>
-                        <div>
-                          <strong>
-                            Requirements
-                          </strong>
-                          <div>
-                            {data.requirements}
-                          </div>
-                        </div>
-                      </CRow>
-                      <CRow>
-                        <div>
-                          <strong>
-                            Benefits
-                          </strong>
-                          <div>
-                            {data.benefits}
-                          </div>
-                        </div>
-                      </CRow>
+                    <CCardBody>
+                      <CContainer className='d-flex flex-column gap-2'>
+                        <CRow>
+                          <CCol>
+                            <CTooltip
+                              content={
+                                data.status?.toLowerCase() === 'active'
+                                  ? 'This is an active job posting. This means that the job is currently open and accepting applications and have posted on social media.'
+                                  : 'This is an inactive job posting. This means that the job posting is currently closed and not accepting applications.'
+                              }
+                              placement='top'
+                            >
+                              <CBadge color={
+                                data.status?.toLowerCase() === 'active'
+                                  ? 'success'
+                                  : 'danger'
+                              }>
+                                {firstLetterUppercase(data.status)}
+                              </CBadge>
+                            </CTooltip>
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <CFormInput
+                              id='title'
+                              name='title'
+                              label='Title'
+                              value={firstLetterUppercase(data.title)}
+                              readOnly
+                            />
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              id='type'
+                              name='type'
+                              label='Type'
+                              value={firstLetterUppercase(data.type)}
+                              readOnly
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Location
+                            </label>
+                            <CInputGroup className='mt-2'>
+                              <CInputGroupText>
+                                <FontAwesomeIcon icon={faLocationPin} />
+                              </CInputGroupText>
+                              <CFormInput
+                                id='location'
+                                name='location'
+                                value={firstLetterUppercase(data.location)}
+                                readOnly
+                              />
+                            </CInputGroup>
+                          </CCol>
+                          <CCol>
+                            <label htmlFor="">
+                              Salary
+                            </label>
+                            <CInputGroup className='mt-2'>
+                              <CInputGroupText>
+                                <FontAwesomeIcon icon={faMoneyBill} />
+                              </CInputGroupText>
+                              <CFormInput
+                                id='salarymin'
+                                name='salarymin'
+                                value={formatCurency(data.salary_min)}
+                                readOnly
+                              />
+                              <CFormInput
+                                id='salarymax'
+                                name='salarymax'
+                                value={formatCurency(data.salary_max)}
+                                readOnly
+                              >
+                              </CFormInput>
+                            </CInputGroup>
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Description
+                            </label>
+                            <CFormTextarea
+                              id='description'
+                              name='description'
+                              value={data.description}
+                              readOnly
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Responsibilities
+                            </label>
+                            <CFormTextarea
+                              id='responsibilities'
+                              name='responsibilities'
+                              value={data.responsibilities}
+                              readOnly
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Requirements
+                            </label>
+                            <CFormTextarea
+                              id='requirements'
+                              name='requirements'
+                              value={data.requirements}
+                              readOnly
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Benefits
+                            </label>
+                            <CFormTextarea
+                              id='benefits'
+                              name='benefits'
+                              value={data.benefits}
+                              readOnly
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow>
+                          <CCol>
+                            <label htmlFor="">
+                              Schedule
+                            </label>
+                            <CInputGroup className='mt-2'>
+                              <CInputGroupText>
+                                <FontAwesomeIcon icon={faCalendar} />
+                              </CInputGroupText>
+                              <CInputGroupText>
+                                Start
+                              </CInputGroupText>
+                              <CFormInput
+                                type='date'
+                                id='scheduleStart'
+                                name='scheduleStart'
+                                value={formattedDate(data.schedule_start)}
+                                readOnly
+                              />
+                              <CInputGroupText>
+                                End
+                              </CInputGroupText>
+                              <CFormInput
+                                type='date'
+                                id='scheduleEnd'
+                                name='scheduleEnd'
+                                value={formattedDate(data.schedule_end)}
+                                readOnly
+                              />
+                            </CInputGroup>
+                          </CCol>
+                        </CRow>
+                      </CContainer>
 
                     </CCardBody>
                   </CCollapse>
@@ -430,16 +516,29 @@ const Jobposter = () => {
                                     <CCardBody>
                                       <div className='d-flex gap-2'>
                                         <CBadge color={
-                                          item.status === 'posted'
+                                          item.status === 'active'
                                             ? 'success'
                                             : 'danger'
                                         }>
                                           {
-                                            item.status === 'posted'
-                                              ? 'Posted'
-                                              : 'Not Posted'
+                                            item.status === 'active'
+                                              ? 'Active'
+                                              : 'Inactive'
                                           }
                                         </CBadge>
+                                        {
+                                          item.isPosted
+                                            ? (
+                                              <CBadge color='success'>
+                                                Posted
+                                              </CBadge>
+                                            )
+                                            : (
+                                              <CBadge color='danger'>
+                                                Not Posted
+                                              </CBadge>
+                                            )
+                                        }
                                         {
                                           item.isDeleted && (
                                             <CBadge color='danger'>
