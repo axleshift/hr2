@@ -1,4 +1,3 @@
-import exp from "constants";
 import mongoose from "mongoose";
 
 const jobposterSchema = new mongoose.Schema(
@@ -17,7 +16,7 @@ const jobposterSchema = new mongoose.Schema(
     },
     post_id: {
       type: String,
-      required: true,
+      // required: true,
     },
     content: {
       type: String,
@@ -26,6 +25,14 @@ const jobposterSchema = new mongoose.Schema(
     expiresAt: {
       type: Date,
       required: false,
+    },
+    isApproved: {
+      type: Boolean,
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
     status: {
       type: String,
@@ -36,7 +43,7 @@ const jobposterSchema = new mongoose.Schema(
   {
     timestamps: true,
     updateAt: true,
-  }
+  },
 );
 
 export default mongoose.model("Jobposter", jobposterSchema);

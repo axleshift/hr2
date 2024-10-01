@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
 
+const certificationSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  authority: {
+    type: String,
+    required: true,
+  },
+  year: {
+    type: String,
+    required: true,
+  },
+});
+
 const applicantSchema = new mongoose.Schema(
   {
     firstname: {
@@ -28,7 +43,6 @@ const applicantSchema = new mongoose.Schema(
     },
     portfolioURL: {
       type: String,
-      required: true,
     },
     professionalSummary: {
       type: String,
@@ -71,16 +85,24 @@ const applicantSchema = new mongoose.Schema(
       required: true,
     },
     certifications: {
-      type: [String],
+      type: [certificationSchema],
       required: true,
     },
     tags: {
       type: [String],
       required: true,
     },
+    remarks: {
+      type: String,
+    },
     resumeFileLoc: {
       type: String,
       required: true,
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      default: new Date().setDate(new Date().getDate() + 7),
     },
   },
   {
