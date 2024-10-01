@@ -15,6 +15,7 @@
   "scripts": {
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",
+    "lint:fix": "eslint --fix \"src/**/*.js\"",
     "serve": "vite preview",
     "start": "vite",
     "dev": "vite"

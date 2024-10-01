@@ -43,7 +43,7 @@ const _nav = [
   {
     component: CNavGroup,
     name: 'Jobpostings',
-    icon: <FontAwesomeIcon icon={faBriefcase} size='lg' fixedWidth className='me-2' />,
+    icon: <FontAwesomeIcon icon={faBriefcase} size="lg" fixedWidth className="me-2" />,
     items: [
       {
         component: CNavItem,
@@ -54,13 +54,13 @@ const _nav = [
         component: CNavItem,
         name: 'Schedules',
         to: '/recruitment/schedules',
-      }
-    ]
+      },
+    ],
   },
   {
     component: CNavGroup,
     name: 'Applicants',
-    icon: <FontAwesomeIcon icon={faFile} size='lg' fixedWidth className='me-2' />,
+    icon: <FontAwesomeIcon icon={faFile} size="lg" fixedWidth className="me-2" />,
     items: [
       {
         component: CNavItem,
@@ -71,8 +71,8 @@ const _nav = [
         component: CNavItem,
         name: 'Schedules',
         to: '/recruitment/schedules',
-      }
-    ]
+      },
+    ],
   },
   // {
   //   component: CNavItem,
