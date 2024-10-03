@@ -1,13 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import {
-  addNewResume,
-  getAllResume,
-  getResumeById,
-  deleteResume,
-  updateResume,
-  searchResume,
-} from "../database/controllers/applicantController";
+import { addNewResume, getAllResume, getResumeById, deleteResume, updateResume, searchResume } from "../database/controllers/applicantController";
 
 router.post("/", addNewResume);
 router.put("/:id", updateResume);

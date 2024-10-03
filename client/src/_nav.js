@@ -67,12 +67,13 @@ const _nav = [
         name: 'Create & Edit',
         to: '/applicant/create',
       },
-      {
-        component: CNavItem,
-        name: 'Schedules',
-        to: '/recruitment/schedules',
-      },
     ],
+  },
+  {
+    component: CNavItem,
+    name: 'Tags & Categories',
+    to: '/tags/tags',
+    icon: <FontAwesomeIcon icon={faStar} size="lg" fixedWidth className="me-2" />,
   },
   // {
   //   component: CNavItem,

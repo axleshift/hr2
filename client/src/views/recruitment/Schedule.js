@@ -24,6 +24,8 @@ import {
   CCollapse,
   CButtonGroup,
   CTooltip,
+  CPagination,
+  CPaginationItem,
 } from '@coreui/react'
 import {
   faChevronDown,
@@ -40,6 +42,8 @@ import {
   faCalendar,
   faClipboard,
   faClipboardCheck,
+  faForward,
+  faBackward,
 } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -262,7 +266,12 @@ const Schedule = () => {
                         id="jpfSchedEnd"
                         name="jpfSchedEnd"
                         value={formattedDate(params.nextWeek)}
-                        onChange={(e) => setParams({ ...params, nextWeek: e.target.value })}
+                        onChange={(e) =>
+                          setParams({
+                            ...params,
+                            nextWeek: e.target.value,
+                          })
+                        }
                       />
                     </CCol>
                     {/* <CCol md={1}>
@@ -331,7 +340,10 @@ const Schedule = () => {
                                 <strong>{data.title}</strong>
                                 <div className="text-muted d-flex flex-row gap-2 align-items-center">
                                   <div
-                                    style={{ width: '15px', height: '15px' }}
+                                    style={{
+                                      width: '15px',
+                                      height: '15px',
+                                    }}
                                     className={`rounded
                                                 ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                                   />
@@ -358,40 +370,52 @@ const Schedule = () => {
                   </div>
                 )}
               </CCardBody>
-              <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-                <CButton
-                  onClick={() => handlePageChange('firstPage')}
-                  disabled={currentPage === 1 && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronLeft} />
-                </CButton>
-
-                <CButton
-                  onClick={() => handlePageChange('prevPage')}
-                  disabled={currentPage === 1 && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronLeft} />
-                </CButton>
-                <p>
-                  Page {currentPage} of {totalPages}
-                </p>
-
-                <CButton
-                  onClick={() => handlePageChange('nextPage')}
-                  disabled={currentPage === totalPages && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </CButton>
-                <CButton
-                  onClick={() => handlePageChange('lastPage')}
-                  disabled={currentPage === totalPages && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </CButton>
+              <CCardFooter className="d-flex justify-content-center">
+                <CPagination>
+                  <CPaginationItem
+                    onClick={() => handlePageChange('firstPage')}
+                    disabled={currentPage === 1}
+                  >
+                    &laquo;
+                  </CPaginationItem>
+                  {currentPage > 3 && (
+                    <>
+                      <CPaginationItem onClick={() => setCurrentPage(1)}>1</CPaginationItem>
+                      <CPaginationItem disabled>...</CPaginationItem>
+                    </>
+                  )}
+                  {[...Array(totalPages)].map((_, index) => {
+                    const page = index + 1
+                    if (page >= currentPage - 2 && page <= currentPage + 2) {
+                      return (
+                        <CPaginationItem
+                          key={index}
+                          onClick={() => setCurrentPage(page)}
+                          active={currentPage === page}
+                        >
+                          {page}
+                        </CPaginationItem>
+                      )
+                    }
+                    return null
+                  })}
+                  {currentPage < totalPages - 2 && (
+                    <>
+                      {currentPage < totalPages - 3 && (
+                        <CPaginationItem disabled>...</CPaginationItem>
+                      )}
+                      <CPaginationItem onClick={() => setCurrentPage(totalPages)}>
+                        {totalPages}
+                      </CPaginationItem>
+                    </>
+                  )}
+                  <CPaginationItem
+                    onClick={() => handlePageChange('nextPage')}
+                    disabled={currentPage === totalPages}
+                  >
+                    &raquo;
+                  </CPaginationItem>
+                </CPagination>
               </CCardFooter>
             </CCard>
           </CContainer>

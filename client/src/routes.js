@@ -9,6 +9,12 @@ const Jobposter = React.lazy(() => import('./views/recruitment/Jobposter'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
 const Applicant = React.lazy(() => import('./views/recruitment/Applicant'))
 
+// Tags & Categories | HR2
+const Tags = React.lazy(() => import('./views/tags/Tags'))
+
+// Errors
+const Page404 = React.lazy(() => import('./views/errors/Page404'))
+
 // Theme
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
@@ -69,6 +75,12 @@ const routes = [
   { path: '/recruitment/jobposter/:id', name: 'Jobposter', element: Jobposter },
   { path: '/recruitment/schedules', name: 'Schedules', element: Schedules },
   { path: '/applicant/create', name: 'Resume Create', element: Applicant },
+
+  // Tags & Categories | HR2
+  { path: '/tags/tags', name: 'Tags', element: Tags },
+
+  // Errors | HR2
+  { path: '*', name: 'Page404', element: Page404 },
 
   // Theme
   { path: '/theme', name: 'Theme', element: Colors, exact: true },

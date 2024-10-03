@@ -13,12 +13,14 @@
   "license": "MIT",
   "author": "The Freight Capsone Team (https://github.com/orgs/freight-capstone/people) && The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "start": "vite",
+    "serve": "vite preview",
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",
     "lint:fix": "eslint --fix \"src/**/*.js\"",
-    "serve": "vite preview",
-    "start": "vite",
-    "dev": "vite"
+    "format": "prettier --write \"src/**/*.js\""
   },
   "dependencies": {
     "@coreui/chartjs": "^4.0.0",

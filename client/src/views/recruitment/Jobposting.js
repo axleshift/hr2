@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-import dayjs from 'dayjs'
 import { post, put, get } from '../../api/axios'
 
 import {
@@ -88,7 +86,7 @@ const Jobposting = () => {
         (val) => new Date(val),
         z.date().min(new Date(), { message: 'End Date must be in the future' }),
       ),
-      jpfStatus: z.optional(),
+      jpfStatus: z.string().optional(),
     })
     .refine(
       (data) => {
@@ -113,9 +111,13 @@ const Jobposting = () => {
   } = useForm({
     // resolver: zodResolver(formSchema),
     resolver: async (data, context, options) => {
-      const result = await zodResolver(formSchema)(data, context, options)
-      console.log('Validation result:', result)
-      return result
+      try {
+        const result = await zodResolver(formSchema)(data, context, options)
+        console.log('Validation result:', result)
+        return result
+      } catch (error) {
+        console.log(error)
+      }
     },
   })
 
@@ -409,7 +411,9 @@ const Jobposting = () => {
                             type="number"
                             id="jpfSalaryMin"
                             placeholder="0"
-                            {...formRegister('jpfSalaryMin', { valueAsNumber: true })}
+                            {...formRegister('jpfSalaryMin', {
+                              valueAsNumber: true,
+                            })}
                             invalid={!!errors.jpfSalaryMin}
                           />
                           {errors.jpfSalaryMin && (
@@ -424,7 +428,9 @@ const Jobposting = () => {
                             type="number"
                             id="jpfSalaryMax"
                             placeholder="1"
-                            {...formRegister('jpfSalaryMax', { valueAsNumber: true })}
+                            {...formRegister('jpfSalaryMax', {
+                              valueAsNumber: true,
+                            })}
                             invalid={!!errors.jpfSalaryMax}
                           />
                           {errors.jpfSalaryMax && (
@@ -514,7 +520,9 @@ const Jobposting = () => {
                             type="date"
                             id="jpfSchedStart"
                             defaultValue={formattedDate(today)}
-                            {...formRegister('jpfSchedStart', { valueAsDate: true })}
+                            {...formRegister('jpfSchedStart', {
+                              valueAsDate: true,
+                            })}
                             invalid={!!errors.jpfSchedStart}
                           />
                           {errors.jpfSchedStart && (
@@ -529,7 +537,9 @@ const Jobposting = () => {
                             type="date"
                             id="jpfSchedEnd"
                             defaultValue={formattedDate(tommorrow)}
-                            {...formRegister('jpfSchedEnd', { valueAsDate: true })}
+                            {...formRegister('jpfSchedEnd', {
+                              valueAsDate: true,
+                            })}
                             invalid={!!errors.jpfSchedEnd}
                           />
                           {errors.jpfSchedEnd && (

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -141,12 +142,9 @@ const Applicant = () => {
       .any()
       // its a bird, its a plane, its a superRefine!
       // Can't help but think of the Superfriends when I see this
-
       .superRefine((file, ctx) => {
         // if editing, file is optional
-        if (isEdit) {
-          return
-        }
+        if (isEdit) return
         if (!file[0]) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -212,12 +210,12 @@ const Applicant = () => {
         certifications.length === 0
           ? []
           : certifications.map((cert) => {
-              return {
-                name: cert.name,
-                authority: cert.authority,
-                year: cert.year,
-              }
-            })
+            return {
+              name: cert.name,
+              authority: cert.authority,
+              year: cert.year,
+            }
+          })
 
       const formData = new FormData()
       formData.append('firstname', data.firstname)
@@ -490,8 +488,8 @@ const Applicant = () => {
   }
 
   const handleRemoveCertField = (name) => {
-    if (certifications.length === 1) return
-
+    console.log(name)
+    if (certifications.length === 0) return
     setCertifications((prev) => prev.filter((cert) => cert.name !== name))
   }
 
