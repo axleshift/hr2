@@ -30,26 +30,6 @@ jobs:
           npm i
           npm run lint
 
-      - name: Create Client Environment File
-        run: |
-          cd client
-          echo "NODE_ENV=${{secrets.CLIENT_NODE_ENV}}" > .env
-          echo "VITE_REACT_SERVER_URL=${{secrets.CLIENT_VITE_REACT_SERVER_URL}}" >> .env
-          cd ..
-
-      - name: Create Server Environment File
-        run: |
-          cd server
-          echo "NODE_ENV=${{secrets.SERVER_NODE_ENV}}" > .env
-          echo "JWT_SECRET=${{secrets.SERVER_JWT_SECRET}}" >> .env
-          echo "SESSION_SECRET=${{secrets.SERVER_SESSION_SECRET}}" >> .env
-          echo "MONGO_URI=${{secrets.SERVER_MONGO_URI}}" >> .env
-          echo "TWITTER_API_KEY=${{secrets.SERVER_TWITTER_API_KEY}}" >> .env
-          echo "TWITTER_API_SECRET=${{secrets.SERVER_TWITTER_API_SECRET}}" >> .env
-          echo "TWITTER_ACCESS_TOKEN=${{secrets.SERVER_TWITTER_ACCESS_TOKEN}}" >> .env
-          echo "TWITTER_ACCESS_TOKEN_SECRET=${{secrets.SERVER_TWITTER_ACCESS_TOKEN_SECRET}}" >> .env
-          cd ..
-
       - name: Upload Frontend
         id: push_directory_frontend
         uses: cpina/github-action-push-to-another-repository@main
