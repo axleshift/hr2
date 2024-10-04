@@ -25,6 +25,7 @@ jobs:
 
       - name: Build Client
         run: |
+          cd client
           npm run build
 
       - name: Push to client branch
@@ -56,6 +57,7 @@ jobs:
 
       - name: Build Server
         run: |
+          cd server
           npm run build
           npm run build:obfuscate
 
