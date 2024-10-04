@@ -36,7 +36,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git checkout -b hr2-frontend || git checkout -B hr2-frontend
           git config pull.rebase false
-          git pull origin hr2-frontend
+          git pull origin hr2-frontend --allow-unrelated-histories
           cp -R client/build/* .
           rm -rf server client
           git add .
@@ -74,7 +74,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git checkout -b hr2-backend || git checkout -B hr2-backend
           git config pull.rebase false
-          git pull origin hr2-backend
+          git pull origin hr2-backend --allow-unrelated-histories
           cp -r server/dist/* .
           rm -rf server client
           git add .
