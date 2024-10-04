@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-client:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Lint Client
+        run: |
+          cd client
+          npm i
+          npm run lint
+
+      - name: Build Client
+        run: |
+          npm run build
+
+      - name: Push to client branch
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git checkout -b hr2-frontend
+          cp -R client/build/* .
+          git add .
+          git commit -m "Build client"
+          git push origin hr2-frontend
+
+  build-server:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Lint Server
+        run: |
+          cd server
+          npm i
+          npm run lint
+
+      - name: Build Server
+        run: |
+          npm run build
+          npm run build:obfuscate
+
+      - name: Push to server branch
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git checkout -b hr2-backend
+          cp -r server/dist/* .
+          git add .
+          git commit -m "Build server"
+          git push origin hr2-backend
