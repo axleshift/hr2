@@ -38,6 +38,7 @@ jobs:
           git config pull.rebase false
           git pull origin hr2-frontend
           cp -R client/build/* .
+          rm -rf server client
           git add .
           git commit -m "Build client"
           git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-frontend
@@ -75,6 +76,7 @@ jobs:
           git config pull.rebase false
           git pull origin hr2-backend
           cp -r server/dist/* .
+          rm -rf server client
           git add .
           git commit -m "Build server"
           git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-backend
