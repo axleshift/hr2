@@ -29,7 +29,8 @@ jobs:
           npm run build
 
       - name: Push to client branch
-        env: GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
@@ -63,7 +64,8 @@ jobs:
           npm run build:obfuscate
 
       - name: Push to server branch
-        env: GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
