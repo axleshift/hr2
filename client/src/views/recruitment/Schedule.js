@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { get } from '../../api/axios'
 import dayjs from 'dayjs'
 
+import { Pagination } from '../../components'
+
 import {
   CButton,
   CCard,
@@ -371,51 +373,11 @@ const Schedule = () => {
                 )}
               </CCardBody>
               <CCardFooter className="d-flex justify-content-center">
-                <CPagination>
-                  <CPaginationItem
-                    onClick={() => handlePageChange('firstPage')}
-                    disabled={currentPage === 1}
-                  >
-                    &laquo;
-                  </CPaginationItem>
-                  {currentPage > 3 && (
-                    <>
-                      <CPaginationItem onClick={() => setCurrentPage(1)}>1</CPaginationItem>
-                      <CPaginationItem disabled>...</CPaginationItem>
-                    </>
-                  )}
-                  {[...Array(totalPages)].map((_, index) => {
-                    const page = index + 1
-                    if (page >= currentPage - 2 && page <= currentPage + 2) {
-                      return (
-                        <CPaginationItem
-                          key={index}
-                          onClick={() => setCurrentPage(page)}
-                          active={currentPage === page}
-                        >
-                          {page}
-                        </CPaginationItem>
-                      )
-                    }
-                    return null
-                  })}
-                  {currentPage < totalPages - 2 && (
-                    <>
-                      {currentPage < totalPages - 3 && (
-                        <CPaginationItem disabled>...</CPaginationItem>
-                      )}
-                      <CPaginationItem onClick={() => setCurrentPage(totalPages)}>
-                        {totalPages}
-                      </CPaginationItem>
-                    </>
-                  )}
-                  <CPaginationItem
-                    onClick={() => handlePageChange('nextPage')}
-                    disabled={currentPage === totalPages}
-                  >
-                    &raquo;
-                  </CPaginationItem>
-                </CPagination>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </CCardFooter>
             </CCard>
           </CContainer>

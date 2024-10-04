@@ -39,6 +39,7 @@ import {
   faPencil,
   faCalendar,
 } from '@fortawesome/free-solid-svg-icons'
+import { Pagination } from '../../components'
 import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
 const Jobposting = () => {
   const [isFormExpanded, setIsFormExpanded] = useState(false)
@@ -58,7 +59,7 @@ const Jobposting = () => {
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(9)
-  const [totalPages, setTotalPages] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
 
   // Display mode
   const [displayMode, setDisplayMode] = useState('grid')
@@ -144,7 +145,6 @@ const Jobposting = () => {
       const res = isEdit
         ? await put(`/jobposting/${data.jpf_id}`, formattedData)
         : await post('/jobposting', formattedData)
-      console.log(res)
       if (res.success === true) {
         isEdit ? alert('Jobposting updated successfully') : alert('Jobposting created successfully')
         getAllJobPosting(1)
@@ -219,14 +219,11 @@ const Jobposting = () => {
   const getAllJobPosting = async (page, limit) => {
     try {
       setIsLoading(true)
-      console.log('Fetch: Search Mode:  ', isSearchMode)
       const res = isSearchMode
         ? await get(`/jobposting/search?query=${searchInput}&page=${page}&limit=${limit}`)
         : await get(`/jobposting?page=${page}&limit=${limit}`)
 
       if (res.success === true) {
-        // console.log("All Date: ", res.data)
-
         setAllData(res.data)
         setCurrentPage(res.currentPage)
         setTotalPages(res.totalPages)
@@ -260,7 +257,6 @@ const Jobposting = () => {
   })
   const searchSubmit = async (data) => {
     try {
-      console.log('Search Input:  ', data.jpSearchInput)
       setIsSearchMode(true)
       setIsLoading(true)
       setSearchInput(data.jpSearchInput)
@@ -746,37 +742,11 @@ const Jobposting = () => {
                 )}
               </CCardBody>
               <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-                <CButton
-                  onClick={() => handlePageChange('firstPage')}
-                  disabled={currentPage === 1 && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faCircleChevronLeft} />
-                </CButton>
-                <CButton
-                  onClick={() => handlePageChange('prevPage')}
-                  disabled={currentPage === 1 && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronLeft} />
-                </CButton>
-                <p>
-                  Page {currentPage} of {totalPages}
-                </p>
-                <CButton
-                  onClick={() => handlePageChange('nextPage')}
-                  disabled={currentPage === totalPages && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </CButton>
-                <CButton
-                  onClick={() => handlePageChange('lastPage')}
-                  disabled={currentPage === totalPages && true}
-                  className="btn btn-outline-primary"
-                >
-                  <FontAwesomeIcon icon={faCircleChevronRight} />
-                </CButton>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages || 1}
+                  onPageChange={setCurrentPage}
+                />
               </CCardFooter>
             </CCard>
           </CContainer>

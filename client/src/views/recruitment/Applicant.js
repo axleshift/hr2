@@ -33,7 +33,10 @@ import {
   CInputGroup,
   CBadge,
 } from '@coreui/react'
+
 import { CChart } from '@coreui/react-chartjs'
+
+import { Pagination } from '../../components'
 
 import { pdfjs, Document, Page } from 'react-pdf'
 
@@ -1241,39 +1244,11 @@ const Applicant = () => {
               )}
             </CCardBody>
             <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-              <CButton
-                onClick={() => handlePageChange('firstPage')}
-                disabled={currentPage === 1 && true}
-                className="btn btn-outline-primary"
-              >
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </CButton>
-
-              <CButton
-                onClick={() => handlePageChange('prevPage')}
-                disabled={currentPage === 1 && true}
-                className="btn btn-outline-primary"
-              >
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </CButton>
-              <p>
-                Page {currentPage} of {totalPages}
-              </p>
-
-              <CButton
-                onClick={() => handlePageChange('nextPage')}
-                disabled={currentPage === totalPages && true}
-                className="btn btn-outline-primary"
-              >
-                <FontAwesomeIcon icon={faChevronRight} />
-              </CButton>
-              <CButton
-                onClick={() => handlePageChange('lastPage')}
-                disabled={currentPage === totalPages && true}
-                className="btn btn-outline-primary"
-              >
-                <FontAwesomeIcon icon={faChevronRight} />
-              </CButton>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </CCardFooter>
           </CCard>
         </CCol>
