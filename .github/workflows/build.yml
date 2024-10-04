@@ -62,7 +62,12 @@ jobs:
           cd server
           npm run build
           npm run build:obfuscate
-          rm -rf src dist/obfuscate.js
+          rm -rf src
+          rm -rf dist/obfuscate.js
+          cd ..
+          rm -rf eslint-config.mjs
+          rm -rf .prettierrc
+          rm -rf tsconfig.json
 
       - name: Push to server branch
         id: push_server
