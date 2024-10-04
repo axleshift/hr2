@@ -38,6 +38,7 @@ jobs:
           destination-github-username: freight-capstone
           destination-repository-name: hr2
           target-branch: hr2-frontend
+          user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build client"
 
   build-server:
@@ -62,12 +63,7 @@ jobs:
           cd server
           npm run build
           npm run build:obfuscate
-          rm -rf src
-          rm -rf dist/obfuscate.js
-          cd ..
-          rm -rf eslint-config.mjs
-          rm -rf .prettierrc
-          rm -rf tsconfig.json
+          rm -rf src dist/obfuscate.js eslint.config.mjs .prettierrc tsconfig.json
 
       - name: Push to server branch
         id: push_server
@@ -79,4 +75,5 @@ jobs:
           destination-github-username: freight-capstone
           destination-repository-name: hr2
           target-branch: hr2-backend
+          user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build server"
