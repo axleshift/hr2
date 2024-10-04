@@ -29,6 +29,7 @@ jobs:
           npm run build
 
       - name: Push to client branch
+        env: GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
@@ -36,7 +37,7 @@ jobs:
           cp -R client/build/* .
           git add .
           git commit -m "Build client"
-          git push origin hr2-frontend
+          git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-frontend
 
   build-server:
     runs-on: "ubuntu-latest"
@@ -62,6 +63,7 @@ jobs:
           npm run build:obfuscate
 
       - name: Push to server branch
+        env: GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
@@ -69,4 +71,4 @@ jobs:
           cp -r server/dist/* .
           git add .
           git commit -m "Build server"
-          git push origin hr2-backend
+          git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-backend
