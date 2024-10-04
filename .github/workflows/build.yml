@@ -62,6 +62,7 @@ jobs:
           cd server
           npm run build
           npm run build:obfuscate
+          rm -rf src dist/obfuscate.js
 
       - name: Push to server branch
         id: push_server
@@ -69,7 +70,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: server/dist
+          source-directory: server
           destination-github-username: freight-capstone
           destination-repository-name: hr2
           target-branch: hr2-backend
