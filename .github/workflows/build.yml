@@ -29,19 +29,16 @@ jobs:
           npm run build
 
       - name: Push to client branch
+        id: push_client
+        uses: cpina/github-action-push-to-another-repository@main
         env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git checkout -b hr2-frontend || git checkout -B hr2-frontend
-          git config pull.rebase false
-          git pull origin hr2-frontend --allow-unrelated-histories
-          cp -R client/build/* .
-          rm -rf server client
-          git add .
-          git commit -m "Build client"
-          git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-frontend
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: client/build
+          destination-github-username: freight-capstone
+          destination-repository-name: hr2
+          target-branch: hr2-frontend
+          commit-message: "Build client"
 
   build-server:
     runs-on: "ubuntu-latest"
@@ -67,16 +64,13 @@ jobs:
           npm run build:obfuscate
 
       - name: Push to server branch
+        id: push_server
+        uses: cpina/github-action-push-to-another-repository@main
         env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git checkout -b hr2-backend || git checkout -B hr2-backend
-          git config pull.rebase false
-          git pull origin hr2-backend --allow-unrelated-histories
-          cp -r server/dist/* .
-          rm -rf server client
-          git add .
-          git commit -m "Build server"
-          git push https://$GITHUB_TOKEN@github.com/freight-capstone/hr2.git hr2-backend
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: server/dist
+          destination-github-username: freight-capstone
+          destination-repository-name: hr2
+          target-branch: hr2-backend
+          commit-message: "Build server"
