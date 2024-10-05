@@ -39,7 +39,7 @@ import {
   faPencil,
   faCalendar,
 } from '@fortawesome/free-solid-svg-icons'
-import { Pagination } from '../../components'
+import AppPagination from '../../components/AppPagination'
 import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
 const Jobposting = () => {
   const [isFormExpanded, setIsFormExpanded] = useState(false)
@@ -91,7 +91,7 @@ const Jobposting = () => {
     })
     .refine(
       (data) => {
-        console.log('Start Date:', data.jpfSchedStart, 'End Date:', data.jpfSchedEnd)
+        // console.log('Start Date:', data.jpfSchedStart, 'End Date:', data.jpfSchedEnd)
         return data.jpfSchedEnd > data.jpfSchedStart
       },
       {
@@ -110,23 +110,21 @@ const Jobposting = () => {
     handleSubmit: formHandleSubmit,
     formState: { errors },
   } = useForm({
-    // resolver: zodResolver(formSchema),
-    resolver: async (data, context, options) => {
-      try {
-        const result = await zodResolver(formSchema)(data, context, options)
-        console.log('Validation result:', result)
-        return result
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    resolver: zodResolver(formSchema),
+    // resolver: async (data, context, options) => {
+    //   try {
+    //     const result = await zodResolver(formSchema)(data, context, options)
+    //     console.log('Validation result:', result)
+    //     return result
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
   })
 
   // CREATE JOB POSTING
-  const onSubmit = async (data, event) => {
-    console.log(data)
+  const onSubmit = async (data) => {
     try {
-      console.log('JOB POSTING: ', data)
       const formattedData = {
         title: data.jpfTitle || 'none',
         type: data.jpfType || 'none',
@@ -141,14 +139,13 @@ const Jobposting = () => {
         schedule_end: data.jpfSchedEnd,
         status: data.jpfStatus || 'active',
       }
-      console.log('ID:', data.jpf_id)
+      // console.log('ID:', data.jpf_id)
       const res = isEdit
         ? await put(`/jobposting/${data.jpf_id}`, formattedData)
         : await post('/jobposting', formattedData)
-      if (res.success === true) {
-        isEdit ? alert('Jobposting updated successfully') : alert('Jobposting created successfully')
+      if (res.status === 201) {
+        alert(res.data.message)
         getAllJobPosting(1)
-
         formReset()
       }
     } catch (error) {
@@ -161,23 +158,24 @@ const Jobposting = () => {
   const handleEdit = async (id) => {
     try {
       const res = await get(`/jobposting/${id}`)
-      if (res.success === true) {
+      if (res.status === 200) {
+        alert(res.data.message)
         setIsEdit(true)
         setIsFormExpanded(true)
-        console.log('Edit: ', res.data)
+        // console.log('Edit: ', res.data)
         const formattedData = {
-          jpf_id: res.data._id,
-          jpfTitle: res.data.title,
-          jpfType: res.data.type,
-          jpfDesc: res.data.description,
-          jpfSalaryMin: res.data.salary_min,
-          jpfSalaryMax: res.data.salary_max,
-          jpfLoc: res.data.location,
-          jpfBnft: res.data.benefits,
-          jpfReq: res.data.requirements,
-          // jpfResp: res.data.responsibilities,
-          jpfSchedStart: formattedDate(res.data.schedule_start),
-          jpfSchedEnd: formattedDate(res.data.schedule_end),
+          jpf_id: res.data.data._id,
+          jpfTitle: res.data.data.title,
+          jpfType: res.data.data.type,
+          jpfDesc: res.data.data.description,
+          jpfSalaryMin: res.data.data.salary_min,
+          jpfSalaryMax: res.data.data.salary_max,
+          jpfLoc: res.data.data.location,
+          jpfBnft: res.data.data.benefits,
+          jpfReq: res.data.data.requirements,
+          // jpfResp: res.data.data.responsibilities,
+          jpfSchedStart: formattedDate(res.data.data.schedule_start),
+          jpfSchedEnd: formattedDate(res.data.data.schedule_end),
           jpfStatus: res.data.status,
         }
         formReset(formattedData)
@@ -223,10 +221,10 @@ const Jobposting = () => {
         ? await get(`/jobposting/search?query=${searchInput}&page=${page}&limit=${limit}`)
         : await get(`/jobposting?page=${page}&limit=${limit}`)
 
-      if (res.success === true) {
-        setAllData(res.data)
-        setCurrentPage(res.currentPage)
-        setTotalPages(res.totalPages)
+      if (res.status === 200) {
+        setAllData(res.data.data)
+        setCurrentPage(res.data.currentPage)
+        setTotalPages(res.data.totalPages)
         setIsLoading(false)
       } else {
         alert('Error getting jobposting')
@@ -248,12 +246,12 @@ const Jobposting = () => {
     handleSubmit: searchHandleSubmit,
     formState: { searchError },
   } = useForm({
-    // resolver: zodResolver(searchSchema),
-    resolver: async (data, context, options) => {
-      const result = await zodResolver(searchSchema)(data, context, options)
-      console.log('Validation result:', result)
-      return result
-    },
+    resolver: zodResolver(searchSchema),
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(searchSchema)(data, context, options)
+    //   console.log('Validation result:', result)
+    //   return result
+    // },
   })
   const searchSubmit = async (data) => {
     try {
@@ -280,32 +278,6 @@ const Jobposting = () => {
     }, 500)
     return () => clearTimeout(delayDebounceFn)
   }, [currentPage, itemsPerPage, isSearchMode, searchInput])
-
-  // Pagination handler
-  const handlePageChange = (action) => {
-    console.log('Action: ', action)
-
-    switch (action) {
-      case 'firstPage':
-        setCurrentPage(1)
-        break
-
-      case 'prevPage':
-        setCurrentPage((prevPage) => prevPage - 1)
-        break
-
-      case 'nextPage':
-        setCurrentPage((prevPage) => prevPage + 1)
-        break
-
-      case 'lastPage':
-        setCurrentPage(totalPages)
-        break
-
-      default:
-        console.warn('Unknown action:', action)
-    }
-  }
 
   return (
     <>
@@ -742,7 +714,7 @@ const Jobposting = () => {
                 )}
               </CCardBody>
               <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-                <Pagination
+                <AppPagination
                   currentPage={currentPage}
                   totalPages={totalPages || 1}
                   onPageChange={setCurrentPage}

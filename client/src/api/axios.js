@@ -12,7 +12,7 @@ const instance = axios.create({
 const post = async (url, data) => {
   try {
     const response = await instance.post(url, data)
-    return response.data
+    return response
   } catch (error) {
     console.log(error)
   }
@@ -21,7 +21,7 @@ const post = async (url, data) => {
 const get = async (url) => {
   try {
     const response = await instance.get(url)
-    return response.data
+    return response
   } catch (error) {
     console.log(error)
   }
@@ -29,7 +29,7 @@ const get = async (url) => {
 const put = async (url, data) => {
   try {
     const response = await instance.put(url, data)
-    return response.data
+    return response
   } catch (error) {
     console.log(error)
   }
@@ -38,7 +38,7 @@ const put = async (url, data) => {
 const del = async (url) => {
   try {
     const response = await instance.delete(url)
-    return response.data
+    return response
   } catch (error) {
     console.log(error)
   }

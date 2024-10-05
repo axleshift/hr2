@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import dayjs from 'dayjs'
-import { post, put, get } from '../../api/axios'
+import { post, put, get, del } from '../../api/axios'
 
 import {
   CButton,
@@ -29,6 +29,7 @@ import {
   CPagination,
   CPaginationItem,
 } from '@coreui/react'
+import AppPagination from '../../components/AppPagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronDown,
@@ -74,11 +75,10 @@ const Tags = () => {
       const res = isSearchMode
         ? await get(`/tags/search?query=${searchInput}&page=${currentPage}&limit=${itemsPerPage}`)
         : await get(`/tags/all?page=${currentPage}&limit=${itemsPerPage}`)
-      if (res.success === true) {
-        console.log(res)
-        setAllTagData(res.data)
-        setTotalPages(res.totalPages)
-        setCurrentPage(res.currentPage)
+      if (res.status === 200) {
+        setAllTagData(res.data.data)
+        setTotalPages(res.data.totalPages)
+        setCurrentPage(res.data.currentPage)
       } else {
         console.log(res)
       }
@@ -106,12 +106,12 @@ const Tags = () => {
     handleSubmit: tagsFormHandleSubmit,
     formState: { errors: tagsFormErrors },
   } = useForm({
-    // resolver: zodResolver(tagsFormSchema),
-    resolver: async (data, context, options) => {
-      const result = await zodResolver(tagsFormSchema)(data, context, options)
-      console.log('Validation result:', result)
-      return result
-    },
+    resolver: zodResolver(tagsFormSchema),
+    // resolver: async (data, context, options) => {
+    //   const result = await zodResolver(tagsFormSchema)(data, context, options)
+    //   console.log('Validation result:', result)
+    //   return result
+    // },
   })
 
   const submitTag = async (data) => {
@@ -126,11 +126,12 @@ const Tags = () => {
         console.log('Tag already exist')
         return
       }
-
-      const res = isEdit ? await put(`/tags/${data._id}`, data) : await post('/tags', data)
-      if (res.success === true) {
-        console.log(res.data)
+      console.log(data)
+      const res = isEdit ? await put(`/tags/${data.id}`, data) : await post('/tags', data)
+      if (res.status === 200 || res.status === 201) {
+        alert(res.data.message)
         tagsFormReset({
+          id: '',
           name: '',
           category: '',
         })
@@ -150,11 +151,14 @@ const Tags = () => {
       setIsEdit(true)
       setIsTagsExpanded(true)
       const res = await get(`/tags/${tag}`)
-      if (res.success === true) {
-        console.log(res.data)
-        tagsFormReset(res.data)
+      if (res.status === 200) {
+        const data = {
+          id: res.data.data._id,
+          name: res.data.data.name,
+          category: res.data.data.category,
+        }
+        tagsFormReset(data)
       }
-      console.log(tag)
     } catch (error) {
       console.error
     }
@@ -162,7 +166,11 @@ const Tags = () => {
 
   const handleDeleteTag = async (tag) => {
     try {
-      console.log(tag)
+      if (!confirm('Are you sure you want to delete this tag?')) return
+      const res = await del(`/tags/${tag}`)
+      if (res.status === 200) {
+        getAllTagData()
+      }
     } catch (error) {
       console.error
     }
@@ -170,6 +178,7 @@ const Tags = () => {
 
   const handleReset = () => {
     tagsFormReset({
+      id: '',
       name: '',
       category: '',
     })
@@ -199,31 +208,6 @@ const Tags = () => {
       getAllTagData()
     } catch (error) {
       console.log(error)
-    }
-  }
-
-  const handlePageChange = (action) => {
-    console.log('Action: ', action)
-
-    switch (action) {
-      case 'firstPage':
-        setCurrentPage(1)
-        break
-
-      case 'prevPage':
-        setCurrentPage((prevPage) => prevPage - 1)
-        break
-
-      case 'nextPage':
-        setCurrentPage((prevPage) => prevPage + 1)
-        break
-
-      case 'lastPage':
-        setCurrentPage(totalPages)
-        break
-
-      default:
-        console.warn('Unknown action:', action)
     }
   }
 
@@ -324,7 +308,7 @@ const Tags = () => {
                     </CRow>
                     <div className="d-flex justify-content-end">
                       <CButton color="primary" type="submit" className="mb-3 w-25">
-                        Submit
+                        {isEdit ? 'Update' : 'Submit'}
                       </CButton>
                     </div>
                   </CContainer>
@@ -408,51 +392,11 @@ const Tags = () => {
               </CContainer>
             </CCardBody>
             <CCardFooter className="d-flex justify-content-center">
-              <CPagination>
-                <CPaginationItem
-                  onClick={() => handlePageChange('firstPage')}
-                  disabled={currentPage === 1}
-                >
-                  &laquo;
-                </CPaginationItem>
-                {currentPage > 3 && (
-                  <>
-                    <CPaginationItem onClick={() => setCurrentPage(1)}>1</CPaginationItem>
-                    <CPaginationItem disabled>...</CPaginationItem>
-                  </>
-                )}
-                {[...Array(totalPages)].map((_, index) => {
-                  const page = index + 1
-                  if (page >= currentPage - 2 && page <= currentPage + 2) {
-                    return (
-                      <CPaginationItem
-                        key={index}
-                        onClick={() => setCurrentPage(page)}
-                        active={currentPage === page}
-                      >
-                        {page}
-                      </CPaginationItem>
-                    )
-                  }
-                  return null
-                })}
-                {currentPage < totalPages - 2 && (
-                  <>
-                    {currentPage < totalPages - 3 && (
-                      <CPaginationItem disabled>...</CPaginationItem>
-                    )}
-                    <CPaginationItem onClick={() => setCurrentPage(totalPages)}>
-                      {totalPages}
-                    </CPaginationItem>
-                  </>
-                )}
-                <CPaginationItem
-                  onClick={() => handlePageChange('nextPage')}
-                  disabled={currentPage === totalPages}
-                >
-                  &raquo;
-                </CPaginationItem>
-              </CPagination>
+              <AppPagination
+                currentPage={currentPage}
+                totalPages={totalPages || 1}
+                onPageChange={setCurrentPage}
+              />
             </CCardFooter>
           </CCard>
         </CContainer>

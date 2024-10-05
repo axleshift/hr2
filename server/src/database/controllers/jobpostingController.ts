@@ -44,6 +44,7 @@ export const createJobposting = async (req: req, res: res) => {
             status,
             schedule_start,
             schedule_end,
+            isExpired: false,
         });
         res.status(201).json({
             statusCode: 201,

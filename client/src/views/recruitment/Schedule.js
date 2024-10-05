@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { get } from '../../api/axios'
 import dayjs from 'dayjs'
 
-import { Pagination } from '../../components'
+import AppPagination from '../../components/AppPagination'
 
 import {
   CButton,
@@ -104,7 +104,7 @@ const Schedule = () => {
     })
     .refine(
       (data) => {
-        console.log('Start Date:', data.jpfSchedStart, 'End Date:', data.jpfSchedEnd)
+        // console.log('Start Date:', data.jpfSchedStart, 'End Date:', data.jpfSchedEnd)
         return data.jpfSchedEnd > data.jpfSchedStart
       },
       {
@@ -130,10 +130,10 @@ const Schedule = () => {
         `/jobposting/scheduled?start=${params.today}&end=${params.nextWeek}&page=${page}&limit=${limit}&sort=${sort}&filter=${filterer}`,
       )
 
-      setAllData(res.data)
-      setCurrentPage(res.currentPage)
-      setTotalPages(res.totalPages)
-      setTotalItems(res.total)
+      setAllData(res.data.data)
+      setCurrentPage(res.data.currentPage)
+      setTotalPages(res.data.totalPages)
+      setTotalItems(res.data.total)
       setIsLoading(false)
     } catch (error) {
       console.log(error)
@@ -202,32 +202,6 @@ const Schedule = () => {
     // console.log("Filter: ", filter);
     console.log('Legends: ', legends)
   }, [params, currentPage, itemsPerPage, filter, legends])
-
-  // Pagination handler
-  const handlePageChange = (action) => {
-    console.log('Action: ', action)
-
-    switch (action) {
-      case 'firstPage':
-        setCurrentPage(1)
-        break
-
-      case 'prevPage':
-        setCurrentPage((prevPage) => prevPage - 1)
-        break
-
-      case 'nextPage':
-        setCurrentPage((prevPage) => prevPage + 1)
-        break
-
-      case 'lastPage':
-        setCurrentPage(totalPages)
-        break
-
-      default:
-        console.warn('Unknown action:', action)
-    }
-  }
 
   return (
     <>
@@ -373,7 +347,7 @@ const Schedule = () => {
                 )}
               </CCardBody>
               <CCardFooter className="d-flex justify-content-center">
-                <Pagination
+                <AppPagination
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={setCurrentPage}

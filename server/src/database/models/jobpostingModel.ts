@@ -54,6 +54,10 @@ const jobpostingSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
+        isExpired: {
+            type: Boolean,
+            required: true,
+        },
     },
     {
         timestamps: true,

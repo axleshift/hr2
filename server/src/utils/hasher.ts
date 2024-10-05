@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const hasher = async (password: string, salt: string) => {
     try {
-        const hashedPassword = bcrypt.hashSync(password, salt);
+        const hashedPassword = bcrypt.hash(password, salt);
         return hashedPassword;
     } catch (error) {
         logger.error("Error hashing password:", error);

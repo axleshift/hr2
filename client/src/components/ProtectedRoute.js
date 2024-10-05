@@ -1,0 +1,24 @@
+import React, { useContext } from 'react'
+import { Navigate } from 'react-router-dom'
+import { AuthContext } from '../context/authContext'
+import propTypes from 'prop-types'
+const ProtectedRoute = ({ children }) => {
+  const env = import.meta.env.VITE_NODE_ENV
+  console.log(env)
+  const { isAuthenticated } = useContext(AuthContext)
+
+  if (env === 'development') {
+    return children
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
+
+ProtectedRoute.propTypes = {
+  children: propTypes.node.isRequired,
+}
+
+export default ProtectedRoute

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { CPagination, CPaginationItem } from '@coreui/react'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 /**
  *
@@ -49,7 +51,7 @@ const AppPagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => handlePageChange('firstPage')}
         disabled={effectiveCurrentPage === 1}
       >
-        &laquo;
+        <FontAwesomeIcon icon={faChevronLeft} />
       </CPaginationItem>
       {effectiveCurrentPage > 3 && (
         <>
@@ -82,7 +84,7 @@ const AppPagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => handlePageChange('nextPage')}
         disabled={effectiveCurrentPage === totalPages}
       >
-        &raquo;
+        <FontAwesomeIcon icon={faChevronRight} />
       </CPaginationItem>
     </CPagination>
   )

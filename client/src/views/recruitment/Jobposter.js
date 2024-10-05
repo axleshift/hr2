@@ -81,8 +81,8 @@ const Jobposter = () => {
     try {
       setIsLoading(true)
       const res = await get(`/jobposting/${id}`)
-      console.log(res.data)
-      setData(res.data)
+      // console.log(res.data.data)
+      setData(res.data.data)
       setIsLoading(false)
     } catch (error) {
       console.log(error)
@@ -92,9 +92,8 @@ const Jobposter = () => {
   const getTrackerData = async () => {
     try {
       const res = await get(`/jobposter/${id}`)
-      console.log('getTrackerData:', res)
-      if (res.success === true) {
-        setTrackerData(res.data)
+      if (res.status === 200) {
+        setTrackerData(res.data.data)
       }
     } catch (error) {
       console.log(error)
@@ -105,7 +104,7 @@ const Jobposter = () => {
     try {
       const res = await post(`/jobposter/${id}/delete`)
       console.log('deleteTrackerData:', res)
-      if (res.success === true) {
+      if (res.status === 200) {
         alert('Deleted successfully')
         getData()
         getTrackerData()
@@ -162,7 +161,7 @@ const Jobposter = () => {
         facebook: data.facebookText,
       }
       const res = await post(`/jobposter/${id}/post`, content)
-      if (res.success === true) {
+      if (res.status === 201) {
         alert('Posted successfully')
         getData()
         getTrackerData()
@@ -521,7 +520,10 @@ const Jobposter = () => {
                                       </CButton>
                                     </CTooltip>
                                     <CTooltip content="Use as Template" placement="top">
-                                      <CButton color="info">
+                                      <CButton
+                                        color="info"
+                                        onClick={() => editSummary(item, item.platform)}
+                                      >
                                         <FontAwesomeIcon icon={faPencil} />
                                       </CButton>
                                     </CTooltip>

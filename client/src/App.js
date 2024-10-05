@@ -1,7 +1,9 @@
 import React, { Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
+import AuthProvider from './context/authContext'
+import AppProvider from './context/appContext'
+import ProtectedRoute from './components/protectedRoute'
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
 
@@ -33,23 +35,37 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="pt-3 text-center">
-            <CSpinner color="primary" variant="grow" />
-          </div>
-        }
-      >
-        <Routes>
-          <Route exact path="/login" name="Login Page" element={<Login />} />
-          <Route exact path="/register" name="Register Page" element={<Register />} />
-          <Route exact path="/404" name="Page 404" element={<Page404 />} />
-          <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          <Route path="*" name="Home" element={<DefaultLayout />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <AuthProvider>
+      <AppProvider>
+        <BrowserRouter>
+          <Suspense
+            fallback={
+              <div className="pt-3 text-center">
+                <CSpinner color="primary" variant="grow" />
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/login" name="Login Page" element={<Login />} />
+              <Route path="/register" name="Register Page" element={<Register />} />
+              <Route path="/404" name="Page 404" element={<Page404 />} />
+              <Route path="/500" name="Page 500" element={<Page500 />} />
+
+              {/* Protect DefaultLayout route */}
+              <Route
+                path="*"
+                name="Home"
+                element={
+                  <ProtectedRoute>
+                    <DefaultLayout />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AppProvider>
+    </AuthProvider>
   )
 }
 

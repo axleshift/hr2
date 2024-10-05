@@ -36,7 +36,7 @@ import {
 
 import { CChart } from '@coreui/react-chartjs'
 
-import { Pagination } from '../../components'
+import AppPagination from '../../components/AppPagination'
 
 import { pdfjs, Document, Page } from 'react-pdf'
 
@@ -244,14 +244,14 @@ const Applicant = () => {
       formData.forEach((value, key) => {
         console.log(key, value)
       })
-
+      console.log("Is Edit: ", isEdit)
       const res = isEdit
         ? await put(`/applicant/${data.id}`, formData)
         : await post(`/applicant`, formData)
 
       console.log(res)
-      if (res.success === true) {
-        alert(res.message)
+      if (res.status === 200) {
+        alert(res.data.message)
         getAllData()
         handleReset()
         setIsPreview(false)
@@ -269,11 +269,11 @@ const Applicant = () => {
       const res = isSearchMode
         ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}`)
         : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
-      if (res.success === true) {
-        setAllData(res.data)
-        setCurrentPage(res.currentPage)
-        setTotalPages(res.totalPages)
-        setTotalItems(res.totalItems)
+      if (res.status === 200) {
+        setAllData(res.data.data)
+        setCurrentPage(res.data.currentPage)
+        setTotalPages(res.data.totalPages)
+        setTotalItems(res.data.totalItems)
         setIsLoading(false)
       } else {
         console.log('Failed')
@@ -289,36 +289,34 @@ const Applicant = () => {
     try {
       handleReset()
       setCertifications([])
-      // console.log("Handle Edit: ", id)
       const res = await get(`/applicant/${id}`)
-      // console.log("Edit Data: ", res)
-      if (res.success === true) {
+      if (res.status === 200) {
         formReset({
-          id: res.data._id,
-          firstname: res.data.firstname,
-          lastname: res.data.lastname,
-          middlename: res.data.middlename,
-          email: res.data.email,
-          phone: res.data.phone,
-          address: res.data.address,
-          portfolioUrl: res.data.portfolioUrl,
-          profSummary: res.data.professionalSummary,
-          skills: res.data.skills,
-          workExperience: res.data.workExperience,
-          education: res.data.education,
-          certifications: res.data.certifications,
-          tags: res.data.tags,
+          id: res.data.data._id,
+          firstname: res.data.data.firstname,
+          lastname: res.data.data.lastname,
+          middlename: res.data.data.middlename,
+          email: res.data.data.email,
+          phone: res.data.data.phone,
+          address: res.data.data.address,
+          portfolioUrl: res.data.data.portfolioUrl,
+          profSummary: res.data.data.professionalSummary,
+          skills: res.data.data.skills,
+          workExperience: res.data.data.workExperience,
+          education: res.data.data.education,
+          certifications: res.data.data.certifications,
+          tags: res.data.data.tags,
           file: '',
         })
-        res.data.certifications.forEach((cert) => {
+        res.data.data.certifications.forEach((cert) => {
           setCertifications((prev) => [...prev, cert])
         })
         // fetch tags data
-        res.data.tags.map(async (tag) => {
+        res.data.data.tags.map(async (tag) => {
           const res = await get(`/tags/${tag}`)
           // console.log("Tag: ", res)
-          if (res.success === true) {
-            setSelectedTags((prev) => [...prev, res.data])
+          if (res.status === 200) {
+            setSelectedTags((prev) => [...prev, res.data.data])
           } else {
             console.log('Failed')
           }
@@ -340,9 +338,8 @@ const Applicant = () => {
         return
       }
       const res = await del(`/applicant/${data}`)
-      if (res.success === true) {
+      if (res.status === 200) {
         alert('Success')
-        console.log('Success')
         getAllData()
       } else {
         console.log('Failed')
@@ -404,8 +401,8 @@ const Applicant = () => {
       setTagLoading(true)
       const category = 'applicant'
       const res = await get(`/tags/category/${category}`)
-      if (res.success === true) {
-        setFormTags(res.data)
+      if (res.status === 200) {
+        setFormTags(res.data.data)
         setTagLoading(false)
       } else {
         console.log('Failed')
@@ -437,7 +434,7 @@ const Applicant = () => {
         category: 'applicant',
       }
       const res = await post('/tags', tag)
-      if (res.success === true) {
+      if (res.status === 200) {
         alert(res.message)
         getAllTagOptions()
         setTagModalVisible(false)
@@ -544,31 +541,7 @@ const Applicant = () => {
     }
   }, [currentPage, totalPages, totalItems, searchInput, isSearchMode])
 
-  // Pagination handler
-  const handlePageChange = (action) => {
-    console.log('Action: ', action)
 
-    switch (action) {
-      case 'firstPage':
-        setCurrentPage(1)
-        break
-
-      case 'prevPage':
-        setCurrentPage((prevPage) => prevPage - 1)
-        break
-
-      case 'nextPage':
-        setCurrentPage((prevPage) => prevPage + 1)
-        break
-
-      case 'lastPage':
-        setCurrentPage(totalPages)
-        break
-
-      default:
-        console.warn('Unknown action:', action)
-    }
-  }
 
   return (
     <CContainer className="d-flex flex-column gap-2 mb-3">
@@ -1051,7 +1024,7 @@ const Applicant = () => {
                           id="file"
                           placeholder="Enter Title"
                           label="Resume"
-                          {...register('file')}
+                          {...register('file', { value: [] })}
                           invalid={!!errors.file}
                         />
                         {errors.file && (
@@ -1244,7 +1217,7 @@ const Applicant = () => {
               )}
             </CCardBody>
             <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-              <Pagination
+              <AppPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
