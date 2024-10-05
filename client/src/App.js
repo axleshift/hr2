@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import AuthProvider from './context/authContext'
 import AppProvider from './context/appContext'
-import ProtectedRoute from './components/protectedRoute'
+import ProtectedRoute from './components/ProtectedRoute'
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
 
