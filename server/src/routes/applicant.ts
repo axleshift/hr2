@@ -1,10 +1,14 @@
 import { Router } from "express";
 const router = Router();
-import { addNewResume, getAllResume, getResumeById, deleteResume, updateResume, searchResume } from "../database/controllers/applicantController";
+import { addNewResume, getAllResumeData, getResumeById, deleteResume, updateResume, searchResume, getResumeFile } from "../database/controllers/applicantController";
+
+
+
 
 router.post("/", addNewResume);
 router.put("/:id", updateResume);
-router.get("/all", getAllResume);
+router.get("/all", getAllResumeData);
+router.get("/download/:id", getResumeFile);
 router.get("/search", searchResume);
 router.get("/:id", getResumeById);
 router.delete("/:id", deleteResume);
