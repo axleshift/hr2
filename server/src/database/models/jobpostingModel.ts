@@ -56,7 +56,7 @@ const jobpostingSchema = new mongoose.Schema(
         },
         isExpired: {
             type: Boolean,
-            required: true,
+            required: false,
         },
     },
     {
