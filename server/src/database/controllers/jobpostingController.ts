@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Jobposting from "../models/jobpostingModel";
+import Jobposter from "../models/jobposterModel";
 import logger from "../../middlewares/logger";
 import { Request as req, Response as res } from "express";
 
@@ -359,6 +360,12 @@ export const updateJobposting = async (req: req, res: res) => {
             },
             { new: true }
         );
+
+        const jobposter = await Jobposter.findOne({ ref_id: id });
+        if (jobposter) {
+            await Jobposter.updateMany({ ref_id: id }, { expiresAt: schedule_end });
+        }
+
         res.status(201).json({
             statusCode: 201,
             success: true,
