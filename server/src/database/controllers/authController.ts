@@ -61,20 +61,8 @@ export const login = async (req: req, res: res) => {
                 error: "User not found",
             });
         }
-        const storedHashedPassword = user.password;
-        const storedSalt = user.rememberToken;
 
-        if (!storedHashedPassword || !storedSalt) {
-            return res.status(401).json({
-                statusCode: 401,
-                success: false,
-                message: "Invalid credentials",
-                error: "Invalid credentials",
-            });
-        }
-        const token: string = jwt.sign({ username, password }, config.env.jwtSecret, {
-            expiresIn: "1h",
-        });
+        const storedHashedPassword = user.password;
         const isPasswordValid = bcrypt.compareSync(password, storedHashedPassword);
 
         if (!isPasswordValid) {
@@ -85,6 +73,10 @@ export const login = async (req: req, res: res) => {
             });
         }
 
+        const token: string = jwt.sign({ username, password }, config.env.jwtSecret, {
+            expiresIn: "1h",
+        });
+
         const data = {
             username: user.username,
             role: user.role,
@@ -92,15 +84,23 @@ export const login = async (req: req, res: res) => {
             status: user.status,
             token: token,
         };
-
-        console.log("Session data before saving", data);
         req.session.user = data;
-        console.log("Session data after saving", req.session.user);
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
-            message: "User verified successfully",
-            data,
+        req.session.save((err) => {
+            if (err) {
+                console.log("Session save error:", err);
+                return res.status(500).json({
+                    statusCode: 500,
+                    success: false,
+                    message: "Error saving session",
+                });
+            }
+            console.log("Session data after saving:", req.session.user);
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "User verified successfully",
+                data,
+            });
         });
     } catch (error) {
         console.log(error);
