@@ -6,7 +6,11 @@ const verifySession = (req: Request, res: Response, next: NextFunction) => {
     } else {
         // User is not authenticated, send an unauthorized response
 
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({
+            statusCode: 401,
+            success: false,
+            message: "Unauthorized",
+        });
     }
 };
 
