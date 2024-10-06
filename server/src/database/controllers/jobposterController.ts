@@ -3,7 +3,7 @@ import JobPosting from "../models/jobpostingModel";
 import { removeTweet } from "../../utils/twitter";
 import logger from "../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-
+import { ITweet } from "../../types/tweet";
 /**
  * Creates a new job poster in the database and post the job posting to the specified platforms.
  *
@@ -104,7 +104,7 @@ export const createJobposter = async (req: req, res: res) => {
     }
 };
 
-export const getJobposterById = async (req: req, res: res) => {
+export const getJobposterByRefId = async (req: req, res: res) => {
     const { id } = req.params;
     try {
         const jobposter = await Jobposter.find({
@@ -135,13 +135,6 @@ export const getJobposterById = async (req: req, res: res) => {
     }
 };
 
-interface ITweet {
-    data: {
-        id: string;
-    };
-    errors?: unknown;
-}
-
 export const removeJobposter = async (req: req, res: res) => {
     const { id } = req.params;
     try {
@@ -156,6 +149,8 @@ export const removeJobposter = async (req: req, res: res) => {
             const tweet = async (post_id: string) => {
                 try {
                     const res = (await removeTweet(post_id)) as ITweet;
+                    console.log("Tweet response:");
+                    console.log(res);
                     if (res.errors) {
                         return res;
                     }
