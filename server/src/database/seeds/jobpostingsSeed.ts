@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { faker } from "@faker-js/faker";
 import JobPosting from "../models/jobpostingModel";
@@ -6,19 +5,6 @@ import JobPoster from "../models/jobposterModel";
 import logger from "../../middlewares/logger";
 
 dotenv.config();
-
-// Connect to MongoDB
-mongoose
-    .connect(process.env.MONGODB_URI!)
-
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((error) => console.error("MongoDB connection error:", error));
-
-// const randomStatus = () => {
-//   const statusArr = ["active", "inactive"];
-//   const rand = Math.floor(Math.random() * statusArr.length);
-//   return statusArr[rand];
-// };
 
 const randomJobType = () => {
     const jobTypeArr = ["full-time", "part-time", "contract", "internship"];
@@ -54,11 +40,9 @@ const seedJobposting = async () => {
         const fakeJobPostings = Array.from({ length: multiplier }, createFakeJobPosting);
         await JobPosting.insertMany(fakeJobPostings);
         logger.info(`Seeded ${multiplier} job postings`);
-        mongoose.connection.close();
         return true;
     } catch (error) {
         logger.error("Error seeding job postings:", error);
-        mongoose.connection.close();
         return false;
     }
 };
