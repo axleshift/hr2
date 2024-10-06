@@ -2,7 +2,8 @@ import { hasher } from "../../utils/hasher";
 import { Request as req, Response as res } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
+import { config } from "../../config";
 import dotenv from "dotenv";
 import logger from "../../middlewares/logger";
 dotenv.config();
@@ -48,7 +49,7 @@ export const createUser = async (req: req, res: res) => {
     }
 };
 
-export const verifyUser = async (req: req, res: res) => {
+export const login = async (req: req, res: res) => {
     const { username, password } = req.body;
     logger.info(`User ${username} is trying to login`);
     try {
@@ -71,6 +72,9 @@ export const verifyUser = async (req: req, res: res) => {
                 error: "Invalid credentials",
             });
         }
+        const token: string = jwt.sign({ username, password }, config.env.jwtSecret, {
+            expiresIn: "1h",
+        });
         const isPasswordValid = bcrypt.compareSync(password, storedHashedPassword);
 
         if (!isPasswordValid) {
@@ -86,10 +90,12 @@ export const verifyUser = async (req: req, res: res) => {
             role: user.role,
             email: user.email,
             status: user.status,
+            token: token,
         };
 
-        console.log(data);
+        console.log("Session data before saving", data);
         req.session.user = data;
+        console.log("Session data after saving", req.session.user);
         res.status(200).json({
             statusCode: 200,
             success: true,
@@ -107,7 +113,36 @@ export const verifyUser = async (req: req, res: res) => {
     }
 };
 
-export const destroyUser = async (req: req, res: res) => {
+export const verify = async (req: req, res: res) => {
+    try {
+        console.log("Session data", req.session.user);
+        const user = req.session.user;
+        if (user) {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "User verified successfully",
+                data: user,
+            });
+        } else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "User not found",
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error verifying user",
+            error,
+        });
+    }
+};
+
+export const logout = async (req: req, res: res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({
