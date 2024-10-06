@@ -1,5 +1,6 @@
-import logger from "../../middlewares/logger";
+import logger from "../../";
 import Tag from "../models/tagModel";
+import Applicant from "../models/applicantModel";
 import { Request as req, Response as res } from "express";
 
 export const createTag = async (req: req, res: res) => {
@@ -202,22 +203,21 @@ export const deleteTag = async (req: req, res: res) => {
 
     try {
         const tag = await Tag.findById(id);
-
-        if (tag) {
-            await tag.deleteOne();
-
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
-                message: "Tag deleted successfully",
-            });
-        } else {
-            res.status(404).json({
+        if (!tag) {
+            return res.status(404).json({
                 statusCode: 404,
                 success: false,
                 message: "Tag not found",
             });
         }
+        await tag.deleteOne();
+
+        await Applicant.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } });
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Tag deleted successfully",
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
