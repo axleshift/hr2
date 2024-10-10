@@ -17,6 +17,7 @@ const jobposterSchema = new mongoose.Schema(
         content: {
             type: String,
             required: true,
+            unique: true,
         },
         isPosted: {
             type: Boolean,

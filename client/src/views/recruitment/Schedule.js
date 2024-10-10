@@ -198,9 +198,6 @@ const Schedule = () => {
 
   useEffect(() => {
     getAllScheduled(currentPage, itemsPerPage)
-    // console.log("Params: ", params);
-    // console.log("Filter: ", filter);
-    console.log('Legends: ', legends)
   }, [params, currentPage, itemsPerPage, filter, legends])
 
   return (

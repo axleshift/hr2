@@ -57,7 +57,7 @@ const App = () => {
                 name="Home"
                 element={
                   <ProtectedRoute>
-                    <DefaultLayout />
+                    <DefaultLayout theme={storedTheme} />
                   </ProtectedRoute>
                 }
               />

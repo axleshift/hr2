@@ -9,4 +9,12 @@ import { createTest, getAllTests } from "../../database/controllers/testControll
 router.post("/", createTest);
 router.get("/", getAllTests);
 
-export default router;
+export default {
+    metadata: {
+        path: "/test",
+        method: ["POST", "GET"],
+        description: "Test route",
+        permissions: ["admin"],
+    },
+    router,
+};

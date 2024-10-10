@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import propTypes from 'prop-types'
 const ProtectedRoute = ({ children }) => {
   const env = import.meta.env.VITE_NODE_ENV
   console.log(env)
   const { isAuthenticated } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   if (env === 'development') {
     return children

@@ -72,8 +72,8 @@ export const login = async (req: req, res: res) => {
                 message: "Invalid credentials",
             });
         }
-
-        const token: string = jwt.sign({ username, password }, config.env.jwtSecret, {
+        const jwtSecret = config.server.jwt.secret as string;
+        const token: string = jwt.sign({ username, password }, jwtSecret, {
             expiresIn: "1h",
         });
 

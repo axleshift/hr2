@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/authContext'
 import { AppContext } from '../../../context/appContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,8 +25,8 @@ import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Login = () => {
-  const Navigate = useNavigate()
-  const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const { login, isAuthenticated } = useContext(AuthContext)
   const [isLoginError, setIsLoginError] = useState(false)
   const loginSchema = z.object({
     username: z
@@ -50,12 +50,18 @@ const Login = () => {
   const onSubmit = (data) => {
     login(data.username, data.password, (success) => {
       if (success) {
-        Navigate('/dashboard')
+        navigate('/dashboard')
       } else {
         setIsLoginError(true)
       }
     })
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard')
+    }
+  }, [isAuthenticated])
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">

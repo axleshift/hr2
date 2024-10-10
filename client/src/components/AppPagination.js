@@ -46,47 +46,51 @@ const AppPagination = ({ currentPage, totalPages, onPageChange }) => {
   }
 
   return (
-    <CPagination>
-      <CPaginationItem
-        onClick={() => handlePageChange('firstPage')}
-        disabled={effectiveCurrentPage === 1}
-      >
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </CPaginationItem>
-      {effectiveCurrentPage > 3 && (
-        <>
-          <CPaginationItem onClick={() => onPageChange(1)}>1</CPaginationItem>
-          <CPaginationItem disabled>...</CPaginationItem>
-        </>
-      )}
-      {[...Array(totalPages)].map((_, index) => {
-        const page = index + 1
-        if (page >= effectiveCurrentPage - 2 && page <= effectiveCurrentPage + 2) {
-          return (
-            <CPaginationItem
-              key={index}
-              onClick={() => onPageChange(page)}
-              active={effectiveCurrentPage === page}
-            >
-              {page}
-            </CPaginationItem>
-          )
-        }
-        return null
-      })}
-      {effectiveCurrentPage < totalPages - 2 && (
-        <>
-          {effectiveCurrentPage < totalPages - 3 && <CPaginationItem disabled>...</CPaginationItem>}
-          <CPaginationItem onClick={() => onPageChange(totalPages)}>{totalPages}</CPaginationItem>
-        </>
-      )}
-      <CPaginationItem
-        onClick={() => handlePageChange('nextPage')}
-        disabled={effectiveCurrentPage === totalPages}
-      >
-        <FontAwesomeIcon icon={faChevronRight} />
-      </CPaginationItem>
-    </CPagination>
+    <>
+      <CPagination>
+        <CPaginationItem
+          onClick={() => handlePageChange('firstPage')}
+          disabled={effectiveCurrentPage === 1}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </CPaginationItem>
+        {effectiveCurrentPage > 3 && (
+          <>
+            <CPaginationItem onClick={() => onPageChange(1)}>1</CPaginationItem>
+            <CPaginationItem disabled>...</CPaginationItem>
+          </>
+        )}
+        {[...Array(totalPages)].map((_, index) => {
+          const page = index + 1
+          if (page >= effectiveCurrentPage - 2 && page <= effectiveCurrentPage + 2) {
+            return (
+              <CPaginationItem
+                key={index}
+                onClick={() => onPageChange(page)}
+                active={effectiveCurrentPage === page}
+              >
+                {page}
+              </CPaginationItem>
+            )
+          }
+          return null
+        })}
+        {effectiveCurrentPage < totalPages - 2 && (
+          <>
+            {effectiveCurrentPage < totalPages - 3 && (
+              <CPaginationItem disabled>...</CPaginationItem>
+            )}
+            <CPaginationItem onClick={() => onPageChange(totalPages)}>{totalPages}</CPaginationItem>
+          </>
+        )}
+        <CPaginationItem
+          onClick={() => handlePageChange('nextPage')}
+          disabled={effectiveCurrentPage === totalPages}
+        >
+          <FontAwesomeIcon icon={faChevronRight} />
+        </CPaginationItem>
+      </CPagination>
+    </>
   )
 }
 

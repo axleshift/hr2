@@ -1,4 +1,4 @@
-import express, { Request, Response, Application } from "express";
+import express, { Application } from "express";
 import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
@@ -12,16 +12,18 @@ import verifySession from "./middlewares/verifySession";
 import startJobs from "./jobs/index";
 import { config } from "./config";
 import sanitize from "./middlewares/sanitize";
+// import { errorHandler } from "./middlewares/errorHandler";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 
 const app: Application = express();
-const port = config.env.port;
+const port = config.server.port;
 const date = new Date().toISOString().split("T")[0];
 
 const initializeFolders = () => {
-    if (!fs.existsSync(config.logFolder)) {
-        fs.mkdirSync(config.logFolder, { recursive: true });
+    const lodDir = config.logging.dir;
+    if (!fs.existsSync(lodDir)) {
+        fs.mkdirSync(lodDir, { recursive: true });
     }
 };
 initializeFolders();
@@ -36,39 +38,49 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(express.json());
-
 app.use(
     session({
-        secret: config.env.sessionSecret,
+        secret: config.server.session.secret as string,
         resave: false,
         saveUninitialized: true,
         cookie: {
-            secure: false,
+            secure: false, // Change to true in production
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
         },
         store: MongoStore.create({
-            mongoUrl: config.mongoDbUri,
+            mongoUrl: config.mongoDB.uri,
             ttl: 24 * 60 * 60, // 24 hours
         }),
     })
 );
 app.use(helmet());
 app.use(pinoHttp({ logger }));
-
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 300,
     standardHeaders: true,
     legacyHeaders: false,
+    skip: (req) => {
+        return req.session.user?.role === "admin";
+    },
 });
 app.use(limiter);
 app.use(sanitize);
+// app.use(errorHandler);
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Welcome to Express & TypeScript Server");
+process.on("unhandledRejection", (reason, promise) => {
+    logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+    fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${reason}\n`, {
+        flag: "a",
+    });
 });
 
-// app.use("api/public", verifySession, express.static(config.fileServer.dir));
+process.on("uncaughtException", (error) => {
+    logger.error(`Uncaught Exception: ${error}`);
+    fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
+        flag: "a",
+    });
+});
 
 connectDB().then(async () => {
     try {
@@ -83,18 +95,19 @@ connectDB().then(async () => {
             for (const file of files) {
                 if (file.endsWith(".ts") || file.endsWith(".js")) {
                     const route = await import(path.join(routesPath, file));
+                    const { metadata, router: routeRouter } = route.default;
                     const routeName = file.split(".")[0];
-                    const sessionExceptions = config.sessionExceptions;
+                    const sessionExceptions = config.route.sessionExceptions;
 
-                    // exclude routes from session verification
                     if (sessionExceptions.includes(routeName)) {
-                        router.use(`/${routeName}`, route.default);
+                        router.use(metadata.path, routeRouter);
                     } else if (useSession) {
-                        router.use(`/${routeName}`, verifySession, route.default);
+                        router.use(metadata.path, verifySession(metadata.permissions), routeRouter);
                     } else {
-                        router.use(`/${routeName}`, route.default);
+                        router.use(metadata.path, routeRouter);
                     }
-                    logger.info(`Route ${routeName} loaded successfully`);
+
+                    logger.info(`🚀 Route loaded: ${metadata.path}`);
                 }
             }
             return router;
@@ -121,7 +134,7 @@ connectDB().then(async () => {
                 logger.error(`Error loading routes: ${error}`);
             });
     } catch (error) {
-        fs.writeFileSync(path.join(config.logFolder, `${date}.log`), `Error: ${error}\n`, {
+        fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
             flag: "a",
         });
     }

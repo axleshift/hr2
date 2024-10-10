@@ -14,4 +14,12 @@ router.get("/category/:category", getTagByCategory);
 router.put("/:id", updateTag);
 router.delete("/:id", deleteTag);
 
-export default router;
+export default {
+    metadata: {
+        path: "/tags",
+        method: ["POST", "GET"],
+        description: "This route is used to add, update, delete, get all, get by id and search tag data",
+        permissions: ["admin", "user"],
+    },
+    router,
+};

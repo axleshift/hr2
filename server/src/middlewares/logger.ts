@@ -2,9 +2,9 @@ import pino from "pino";
 import { config } from "../config";
 
 const logger = pino({
-    level: config.env.environment === "production" ? "info" : "debug",
+    level: config.env === "production" ? "info" : "debug",
     transport:
-        config.env.environment !== "production"
+        config.env !== "production"
             ? {
                   target: "pino-pretty",
                   options: {

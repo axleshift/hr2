@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { post, put, get } from '../../api/axios'
@@ -137,7 +137,7 @@ const Jobposting = () => {
         benefits: data.jpfBnft || 'none',
         schedule_start: data.jpfSchedStart,
         schedule_end: data.jpfSchedEnd,
-        status: data.jpfStatus || 'active',
+        status: data.jpfStatus || 'inactive',
       }
       // console.log('ID:', data.jpf_id)
       const res = isEdit
@@ -221,7 +221,7 @@ const Jobposting = () => {
         ? await get(`/jobposting/search?query=${searchInput}&page=${page}&limit=${limit}`)
         : await get(`/jobposting?page=${page}&limit=${limit}`)
 
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         setAllData(res.data.data)
         setCurrentPage(res.data.currentPage)
         setTotalPages(res.data.totalPages)
@@ -714,11 +714,13 @@ const Jobposting = () => {
                 )}
               </CCardBody>
               <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-                <AppPagination
-                  currentPage={currentPage}
-                  totalPages={totalPages || 1}
-                  onPageChange={setCurrentPage}
-                />
+                {totalPages > 1 && (
+                  <AppPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                )}
               </CCardFooter>
             </CCard>
           </CContainer>

@@ -1,4 +1,4 @@
-import logger from "../../";
+import logger from "../../middlewares/logger";
 import Tag from "../models/tagModel";
 import Applicant from "../models/applicantModel";
 import { Request as req, Response as res } from "express";

@@ -11,6 +11,11 @@ const tagSchema = new mongoose.Schema(
         description: {
             type: String,
         },
+        color: {
+            type: String,
+            // default to random color
+            default: "#000000".replace(/0/g, () => (~~(Math.random() * 16)).toString(16)),
+        }
     },
     {
         timestamps: true,

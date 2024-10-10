@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { post, get } from '../../api/axios'
+import { post, get, del } from '../../api/axios'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -92,7 +92,7 @@ const Jobposter = () => {
   const getTrackerData = async () => {
     try {
       const res = await get(`/jobposter/${id}`)
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         setTrackerData(res.data.data)
       }
     } catch (error) {
@@ -102,7 +102,7 @@ const Jobposter = () => {
 
   const deleteTrackerData = async (id) => {
     try {
-      const res = await post(`/jobposter/${id}/delete`)
+      const res = await del(`/jobposter/${id}`)
       console.log('deleteTrackerData:', res)
       if (res.status === 200) {
         alert('Deleted successfully')

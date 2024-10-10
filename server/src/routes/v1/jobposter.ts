@@ -10,4 +10,12 @@ router.post("/:id/post", createJobposter);
 router.get("/:id", getJobposterByRefId);
 router.delete("/:id", removeJobposter);
 
-export default router;
+export default {
+    metadata: {
+        path: "/jobposter",
+        method: ["POST", "GET"],
+        description: "This route is used to add, get by ref id and remove jobposter data",
+        permissions: ["admin"],
+    },
+    router,
+};

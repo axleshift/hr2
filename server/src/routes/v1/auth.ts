@@ -11,4 +11,12 @@ router.post("/login", login);
 router.get("/logout", logout);
 router.get("/verify", verify);
 
-export default router;
+export default {
+    metadata: {
+        path: "/auth",
+        method: ["POST", "GET"],
+        description: "This route is used to register, login, logout and verify user",
+        permissions: ["admin", "user", "guest"],
+    },
+    router,
+};

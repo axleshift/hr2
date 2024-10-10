@@ -14,4 +14,12 @@ router.get("/:id", getJobpostingById);
 router.put("/:id", updateJobposting);
 router.delete("/:id", deleteJobposting);
 
-export default router;
+export default {
+    metadata: {
+        path: "/jobposting",
+        method: ["POST", "GET"],
+        description: "This route is used to add, update, delete, get all, get by id and search jobposting data",
+        permissions: ["admin"],
+    },
+    router,
+};
