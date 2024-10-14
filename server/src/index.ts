@@ -32,7 +32,7 @@ initializeFolders();
 app.use(
     cors({
         // multiple origins can be added
-        origin: ["http://localhost:3000", "http://localhost:8080"],
+        origin: config.server.origins,
         credentials: true, // Enable credentials
     })
 );

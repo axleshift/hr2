@@ -19,6 +19,8 @@ export const config = {
             secret: process.env.SESSION_SECRET,
             expiry: 24 * 60 * 60 * 1000, // 24 hours
         },
+
+        origins: ["http://localhost:3000", "http://localhost:8000", "http://localhost:5056", "http://localhost:4173", "https://hr2.axleshift.com/"],
     },
 
     mongoDB: {
