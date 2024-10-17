@@ -22,7 +22,7 @@ const startJobs = async () => {
                 await module.default();
             }
         }
-        logger.info("Jobs ran successfully");
+        logger.info("⚙️ Jobs ran successfully");
     } catch (error) {
         logger.error("Error running jobs:", error);
     }

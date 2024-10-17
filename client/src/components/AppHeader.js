@@ -29,6 +29,9 @@ import {
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
+import { faBell, faMoon, faSun, faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 const AppHeader = () => {
   const { logout } = React.useContext(AuthContext)
   const headerRef = useRef()
@@ -83,6 +86,13 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav> */}
+        <CHeaderNav className="ms-auto">
+          <CNavItem>
+            <CNavLink href="#">
+              <FontAwesomeIcon icon={faBell} />
+            </CNavLink>
+          </CNavItem>
+        </CHeaderNav>
         <CHeaderNav>
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
@@ -90,11 +100,11 @@ const AppHeader = () => {
           <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>
               {colorMode === 'dark' ? (
-                <CIcon icon={cilMoon} size="lg" />
+                <FontAwesomeIcon icon={faMoon} />
               ) : colorMode === 'auto' ? (
-                <CIcon icon={cilContrast} size="lg" />
+                <FontAwesomeIcon icon={faCircleHalfStroke} />
               ) : (
-                <CIcon icon={cilSun} size="lg" />
+                <FontAwesomeIcon icon={faSun} />
               )}
             </CDropdownToggle>
             <CDropdownMenu>

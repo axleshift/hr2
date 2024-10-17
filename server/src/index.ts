@@ -127,7 +127,6 @@ connectDB().then(async () => {
                     logger.info(`Server is running at http://localhost:${port}`);
                 });
                 logger.info("🚀 Routes loaded successfully");
-                logger.info("🌿Connected to MongoDB");
                 startJobs();
             })
             .catch((error) => {

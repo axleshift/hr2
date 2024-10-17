@@ -15,11 +15,11 @@ const dbConnection = async () => {
 // loop till db is connected
 export const connectDB = async () => {
     let connected = false;
-    logger.info(" Attempting to connect to MongoDB");
+    logger.info("🙏 Attempting to connect to MongoDB");
     while (!connected) {
         connected = await dbConnection();
     }
     if (connected) {
-        logger.info("Connected to MongoDB");
+        logger.info("🌿 Connected to MongoDB");
     }
 };

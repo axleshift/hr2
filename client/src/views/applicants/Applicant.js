@@ -268,13 +268,15 @@ const Applicant = () => {
     try {
       setIsLoading(true)
       const res = isSearchMode
-        ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}`)
+        ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}&tags=`)
         : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
       if (res.status === 200 || res.status === 201) {
+
+        isSearchMode && console.log(res.data)
         setAllData(res.data.data)
         setCurrentPage(res.data.currentPage)
         setTotalPages(res.data.totalPages)
-        setTotalItems(res.data.totalItems)
+        setTotalItems(res.data.totalItems || 0)
         setIsLoading(false)
       } else {
         console.log('Failed')

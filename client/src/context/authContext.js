@@ -7,7 +7,7 @@ import { post, get } from '../api/axios'
 export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false) || Cookies.get('isAuthenticated')
+  const [isAuthenticated, setIsAuthenticated] = useState(false) //|| Cookies.get('isAuthenticated')
   const [userInformation, setUserInformation] =
     useState({
       username: '',
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
           role: '',
           token: '',
         })
-        Cookies.remove('isAuthenticated')
+        // Cookies.remove('isAuthenticated')
         Cookies.remove('userInformation')
       }
     } catch (error) {
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
-        Cookies.set('isAuthenticated', true)
+        // Cookies.set('isAuthenticated', true)
         Cookies.set('userInformation', res.data.data)
       }
     } catch (error) {
@@ -72,7 +72,7 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    verifySession()
+    // verifySession()
   }, [])
 
   return (

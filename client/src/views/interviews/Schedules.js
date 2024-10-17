@@ -34,14 +34,23 @@ import {
   faUser,
   faPlus,
   faBars,
+  faPencil,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { Calendar } from 'react-calendar'
 import ScheduleForm from './modals/ScheduleForm'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import propTypes from 'prop-types'
-import { formattedDateMMM, formatTime, randomDate, randomTime, trimString } from '../../utils'
+import {
+  convertTimeStringTo12Hour,
+  formattedDateMMM,
+  formatTime,
+  randomDate,
+  randomTime,
+  trimString,
+} from '../../utils'
 import { get } from '../../api/axios'
 
 const Schedules = ({ theme }) => {
@@ -52,6 +61,7 @@ const Schedules = ({ theme }) => {
 
   //
   const [dateData, setDateData] = useState(new Date())
+  const [dateTimeSlotData, setDateTimeSlotData] = useState([])
   const [isDateLoading, setIsDateLoading] = useState(false)
 
   // Modal Forms
@@ -62,7 +72,8 @@ const Schedules = ({ theme }) => {
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalPages, setTotalPages] = useState(1)
 
-  const [interviewData, setInterviewData] = useState([])
+  const [interviewDatas, setInterviewDatas] = useState([])
+  const [interviewData, setInterviewData] = useState(null)
 
   const onChange = (newValue) => {
     if (newValue.length > 1) {
@@ -77,40 +88,30 @@ const Schedules = ({ theme }) => {
     setDefaultDate(new Date())
   }
 
-  const getAllData = async (date) => {
+  const getAllData = useCallback(async (date) => {
     setIsDateLoading(true)
     try {
       const res = await get(`/interview/all?date=${date}&page=${currentPage}&limit=${itemsPerPage}`)
       if (res.status === 404) {
-        setInterviewData([])
+        setInterviewDatas([])
         setIsDateLoading(false)
         return
       }
-
-      console.log(res.data.data)
-
-      setInterviewData(res.data.data)
+      console.log(res.data)
+      setInterviewDatas(res.data.data)
+      setDateTimeSlotData(res.data.slots)
       setTotalPages(res.data.totalPages)
       setIsDateLoading(false)
     } catch (error) {
       console.error(error)
       setIsDateLoading(false)
     }
-  }
+  })
 
   const getTimeData = async (id) => {
     try {
-      const res = await get(`/interview/slot/${id}`)
-      console.log(res.data.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const getAllSlotData = async () => {
-    try {
-      const res = await get('/interview/slot/all')
-      console.log(res.data.data)
+      const res = dateTimeSlotData.filter((data) => data.id === id)
+      console.log(res)
     } catch (error) {
       console.error(error)
     }
@@ -123,6 +124,12 @@ const Schedules = ({ theme }) => {
 
     return () => clearTimeout(delayDebounceFn)
   }, [defaultDate])
+
+  useEffect(() => {
+    if (formModal && interviewData) {
+      setFormModal(false)
+    }
+  }, [currentPage])
 
   return (
     <>
@@ -167,6 +174,15 @@ const Schedules = ({ theme }) => {
           <CContainer>
             <CCard>
               <CCardBody>
+                <CForm>
+                  <CInputGroup>
+                    <CFormInput type="text" placeholder="Search" />
+                    <CButton color="primary">
+                      <FontAwesomeIcon icon={faSearch} />
+                    </CButton>
+                  </CInputGroup>
+                </CForm>
+
                 <CTable align="middle" hover responsive striped>
                   <CTableHead>
                     <CTableRow>
@@ -176,36 +192,42 @@ const Schedules = ({ theme }) => {
                       <CTableHeaderCell>Date</CTableHeaderCell>
                       <CTableHeaderCell>Time</CTableHeaderCell>
                       <CTableHeaderCell>Location</CTableHeaderCell>
-                      <CTableHeaderCell>Additional Info</CTableHeaderCell>
+                      <CTableHeaderCell>Capacity</CTableHeaderCell>
                       <CTableHeaderCell>Action</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {interviewData.length === 0 ? (
+                    {interviewDatas.length === 0 ? (
                       <CTableRow>
                         <CTableDataCell colSpan="5" className="text-center">
                           No data available
                         </CTableDataCell>
                       </CTableRow>
                     ) : (
-                      interviewData.map((data, index) => (
+                      interviewDatas.map((data, index) => (
                         <CTableRow key={index}>
                           <CTableDataCell>{data.title}</CTableDataCell>
                           <CTableDataCell>{formattedDateMMM(data.date)}</CTableDataCell>
                           <CTableDataCell>
-                            <CButton onClick={() => getTimeData(data.timeslotRef_id)}>
-                              <FontAwesomeIcon icon={faCalendarDay} />
-                            </CButton>
+                            {convertTimeStringTo12Hour(data.timeslot.start)} -{' '}
+                            {convertTimeStringTo12Hour(data.timeslot.end)}
                           </CTableDataCell>
                           <CTableDataCell>
                             {data.location ? trimString(data.location, 20) : 'N/A'}
                           </CTableDataCell>
                           <CTableDataCell>
-                            {data.additionalInfo ? trimString(data.additionalInfo, 20) : 'N/A'}
+                            {data.capacity ? trimString(data.capacity, 20) : 'N/A'}
                           </CTableDataCell>
                           <CTableDataCell>
-                            <CButton color="primary" className="btn btn-primary">
-                              <FontAwesomeIcon icon={faUser} />
+                            <CButton
+                              onClick={() => {
+                                console.log('Interview Data:', data)
+                                setInterviewData(data)
+                                setFormModal(true)
+                              }}
+                              className="btn btn-primary"
+                            >
+                              <FontAwesomeIcon icon={faPencil} />
                             </CButton>
                           </CTableDataCell>
                         </CTableRow>
@@ -213,22 +235,27 @@ const Schedules = ({ theme }) => {
                     )}
                   </CTableBody>
                 </CTable>
-                <div className="d-flex justify-content-center align-items-center">
-                  <AppPagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
-                </div>
               </CCardBody>
             </CCard>
           </CContainer>
+        </CRow>
+        <CRow>
+          <CCol>
+            <div className="d-flex justify-content-center align-items-center">
+              <AppPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          </CCol>
         </CRow>
         <CRow>
           <ScheduleForm
             isVisible={formModal}
             onClose={() => setFormModal(false)}
             isDarkMode={isDarkMode}
+            interviewData={interviewData}
           />
         </CRow>
       </CContainer>

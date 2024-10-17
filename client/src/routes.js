@@ -13,7 +13,7 @@ const Applicant = React.lazy(() => import('./views/applicants/Applicant'))
 const Tags = React.lazy(() => import('./views/tags/Tags'))
 
 // Interviews | HR2
-const CreateInterview = React.lazy(() => import('./views/interviews/CreateInterview'))
+const CreateInterview = React.lazy(() => import('./views/interviews/Applicants'))
 const Interviews = React.lazy(() => import('./views/interviews/Schedules'))
 
 // Errors
@@ -38,7 +38,7 @@ const routes = [
   { path: '*', name: 'Page404', element: Page404 },
 
   // Interviews | HR2
-  { path: '/interviews/CreateInterview', name: 'Create Interview', element: CreateInterview },
+  { path: '/interviews/applicants', name: 'Create Interview', element: CreateInterview },
   { path: '/interviews/schedules', name: 'Interviews', element: Interviews },
 
   { path: '/widgets', name: 'Widgets', element: Widgets },

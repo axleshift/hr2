@@ -34,22 +34,23 @@ import {
   faCheck,
   faXmark,
   faTrash,
+  faListNumeric,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { del, get, post } from '../../../api/axios'
+import { del, get, post, put } from '../../../api/axios'
 
 import React, { useEffect, useState } from 'react'
-import propTypes from 'prop-types'
-import { set, z } from 'zod'
+import propTypes, { object } from 'prop-types'
+import { date, set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { convertTimeStringTo12Hour, formattedDate, formattedDateMMM } from '../../../utils'
 
-const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
+const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
   const [defaultDate, setDefaultDate] = useState(new Date())
   const [isConfirmed, setIsConfirmed] = useState(false)
-
+  const [isEdit, setIsEdit] = useState(false)
   const [dateData, setDateData] = useState({})
   const [monthData, setMonthData] = useState({})
 
@@ -75,6 +76,11 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
     start: z.string().min(1, { message: 'Start time is required' }),
     end: z.string().min(1, { message: 'End time is required' }),
     location: z.string().optional(),
+    capacity: z.preprocess(
+      (value) => parseInt(value),
+      z.number().min(1, { message: 'Capacity should be at least 1' }),
+    ),
+    additionalInfo: z.string().optional(),
   })
   // notify if time is not available
 
@@ -174,7 +180,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
   const getAllSlotsForDate = async (date) => {
     try {
       console.log(date)
-      const res = await get(`/interview/slots/${date}`)
+      const res = await get(`/interview/slots?date=${date}`)
 
       if (res.status === 200) {
         const data = res.data
@@ -204,7 +210,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
         },
       }
       const res = await post(`/interview/slots/`, data)
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         alert('Time slot added successfully')
         getAllSlotsForDate(defaultDate)
       } else {
@@ -234,12 +240,15 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
       const formdata = {
         date: defaultDate,
         title: data.title,
-        timeslotId: data.timeslotId,
-        location: data.location,
+        timeslotRef_id: data.timeslotId,
         additionalInfo: data.additionalInfo,
+        location: data.location,
+        capacity: data.capacity,
       }
       console.log(formdata)
-      const res = post('/interview', formdata)
+      const res = !isEdit
+        ? post(`/interview/schedule`, formdata)
+        : put(`/interview/schedule/${interviewData._id}`, formdata)
       if (res.status === 200) {
         console.log(res.data)
         alert('Interview scheduled successfully')
@@ -273,11 +282,27 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
     getAllSlotsForDate(defaultDate)
   }, [defaultDate])
 
+  useEffect(() => {
+    if (interviewData) {
+      console.log('Scheduled Interview', interviewData)
+      setIsEdit(true)
+      setDefaultDate(new Date(interviewData.date))
+      reset({
+        title: interviewData.title,
+        timeslotId: interviewData.timeslot._id,
+        start: convertTimeStringTo12Hour(interviewData.timeslot.start),
+        end: convertTimeStringTo12Hour(interviewData.timeslot.end),
+        location: interviewData.location,
+        additionalInfo: interviewData.additionalInfo,
+      })
+    }
+  }, [interviewData])
+
   return (
     <>
       <CModal visible={isVisible} onClose={handleOnClose} size="lg">
         <CModalHeader>
-          <CModalTitle>Schedule An Interview</CModalTitle>
+          <CModalTitle>{isEdit ? 'Edit Interview' : 'Schedule Interview'}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <div className="mb-5">
@@ -442,6 +467,25 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
               <CCol>
                 <CInputGroup className="mb-3">
                   <CInputGroupText>
+                    <FontAwesomeIcon icon={faListNumeric} />
+                  </CInputGroupText>
+                  <CFormInput
+                    type="number"
+                    placeholder="capacity"
+                    {...register('capacity')}
+                    invalid={!!errors.capacity}
+                    defaultValue={1}
+                  />
+                  {errors.capacity && (
+                    <CFormFeedback invalid>{errors.capacity.message}</CFormFeedback>
+                  )}
+                </CInputGroup>
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText>
                     <FontAwesomeIcon icon={faPenClip} />
                   </CInputGroupText>
                   <CFormTextarea
@@ -471,7 +515,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode }) => {
             </CRow>
             <CModalFooter>
               <CButton type="submit" disabled={!isConfirmed} className="btn btn-primary">
-                Create
+                {isEdit ? 'Update' : 'Schedule'}
               </CButton>
               <CButton color="secondary" onClick={handleOnClose}>
                 Cancel
@@ -493,6 +537,7 @@ ScheduleForm.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   isDarkMode: propTypes.bool.isRequired,
+  interviewData: propTypes.object,
 }
 
 export default ScheduleForm
