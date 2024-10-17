@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Jobposting from "../models/jobpostingModel";
 import Jobposter from "../models/jobposterModel";
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
 
 /**

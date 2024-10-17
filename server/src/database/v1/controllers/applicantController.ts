@@ -1,13 +1,13 @@
 import fs from "fs/promises";
 import path from "path";
 import { Request, Response } from "express";
-import logger from "../../middlewares/logger";
-import { upload } from "../../utils/fileUploadHandler";
+import logger from "../../../middlewares/logger";
+import { upload } from "../../../utils/fileUploadHandler";
 
 import Applicant from "../models/applicantModel";
-import { config } from "../../config";
+import { config } from "../../../config";
 
-import { ApplicantData, ApplicantDocument } from "../../types/application";
+import { ApplicantData, ApplicantDocument } from "../../../types/application";
 
 export const handleFileUpload = (req: Request, res: Response) => {
     return new Promise((resolve, reject) => {
@@ -197,13 +197,31 @@ export const getResumeFile = async (req: Request, res: Response) => {
 
 export const searchResume = async (req: Request, res: Response) => {
     try {
-        const searchQuery = req.query.query;
-        // const tags = req.query.tags;
+        logger.info("Searching for resumes...");
+        logger.info("Search Query:", req.query);
+        const searchQuery = req.query.query as string;
+        const tags = req.query.tags ? (Array.isArray(req.query.tags) ? req.query.tags.map(String) : (req.query.tags as string).split(",")) : [];
+
+        // let tags: string[] = [];
+        // // Check if tags exist in the query
+        // if (req.query.tags) {
+        //     // If tags is already an array
+        //     if (Array.isArray(req.query.tags)) {
+        //         tags = req.query.tags.map(String); // Convert all elements to strings
+        //     } else {
+        //         // If tags is a string, split by commas to form an array
+        //         tags = (req.query.tags as string).split(",");
+        //     }
+        // }
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
 
-        const totalItems = await Applicant.countDocuments({
+        interface SearchCriteria {
+            $or: Array<{ [key: string]: { $regex: string; $options: string } } | { certifications: { $elemMatch: { $regex: string; $options: string } } } | { tags: { $in: string[] } }>;
+        }
+
+        const searchCriteria: SearchCriteria = {
             $or: [
                 { firstname: { $regex: searchQuery, $options: "i" } },
                 { lastname: { $regex: searchQuery, $options: "i" } },
@@ -214,7 +232,6 @@ export const searchResume = async (req: Request, res: Response) => {
                 { workExperience: { $regex: searchQuery, $options: "i" } },
                 { education: { $regex: searchQuery, $options: "i" } },
                 { remarks: { $regex: searchQuery, $options: "i" } },
-
                 // array fields
                 {
                     certifications: {
@@ -224,60 +241,34 @@ export const searchResume = async (req: Request, res: Response) => {
                         },
                     },
                 },
-                {
-                    tags: {
-                        $elemMatch: {
-                            $regex: searchQuery,
-                            $options: "i",
-                        },
-                    },
-                },
             ],
-        });
+        };
 
-        const data = await Applicant.find({
-            $or: [
-                { firstname: { $regex: searchQuery, $options: "i" } },
-                { lastname: { $regex: searchQuery, $options: "i" } },
-                { email: { $regex: searchQuery, $options: "i" } },
-                { phone: { $regex: searchQuery, $options: "i" } },
-                { address: { $regex: searchQuery, $options: "i" } },
-                { skills: { $regex: searchQuery, $options: "i" } },
-                { workExperience: { $regex: searchQuery, $options: "i" } },
-                { education: { $regex: searchQuery, $options: "i" } },
-                { remarks: { $regex: searchQuery, $options: "i" } },
+        // Add tags condition if tags array is not empty
+        if (tags.length > 0) {
+            searchCriteria.$or.push({
+                tags: { $in: tags },
+            });
+        }
 
-                // array fields
-                {
-                    certifications: {
-                        $elemMatch: {
-                            $regex: searchQuery,
-                            $options: "i",
-                        },
-                    },
-                },
-                {
-                    tags: {
-                        $elemMatch: {
-                            $regex: searchQuery,
-                            $options: "i",
-                        },
-                    },
-                },
-            ],
-        })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        const totalPages = Math.ceil(totalItems / limit);
+        const applicants = await Applicant.find(searchCriteria).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalItems = await Applicant.countDocuments(searchCriteria);
+        // const totalPages = Math.ceil(totalItems / limit);
+        if (!applicants || applicants.length === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "No applicants found",
+            });
+        }
         return res.status(200).json({
             statusCode: 200,
             success: true,
             message: "Applicants found",
-            data,
+            data: applicants,
             totalItems,
-            totalPages,
+            totalPages: Math.ceil(totalItems / limit),
+            tags: tags,
             currentPage: page,
         });
     } catch (error) {
@@ -290,7 +281,6 @@ export const searchResume = async (req: Request, res: Response) => {
         });
     }
 };
-
 export const getResumeById = async (req: Request, res: Response) => {
     try {
         const applicant = await Applicant.findById(req.params.id);

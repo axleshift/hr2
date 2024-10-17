@@ -11,7 +11,7 @@ const interviewSchedModel = new mongoose.Schema(
         timeslotRef_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "InterviewTimeslots",
-            required: false,
+            required: true,
         },
         date: {
             type: Date,
@@ -19,10 +19,21 @@ const interviewSchedModel = new mongoose.Schema(
         },
         location: {
             type: String,
-            required: false,
+            default: null,
         },
+        capacity: {
+            type: Number,
+            default: 1,
+        },
+        participants: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "users",
+            },
+        ],
         additionalInfo: {
             type: String,
+            default: null,
         },
         isActive: {
             type: Boolean,

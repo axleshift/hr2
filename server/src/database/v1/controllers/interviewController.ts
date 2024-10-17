@@ -1,4 +1,4 @@
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 import interviewSchedModel from "../models/interviewSchedModel";
 import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
 import { Request as req, Response as res } from "express";
@@ -45,6 +45,16 @@ export const getInterviewForADay = async (req: req, res: res) => {
             },
         });
 
+        // parse slots to replace timeslotRef_id with timeslot data
+        const parsedInterviews = interviews.map(async (interview) => {
+            const timeslot = await interviewTimeSlotModel.findById(interview.timeslotRef_id);
+            return {
+                ...interview.toObject(),
+                timeslot: timeslot,
+            };
+        });
+        const interviewsWithSlots = await Promise.all(parsedInterviews);
+
         if (interviews.length === 0) {
             return res.status(404).json({
                 statusCode: 404,
@@ -53,11 +63,13 @@ export const getInterviewForADay = async (req: req, res: res) => {
             });
         }
 
+        // console.log(interviewsWithSlots);
+
         res.status(200).json({
             statusCode: 200,
             success: true,
             message: "Interviews retrieved successfully",
-            data: interviews,
+            data: interviewsWithSlots,
             slots: allSlots,
             total: total,
             totalPages: Math.ceil(total / limit),
@@ -132,14 +144,16 @@ export const getInterviewById = async (req: req, res: res) => {
     }
 };
 
-
 export const createInterviewForADate = async (req: req, res: res) => {
     try {
-        const date = req.body.date;
-        const timeslotRef_id = req.body.timeslotId; // ID of the timeslot
-        const title = req.body.title;
-        const additionalInfo = req.body.additionalInfo;
-        const location = req.body.location;
+        // const date = req.body.date;
+        // const timeslotRef_id = req.body.timeslotId; // ID of the timeslot
+        // const title = req.body.title;
+        // const additionalInfo = req.body.additionalInfo;
+        // const location = req.body.location;
+        // const capacity = req.body.capacity;
+
+        const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
 
         const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
 
@@ -156,8 +170,9 @@ export const createInterviewForADate = async (req: req, res: res) => {
             date: parsedDate,
             title,
             timeslotRef_id,
-            additionalInfo: additionalInfo || null,
-            location: location || null,
+            additionalInfo: additionalInfo,
+            location: location,
+            capacity: capacity,
             isActive: true,
             isExpired: false,
         });
@@ -200,41 +215,26 @@ export const createInterviewForADate = async (req: req, res: res) => {
 
 export const updateInterview = async (req: req, res: res) => {
     try {
-        const date = req.body.date;
-        const timeslotRef_id = req.body.timeslotId; // ID of the timeslot
-        const title = req.body.title;
-        const additionalInfo = req.body.additionalInfo;
-        const location = req.body.location;
-
-        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
-
-        if (!timeslotRef_id || !title || !date) {
-            return res.status(400).json({
-                statusCode: 400,
-                success: false,
-                message: "Missing required fields",
-            });
-        }
-
-        // find the interview data, extract the previous timeslot id then update the timeslot to be available
-        const prevInterview = await interviewSchedModel.findById(req.params.id);
-        if (!prevInterview) {
+        const id = req.params.id;
+        const interview = await interviewSchedModel.findById(id);
+        if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
                 success: false,
-                message: "Previous interview not found",
+                message: "Interview not found",
             });
         }
-        const prevTimeslotId = prevInterview.timeslotRef_id;
-        const timeslot = await interviewTimeSlotModel.findByIdAndUpdate(
-            prevTimeslotId,
+        const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
+
+        const formerTimeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+            interview.timeslotRef_id,
             {
                 isAvailable: true,
             },
             { new: true }
         );
 
-        if (!timeslot) {
+        if (!formerTimeslot) {
             return res.status(404).json({
                 statusCode: 404,
                 success: false,
@@ -243,21 +243,52 @@ export const updateInterview = async (req: req, res: res) => {
         }
 
         // Update the interview
-        await interviewSchedModel.findByIdAndUpdate(
-            req.params.id,
+        const updatedInterview = await interviewSchedModel.findByIdAndUpdate(
+            id,
             {
-                date: parsedDate,
+                date,
                 title,
                 timeslotRef_id,
-                additionalInfo: additionalInfo || null,
-                location: location || null,
-                isActive: true,
-                isExpired: false,
+                additionalInfo,
+                location,
+                capacity,
             },
             { new: true }
         );
 
+        if (!updatedInterview) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Interview not found",
+            });
+        }
+
+        // Update the timeslot to be unavailable
+        const timeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+            timeslotRef_id,
+            {
+                isAvailable: false,
+            },
+            { new: true }
+        );
+        if (!timeslot) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Timeslot not found",
+            });
+        }
+
+        await updatedInterview.save();
         await timeslot.save();
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interview updated successfully",
+            data: updatedInterview,
+            formerTimeslot,
+        });
     } catch (error) {
         logger.error(error);
     }

@@ -4,16 +4,18 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import { getInterviewForAMonth, getInterviewForADay, createInterviewForADate } from "../../database/controllers/interviewController";
-import { getAllSlotsForADate, getSlotById, createSlotForADate, deleteSlotById } from "../../database/controllers/timeslotController";
+import { getInterviewForAMonth, getInterviewForADay, createInterviewForADate, updateInterview } from "../../database/v1/controllers/interviewController";
+import { getAllSlotsForADate, getSlotById, createSlotForADate, deleteSlotById } from "../../database/v1/controllers/timeslotController";
 
 router.get("/slots/:year/:month", getInterviewForAMonth);
-router.get("/slots/:date", getAllSlotsForADate);
+router.get("/slots/", getAllSlotsForADate);
 router.get("/slot/:id", getSlotById);
 router.get("/all/", getInterviewForADay);
 
 router.post("/slots", createSlotForADate);
-router.post("/", createInterviewForADate);
+router.post("/schedule/", createInterviewForADate);
+
+router.put("/schedule/:id", updateInterview);
 
 router.delete("/slot/:id", deleteSlotById);
 

@@ -1,9 +1,9 @@
 import Jobposter from "../models/jobposterModel";
 import JobPosting from "../models/jobpostingModel";
-import { removeTweet } from "../../utils/twitter";
-import logger from "../../middlewares/logger";
+import { removeTweet } from "../../../utils/twitter";
+import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import { ITweet } from "../../types/tweet";
+import { ITweet } from "../../../types/tweet";
 /**
  * Creates a new job poster in the database and post the job posting to the specified platforms.
  *

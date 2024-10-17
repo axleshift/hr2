@@ -1,11 +1,11 @@
-import { hasher } from "../../utils/hasher";
+import { hasher } from "../../../utils/hasher";
 import { Request as req, Response as res } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { config } from "../../config";
+import { config } from "../../../config";
 import dotenv from "dotenv";
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 dotenv.config();
 
 const salt = bcrypt.genSaltSync(10);

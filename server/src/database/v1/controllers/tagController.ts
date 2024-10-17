@@ -1,4 +1,4 @@
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 import Tag from "../models/tagModel";
 import Applicant from "../models/applicantModel";
 import { Request as req, Response as res } from "express";
@@ -162,15 +162,16 @@ export const getTagByCategory = async (req: req, res: res) => {
 
 export const updateTag = async (req: req, res: res) => {
     const { id } = req.params;
-    const { name, category, description } = req.body;
+    const { name, category, description, isProtected } = req.body;
 
     try {
         const tag = await Tag.findById(id);
 
         if (tag) {
-            tag.name = name || tag.name;
-            tag.category = category || tag.category;
-            tag.description = description || tag.description;
+            tag.name = name;
+            tag.category = category;
+            tag.description = description;
+            tag.isProtected = isProtected;
 
             await tag.save();
 

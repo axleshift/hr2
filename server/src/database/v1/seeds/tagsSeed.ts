@@ -1,5 +1,5 @@
 import Tag from "../models/tagModel";
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 import { faker } from "@faker-js/faker";
 
 const tagNameArr = ["top candidate", "qualified", "unqualified", "potential", "rejected", "needs review"];

@@ -4,7 +4,7 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import { createUser, login, logout, verify } from "../../database/controllers/authController";
+import { createUser, login, logout, verify } from "../../database/v1/controllers/authController";
 
 router.post("/register", createUser);
 router.post("/login", login);

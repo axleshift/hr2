@@ -1,4 +1,4 @@
-import logger from "../../middlewares/logger";
+import logger from "../../../middlewares/logger";
 import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
 import { Request as req, Response as res } from "express";
 
@@ -35,12 +35,11 @@ export const getSlotById = async (req: req, res: res) => {
 
 export const getAllSlotsForADate = async (req: req, res: res) => {
     try {
+        const date = typeof req.query.date === "string" ? req.query.date : new Date().toISOString();
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
         const total = await interviewTimeSlotModel.countDocuments();
-
-        const { date } = req.params;
         logger.info("Getting all slots for a date");
         logger.info(date);
         // Validate date input
@@ -52,7 +51,7 @@ export const getAllSlotsForADate = async (req: req, res: res) => {
             });
         }
 
-        const startDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const startDate = new Date(date).setHours(0, 0, 0, 0);
         const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
 
         const slots = await interviewTimeSlotModel
@@ -65,6 +64,14 @@ export const getAllSlotsForADate = async (req: req, res: res) => {
             .skip(skip)
             .limit(limit)
             .sort({ start: 1 });
+
+        if (!slots || slots === null) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "No slots found",
+            });
+        }
 
         res.status(200).json({
             statusCode: 200,

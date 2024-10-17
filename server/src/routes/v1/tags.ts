@@ -4,7 +4,7 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import { createTag, getAllTags, updateTag, getTagById, getTagByCategory, deleteTag, searchTags } from "../../database/controllers/tagController";
+import { createTag, getAllTags, updateTag, getTagById, getTagByCategory, deleteTag, searchTags } from "../../database/v1/controllers/tagController";
 
 router.post("/", createTag);
 router.get("/all", getAllTags);

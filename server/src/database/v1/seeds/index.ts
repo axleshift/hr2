@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import logger from "../../middlewares/logger";
-import { connectDB } from "../connectDB";
+import logger from "../../../middlewares/logger";
+import { connectDB } from "../../connectDB";
 import mongoose from "mongoose";
 const currentDir = __dirname;
 
