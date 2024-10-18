@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // verifySession()
-  }, [])
+  }, [isAuthenticated, userInformation])
 
   return (
     <AuthContext.Provider value={{ userInformation, isAuthenticated, login, logout }}>

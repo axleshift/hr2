@@ -9,8 +9,8 @@ export const config = {
     },
 
     server: {
-        host: "localhost",
-        port: 5056,
+        host: process.env.SERVER_HOST,
+        port: process.env.SERVER_PORT,
         jwt: {
             secret: process.env.JWT_SECRET,
             expiry: "1h",
