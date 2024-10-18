@@ -1,1 +1,0 @@
-import{r as l,_ as d,R as n,a as p,c as i,p as e}from"./index-CMlWho3f.js";var r=l.forwardRef(function(a,s){var c=a.children,o=a.className,t=d(a,["children","className"]);return n.createElement("div",p({className:i("card-footer",o)},t,{ref:s}),c)});r.propTypes={children:e.node,className:e.string};r.displayName="CCardFooter";export{r as C};
