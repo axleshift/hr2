@@ -31,7 +31,7 @@ const path_1 = __importDefault(require("path"));
 const logger_1 = __importDefault(require("../middlewares/logger"));
 const currentDir = __dirname;
 const jobFiles = fs_1.default.readdirSync(currentDir).filter((file) => {
-    return file.endsWith(".ts") && file !== "index.ts";
+    return file.endsWith(".ts") || (file.endsWith(".js") && file !== "index.ts") || file !== "index.js";
 });
 const jobModules = jobFiles.map((file) => {
     const modulePath = path_1.default.join(currentDir, file);
@@ -41,12 +41,12 @@ const startJobs = async () => {
     try {
         const modules = await Promise.all(jobModules);
         for (const module of modules) {
-            if (typeof module.default === "function") {
-                logger_1.default.info(`Running job: ${module.default.name}`);
-                await module.default();
+            const m = module.default;
+            if (typeof m.run === "function") {
+                logger_1.default.info(`🤖 Running job: ${m.metadata.name}`);
+                await m.run();
             }
         }
-        logger_1.default.info("⚙️ Jobs ran successfully");
     }
     catch (error) {
         logger_1.default.error("Error running jobs:", error);

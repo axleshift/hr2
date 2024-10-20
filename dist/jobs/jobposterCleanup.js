@@ -74,4 +74,11 @@ const jobposterCleanUp = () => {
         }
     });
 };
-exports.default = jobposterCleanUp;
+// export default jobposterCleanUp;
+exports.default = {
+    metadata: {
+        name: "Jobposter Cleanup",
+        description: "Removes expired jobposters and posts approved jobposters to Twitter",
+    },
+    run: jobposterCleanUp,
+};

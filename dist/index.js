@@ -124,7 +124,7 @@ process.on("uncaughtException", (error) => {
                     else {
                         router.use(metadata.path, routeRouter);
                     }
-                    logger_1.default.info(`🚀 Route loaded: ${metadata.path}`);
+                    logger_1.default.info(`🚀 Route loaded: ${version}${metadata.path}`);
                 }
             }
             return router;
@@ -138,7 +138,7 @@ process.on("uncaughtException", (error) => {
         initRoutes()
             .then(() => {
             app.listen(port, () => {
-                logger_1.default.info(`Server is running at http://${host}:${port}`);
+                logger_1.default.info(`🟢 Server is running at http://${host}:${port}`);
             });
             logger_1.default.info("🚀 Routes loaded successfully");
             (0, index_1.default)();

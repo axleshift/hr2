@@ -15,7 +15,7 @@ exports.default = {
         path: "/test",
         method: ["POST", "GET"],
         description: "Test route",
-        permissions: ["admin"],
+        permissions: ["admin", "user", "guest"],
     },
     router,
 };
