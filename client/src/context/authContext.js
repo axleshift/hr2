@@ -8,14 +8,13 @@ export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false) //|| Cookies.get('isAuthenticated')
-  const [userInformation, setUserInformation] =
-    useState({
-      username: '',
-      email: '',
-      status: '',
-      role: '',
-      token: '',
-    }) || Cookies.get('userInformation')
+  const [userInformation, setUserInformation] = useState({
+    username: '',
+    email: '',
+    status: '',
+    role: '',
+    token: '',
+  }) // || Cookies.get('userInformation')
 
   const login = async (username, password, callback) => {
     try {
@@ -50,7 +49,7 @@ const AuthProvider = ({ children }) => {
           token: '',
         })
         // Cookies.remove('isAuthenticated')
-        Cookies.remove('userInformation')
+        // Cookies.remove('userInformation')
       }
     } catch (error) {
       console.error(error)
@@ -64,7 +63,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
         // Cookies.set('isAuthenticated', true)
-        Cookies.set('userInformation', res.data.data)
+        // Cookies.set('userInformation', res.data.data)
       }
     } catch (error) {
       console.error(error)
