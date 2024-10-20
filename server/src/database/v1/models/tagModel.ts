@@ -22,6 +22,10 @@ const tagSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        isSystem: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

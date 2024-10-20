@@ -15,6 +15,92 @@ const certificationSchema = new mongoose.Schema({
     },
 });
 
+// const workExperienceSchema = new mongoose.Schema({
+//     company: {
+//         type: String,
+//         required: true,
+//     },
+//     position: {
+//         type: String,
+//         required: true,
+//     },
+//     startDate: {
+//         type: Date,
+//         required: true,
+//     },
+//     endDate: {
+//         type: Date,
+//         required: true,
+//     },
+//     description: {
+//         type: String,
+//         required: true,
+//     },
+// });
+
+// const skillSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true,
+//     },
+//     level: {
+//         type: String,
+//         required: true,
+//     },
+// });
+
+// const educationSchema = new mongoose.Schema({
+//     degree: {
+//         type: String,
+//         required: true,
+//     },
+//     institution: {
+//         type: String,
+//         required: true,
+//     },
+//     year: {
+//         type: String,
+//         required: true,
+//     },
+// });
+
+// const remarksSchema = new mongoose.Schema({
+//     interviewer: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "Users",
+//         required: true,
+//     },
+//     remarks: {
+//         type: String,
+//         required: true,
+//     },
+//     date: {
+//         type: Date,
+//         default: Date.now,
+//     },
+// });
+
+const interviewSchema = new mongoose.Schema({
+    interviewer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    scheduleRef_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "InterviewSchedules",
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ["pending", "accepted", "rejected"],
+        default: "pending",
+    },
+    remarks: {
+        type: String,
+    },
+});
+
 const applicantSchema = new mongoose.Schema(
     {
         firstname: {
@@ -52,34 +138,10 @@ const applicantSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        // workExperience: {
-        //   type: [
-        //     {
-        //       companyName: String,
-        //       position: String,
-        //       startDate: Date,
-        //       endDate: Date,
-        //       jobDescription: String,
-        //     },
-        //   ],
-        //   required: true,
-        // },
         workExperience: {
             type: String,
             required: true,
         },
-        // education: {
-        //   type: [
-        //     {
-        //       institutionName: String,
-        //       degree: String,
-        //       startDate: Date,
-        //       endDate: Date,
-        //       courses: [String],
-        //     },
-        //   ],
-        //   required: true,
-        // },
         education: {
             type: String,
             required: true,
@@ -99,10 +161,14 @@ const applicantSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        interviews: {
+            type: [interviewSchema],
+            default: [],
+        },
         expiresAt: {
             type: Date,
             required: true,
-            default: new Date().setDate(new Date().getDate() + 7),
+            default: new Date().setDate(new Date().getDate() + 30), // 30 days from now
         },
     },
     {

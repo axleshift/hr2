@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const interviewSchedModel = new mongoose.Schema(
+const interviewSchedSchema = new mongoose.Schema(
     {
         title: {
             type: String,
@@ -50,4 +50,4 @@ const interviewSchedModel = new mongoose.Schema(
     }
 );
 
-export default mongoose.model("InterviewSchedules", interviewSchedModel);
+export default mongoose.model("InterviewSchedules", interviewSchedSchema);
