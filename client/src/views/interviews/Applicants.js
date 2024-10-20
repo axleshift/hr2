@@ -29,6 +29,7 @@ import {
   faPlus,
   faXmark,
   faCheck,
+  faRefresh,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
@@ -38,10 +39,13 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import ApplicantForm from './modals/ApplicantForm'
+
 const Applicants = ({ theme }) => {
   const isDarkMode = theme === 'dark'
   const [tagLoading, setTagLoading] = useState(false)
   const [formTags, setFormTags] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const [applicantsData, setApplicantsData] = useState([])
   const [applicantData, setApplicantData] = useState({})
   const [formModal, setFormModal] = useState(false)
@@ -56,29 +60,28 @@ const Applicants = ({ theme }) => {
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalPages, setTotalPages] = useState(1)
 
-  const getAllData = async (page, limit) => {
+  const getAllData = async (page, limit, term) => {
     try {
+      setIsLoading(true)
       let tagsParams = ''
       if (selectedTags.length > 0) {
-        tagsParams = selectedTags.map((tag) => `tags=${tag}`).join(',')
+        tagsParams = selectedTags.map((tag) => `${tag}`).join(',')
       }
-      console.log("Tags", tagsParams)
-      console.log("Search Term", searchTerm)
-      console.log("Search Mode", isSearchMode)
       const res = !isSearchMode
         ? await get('/applicant/all')
         : await get(
-          `/applicant/search?page=${page}&limit=${limit}&${tagsParams}`,
+          `/applicant/search?query=${term}&page=${page}&limit=${limit}&tags=${tagsParams}`,
         )
 
       if (res.status === 200) {
+        console.log(res.data.data)
         setApplicantsData(res.data.data)
         setTotalPages(res.data.totalPages)
-        setCurrentPage(res.data.currentPage)
+        setIsLoading(false)
       } else {
-        console.log('Error', res)
+        console.log('Failed')
+        setIsLoading(false)
       }
-      console.log(applicantsData)
     } catch (error) {
       console.error(error)
     }
@@ -139,16 +142,28 @@ const Applicants = ({ theme }) => {
 
   const handleSearch = (data) => {
     const { searchTerm } = data
+    setApplicantsData([])
     setSearchTerm(searchTerm)
     setIsSearchMode(true)
+    setCurrentPage(1)
+    getAllData(currentPage, itemsPerPage, searchTerm)
+  }
+
+  const handleReset = () => {
+    setSearchTerm('')
+    setIsSearchMode(false)
     setCurrentPage(1)
     getAllData(currentPage, itemsPerPage)
   }
 
   useEffect(() => {
-    getAllData(currentPage, itemsPerPage);
     getAllTagOptions()
-  }, [currentPage, itemsPerPage, isSearchMode]);
+    const delayDebounceFn = setTimeout(() => {
+      getAllData(currentPage, itemsPerPage, searchTerm)
+    }, 300)
+    return () => clearTimeout(delayDebounceFn)
+
+  }, [currentPage, itemsPerPage, isSearchMode, searchTerm]);
 
   return (
     <>
@@ -163,9 +178,22 @@ const Applicants = ({ theme }) => {
                   {...register('searchTerm')}
                   invalid={!!errors.searchTerm}
                 />
-                <CButton type="submit" color="primary">
-                  <FontAwesomeIcon icon={faSearch} />
-                </CButton>
+                <CTooltip
+                  placement="top"
+                  content="Search"
+                >
+                  <CButton type="submit" color="primary">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </CButton>
+                </CTooltip>
+                <CTooltip
+                  placement="top"
+                  content="Refresh"
+                >
+                  <CButton color="primary" onClick={() => handleReset()}>
+                    <FontAwesomeIcon icon={faRefresh} />
+                  </CButton>
+                </CTooltip>
               </CInputGroup>
               {errors.searchTerm && (
                 <CFormFeedback invalid>{errors.searchTerm.message}</CFormFeedback>
@@ -206,43 +234,57 @@ const Applicants = ({ theme }) => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {applicantsData.map((applicant) => (
-                      <CTableRow key={applicant._id}>
-                        <CTableDataCell>
-                          <div>
-                            {applicant.lastname}, {applicant.firstname}
-                          </div>
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          <div>{applicant.email}</div>
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          <div>{applicant.phone}</div>
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          <div className="d-flex gap-2">
-                            {applicant.tags.map((tag, index) => {
-                              return (
-                                <CBadge key={index} color="primary">
-                                  {/* // get tag name from formtags */}
-                                  {formTags.find((item) => item._id === tag) &&
-                                    formTags.find((item) => item._id === tag).name}
-                                </CBadge>
-                              )
-                            })}
-                          </div>
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          <CButton
-                            onClick={() => getApplicant(applicant._id)}
-                            className="btn btn-primary"
-                            size="sm"
-                          >
-                            <FontAwesomeIcon icon={faCalendarAlt} />
-                          </CButton>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
+                    {
+                      applicantsData.length > 0 ? (
+                        applicantsData.map((applicant) => (
+                          <CTableRow key={applicant._id}>
+                            <CTableDataCell>
+                              <div>
+                                {applicant.lastname}, {applicant.firstname}
+                              </div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div>{applicant.email}</div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div>{applicant.phone}</div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div className="d-flex gap-2">
+                                {applicant.tags.map((tag, index) => {
+                                  return (
+                                    <CBadge key={index} color="primary">
+                                      {/* // get tag name from formtags */}
+                                      {formTags.find((item) => item._id === tag) &&
+                                        formTags.find((item) => item._id === tag).name}
+                                    </CBadge>
+                                  )
+                                })}
+                              </div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <CTooltip
+                                placement='top'
+                                content='Schedule Interview for this applicant'
+                              >
+                                <CButton
+                                  onClick={() => getApplicant(applicant._id)}
+                                  className="btn btn-primary"
+                                  size="sm"
+                                >
+                                  <FontAwesomeIcon icon={faCalendarAlt} />
+                                </CButton>
+                              </CTooltip>
+                            </CTableDataCell>
+                          </CTableRow>
+                        ))
+                      )
+                        : (
+                          <CTableRow>
+                            <CTableDataCell colSpan={5}>No data available</CTableDataCell>
+                          </CTableRow>
+                        )
+                    }
                   </CTableBody>
                 </CTable>
               </CCardBody>
@@ -258,6 +300,17 @@ const Applicants = ({ theme }) => {
                 onPageChange={setCurrentPage}
               />
             </div>
+          </CCol>
+        </CRow>
+
+        <CRow>
+          <CCol>
+            <ApplicantForm
+              isVisible={formModal}
+              onClose={() => setFormModal(false)}
+              isDarkMode={isDarkMode}
+              applicantData={applicantData}
+            />
           </CCol>
         </CRow>
       </CContainer>
