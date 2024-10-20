@@ -198,30 +198,21 @@ export const getResumeFile = async (req: Request, res: Response) => {
 export const searchResume = async (req: Request, res: Response) => {
     try {
         logger.info("Searching for resumes...");
-        logger.info("Search Query:", req.query);
+        logger.info("Search Query:");
+        logger.info(req.query.query);
         const searchQuery = req.query.query as string;
         const tags = req.query.tags ? (Array.isArray(req.query.tags) ? req.query.tags.map(String) : (req.query.tags as string).split(",")) : [];
-
-        // let tags: string[] = [];
-        // // Check if tags exist in the query
-        // if (req.query.tags) {
-        //     // If tags is already an array
-        //     if (Array.isArray(req.query.tags)) {
-        //         tags = req.query.tags.map(String); // Convert all elements to strings
-        //     } else {
-        //         // If tags is a string, split by commas to form an array
-        //         tags = (req.query.tags as string).split(",");
-        //     }
-        // }
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
 
         interface SearchCriteria {
-            $or: Array<{ [key: string]: { $regex: string; $options: string } } | { certifications: { $elemMatch: { $regex: string; $options: string } } } | { tags: { $in: string[] } }>;
+            $or?: Array<{ [key: string]: { $regex: string; $options: string } } | { certifications: { $elemMatch: { $regex: string; $options: string } } } | { tags: { $in: string[] } }>;
+            $and?: Array<SearchCriteria | { tags: { $in: string[] } }>;
+            tags?: { $in: string[] };
         }
 
-        const searchCriteria: SearchCriteria = {
+        let searchCriteria: SearchCriteria = {
             $or: [
                 { firstname: { $regex: searchQuery, $options: "i" } },
                 { lastname: { $regex: searchQuery, $options: "i" } },
@@ -232,7 +223,6 @@ export const searchResume = async (req: Request, res: Response) => {
                 { workExperience: { $regex: searchQuery, $options: "i" } },
                 { education: { $regex: searchQuery, $options: "i" } },
                 { remarks: { $regex: searchQuery, $options: "i" } },
-                // array fields
                 {
                     certifications: {
                         $elemMatch: {
@@ -244,16 +234,18 @@ export const searchResume = async (req: Request, res: Response) => {
             ],
         };
 
-        // Add tags condition if tags array is not empty
         if (tags.length > 0) {
-            searchCriteria.$or.push({
-                tags: { $in: tags },
-            });
+            if (searchQuery) {
+                searchCriteria = {
+                    $and: [searchCriteria, { tags: { $in: tags } }],
+                };
+            } else {
+                searchCriteria = { tags: { $in: tags } };
+            }
         }
 
         const applicants = await Applicant.find(searchCriteria).sort({ createdAt: -1 }).skip(skip).limit(limit);
         const totalItems = await Applicant.countDocuments(searchCriteria);
-        // const totalPages = Math.ceil(totalItems / limit);
         if (!applicants || applicants.length === 0) {
             return res.status(404).json({
                 statusCode: 404,
