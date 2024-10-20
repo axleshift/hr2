@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import dayjs from 'dayjs'
 import { post, put, get, del } from '../../api/axios'
+import { AuthContext } from '../../context/authContext'
 
 import {
   CButton,
@@ -34,6 +35,11 @@ import {
   CDropdownToggle,
   CInputGroup,
   CInputGroupText,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -54,6 +60,10 @@ import {
   faSearch,
   faLock,
   faUnlock,
+  faCog,
+  faCogs,
+  faGear,
+  faUserGear,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   formattedDate,
@@ -69,6 +79,10 @@ const Tags = () => {
   const [isEdit, setIsEdit] = useState(false)
   const [isTagsExpanded, setIsTagsExpanded] = useState(true)
 
+  // modal
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [isConfirmed, setIsConfirmed] = useState(false)
+
   // Search
   const [searchInput, setSearchInput] = useState('')
   const [isSearchMode, setIsSearchMode] = useState(false)
@@ -77,6 +91,9 @@ const Tags = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalPages, setTotalPages] = useState(0)
+
+  // user information from auth context
+  const { userInformation } = useContext(AuthContext)
 
   const getAllTagData = async () => {
     try {
@@ -106,6 +123,10 @@ const Tags = () => {
       .min(3, { message: 'Category name must be at least 3 characters long' })
       .max(50, { message: 'Category name must not exceed 50 characters' }),
     isProtected: z
+      .preprocess((val) => val === 'true' || val === true, z.boolean())
+      .optional()
+      .default(false),
+    isSystem: z
       .preprocess((val) => val === 'true' || val === true, z.boolean())
       .optional()
       .default(false),
@@ -147,6 +168,7 @@ const Tags = () => {
           name: '',
           category: '',
           isProtected: false,
+          isSystem: false,
         })
         setIsEdit(false)
         setIsTagsExpanded(true)
@@ -169,7 +191,8 @@ const Tags = () => {
           id: res.data.data._id,
           name: res.data.data.name,
           category: res.data.data.category,
-          protected: res.data.data.protected || false,
+          isProtected: res.data.data.isProtected || false,
+          isSystem: res.data.data.isSystem || false,
         }
         tagsFormReset(data)
       }
@@ -322,7 +345,7 @@ const Tags = () => {
                     </CRow>
                     <CRow>
                       <CCol>
-                        <CFormLabel>is Protected?</CFormLabel>
+                        <CFormLabel>Protected?</CFormLabel>
                         <CInputGroup>
                           <CFormInput
                             type="text"
@@ -356,6 +379,42 @@ const Tags = () => {
                         )}
                       </CCol>
                     </CRow>
+                    <CRow>
+                      <CCol>
+                        <CFormLabel>System Tag ?</CFormLabel>
+                        <CInputGroup>
+                          <CFormInput
+                            type="text"
+                            id="system"
+                            placeholder="..."
+                            readOnly
+                            {...tagsFormRegister('isSystem')}
+                            invalid={!!tagsFormErrors.isSystem}
+                          />
+                          <CTooltip content="Protect" placement="top">
+                            <CButton
+                              onClick={() => tagsFormReset({ isSystem: true })}
+                              className={'btn btn-primary'}
+                            >
+                              <FontAwesomeIcon icon={faGear} />
+                            </CButton>
+                          </CTooltip>
+                          <CTooltip content="Unprotect" placement="top">
+                            <CButton
+                              onClick={() => tagsFormReset({ isSystem: false })}
+                              className={'btn btn-warning'}
+                            >
+                              <FontAwesomeIcon icon={faUserGear} />
+                            </CButton>
+                          </CTooltip>
+                        </CInputGroup>
+                        {tagsFormErrors && tagsFormErrors.isSystem && (
+                          <CFormFeedback className="text-danger">
+                            {tagsFormErrors.isSystem.message}
+                          </CFormFeedback>
+                        )}
+                      </CCol>
+                    </CRow>
                     <div className="d-flex justify-content-end">
                       <CButton color="primary" type="submit" className="mb-3 w-25">
                         {isEdit ? 'Update' : 'Submit'}
@@ -374,25 +433,25 @@ const Tags = () => {
             <strong>All Tags</strong>
           </div>
           <div>
-            <CForm onSubmit={searchHandleSubmit(submitSearch)} className="d-flex flex-row gap-2">
-              <div>
+            <CForm onSubmit={searchHandleSubmit(submitSearch)}>
+              <CInputGroup>
                 <CFormInput
                   placeholder="..."
                   id="searcInput"
                   {...searchRegister('searchInput')}
                   invalid={!!searchErrors.searchInput}
                 />
-                {searchErrors && searchErrors.searchInput && (
-                  <CFormFeedback className="text-danger">
-                    {searchErrors.searchInput.message}
-                  </CFormFeedback>
-                )}
-              </div>
-              <CTooltip content="Search tags" placement="top">
-                <CButton type="submit" className="btn btn-primary">
-                  <FontAwesomeIcon icon={faSearch} />
-                </CButton>
-              </CTooltip>
+                <CTooltip content="Search tags" placement="top">
+                  <CButton type="submit" className="btn btn-primary">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </CButton>
+                </CTooltip>
+              </CInputGroup>
+              {searchErrors && searchErrors.searchInput && (
+                <CFormFeedback className="text-danger">
+                  {searchErrors.searchInput.message}
+                </CFormFeedback>
+              )}
             </CForm>
           </div>
         </div>
@@ -411,6 +470,9 @@ const Tags = () => {
                 <CRow>
                   <CCol>Protected: {tag.isProtected ? 'Yes' : 'No'}</CCol>
                 </CRow>
+                <CRow>
+                  <CCol>System Tag: {tag.isSystem ? 'Yes' : 'No'}</CCol>
+                </CRow>
               </CCardBody>
               <CCardFooter>
                 <CRow>
@@ -422,11 +484,72 @@ const Tags = () => {
                         </CButton>
                       </CTooltip>
                       <CTooltip content="Delete tag" placement="top">
-                        <CButton color="danger" onClick={() => handleDeleteTag(tag._id)}>
-                          <FontAwesomeIcon icon={faTrash} />
+                        <CButton
+                          color="danger"
+                          onClick={() => setDeleteModal(true)}
+                          disabled={tag.isProtected}
+                        >
+                          <FontAwesomeIcon icon={tag.isProtected ? faLock : faTrash} />
                         </CButton>
                       </CTooltip>
                     </CButtonGroup>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
+                      <CModalHeader>
+                        <CModalTitle>Warning</CModalTitle>
+                      </CModalHeader>
+                      <CModalBody>
+                        <div>
+                          <p>Are you sure you want to delete this tag?</p>
+                          <p>
+                            Name: <strong>{tag.name}</strong>
+                            <br />
+                            Category: <strong>{tag.category}</strong>
+                          </p>
+                          <p>
+                            <strong>Note:</strong> This action cannot be undone.
+                          </p>
+                          <p>There&apos;s no way to recover the tag once it&apos;s deleted.</p>
+                          <p>
+                            This is important because tags are used to categorize and organize
+                            content. Deleting a tag can result in the loss of important information
+                            and make it difficult to find and manage content.
+                          </p>
+                          <p>
+                            <strong>What this action does:</strong>
+                          </p>
+                          <p>
+                            It removes the tag from the system and removes the tag from any content.
+                          </p>
+                          <p>
+                            if the tag is used in any content, it will no longer be associated with
+                            that content.
+                          </p>
+                        </div>
+                      </CModalBody>
+                      <CModalFooter>
+                        <CCol className="d-flex justify-content-end">
+                          <CFormCheck
+                            type="checkbox"
+                            id="invalidCheck"
+                            label="I confirm that I understand the consequences of this action."
+                            checked={isConfirmed}
+                            onChange={() => setIsConfirmed(!isConfirmed)}
+                          />
+                          <CFormFeedback invalid>You must agree before submitting.</CFormFeedback>
+                        </CCol>
+                        <CButton
+                          onClick={() => handleDeleteTag(tag._id)}
+                          disabled={!isConfirmed}
+                          className="btn btn-danger"
+                        >
+                          Delete
+                        </CButton>
+                      </CModalFooter>
+                    </CModal>
                   </CCol>
                 </CRow>
               </CCardFooter>

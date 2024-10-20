@@ -162,7 +162,7 @@ export const getTagByCategory = async (req: req, res: res) => {
 
 export const updateTag = async (req: req, res: res) => {
     const { id } = req.params;
-    const { name, category, description, isProtected } = req.body;
+    const { name, category, description, isProtected, isSystem } = req.body;
 
     try {
         const tag = await Tag.findById(id);
@@ -172,6 +172,7 @@ export const updateTag = async (req: req, res: res) => {
             tag.category = category;
             tag.description = description;
             tag.isProtected = isProtected;
+            tag.isSystem = isSystem;
 
             await tag.save();
 
@@ -217,6 +218,14 @@ export const deleteTag = async (req: req, res: res) => {
                 statusCode: 403,
                 success: false,
                 message: "Cannot delete protected tag",
+            });
+        }
+
+        if (tag.isSystem) {
+            return res.status(403).json({
+                statusCode: 403,
+                success: false,
+                message: "Cannot delete system tag",
             });
         }
 
