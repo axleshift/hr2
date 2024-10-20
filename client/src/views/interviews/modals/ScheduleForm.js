@@ -210,6 +210,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         },
       }
       const res = await post(`/interview/slots/`, data)
+      console.log('res', res)
       if (res.status === 200 || res.status === 201) {
         alert('Time slot added successfully')
         getAllSlotsForDate(defaultDate)
@@ -279,7 +280,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   }
 
   useEffect(() => {
-    getAllSlotsForDate(defaultDate)
+    getAllSlotsForDate(new Date(defaultDate))
   }, [defaultDate])
 
   useEffect(() => {
@@ -331,13 +332,15 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
             </CRow>
             {!allSlots || allSlots.length === 0 ? (
               <CRow className="text-danger">
-                <CCol>No available time slots for the selected date, Add one.</CCol>
+                <CCol>
+                  <CFormLabel>Click a Date to view its timeslot, if none.. add one.</CFormLabel>
+                </CCol>
               </CRow>
             ) : (
               <>
                 <CRow>
                   <CCol>
-                    <CFormLabel>Available Time Slots</CFormLabel>
+                    <CFormLabel>Time Slots</CFormLabel>
                   </CCol>
                 </CRow>
                 <CRow>
