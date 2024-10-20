@@ -1,7 +1,6 @@
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
-
 export const config = {
     fileServer: {
         dir: path.join(__dirname, "public"),
@@ -13,14 +12,14 @@ export const config = {
         port: process.env.SERVER_PORT,
         jwt: {
             secret: process.env.JWT_SECRET,
-            expiry: "1h",
+            expiry: process.env.JWT_EXPIRES_IN,
         },
         session: {
             secret: process.env.SESSION_SECRET,
-            expiry: 24 * 60 * 60 * 1000, // 24 hours
+            expiry: 24 * 60 * 60 * 1000,
         },
 
-        origins: ["http://localhost:3000", "http://localhost:8000", "http://localhost:5056", "http://localhost:4173", "https://hr2.axleshift.com/"],
+        origins: process.env.CORS_ORIGINS?.split(",") || [],
     },
 
     mongoDB: {
@@ -44,24 +43,8 @@ export const config = {
 
     route: {
         dir: path.join(__dirname, "routes"),
-        sessionExceptions: ["auth"],
+        sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || ["auth"],
     },
 
     env: process.env.NODE_ENV || "development",
-
-    // logFolder: path.join(__dirname, "logs/express"),
-    // routeFolder: path.join(__dirname, "routes"),
-    // sessionExceptions: ["auth"],
-
-    // env: {
-    //     environment: process.env.NODE_ENV || "development", // development, production, test
-    //     port: process.env.SERVER_PORT, // Port to run the server on
-    //     sessionSecret: process.env.SESSION_SECRET || "", // Secret for session
-    //     jwtSecret: process.env.JWT_SECRET || "", // Secret for JWT
-    //     mongoDbUri: process.env.MONGODB_URI || "",
-    // },
-
-    // resumes: {
-    //     defaultExpiry: 30, // in days
-    // },
 };

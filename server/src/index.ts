@@ -108,7 +108,7 @@ connectDB().then(async () => {
                         router.use(metadata.path, routeRouter);
                     }
 
-                    logger.info(`🚀 Route loaded: ${metadata.path}`);
+                    logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
                 }
             }
             return router;
@@ -125,7 +125,7 @@ connectDB().then(async () => {
         initRoutes()
             .then(() => {
                 app.listen(port, () => {
-                    logger.info(`Server is running at http://${host}:${port}`);
+                    logger.info(`🟢 Server is running at http://${host}:${port}`);
                 });
                 logger.info("🚀 Routes loaded successfully");
                 startJobs();
