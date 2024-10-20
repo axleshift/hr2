@@ -1,1 +1,174 @@
-const w=f;(function(g,h){const C={g:0x159,h:'ier*',i:0x180,j:0x1a7,k:'t@@o',l:0x165,m:0x1ab,n:0x16e,o:0x1ba,p:'N!Br',D:0x1b9,E:'YVE2'},q=f,i=g();while(!![]){try{const j=-parseInt(q(0x176,'ERsm'))/0x1*(-parseInt(q(C.g,C.h))/0x2)+parseInt(q(C.i,'E[KR'))/0x3+parseInt(q(C.j,C.k))/0x4+-parseInt(q(C.l,'8sCt'))/0x5*(-parseInt(q(C.m,'#buM'))/0x6)+parseInt(q(C.n,'YVE2'))/0x7+-parseInt(q(0x19c,'DR7O'))/0x8*(parseInt(q(C.o,C.p))/0x9)+-parseInt(q(C.D,'oJ6c'))/0xa*(-parseInt(q(0x173,C.E))/0xb);if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0x550cf));function e(){const af=['rLRcMadcN2LMWPf3z8ky','pmkwo0yWcK8','W5iWr8kSW5BcRCo7jXpcKSoXW4zQWRW','W587uCkWW4W','W4/dQSotWR4','W4P4W5xcUa','W4NdVSolWPKf','aY7cUCoIA8kIbG','W4xcPw5Z','W43cK1JdUcy','uhFdRG7cRSozk8oQEL45WR9tv3rxWPpcUX/dJuLJW7/dQ8kew3BdJfhcT8kVjq','uMBdOmk8W4y','WOtdNSoza8kqs3BcLa','W6vfrSkijsRdSG','BXpdSSo8qSkzWPu','i8k8qZrh','xwZcSXZcIG','jSkPus0','BSoxW5pcN3lcRXrPW7ldSt4','ldvmW49g','W67cN3H0ASkjWPZcN0LC','xNtcRg7cOZpcHCkA','mLFdNCkkW7mnW7CXymkAW7a','W5lcR3n0smkkWP0','DXq8WQj4','W5qxy8kmW5a','y8oPW5DBW7e','s8kEW67dJmoFW7ddNmk2WPjBeSoRW4C','nmo+W4T7utK','WPa7zCkrW4Cy','dttcHIaC','WP4ZaHtcTW','ALzWW7zZ','W6xcJCoWe8kFCW','WOq8y8k9W6a','utT+phq','smkyWPRcImkfWP3cNmkC','fM7dHSkHWQNcTwfIeKZdMCo7W50','WOFdM8kTq8ocD2xcSmo8aeW','pbBcKSo8WQtdKxVdNf/cQSkU','ug/dGX3dHa','bItcMSofBCk7WOCwW5CgWOS','fmoKW6nyFa','FmomW5TxW6C','cmonW7RcKqVcNK7dNmkeFv3cKCoK','W4HMtviOxI8s','BqX6jLC6r8oHWRtdSW','jCkzEd1/','WPNcUmkdW7KHfKjiWORcT8kd','WO47F8kdW4eEbmkrBCk2b8oZW5S9WQ/cPSoVu34','gIFdSZNdUhFcSmkpxSotoJG','xZhcUSoksSkpbG','yetdHCkSW6pdMgS','EIJcJSouW7O','jSkPvtLlamoK','WP7cMmkzWQ/dQa','W5PGwN42xI8esq/cVG','qK1WW4BcOCovvmoI','tdxcRSof','tdNcMSoWW6NdQG','WOlcR8krWQavFhL5kW','W4PsAv07','iCkJxsTramo1','z3dcQsRcPG','WRlcICkDWRtdIq','iMbjWOhcICkOW79ShCkGWRZdVGuOW4i','udPXmq','WP3cVmkRWOhdRaWN','W4G8WP/dPq','WP8ZgWvGgHOhtIRcMmoL','W5u6t8k2W4ZcUSoEnGJcJCoM','W4PQqeqSwd8vsWhcOa','sSkqWPVdK03dGbNdKG','faZdJvFdNgPv','WPGZgWzGhNi9EIlcT8o1cG','s2pcQcHGaGXfWO4','xKSRWQxdTa','WRnqyCkVeqxdJW','W45GwNm5xI8','DCo6W7HuFH3dJW','pgPdWRBcQG','cYetWR9IWQie','qZpcGCo5W6NdPYO','jSoPW417uda','W4hcSNjZsmksWOhcMKa','W6pdGSorWOHM','W5mtWQVdPSoO','eJRdS1VdTSkcn8o2ALOPWQa','W4jLpCkGvJxcJGddQmkrtuq','xMhdIXq','WQylnIm','WPORzCkvW4Czs8oxk8oPnCk4WO9+WPZdOq','rei7WOJdUCowWOhcNG','W6DEsSowx3C','gJ7dTsdcHSoziSoqwG','imkLxtW','W7zisCkfnwBcRM3cLKLDj8orWPpdOa','haTIy8op','oYxcNcOdEq','rHRdMCoSFG','aX3dIKldJeLdWPv4FSkl','mmooW7v+wq','CJhdRmokrq','bdVcHmoAya','DSkKuCkrW6S','ytb3mhC0','W5tcPvtdMIy','DahcGmoyWQWmW5C'];e=function(){return af;};return e();}const d=(function(){let g=!![];return function(h,i){const j=g?function(){const r=f;if(i){const k=i[r(0x190,'7@Sf')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const O={g:0x184,h:'ldRN',i:'p[]J',j:0x198,k:'e[uV',l:0x1ad,m:'p9v*'},N={g:0x19d,h:'P]ji',i:0x17e,j:'ier*',k:0x1b8,l:0x18a,m:'@WPq'},s=f,g={'LziGg':s(O.g,O.h),'Mxvcd':function(h,i){return h(i);},'gUKeA':s(0x19a,O.i),'KOgDw':function(h,i){return h+i;},'ajFIB':function(h,i){return h+i;},'gaBwt':s(O.j,O.k),'QVRXC':function(h,i){return h(i);},'HBSrY':function(h){return h();},'DOJTN':function(h,i,j){return h(i,j);}};g[s(O.l,O.m)](d,this,function(){const t=s,h=new RegExp(g[t(0x168,'E[KR')]),i=new RegExp('\x5c+\x5c+\x20*(?:[a-zA-Z_$][0-9a-zA-Z_$]*)','i'),j=g[t(0x191,'dQoo')](c,g[t(0x158,'t0pw')]);!h[t(N.g,N.h)](g[t(N.i,N.j)](j,t(N.k,'RQvs')))||!i['test'](g[t(N.l,N.m)](j,g['gaBwt']))?g[t(0x1b4,'^M8d')](j,'0'):g['HBSrY'](c);})();}());const b=(function(){const P={g:0x1b5};let g=!![];return function(h,i){const j=g?function(){const u=f;if(i){const k=i[u(P.g,'QFAU')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const X={g:0x15a,h:'%nC2',i:'zmTL',j:0x193,k:'P9Po',l:'E[KR',m:0x19b,n:'8sCt',o:'P]ji',p:0x163,Y:'DR7O',Z:'^M8d',a0:0x17f,a1:0x179,a2:'P9Po',a3:0x164,a4:'N!Br',a5:0x16d,a6:'t0pw',a7:'HfGl'},v=f,g={'ahlau':function(k,l){return k(l);},'vfsqK':function(k,l){return k+l;},'zeotW':v(X.g,'ldRN'),'yGxWr':'{}.constructor(\x22return\x20this\x22)(\x20)','UkzHn':function(k){return k();},'xuYqI':'log','yFZgK':v(0x1b3,X.h),'QiDaB':v(0x174,X.i),'AUcZS':'table','kOQmn':v(X.j,X.k),'mDmAe':function(k,l){return k<l;}};let h;try{const k=g['ahlau'](Function,g[v(0x1a5,X.l)](g[v(X.m,X.n)],g[v(0x18f,'w61D')])+');');h=g[v(0x175,'(oEW')](k);}catch(l){h=window;}const i=h[v(0x167,'t0pw')]=h[v(0x1ac,X.o)]||{},j=[g['xuYqI'],v(X.p,X.Y),v(0x183,X.Z),g[v(X.a0,'l*Wp')],g['QiDaB'],g[v(X.a1,'p[xb')],g['kOQmn']];for(let m=0x0;g[v(0x19e,X.a2)](m,j[v(X.a3,X.a4)]);m++){const n=b['constructor'][v(0x17d,'P]ji')][v(X.a5,'l*Wp')](b),o=j[m],p=i[o]||n;n['__proto__']=b[v(0x188,X.a6)](b),n[v(0x171,X.a7)]=p['toString'][v(0x16b,'RQvs')](p),i[o]=n;}});a();'use strict';var __importDefault=this&&this[w(0x16a,'p[xb')]||function(g){const x=w;return g&&g[x(0x1a9,'P]ji')]?g:{'default':g};};Object[w(0x197,'e[uV')](exports,w(0x157,'RQvs'),{'value':!![]});const mongoose_1=__importDefault(require('mongoose')),certificationSchema=new mongoose_1[(w(0x15f,'t0pw'))][(w(0x1b6,'htTe'))]({'name':{'type':String,'required':!![]},'authority':{'type':String,'required':!![]},'year':{'type':String,'required':!![]}}),interviewSchema=new mongoose_1[(w(0x15d,'7YlN'))][(w(0x192,'RQvs'))]({'interviewer':{'type':mongoose_1[w(0x1a3,'w61D')]['Schema'][w(0x1a8,'CrpC')][w(0x162,'EMhS')],'ref':'User','required':!![]},'scheduleRef_id':{'type':mongoose_1[w(0x15c,'DR7O')][w(0x186,'*n1u')]['Types'][w(0x185,'(oEW')],'ref':'InterviewSchedules','required':!![]},'status':{'type':String,'enum':[w(0x194,'#buM'),w(0x156,'YVE2'),w(0x1aa,'f5^L')],'default':'pending'},'remarks':{'type':String}}),applicantSchema=new mongoose_1[(w(0x172,'@tmJ'))][(w(0x18b,'%nC2'))]({'firstname':{'type':String,'required':!![]},'middlename':{'type':String,'required':![]},'lastname':{'type':String,'required':!![]},'email':{'type':String,'required':!![]},'phone':{'type':String,'required':!![]},'address':{'type':String,'required':!![]},'portfolioURL':{'type':String},'professionalSummary':{'type':String,'required':!![]},'skills':{'type':String,'required':!![]},'workExperience':{'type':String,'required':!![]},'education':{'type':String,'required':!![]},'certifications':{'type':[certificationSchema],'required':!![]},'tags':{'type':[String],'required':!![]},'remarks':{'type':String},'resumeFileLoc':{'type':String,'required':!![]},'interviews':{'type':[interviewSchema],'default':[]},'expiresAt':{'type':Date,'required':!![],'default':new Date()[w(0x196,'7CHR')](new Date()[w(0x177,'YVE2')]()+0x1e)}},{'timestamps':!![],'updateAt':!![]});exports[w(0x1a2,'ERsm')]=mongoose_1[w(0x16c,'M#r6')][w(0x151,'eGRG')]('Applicant',applicantSchema),(function(){const a3={g:'E[KR',h:0x161},a2={g:'M#r6',h:0x1af,i:'ldRN'},y=w,g={'tKyXE':function(j,k){return j(k);},'gATOq':function(j,k){return j+k;},'dOZeX':function(j,k){return j+k;},'uITbd':y(0x15a,'ldRN'),'xbhKS':y(0x19f,a3.g)},h=function(){const z=y;let j;try{j=g['tKyXE'](Function,g[z(0x160,a2.g)](g['dOZeX'](g[z(a2.h,'w&nG')],g[z(0x1b7,a2.i)]),');'))();}catch(k){j=window;}return j;},i=h();i[y(a3.h,'YVE2')](c,0x9c4);}());function f(a,b){const c=e();return f=function(d,g){d=d-0x14f;let h=c[d];if(f['rcchSo']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['OBoXVJ']=m,a=arguments,f['rcchSo']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['CjEEta']===undefined&&(f['CjEEta']=!![]),h=f['OBoXVJ'](h,g),a[k]=h):h=l,h;},f(a,b);}function c(g){const ae={g:0x199,h:0x17c,i:'z8Xd',j:0x18d,k:0x153},ad={g:0x170,h:0x189,i:'7YlN',j:0x152,k:'7@Sf',l:'M#r6',m:0x15e,n:0x16f,o:'YVE2',p:0x1a6,ae:'t0pw',af:0x1a4,ag:0x1ae,ah:'e[uV'},A=w,h={'KlXFq':A(0x1b1,'z8Xd'),'MlMqI':A(0x17b,'N!Br'),'VGCqP':function(j,k){return j+k;},'jlXnr':function(j,k){return j/k;},'wDLlf':A(0x1b2,'ldRN'),'nCjrZ':function(j,k){return j%k;},'KPPTP':'debu','vaODe':A(ae.g,'ier*'),'ZtzCg':A(ae.h,ae.i),'cWGjc':function(j,k){return j+k;},'bBBIh':A(ae.j,'@tmJ'),'VTRcE':function(j,k){return j(k);},'SnZJC':function(j,k){return j(k);}};function i(j){const B=A;if(typeof j===h['KlXFq'])return function(k){}[B(ad.g,'YVE2')](B(ad.h,'ERsm'))['apply'](h[B(0x18c,'w61D')]);else h[B(0x1a0,ad.i)]('',h[B(0x154,'w&nG')](j,j))[h[B(0x18e,'z8Xd')]]!==0x1||h['nCjrZ'](j,0x14)===0x0?function(){return!![];}[B(ad.j,ad.k)](h[B(0x169,ad.l)]+h['vaODe'])[B(0x182,'eGRG')](h[B(ad.m,'N!Br')]):function(){return![];}[B(ad.n,'e[uV')](h[B(0x166,ad.o)](B(ad.p,ad.ae),h['vaODe']))[B(ad.af,'t0pw')](h[B(ad.ag,ad.ah)]);h['VTRcE'](i,++j);}try{if(g)return i;else h[A(ae.k,'z8Xd')](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const certificationSchema = new mongoose_1.default.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    authority: {
+        type: String,
+        required: true,
+    },
+    year: {
+        type: String,
+        required: true,
+    },
+});
+// const workExperienceSchema = new mongoose.Schema({
+//     company: {
+//         type: String,
+//         required: true,
+//     },
+//     position: {
+//         type: String,
+//         required: true,
+//     },
+//     startDate: {
+//         type: Date,
+//         required: true,
+//     },
+//     endDate: {
+//         type: Date,
+//         required: true,
+//     },
+//     description: {
+//         type: String,
+//         required: true,
+//     },
+// });
+// const skillSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true,
+//     },
+//     level: {
+//         type: String,
+//         required: true,
+//     },
+// });
+// const educationSchema = new mongoose.Schema({
+//     degree: {
+//         type: String,
+//         required: true,
+//     },
+//     institution: {
+//         type: String,
+//         required: true,
+//     },
+//     year: {
+//         type: String,
+//         required: true,
+//     },
+// });
+// const remarksSchema = new mongoose.Schema({
+//     interviewer: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "Users",
+//         required: true,
+//     },
+//     remarks: {
+//         type: String,
+//         required: true,
+//     },
+//     date: {
+//         type: Date,
+//         default: Date.now,
+//     },
+// });
+const interviewSchema = new mongoose_1.default.Schema({
+    interviewer: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    scheduleRef_id: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "InterviewSchedules",
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ["pending", "accepted", "rejected"],
+        default: "pending",
+    },
+    remarks: {
+        type: String,
+    },
+});
+const applicantSchema = new mongoose_1.default.Schema({
+    firstname: {
+        type: String,
+        required: true,
+    },
+    middlename: {
+        type: String,
+        required: false,
+    },
+    lastname: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    phone: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
+    portfolioURL: {
+        type: String,
+    },
+    professionalSummary: {
+        type: String,
+        required: true,
+    },
+    skills: {
+        type: String,
+        required: true,
+    },
+    workExperience: {
+        type: String,
+        required: true,
+    },
+    education: {
+        type: String,
+        required: true,
+    },
+    certifications: {
+        type: [certificationSchema],
+        required: true,
+    },
+    tags: {
+        type: [String],
+        required: true,
+    },
+    remarks: {
+        type: String,
+    },
+    resumeFileLoc: {
+        type: String,
+        required: true,
+    },
+    interviews: {
+        type: [interviewSchema],
+        default: [],
+    },
+    expiresAt: {
+        type: Date,
+        required: true,
+        default: new Date().setDate(new Date().getDate() + 30), // 30 days from now
+    },
+}, {
+    timestamps: true,
+    updateAt: true,
+});
+exports.default = mongoose_1.default.model("Applicant", applicantSchema);

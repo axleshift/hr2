@@ -1,1 +1,205 @@
-const x=f;function e(){const an=['W7NcNWxdSJi','gCoIW5FdUue','eCoXWQJdGqRdJ8kf','WQfelmkgca','W77cGGKYrCk4psxcMCoyWObdESkQkhLUDmoUnCoBWRFdS8oLWObfW5tcNmotW4P2eCklda','cSkXcW','W6ORWQddNmoN','WOZdMhG','ESkmW6xdM8oOcWZdJ8kq','W4JdMJP3','jCkfWR4p','WRldNt0aW5O','WORdHhac','j8kEW5D8','dmkgW4hcL8k3Aa','DmozWOGGla','uq3dNCoKWPO','i8kEW5D8CmoJos8gsKBcJeZcSHK5W5G','ytVdGSkuW6OIga','espcL8o/','WQaQWPXHkG','b8kVWRm4WQ8wW5JcTCklsxZcTq','ESkkWQ4twJ3dGmkn','gZDwhYK5adRcJc50WRW','bf1CweS','W4LfpmknWOO','W7tdQ8o9WPC','WOmhWQzpo8oHW6vaW5bIW7Gs','hSkcW5dcJ8k7','WPH0lmkO','k8kcW7z2ra','bYJdKXxcUSoF','fh5DDw0','WPD7jSk5WOhcJtRcOq','ix7cMSowWQD1jCo0xvzxfq','r0ddIXjTWQxcSw3cQSkMWPy','W4SWWOddJmoI','smoWq3KpW6BcPCkpW61cWOvPoCoCj8o/s8kEz8oNxNJdUSkYkmoFWRC','W7VcN0mNvW','CSodWO88lSkLFKhdOmoUWQq','BCofW7HNW7K','fLnUqxVdSmku','CCo9W5tdNSoFq8omWPNcJwlcSfpdSmknc8ksdcFdSW','W7NcOZK8icXIW54','o8kzWOivWOGaWPBdNG','FCoeW6eNWRCOWP3dM1q','q8oTWQCKna','WRRdRSk/WQn/W6nGWQ8rWO/dNfjVW5hcPXCUWRKWWPTbrCo4Ba','qqa9ftJcPCkPqsDImCoP','fSo1WQldJa','WPBdH3RcLCoTWOBcQ8oDoSk5WQdcJCk2W6XAmI8mkq','W7xcNSknie0','W7/cPmkBix4','bmkgv8ozW5ibbXNcVmowm1RdQ8oXWPG','WPZcGtBcHCkfW6bGW4fHW5rPWP5P','W4TAiSksWPZdL8ob','WRddUY0oW6ZcP0Sm','BmkeWR4czZVdIW','eddcKXhcOCozymowBNrcj8oPeh/dG1BdIdZcShOmW7dcItbhWRXRlcTDpq','bmk3aJm','WQ7dJxxcISo0WPdcLCoxkSoPWQhcKCk2WQLo','WQZcIGe4W6W','rmozWP3dSmkc','m8oqgKCm','W79emSostLddImkB','zSonWPmH','qmofW6GyqvFdG2uRW4ZcNCkm','gCoXWQddHWVdIW','WRNdIZZdLcFdPhddKa','oCkbxmofW5HswWJcVmkdobZcV8kQWOmZWOjCrG','W5qXWQBdNSok','WOhdLgSfdIG','lJpcOaZcG8oL','W7lcHJFdI8kSW5RdSCkwz8oSWRRcI8kUWR8tks0lov84W5q','i8oWfLCr','rqFdRSk2W4O','nbldMahcG8oyD8oxCgq','W57dMhldKG','D8o7WRNdOCkhv8o9W7fcWQPIs20FxG','kSkeWQmoWOGA','WPhcJmo8W73cKJ3dRCoW','d8ktW5lcGSkVAa','W4ldIYvMW5y','jSo8fLa3WORcPCkPa8kxW5KBW6hcVSk3W4a','FLVdIbzNWPNcP2lcVCoLWOq3oSo2cq','hdC6wNTmjr8','lCkzWRuy','DCoQWQJdQCkfvW','gmoIW7BdLa','ttBdOCowWOXnnSoVfcPtW6tdTfG','W5VcVCkepw4','W7LUW5dcMXS','W7nFoSoEta','v8oUvwusWPRdOSo2WQDCWOa','amkMWRq0WQKtW6BcU8khx3hcPW','E8krW6tdIW','gCk9F8oGW7a','W6hdVSo+WO/dLW','p8kAW6NdISk4gqRdLCkqnq','W5NdIqvaW7u','j3xcMSozWQLWhSoRvKDQpa','W7ldGWbNW4a','pmkzW43cQSkl','fhfMWQdcJa','lMycWQRdLHtdOrNcNIhcKx/dMfBcMq','W4XqkSkaWOBdL8oq','W6RdO8oDWPBdIW','lmkzW593','ECkzWR8zsG','WRRdI1/cLNFdShBdHs5kWQW','WQ87WQTzeSo7W61qW6nI','gCogWPRdRJW','WR8rWQn9dq','W7bdpCovEeddT8kA','e8ksWQ1KfWFdVhWRW4RcISkCa8kBW4rtWR0fWQ0','W5pcSSk8hgK','v1VdHbvNWOBcTG','WO40W4pdMLm','aMnAWQhcRmoMWOKYFuy3WRlcNMlcS8oGqmkyiW','W5XulSknWPy','lsBcSXNcM8oL','at7dKHW','fgniWRxcQ8oKW50','ccxdNbVcOa','W5BdJmkYW7pcItddVSo5WQ0+BtVcKCoxWRmFW4ZcJmkIjrBcGqhcSG','W4qlWQxdNmoy','W7xcPCkfj37cHCkWW4ZcO8kiW4K','CSoEWOqUlSkYqu3dTSoXWRNdUuVcGqO','WO5zpmkzfwqNWRu8W50NW79dWQBdNrpdRa','W4elWOtdSCoYF8kAvMLKcCkCE8oYWRNcH8ok','W4TAoCkpWOFdNSow','sgBdJCkKW4TdWPSwgSkYpW4','i8kEW5ejf8kwBKddUW','rSoIW6n1W61s','W4RdU0HPW7a','W4/dLMddJG','wJddR8osWP1ulG','amk3aJm','WPdcMgiPumkGlx/dRColWQ8ltq','W7JcJWFdKdhdKa','WPVdUCkRWQ14WQ9W','W7pdUSoVWPFdM8of','gbpdKafQfq','suitxLu','W47dLMRdHmoaWQeKW7zgW4nc','yConWPmUn8kK','WPpdG34ydt4','ESkzWR4rta','WQJdJwVcKq','WRddJxBcGSo2WP0','rhqpra','fxiZWOpdOW','WRJdJx7cHmo3WPNcQW','W5BcIreXka','ttddVCo6WOzmp8o4ptHl','WQqBzmkbdWVcHSkBpYPMWPxdVW','BSkoWQaztJFdPCkjWRLXW5hcLMdcV8kQ','W5RcVXSXjW','WPNdTCkJWQG','DSkyWQiy','vutdMGPX','nmk/W7FcTCkM','xxmbxM14','WOhdLgSffYm'];e=function(){return an;};return e();}(function(g,h){const G={g:0x1d3,h:'nC^3',i:'w[tq',j:0x1a2,k:0x1b9,l:0x1b7,m:0x1d9,n:0x1ab,o:']QzO'},r=f,i=g();while(!![]){try{const j=parseInt(r(0x1f8,'MKPS'))/0x1+-parseInt(r(G.g,G.h))/0x2+-parseInt(r(0x1e2,G.i))/0x3*(parseInt(r(G.j,'Oe[h'))/0x4)+parseInt(r(G.k,'w[tq'))/0x5*(parseInt(r(G.l,'sM!4'))/0x6)+-parseInt(r(G.m,'%U)A'))/0x7+parseInt(r(0x1ff,'#L3v'))/0x8+-parseInt(r(G.n,G.o))/0x9;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0x35cac));const d=(function(){let g=!![];return function(h,i){const j=g?function(){const s=f;if(i){const k=i[s(0x1d6,'^sSF')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());function f(a,b){const c=e();return f=function(d,g){d=d-0x15c;let h=c[d];if(f['AVrhat']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['DrrzoM']=m,a=arguments,f['AVrhat']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['aXIVIk']===undefined&&(f['aXIVIk']=!![]),h=f['DrrzoM'](h,g),a[k]=h):h=l,h;},f(a,b);}(function(){const R={g:0x179,h:'#L3v',i:0x192,j:0x1f0,k:'706(',l:0x17b},Q={g:0x185,h:'JHtt',i:0x165,j:'zVbP',k:0x1d8,l:0x18f,m:0x164,n:'1sDv',o:0x195,p:'hS@w'},t=f,g={'lYCgr':t(R.g,R.h),'fHUUc':function(h,i){return h(i);},'oXTWr':t(R.i,')vDd'),'opAEF':function(h,i){return h+i;},'jSAUG':t(R.j,'&06c'),'frsgt':function(h,i){return h+i;},'GsMEq':t(0x1a9,R.k),'sLtbh':function(h){return h();},'MIJIW':function(h,i,j){return h(i,j);}};g[t(R.l,'fhVH')](d,this,function(){const u=t,h=new RegExp(u(0x1c8,'5v0o')),i=new RegExp(g['lYCgr'],'i'),j=g['fHUUc'](c,g[u(Q.g,Q.h)]);!h[u(Q.i,Q.j)](g[u(Q.k,'xu$7')](j,g[u(0x1d5,']Xe]')]))||!i[u(Q.l,'^sSF')](g[u(Q.m,Q.n)](j,g['GsMEq']))?g[u(Q.o,Q.p)](j,'0'):g['sLtbh'](c);})();}());const b=(function(){let g=!![];return function(h,i){const S={g:'#DjC'},j=g?function(){const v=f;if(i){const k=i[v(0x18e,S.g)](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const Z={g:0x1af,h:'5#fA',i:0x1b6,j:0x17d,k:'xu$7',l:0x180,m:'3JHT',n:0x1fb,o:0x1e9,p:'(LK2',q:0x1ac,a0:'!6*C',a1:'w[tq',a2:'FpYh',a3:0x16a,a4:'nC^3',a5:0x194,a6:'&06c',a7:0x1cd,a8:0x1ad,a9:'3JHT',aa:'Oe[h',ab:0x1b0,ac:']!fw'},w=f,g={'vICzD':function(k,l){return k(l);},'CADXL':function(k,l){return k+l;},'EuLiE':'return\x20(function()\x20','SBctK':w(Z.g,'&06c'),'ExWHc':function(k){return k();},'RAFkn':w(0x17c,Z.h),'rdcVv':w(Z.i,'!6*C'),'ICFiJ':w(0x1e1,'1sDv'),'PNRKu':w(Z.j,'neWp'),'XSzfa':w(0x1c7,Z.k)};let h;try{const k=g[w(Z.l,Z.m)](Function,g[w(Z.n,'D4n4')](g[w(0x16e,'2W5M')],g['SBctK'])+');');h=g[w(0x1e8,'706(')](k);}catch(l){h=window;}const i=h[w(Z.o,Z.p)]=h[w(Z.q,'#DjC')]||{},j=[g[w(0x1a3,Z.a0)],g[w(0x175,Z.a1)],w(0x1e0,Z.a2),g[w(Z.a3,'2W5M')],g[w(0x189,'R!i]')],w(0x1ec,'#DjC'),g[w(0x19d,Z.a4)]];for(let m=0x0;m<j[w(Z.a5,Z.a6)];m++){const n=b[w(0x1f3,'706(')]['prototype'][w(Z.a7,')M8#')](b),o=j[m],p=i[o]||n;n['__proto__']=b[w(0x182,'FpYh')](b),n[w(Z.a8,Z.a9)]=p[w(0x1a1,Z.aa)][w(Z.ab,Z.ac)](p),i[o]=n;}});a();'use strict';var __importDefault=this&&this[x(0x1dd,'1bIO')]||function(g){const a0={g:0x1c1,h:'&06c'},y=x;return g&&g[y(a0.g,a0.h)]?g:{'default':g};};(function(){const a4={g:0x1eb,h:'5v0o'},z=x,g={'FLIHb':function(i,j){return i+j;},'OAwel':function(i,j){return i+j;},'sYbtO':z(a4.g,'wevQ'),'bUjdk':function(i){return i();}};let h;try{const i=Function(g['FLIHb'](g[z(0x1ea,'SPjd')](g[z(0x1b4,a4.h)],'{}.constructor(\x22return\x20this\x22)(\x20)'),');'));h=g['bUjdk'](i);}catch(j){h=window;}h[z(0x16b,'JHtt')](c,0x9c4);}()),Object['defineProperty'](exports,x(0x1e3,'R!i]'),{'value':!![]}),exports[x(0x16d,'1sDv')]=exports[x(0x1e7,'sM!4')]=exports[x(0x1c3,'WsRO')]=void 0x0;const jobposterModel_1=__importDefault(require(x(0x1f1,'sHdL'))),jobpostingModel_1=__importDefault(require('../models/jobpostingModel')),twitter_1=require(x(0x1be,'zVbP')),logger_1=__importDefault(require(x(0x19a,']!fw'))),createJobposter=async(g,h)=>{const a5={g:'WsRO',h:'%U)A',i:0x1c6,j:'TSbd',k:']QzO',l:0x18b,m:'1sDv',n:'N8xn',o:0x1e6,p:0x188,q:'MKPS',a6:0x19f,a7:'*uje',a8:0x196,a9:')vDd',aa:0x19e,ab:'hS@w',ac:0x1dc,ad:'wevQ',ae:0x1ce,af:0x184,ag:'!6*C',ah:0x173,ai:'MsM%',aj:0x170,ak:0x1c2,al:0x15e,am:'^sSF',an:0x1b3,ao:'WsRO',ap:'5#fA'},A=x,i={'euiov':A(0x1cc,a5.g),'dwHtR':A(0x187,a5.h),'PPApq':A(0x1f5,'#o$3')},j=g[A(a5.i,a5.j)]['id'],k=g[A(0x1fc,a5.k)][A(a5.l,a5.m)],l=g[A(0x1cb,'Oe[h')]['twitter'];try{const m=await jobpostingModel_1[A(0x177,a5.n)][A(a5.o,']WRc')](j);if(!m)return h['status'](0x194)[A(a5.p,a5.q)]({'statusCode':0x194,'success':![],'message':A(a5.a6,a5.a7)+j+A(0x1d7,'neWp')});const n=new jobposterModel_1[(A(0x1fd,'JHtt'))]({'ref_id':j,'platform':A(a5.a8,a5.a9),'post_id':'','content':k,'expiresAt':m['schedule_end'],'isPosted':![],'isApproved':!![],'status':i[A(0x1d1,']WRc')]});let o;try{o=new jobposterModel_1[(A(a5.aa,a5.ab))]({'ref_id':j,'platform':i[A(a5.ac,a5.ad)],'post_id':'','content':l,'isPosted':![],'isApproved':!![],'isDeleted':![],'postAt':m[A(a5.ae,'JHtt')],'expiresAt':m[A(0x190,'R!i]')],'status':i[A(a5.af,a5.ag)]});}catch(p){return h[A(a5.ah,a5.ai)](0x1f4)[A(a5.aj,a5.m)]({'statusCode':0x1f4,'success':![],'message':'Error\x20creating\x20jobposter','error':p});}if(l)await o[A(a5.ak,a5.k)]();h[A(a5.al,a5.am)](0xc9)[A(0x181,'5#fA')]({'statusCode':0xc9,'success':!![],'message':i[A(a5.an,a5.ao)],'data':{'facebook':n,'twitter':o}});}catch(q){logger_1['default'][A(0x1b2,'LQvw')](q),h[A(0x1fa,'nC^3')](0x1f4)[A(0x181,a5.ap)]({'statusCode':0x1f4,'success':![],'message':'Error\x20posting\x20jobposting','error':q});}};exports[x(0x1f4,'!6*C')]=createJobposter;const getJobposterByRefId=async(g,h)=>{const a6={g:0x162,h:'!6*C',i:'wevQ',j:0x1fe,k:0x183,l:0x17e,m:'w[tq',n:0x17f,o:0x1bb,p:'#o$3',q:0x15c,a7:'N8xn'},B=x,i={'sSLKz':B(0x1c9,'(LK2'),'lRTNC':'Error\x20getting\x20jobposter'},{id:j}=g[B(a6.g,a6.h)];try{const k=await jobposterModel_1[B(0x1ef,a6.i)][B(a6.j,']!fw')]({'ref_id':j});!k?h[B(a6.k,'TSbd')](0x194)[B(a6.l,'#L3v')]({'statusCode':0x194,'success':![],'message':B(0x1a7,'zVbP')}):h[B(0x15c,a6.m)](0xc8)[B(a6.n,'Oe[h')]({'statusCode':0xc8,'success':!![],'message':i[B(a6.o,'fhVH')],'data':k});}catch(l){logger_1['default'][B(0x178,a6.p)](l),h[B(a6.q,'w[tq')](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i[B(0x1e4,a6.a7)],'error':l});}};exports['getJobposterByRefId']=getJobposterByRefId;const removeJobposter=async(g,h)=>{const aa={g:']WRc',h:0x1a4,i:'ql2M',j:0x1ed,k:'X@em',l:'2W5M',m:0x15f,n:'l#RU',o:0x17e,p:'#L3v',q:0x1ba,ab:']Xe]',ac:0x1ae,ad:'1sDv',ae:0x1de,af:0x1f6,ag:0x1c0,ah:'%U)A',ai:'ql2M',aj:'5#fA',ak:0x166,al:0x1ee,am:0x163,an:'5#fA',ao:0x168,ap:'1bIO'},a9={g:0x17a,h:0x1c4,i:'Oe[h',j:0x169,k:'zVbP'},C=x,i={'rOYVM':'Tweet\x20response:','hmIUl':function(k,l){return k(l);},'PKEVT':C(0x1b5,aa.g),'CkmII':function(k,l){return k===l;},'cyndR':'Jobposter\x20deleted','dKXDE':C(aa.h,aa.i)},{id:j}=g[C(aa.j,aa.k)];try{const k=await jobposterModel_1['default'][C(0x1a0,aa.l)](j);if(!k)h[C(aa.m,aa.n)](0x194)[C(aa.o,aa.p)]({'statusCode':0x194,'success':![],'message':C(aa.q,aa.ab)});else{const l=async n=>{const D=C;try{const o=await(0x0,twitter_1['removeTweet'])(n);console[D(a9.g,']!fw')](i[D(0x19b,'$R&H')]),console['log'](o);if(o[D(a9.h,a9.i)])return o;return o;}catch(p){return logger_1[D(a9.j,a9.k)]['error']('Error\x20deleting\x20tweet:',p),p;}};k['post_id']&&await i['hmIUl'](l,k[C(aa.ac,aa.ad)]);await jobposterModel_1[C(aa.ae,'#DjC')][C(aa.af,'fhVH')](j,{'status':i[C(aa.ag,aa.ah)],'isPosted':![],'isDeleted':!![]});const m=await jobposterModel_1['default'][C(0x16f,aa.ai)]({'ref_id':k['ref_id'],'status':C(0x1bc,aa.aj)});i[C(0x1db,'TSbd')](m[C(aa.ak,'zVbP')],0x0)&&await jobpostingModel_1[C(0x15d,'ql2M')][C(0x186,'FpYh')](k['ref_id'],{'status':C(0x1c5,'sHdL')}),h[C(0x1bd,'X@em')](0xc8)[C(aa.al,'&06c')]({'statusCode':0xc8,'success':!![],'message':i[C(0x1bf,'5v0o')]});}}catch(n){logger_1['default']['error'](n),h[C(aa.am,aa.an)](0x1f4)[C(0x167,'MsM%')]({'statusCode':0x1f4,'success':![],'message':i[C(aa.ao,aa.ap)],'error':n});}};exports[x(0x1b1,'zVbP')]=removeJobposter;function c(g){const am={g:'N8xn',h:0x1d4,i:0x198},al={g:'706(',h:0x171,i:0x199,j:0x1df,k:'^sSF',l:0x172,m:0x160,n:'MsM%',o:0x1e5,p:'R!i]',q:0x176,am:')M8#',an:'N8xn',ao:'5#fA',ap:0x161,aq:']QzO',ar:0x1d0,as:'A8Z4',at:0x1f2,au:'xu$7',av:'hS@w'},E=x,h={'nuOnv':function(j,k){return j===k;},'jknXZ':'string','cTftG':E(0x1aa,']Xe]'),'MVqdq':E(0x1f7,'#DjC'),'lRjYR':function(j,k){return j!==k;},'jmSue':function(j,k){return j/k;},'KMWVd':E(0x1b8,am.g),'gEstM':function(j,k){return j===k;},'OumWR':function(j,k){return j%k;},'LmfVw':E(am.h,'neWp'),'ciOIh':'gger','Mwoid':function(j,k){return j+k;},'DzDbs':E(am.i,'(LK2'),'vkTxE':function(j,k){return j(k);}};function i(j){const F=E;if(h[F(0x193,'FpYh')](typeof j,h['jknXZ']))return function(k){}['constructor'](h[F(0x1a8,al.g)])[F(al.h,'(LK2')](h['MVqdq']);else h[F(al.i,'fhVH')]((''+h[F(al.j,al.k)](j,j))[h[F(al.l,'TSbd')]],0x1)||h[F(al.m,al.n)](h[F(al.o,al.p)](j,0x14),0x0)?function(){return!![];}[F(0x19c,'!6*C')](h['LmfVw']+h[F(al.q,al.am)])[F(0x1a6,al.an)](F(0x174,al.ao)):function(){return![];}[F(al.ap,al.aq)](h[F(0x1cf,al.g)](h[F(al.ar,al.as)],h[F(al.at,'fhVH')]))[F(0x191,'TSbd')](h[F(0x1da,al.au)]);h[F(0x18d,al.av)](i,++j);}try{if(g)return i;else i(0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeJobposter = exports.getJobposterByRefId = exports.createJobposter = void 0;
+const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
+const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
+const twitter_1 = require("../../../utils/twitter");
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+/**
+ * Creates a new job poster in the database and post the job posting to the specified platforms.
+ *
+ * @param req - The HTTP request object containing the job posting data.
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response with the created job posting.
+ */
+const createJobposter = async (req, res) => {
+    const ref_id = req.params.id;
+    const contentFB = req.body.facebook;
+    const contentTW = req.body.twitter;
+    try {
+        const jobposting = await jobpostingModel_1.default.findById(ref_id);
+        if (!jobposting) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: `Jobposting with id ${ref_id} not found`,
+            });
+        }
+        const jobposterFB = new jobposterModel_1.default({
+            ref_id: ref_id,
+            platform: "facebook",
+            post_id: "",
+            content: contentFB,
+            expiresAt: jobposting.schedule_end,
+            isPosted: false,
+            isApproved: true,
+            status: "active",
+        });
+        // will not be posting to twitter
+        // const tweet = async (content: any) => {
+        //   try {
+        //     const tweet = content;
+        //     const res: any = await createTweet(tweet);
+        //     if (res.errors) {
+        //       throw new Error(res.errors);
+        //     }
+        //     await JobPosting.findByIdAndUpdate(ref_id, {
+        //       status: "active",
+        //     });
+        //     return res.data;
+        //   } catch (error) {
+        //     logger.error("Error posting tweet:", error);
+        //     throw error;
+        //   }
+        // };
+        let jobposterTW;
+        try {
+            // const tweetResponse = await tweet(contentTW);
+            // logger.info("Tweet response:");
+            // logger.info(tweetResponse);
+            jobposterTW = new jobposterModel_1.default({
+                ref_id: ref_id,
+                platform: "twitter",
+                post_id: "",
+                content: contentTW,
+                isPosted: false,
+                isApproved: true,
+                isDeleted: false,
+                postAt: jobposting.schedule_start,
+                expiresAt: jobposting.schedule_end,
+                status: "active",
+            });
+        }
+        catch (error) {
+            return res.status(500).json({
+                statusCode: 500,
+                success: false,
+                message: "Error creating jobposter",
+                error,
+            });
+        }
+        // if (contentFB) await jobposterFB.save();
+        if (contentTW)
+            await jobposterTW.save();
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Jobposting posted",
+            data: {
+                facebook: jobposterFB,
+                twitter: jobposterTW,
+            },
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error posting jobposting",
+            error,
+        });
+    }
+};
+exports.createJobposter = createJobposter;
+const getJobposterByRefId = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const jobposter = await jobposterModel_1.default.find({
+            ref_id: id,
+        });
+        if (!jobposter) {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Jobposter not found",
+            });
+        }
+        else {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Jobposter found",
+                data: jobposter,
+            });
+        }
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error getting jobposter",
+            error,
+        });
+    }
+};
+exports.getJobposterByRefId = getJobposterByRefId;
+const removeJobposter = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const jobposter = await jobposterModel_1.default.findById(id);
+        if (!jobposter) {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Jobposter not found",
+            });
+        }
+        else {
+            const tweet = async (post_id) => {
+                try {
+                    const res = (await (0, twitter_1.removeTweet)(post_id));
+                    console.log("Tweet response:");
+                    console.log(res);
+                    if (res.errors) {
+                        return res;
+                    }
+                    return res;
+                }
+                catch (error) {
+                    logger_1.default.error("Error deleting tweet:", error);
+                    return error;
+                }
+            };
+            if (jobposter.post_id) {
+                await tweet(jobposter.post_id);
+            }
+            await jobposterModel_1.default.findByIdAndUpdate(id, {
+                status: "inactive",
+                isPosted: false,
+                isDeleted: true,
+            });
+            // check if there are no more jobposters for the jobposting that is active and if none exist,
+            // set the jobposting status to inactive
+            const jobposters = await jobposterModel_1.default.find({
+                ref_id: jobposter.ref_id,
+                status: "active",
+            });
+            if (jobposters.length === 0) {
+                await jobpostingModel_1.default.findByIdAndUpdate(jobposter.ref_id, {
+                    status: "inactive",
+                });
+            }
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Jobposter deleted",
+            });
+        }
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error deleting jobposter",
+            error,
+        });
+    }
+};
+exports.removeJobposter = removeJobposter;

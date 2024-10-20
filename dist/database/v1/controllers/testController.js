@@ -1,1 +1,85 @@
-const x=f;(function(g,h){const E={g:'%caI',h:0xab,i:'VVRT',j:0x90,k:'j#c)',l:0xd8,m:0x83,n:0x80,o:'5GRR',p:0x7a,F:'3f!M'},q=f,i=g();while(!![]){try{const j=-parseInt(q(0xea,E.g))/0x1*(-parseInt(q(E.h,'DHn0'))/0x2)+parseInt(q(0xe5,E.i))/0x3+-parseInt(q(0x91,'sy^x'))/0x4*(parseInt(q(E.j,E.k))/0x5)+parseInt(q(0xb1,'8]x7'))/0x6+-parseInt(q(E.l,'Befo'))/0x7+parseInt(q(E.m,'R#J2'))/0x8*(-parseInt(q(E.n,E.o))/0x9)+-parseInt(q(E.p,E.F))/0xa;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0x22737));const d=(function(){let g=!![];return function(h,i){const F={g:'%HNQ'},j=g?function(){const r=f;if(i){const k=i[r(0xa3,F.g)](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const O={g:0xd6,h:0xba,i:'fw9p',j:0x99,k:'%HNQ'},N={g:0x84,h:0x96,i:0x89,j:'FkG@',k:'e[]p'},s=f,g={'obTgT':s(O.g,'8]x7'),'sYlSz':function(h,i){return h(i);},'OVyFv':s(O.h,O.i),'VnYqh':function(h,i){return h+i;},'OghkV':'chain','umHOQ':'input','mdEcL':function(h){return h();},'HWeRk':function(h,i,j){return h(i,j);}};g[s(O.j,O.k)](d,this,function(){const t=s,h=new RegExp(t(0x8f,'sy^x')),i=new RegExp(g[t(0x7b,'j#c)')],'i'),j=g[t(0xe9,'FkG@')](c,g[t(0xd1,'y#vZ')]);!h['test'](g[t(N.g,'wDA@')](j,g[t(N.h,'VVRT')]))||!i['test'](g[t(N.i,N.j)](j,g[t(0xca,'iAMH')]))?g[t(0x87,N.k)](j,'0'):g[t(0xbb,'hX7X')](c);})();}());const b=(function(){const P={g:0xcb};let g=!![];return function(h,i){const j=g?function(){const u=f;if(i){const k=i[u(P.g,'OmYv')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const X={g:0xbe,h:'hX7X',i:0x98,j:'%HNQ',k:'@Mk3',l:0xe1,m:0xce,n:'W!Tr',o:0xad,p:'RCSE',Y:'OmYv',Z:0x9a,a0:'basP',a1:0xe4,a2:'hX7X',a3:0xa6,a4:'Cp@M',a5:0x81,a6:'3f!M',a7:'2Fnh',a8:'VVRT',a9:0xa7,aa:'%caI',ab:'%NdN'},v=f,g={'WWwep':function(k,l){return k(l);},'ykUoH':function(k,l){return k+l;},'BCouZ':v(X.g,X.h),'gFXca':v(X.i,X.j),'AqYLQ':function(k){return k();},'DIiuz':'log','GKnKj':v(0x8b,X.k),'qjwCJ':v(0xb9,'RCSE'),'UaKDD':'error','teTwF':v(X.l,'mO*i'),'ibwys':function(k,l){return k<l;}};let h;try{const k=g[v(X.m,'%HNQ')](Function,g[v(0xc6,X.n)](g['ykUoH'](g['BCouZ'],g[v(X.o,X.p)]),');'));h=g['AqYLQ'](k);}catch(l){h=window;}const i=h[v(0xc8,X.Y)]=h[v(X.Z,'j#c)')]||{},j=[g['DIiuz'],g[v(0xbf,X.a0)],g[v(X.a1,X.a2)],g[v(0xb2,X.k)],'exception',g[v(0x79,'e[]p')],v(0x9f,'fx*6')];for(let m=0x0;g[v(X.a3,X.a4)](m,j['length']);m++){const n=b[v(0xe7,'DHn0')]['prototype'][v(0xbc,'rzEx')](b),o=j[m],p=i[o]||n;n[v(X.a5,X.a6)]=b[v(0x77,X.a7)](b),n[v(0xac,X.a8)]=p[v(X.a9,X.aa)][v(0xa2,X.ab)](p),i[o]=n;}});a();function e(){const aj=['W6WsW4dcLmoKWQddKW','WRSgqZukfanGpGWzW7q','bCoUWQjKWR4','W645W5DQumkUnmkpmxH9xqfVWQikomo1k8oVtwrc','WQRdR8opeSkoWRpcNrW5WPqeWQC','lSksW75c','WONcGmoUW70','W442WRdcPSkkwSoOkhj9W4RcNCkRj8oZzfWUwXTdB8kPW4j6WPpcP2BdGSkjCmkofmoY','W6Xfb29k','WOO0zIXcWOpdGSkdWQ7dV8odWP0','smkgW73cKeNcKCozWOKyW7Xc','W53cRmkft8opWQpcMWaSWRecWPldTZtdVNPyWO3dHmkfjNq','W78bW5xcNmoH','W6JcTCkDW6PzuZOOutXp','jSk9or4fWRfZWPZcPGjK','wGmolmoX','ymoPW43cMCoq','ymkvWRFdGmk7W6S','WR3cI8kAW4lcGa','aSooW6VdGbBcISoyWPmiW5TOW4bYW5K+FCkagCofrCopWRxcRSopWOPzFLVcISozCCoW','AhSJjG','xmoAW6RcOmop','W6ZcTb9mfd8UtCkjiKeP','WQFdHH0lWOCOW48uWQVdMW','W6SyW4JcHSoLWR7dKGdcQxpcOW','W4FdG8o3smkOoKVdRhyEp0W','FCorW7ddTKy','xwbhxSoLW4KzdCkB','W6HuawLxqG','W47dG0yT','zSoopCk/dJWdWONdU0W','W7mYW6bVCW','WPxcK8k1W5ZcHSkFgCkMFmoAave','yh4sm8kf','WQFdLSo8','lW/cMglcQ8oKuxRcGCkeW6bIWPCoo8kltSouW7XcBSoxW7ZcOHpcKmkmAq','e8oaWQRdJq','WPbtWOddLCk/','eCkkq8kTusddICkna3ddUW','W7JdVCo9WPZdMSoBaSkaqG','WOG5jCkvW4O','W7FdL8oXW4XFWOFdIXRdSa','WRNcH8ozW6JcUW','f8oTW4lcJSo/cmo8dWiJlW','W51LpNm','W7qoW5HltW','sSkbWOrWvG','wmoMW4xdLfq','W73dNCokW4RcOIlcS3ZdSq','m8kaW6nc','sCoPkmo9kG','iCovW5FcRSoV','WOetb2ldL8kPW7FcSrRcOSk0','h8ogWQVdGa3cJCoeWOLAWOrxWPW9WOfkDG','pIL+z8oHbeiEkmoiW64','qCklWPxdGrxcO8osWOW','W6BdJqzjWQT7W6lcIZyjBXNcLxpcRmoSxCopWOXwdMSrf8kGquWXW44','W6VcQSkwvmoiW7a','FmoJkSkJmxmeWO7dSKJdJH0lWQ9gvSovdmka','W5ddISoKWOldKmkprCkRB8o4cYGKauu','WPhdOKesCa','DJ4iW7fqW44','W7jkw2nxqGbgcbazW4m/W4dcOhOHaSk8kCotBXqPWRCwWR3dMCkAtrub','W4fGefjt','BhmOj8k+hvu','WQdcKSkMW4LSWOu','WPeicgxdLSkO','oComWRPwWR3dNa','ovHpl8ouWQRcU8oGWQCNCsBdL8oDWQeDE8knW68','W6ZcRmkwq8oy','W7GwW5tcLmo8WR8','WRxdGLamBa','WPhcMSkThW','W6HhbwXb','W79mWQjKcq','atj7W7NcUCoPyx0rWQTR','zCksWQ7dNSk8','gZ0LFmotW6y+aq','W5BcTCk6W55a','jK9sESkmWOlcN8o0WQ5sDq','WRP7WOVdS8kADCkjgr5Rca','WRPeWPldH8o8WOpdVXBcUv0','WQRdQNOnvg4WEa','yGWXW6ze','ECovW67cL8kLW41marNcMrrCvmoq','zNiLjSk0hfuEpSooW4izWQ5rtmocW4HqiGHNWQpcOq','WQxdJCoUhmoA','WQCSW5JcTmkAsmkrDrjtW6pdHa','eCkaW5POWOe','lCkSlWSf','qb1odmkIqeO','bSk7W7H5WO4','W7Xam2DQ','k8kRiJe','W4bSWQTg','BcqpW6O','WQldL8oYcG','qmouW5JcGmoj','W63cUCkhW48','WRpdOxGVBG','x8ovW6NcLSo3W40dxv/cIHvktSoDD113iCoD','WQFdTK3dNSkq','jfvUF2XBW4JcU3ddNay','W5LRWQvCjxq','ymk0nCk9','j8ktW7rnWRfEW4udire','WOpcHSoN','wmoHkmkGoG','WPSxph7dQW','WPTgWOBdQmkA','iSk3iYWgWRfc','W53cRmkft8opWQpcGaS7WReoWPRdPdpdPhqwWP7cGCken3C3WP88WQlcRqGowG','W5BdKJXPWOG','imkOptmq','amo8W4hcJW','zqmUbg9GW7xcVgldVa','W55GaMvi'];e=function(){return aj;};return e();}'use strict';var __importDefault=this&&this['__importDefault']||function(g){const w=f;return g&&g[w(0xe6,'!9#^')]?g:{'default':g};};Object['defineProperty'](exports,x(0x78,'SoRK'),{'value':!![]}),exports[x(0xd2,'e[]p')]=exports[x(0xdd,'OmYv')]=exports[x(0xc3,'@Mk3')]=void 0x0;const testModel_1=__importDefault(require(x(0x9e,'rDS8'))),createTest=async(g,h)=>{const Z={g:0xcf,h:'DHn0',i:'R#J2',j:0xc1,k:0x7c,l:'fw9p',m:0x97,n:'OmYv'},y=x,i={'aiXfr':y(0x94,'SoRK')},{title:j,content:k}=g['body'];try{const l=await testModel_1[y(Z.g,Z.h)][y(0x9b,Z.i)]({'title':j,'content':k,'repetition':0x1});h[y(Z.j,'hOv3')](0xc9)[y(0xd4,'@Mk3')]({'statusCode':0xc9,'success':!![],'message':'Test\x20created\x20successfully','test':l});}catch(m){console[y(Z.k,Z.l)](m),h[y(Z.m,'RCSE')](0x1f4)[y(0xb7,Z.n)]({'statusCode':0x1f4,'success':![],'message':i['aiXfr'],'error':m});}};exports['createTest']=createTest,(function(){const a4={g:0xe2,h:'sy^x',i:0xdb,j:'DHn0',k:0x88,l:'PBK5',m:0xb6,n:0xc0},z=x,g={'MunnJ':function(i,j){return i(j);},'mdQVH':function(i,j){return i+j;},'OJLnZ':function(i,j){return i+j;},'wvsip':'return\x20(function()\x20','lyxRR':z(a4.g,a4.h),'uwFgR':function(i){return i();}};let h;try{const i=g[z(0xde,'rDS8')](Function,g[z(0xbd,'VVRT')](g['OJLnZ'](g[z(a4.i,a4.j)],g[z(a4.k,a4.l)]),');'));h=g[z(a4.m,'%HNQ')](i);}catch(j){h=window;}h[z(a4.n,'DX9h')](c,0x9c4);}());const getAllTests=async(g,h)=>{const a5={g:0xd5,h:'D9TM',i:0xda,j:'fx*6'},A=x;try{const i=await testModel_1['default'][A(a5.g,'wDA@')]();h['status'](0xc8)[A(0xc2,a5.h)]({'statusCode':0xc8,'success':!![],'message':A(0x7d,'u7PA'),'tests':i});}catch(j){console[A(0xc4,'wDA@')](j),h['status'](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':A(a5.i,a5.j),'error':j});}};function f(a,b){const c=e();return f=function(d,g){d=d-0x76;let h=c[d];if(f['JzGuYA']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['tcbbIx']=m,a=arguments,f['JzGuYA']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['DywjJK']===undefined&&(f['DywjJK']=!![]),h=f['tcbbIx'](h,g),a[k]=h):h=l,h;},f(a,b);}exports[x(0xdc,'rzEx')]=getAllTests;const incrementTestRepetition=async(g,h)=>{const a6={g:0xc9,h:0x92,i:'iAMH',j:0xb4,k:0x93,l:'hOv3',m:'y#vZ',n:0xae,o:'hX7X',p:'hX7X',a7:'W!Tr',a8:'VVRT'},B=x,i={'USfLY':'Repetition\x20incremented\x20successfully','MYPzU':B(a6.g,'fx*6'),'kGyuJ':B(a6.h,a6.i)},{id:j}=g[B(0xa0,'DHn0')];try{const k=await testModel_1[B(a6.j,'^MF!')]['findByIdAndUpdate'](j,{'$inc':{'repetition':0x1}},{'new':!![]});k?h[B(a6.k,'fx*6')](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':i[B(0xa4,a6.l)],'test':k}):h[B(0x9d,a6.m)](0x194)[B(0xb8,a6.l)]({'statusCode':0x194,'success':![],'message':B(a6.n,a6.o)});}catch(l){console[B(0xd7,'%HNQ')](i[B(0xdf,a6.p)],l),h[B(0x9c,a6.a7)](0x1f4)[B(0x7e,'sy^x')]({'statusCode':0x1f4,'success':![],'message':i[B(0xa1,a6.a8)],'error':l});}};exports[x(0xaf,'j#c)')]=incrementTestRepetition;function c(g){const ai={g:0xcc,h:0x76,i:'%HNQ'},ah={g:0x95,h:'%HNQ',i:0xb0,j:'fw9p',k:0x82,l:0xe0,m:0xb3,n:'OmYv',o:'JP@b',p:0x8c,ai:0xa8,aj:'Befo',ak:'JP@b',al:0xa5,am:0xa8,an:'FBe[',ao:0xc5,ap:'SoRK',aq:0x85,ar:0xb5},C=x,h={'IGeUQ':function(j,k){return j===k;},'pthHG':'string','ntubl':function(j,k){return j!==k;},'iZYhL':function(j,k){return j+k;},'qPpDy':function(j,k){return j/k;},'ltbTl':function(j,k){return j%k;},'YeSuu':C(ai.g,'FBe['),'ELtTu':C(0xe3,'j#c)'),'BRcht':C(ai.h,ai.i),'lcWxo':function(j,k){return j+k;},'BZiUK':function(j,k){return j(k);}};function i(j){const D=C;if(h[D(0x7f,'JP@b')](typeof j,h['pthHG']))return function(k){}[D(0x8e,'W!Tr')](D(ah.g,'3f!M'))[D(0xa3,ah.h)]('counter');else h[D(ah.i,ah.j)](h[D(ah.k,'z*y2')]('',h['qPpDy'](j,j))[D(ah.l,'Cp@M')],0x1)||h['IGeUQ'](h[D(ah.m,ah.n)](j,0x14),0x0)?function(){return!![];}[D(0xaa,ah.o)](h[D(ah.p,'5GRR')](h[D(ah.ai,'rzEx')],h[D(0x8d,'FBe[')]))[D(0x86,ah.aj)](h[D(0xc7,ah.ak)]):function(){return![];}[D(ah.al,'LbRW')](h['lcWxo'](h[D(ah.am,'rzEx')],h[D(0x8d,ah.an)]))[D(ah.ao,ah.ap)](D(ah.aq,'FBe['));h[D(ah.ar,'@Mk3')](i,++j);}try{if(g)return i;else i(0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.incrementTestRepetition = exports.getAllTests = exports.createTest = void 0;
+const testModel_1 = __importDefault(require("../models/testModel"));
+const createTest = async (req, res) => {
+    const { title, content } = req.body;
+    try {
+        const test = await testModel_1.default.create({
+            title,
+            content,
+            repetition: 1,
+        });
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Test created successfully",
+            test,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error creating test",
+            error,
+        });
+    }
+};
+exports.createTest = createTest;
+const getAllTests = async (req, res) => {
+    try {
+        const tests = await testModel_1.default.find();
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Tests retrieved successfully",
+            tests: tests,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving tests",
+            error,
+        });
+    }
+};
+exports.getAllTests = getAllTests;
+const incrementTestRepetition = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedTest = await testModel_1.default.findByIdAndUpdate(id, { $inc: { repetition: 1 } }, { new: true });
+        if (updatedTest) {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Repetition incremented successfully",
+                test: updatedTest,
+            });
+        }
+        else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Test not found",
+            });
+        }
+    }
+    catch (error) {
+        console.error("Error incrementing repetition:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error incrementing repetition",
+            error,
+        });
+    }
+};
+exports.incrementTestRepetition = incrementTestRepetition;

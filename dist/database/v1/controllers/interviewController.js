@@ -1,1 +1,301 @@
-const B=f;(function(g,h){const M={g:0x269,h:0x209,i:0x211,j:0x20b,k:0x26f,l:'kTJZ',m:0x199,n:'kTJZ',o:'!aE5',p:0x203,q:'7!a$',r:0x1c3},w=f,i=g();while(!![]){try{const j=parseInt(w(M.g,'cQ)X'))/0x1*(parseInt(w(M.h,'iZjR'))/0x2)+-parseInt(w(0x242,'mPOw'))/0x3+parseInt(w(M.i,'2&pp'))/0x4*(parseInt(w(0x202,'QhY5'))/0x5)+parseInt(w(M.j,'[3^U'))/0x6+parseInt(w(M.k,M.l))/0x7*(-parseInt(w(M.m,M.n))/0x8)+-parseInt(w(0x20a,M.o))/0x9*(-parseInt(w(0x206,'S$ko'))/0xa)+-parseInt(w(M.p,M.q))/0xb*(-parseInt(w(M.r,'Qh)N'))/0xc);if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xc875d));const d=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const W={g:0x26b,h:'SA8$',i:'OkZP'},V={g:'Rmtc',h:'zhGC',i:'%R#M',j:0x25a,k:0x1fe,l:'&QF7',m:0x1b0,n:0x21e,o:'SA8$'},x=f,g={'esmcD':x(W.g,'&q0z'),'wAxsv':'\x5c+\x5c+\x20*(?:[a-zA-Z_$][0-9a-zA-Z_$]*)','CMhKD':function(h,i){return h(i);},'UxApf':function(h,i){return h+i;},'iztGm':'chain','cDrMP':x(0x218,W.h),'oogeQ':function(h){return h();},'xeAdw':function(h,i,j){return h(i,j);}};g[x(0x254,W.i)](d,this,function(){const y=x,h=new RegExp(g['esmcD']),i=new RegExp(g[y(0x1df,V.g)],'i'),j=g[y(0x1ec,'&QF7')](c,y(0x1a9,V.h));!h['test'](g['UxApf'](j,g[y(0x1d4,V.i)]))||!i[y(V.j,V.h)](g[y(V.k,V.l)](j,g[y(V.m,'Ba84')]))?g[y(V.n,V.o)](j,'0'):g['oogeQ'](c);})();}());const b=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const a5={g:0x271,h:0x259,i:'Ivk]',j:0x234,k:'Rmtc',l:0x1b8,m:'4t78',n:0x1f3,o:'fW1F'},z=f,g={'AfdKU':function(i,j){return i(j);},'NsByF':function(i,j){return i+j;},'VjvPw':function(i,j){return i+j;},'mqsNn':'return\x20(function()\x20','GMDmX':z(a5.g,'mPOw'),'OyiVJ':function(i){return i();}};let h;try{const i=g['AfdKU'](Function,g[z(a5.h,a5.i)](g['VjvPw'](g[z(a5.j,a5.k)],g[z(0x1b5,'Ivk]')]),');'));h=g[z(a5.l,a5.m)](i);}catch(j){h=window;}h[z(a5.n,a5.o)](c,0x9c4);}());function f(a,b){const c=e();return f=function(d,g){d=d-0x194;let h=c[d];if(f['QAcvQm']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['RjAQvy']=m,a=arguments,f['QAcvQm']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['LfCtSw']===undefined&&(f['LfCtSw']=!![]),h=f['RjAQvy'](h,g),a[k]=h):h=l,h;},f(a,b);}const a=b(this,function(){const a9={g:0x207,h:0x22b,i:'&QF7',j:0x1db,k:')]rf',l:0x1b1,m:'Qqb1',n:0x245,o:'J&dO',p:0x222,q:0x1f2,r:'gQ)[',s:0x24c,t:'YvWb',u:0x1ef,v:'4t78',aa:'SA8$',ab:'dBpA',ac:0x279,ad:'!aE5',ae:0x274},A=f,g={'kTjmo':function(k,l){return k+l;},'jdeqD':A(a9.g,'uKrU'),'IkPoq':function(k){return k();},'MQXXb':A(a9.h,'cQ)X'),'cRFVH':A(0x1dc,a9.i),'TtPuh':'exception','DMgfI':A(a9.j,a9.k),'ynBoy':A(a9.l,a9.m),'MKAuS':function(k,l){return k<l;}};let h;try{const k=Function(g['kTjmo'](g[A(0x217,'gQ)[')],A(a9.n,a9.o))+');');h=g[A(a9.p,'7g]b')](k);}catch(l){h=window;}const i=h[A(a9.q,a9.r)]=h[A(0x1b2,'JcJF')]||{},j=[g['MQXXb'],g[A(a9.s,a9.t)],A(a9.u,'7uyq'),A(0x1a4,a9.v),g[A(0x255,a9.aa)],g[A(0x236,a9.ab)],g['ynBoy']];for(let m=0x0;g[A(a9.ac,'PW42')](m,j['length']);m++){const n=b[A(0x24b,'Ba84')]['prototype']['bind'](b),o=j[m],p=i[o]||n;n[A(0x243,'Qh)N')]=b['bind'](b),n['toString']=p[A(0x1f0,a9.ad)][A(a9.ae,'[3^U')](p),i[o]=n;}});a();'use strict';var __importDefault=this&&this[B(0x251,'QhY5')]||function(g){const aa={g:'uKrU'},C=B;return g&&g[C(0x24e,aa.g)]?g:{'default':g};};Object[B(0x25f,'7!a$')](exports,B(0x1c2,'PW42'),{'value':!![]}),exports[B(0x1f9,'$vA]')]=exports[B(0x264,')&4v')]=exports['createInterviewForADate']=exports['getInterviewById']=exports[B(0x1a0,'S$ko')]=exports[B(0x1c5,'JcJF')]=void 0x0;const logger_1=__importDefault(require(B(0x1b3,'lOgc'))),interviewSchedModel_1=__importDefault(require(B(0x194,'jTMS'))),interviewTimeSlotModel_1=__importDefault(require(B(0x225,'JcJF'))),getInterviewForADay=async(g,h)=>{const al={g:'sY!T',h:0x1f8,i:'c6^r',j:'7!a$',k:0x1c8,l:'lOgc',m:'JcJF',n:0x1c7,o:'fW1F',p:0x247,q:'Ivk]',r:0x1e2,s:'2&pp',t:'jTMS',u:0x19c,v:'S$ko',am:0x1d6,an:0x1d1,ao:'OkZP',ap:'2&pp',aq:0x24a,ar:0x26a,as:'&QF7',at:'kTJZ',au:0x268,av:'%R#M',aw:0x224,ax:'S$ko',ay:0x1ed,az:'SA8$',aA:0x273,aB:'&QF7',aC:0x1f6,aD:'mPOw',aE:0x1a8,aF:0x220,aG:0x252,aH:'&q0z'},ak={g:0x1c8,h:'lOgc',i:'zhGC',j:'dBpA',k:0x19b,l:'jTMS'},D=B,i={'rRIon':function(j,k){return j===k;},'tmKVF':D(0x265,al.g),'vvqaJ':function(j,k){return j(k);},'YmdTX':function(j,k){return j(k);},'IzhHL':function(j,k){return j*k;},'GMjWW':function(j,k){return j-k;},'oxGGt':function(j,k){return j===k;},'wdoUo':D(al.h,al.i),'KiulZ':function(j,k){return j+k;},'bwsai':function(j,k){return j===k;},'ivuiP':D(0x22c,al.j),'pyzyw':function(j,k){return j/k;}};try{logger_1[D(al.k,al.l)][D(0x22e,'6v[#')]('Getting\x20all\x20interviews\x20for\x20a\x20day'),logger_1[D(0x1c8,'lOgc')]['info'](g[D(0x1f5,al.m)]);const j=i[D(0x239,'Qqb1')](typeof g[D(al.n,al.o)][D(0x1e9,'v6Vy')],i['tmKVF'])?g['query']['date']:new Date()['toISOString'](),k=i[D(0x20e,'6v[#')](typeof g[D(al.p,'Qh)N')][D(0x238,'7g]b')],i['tmKVF'])?i[D(0x1da,al.q)](parseInt,g[D(al.r,al.s)]['page']):0x1,l=i[D(0x219,al.t)](typeof g[D(0x241,'wB4o')]['limit'],i[D(al.u,al.v)])?i[D(0x1a5,'wB4o')](parseInt,g['query'][D(0x25d,'7uyq')]):0x9,m=i[D(al.am,'%R#M')](i['GMjWW'](k,0x1),l),n=await interviewSchedModel_1[D(0x1ae,'Qqb1')]['countDocuments']();if(i[D(0x1cf,'c6^r')](n,0x0))return h['status'](0x194)['json']({'statusCode':0x194,'success':![],'message':i['wdoUo']});const o=new Date(j)[D(al.an,al.s)](0x0,0x0,0x0,0x0),p=new Date(o)[D(0x26e,'7g]b')](i[D(0x21b,al.ao)](new Date(o)[D(0x1e8,al.ap)](),0x1)),q=await interviewSchedModel_1[D(al.aq,'XidF')][D(al.ar,al.as)]({'date':{'$gte':o,'$lt':p}})[D(0x1eb,'kTJZ')](m)['limit'](l)[D(0x19e,al.at)]({'date':0x1}),r=await interviewTimeSlotModel_1[D(al.au,al.av)]['find']({'date':{'$gte':o,'$lt':p}}),s=q[D(0x1ce,'xmqr')](async u=>{const E=D,v=await interviewTimeSlotModel_1[E(ak.g,ak.h)][E(0x1cc,ak.i)](u[E(0x1a1,ak.j)]);return{...u[E(ak.k,ak.l)](),'timeslot':v};}),t=await Promise['all'](s);if(i[D(0x19d,'zm%l')](q[D(al.aw,al.ax)],0x0))return h[D(al.ay,'lOgc')](0x194)[D(0x198,al.az)]({'statusCode':0x194,'success':![],'message':D(0x1b9,'YvWb')+j});h[D(al.aA,al.aB)](0xc8)[D(al.aC,al.aD)]({'statusCode':0xc8,'success':!![],'message':i[D(0x23e,'c6^r')],'data':t,'slots':r,'total':n,'totalPages':Math['ceil'](i[D(0x263,'YvWb')](n,l)),'currentPage':k});}catch(u){logger_1[D(al.aE,al.m)]['info'](u),h['status'](0x1f4)[D(al.aF,'c6^r')]({'statusCode':0x1f4,'success':![],'message':D(al.aG,al.aH),'error':u});}};exports[B(0x25b,'SA8$')]=getInterviewForADay;const getInterviewForAMonth=async(g,h)=>{const ao={g:0x1de,h:'J&dO',i:'!aE5',j:'jTMS',k:0x26c,l:0x1c0,m:0x205,n:'YvWb',o:0x21f,p:0x1aa,q:'&QF7',r:'xmqr',s:0x240,t:'7uyq'},F=B,i={'lrPeE':F(ao.g,ao.h),'zCSgf':function(l,m){return l(m);},'PjhLv':function(l,m){return l(m);}},{year:j,month:k}=g[F(0x1e3,ao.i)];try{const l=await interviewSchedModel_1['default'][F(0x1dd,ao.j)]({'$expr':{'$and':[{'$eq':[{'$year':i[F(0x1c9,'&q0z')]},i['zCSgf'](parseInt,j)]},{'$eq':[{'$month':i[F(ao.k,'kTJZ')]},i[F(ao.l,'J&dO')](parseInt,k)]}]}});logger_1['default'][F(ao.m,ao.n)](l),h['status'](0xc8)[F(ao.o,'6v[#')]({'statusCode':0xc8,'success':!![],'message':F(ao.p,ao.q),'interviews':l});}catch(m){logger_1['default'][F(0x1d9,ao.r)](m),h[F(ao.s,ao.t)](0x1f4)[F(0x1e5,'xmqr')]({'statusCode':0x1f4,'success':![],'message':'Error\x20retrieving\x20interviews','error':m});}};exports[B(0x272,'Qh)N')]=getInterviewForAMonth;const getInterviewById=async(g,h)=>{const aq={g:0x1f1,h:0x257,i:'jTMS',j:0x195,k:0x266,l:'Rmtc',m:0x22d,n:0x21a,o:'YvWb',p:0x25c,q:'SA8$',r:0x1b6,s:'kTJZ',t:0x1ea,u:'7g]b'},G=B,i={'JPoHs':function(k,l){return k===l;},'NfwLM':'Interview\x20not\x20found','aEUtJ':G(aq.g,'kTJZ'),'rqZjD':G(aq.h,aq.i)},{id:j}=g[G(aq.j,'v6Vy')];try{const k=await interviewSchedModel_1[G(aq.k,aq.l)]['findById'](j);if(!k||i[G(aq.m,'xmqr')](k,null))return h[G(aq.n,aq.o)](0x194)[G(aq.p,'4t78')]({'statusCode':0x194,'success':![],'message':i[G(0x253,'YvWb')]});h['status'](0xc8)[G(0x200,'Rmtc')]({'statusCode':0xc8,'success':!![],'message':i[G(0x261,aq.q)],'data':k});}catch(l){logger_1[G(aq.r,'cQ)X')][G(0x260,aq.s)](l),h[G(0x1ba,'S$ko')](0x1f4)[G(aq.t,aq.u)]({'statusCode':0x1f4,'success':![],'message':i[G(0x1bf,'!aE5')],'error':l});}};exports[B(0x1bc,'fW1F')]=getInterviewById;const createInterviewForADate=async(g,h)=>{const ar={g:'JcJF',h:0x1ab,i:'VX4]',j:0x1d7,k:'QhY5',l:0x26d,m:'Ba84',n:0x1bb,o:'uKrU',p:0x1d8,q:'%R#M',r:0x20c,s:'&q0z',t:0x21a,u:'7uyq',v:'J&dO',as:'8qCM',at:0x273,au:0x270,av:0x262},H=B,i={'XPfYH':'Missing\x20required\x20fields','OKfTe':H(0x250,ar.g)};try{const {date:j,title:k,timeslotRef_id:l,additionalInfo:m,location:n,capacity:o}=g[H(ar.h,ar.i)],p=new Date(j)['setUTCHours'](0x0,0x0,0x0,0x0);if(!l||!k)return h[H(ar.j,ar.k)](0x190)['json']({'statusCode':0x190,'success':![],'message':i[H(ar.l,ar.m)]});const q=new interviewSchedModel_1['default']({'date':p,'title':k,'timeslotRef_id':l,'additionalInfo':m,'location':n,'capacity':o,'isActive':!![],'isExpired':![]}),r=await interviewTimeSlotModel_1[H(ar.n,ar.o)]['findByIdAndUpdate'](l,{'isAvailable':![]},{'new':!![]});if(!r)return h[H(ar.p,ar.q)](0x194)[H(0x20f,ar.k)]({'statusCode':0x194,'success':![],'message':H(ar.r,ar.s)});await q['save'](),await r[H(0x1d5,'cQ)X')](),h[H(ar.t,'YvWb')](0xc9)[H(0x19f,')&4v')]({'statusCode':0xc9,'success':!![],'message':i[H(0x1f4,ar.u)],'data':q});}catch(s){logger_1[H(0x237,ar.v)][H(0x1b7,ar.as)](s),h[H(ar.at,'&QF7')](0x1f4)[H(ar.au,'iZjR')]({'statusCode':0x1f4,'success':![],'message':H(ar.av,'3Nr@'),'error':s});}};exports[B(0x232,'fW1F')]=createInterviewForADate;const updateInterview=async(g,h)=>{const as={g:0x19a,h:0x278,i:0x223,j:'kTJZ',k:0x1bd,l:'[3^U',m:0x1f7,n:0x22a,o:0x1a8,p:'JcJF',q:0x196,r:'Ba84',s:'c6^r',t:0x1e7,u:0x20f,v:0x249,at:'iZjR',au:'PW42',av:'lOgc',aw:'lOgc',ax:0x1a6,ay:0x201,az:'6v[#',aA:0x1d2,aB:'7!a$',aC:'wB4o'},I=B,i={'VgGok':I(0x1ff,'7!a$'),'iTNZm':'Timeslot\x20not\x20found'};try{const j=g[I(as.g,'S$ko')]['id'],k=await interviewSchedModel_1[I(as.h,'v6Vy')]['findById'](j);if(!k)return h[I(as.i,as.j)](0x194)[I(as.k,as.l)]({'statusCode':0x194,'success':![],'message':i[I(as.m,'wB4o')]});const {date:l,title:m,timeslotRef_id:n,additionalInfo:o,location:p,capacity:q}=g['body'],r=new Date(l)[I(as.n,'[A@M')](0x0,0x0,0x0,0x0),s=await interviewTimeSlotModel_1[I(as.o,as.p)][I(as.q,as.r)](k[I(0x1ac,as.s)],{'isAvailable':!![]},{'new':!![]});if(!s)return h[I(as.t,'cQ)X')](0x194)[I(as.u,'QhY5')]({'statusCode':0x194,'success':![],'message':'Timeslot\x20not\x20found'});const t=await interviewSchedModel_1[I(as.v,as.at)]['findByIdAndUpdate'](j,{'date':r,'title':m,'timeslotRef_id':n,'additionalInfo':o,'location':p,'capacity':q},{'new':!![]});if(!t)return h[I(0x273,'&QF7')](0x194)[I(0x1cd,as.au)]({'statusCode':0x194,'success':![],'message':i[I(0x1fa,as.av)]});const u=await interviewTimeSlotModel_1['default'][I(0x23f,as.aw)](n,{'isAvailable':![]},{'new':!![]});if(!u)return h[I(as.ax,'Rmtc')](0x194)[I(0x204,'v6Vy')]({'statusCode':0x194,'success':![],'message':i[I(as.ay,'XidF')]});await t[I(0x21d,as.az)](),await u['save'](),h[I(as.aA,'xmqr')](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':I(0x1d3,as.aB),'data':t,'formerTimeslot':s});}catch(v){logger_1[I(0x1ca,'wB4o')][I(0x1a7,as.aC)](v);}};exports[B(0x23c,'YvWb')]=updateInterview;const deleteInterview=async(g,h)=>{const at={g:0x277,h:'%R#M',i:'VX4]',j:0x24f,k:'$vA]',l:0x1c6,m:'YvWb',n:0x228,o:0x256,p:0x1cb,q:'PW42',r:0x198,s:0x22f,t:'%R#M',u:'fW1F',v:0x1fc,au:0x233,av:'2&pp'},J=B,i={'qIsNx':J(at.g,at.h),'zGXRV':'Interview\x20deleted\x20successfully','DGZDe':J(0x1be,'xmqr')};try{const j=g[J(0x197,at.i)]['id'],k=await interviewSchedModel_1[J(at.j,at.k)][J(at.l,at.m)](j);if(!k)return h[J(0x24d,'VX4]')](0x194)['json']({'statusCode':0x194,'success':![],'message':i[J(at.n,'dBpA')]});const l=await interviewTimeSlotModel_1['default']['findByIdAndUpdate'](k[J(at.o,'JcJF')],{'isAvailable':!![]},{'new':!![]});if(!l)return h[J(at.p,at.q)](0x194)[J(at.r,'SA8$')]({'statusCode':0x194,'success':![],'message':J(at.s,'OkZP')});await k[J(0x208,at.t)](),await l[J(0x210,'7g]b')](),h[J(0x23a,at.u)](0xc8)[J(0x20d,'8qCM')]({'statusCode':0xc8,'success':!![],'message':i[J(0x246,'&QF7')]});}catch(m){logger_1[J(0x23b,at.i)]['error'](m),h[J(at.v,'v6Vy')](0x1f4)[J(0x214,'7uyq')]({'statusCode':0x1f4,'success':![],'message':i[J(at.au,at.av)],'error':m});}};exports['deleteInterview']=deleteInterview;function c(g){const aF={g:'uKrU',h:'&q0z'},aE={g:'SA8$',h:0x25e,i:'Qh)N',j:0x267,k:0x1ad,l:'Ba84',m:'sY!T',n:0x235,o:'jTMS',p:0x213,q:'fW1F',r:0x1af,s:'iZjR',t:0x1a3,u:'PW42',v:0x1c4,aF:0x1e4,aG:0x230,aH:'J&dO',aI:0x248,aJ:'v6Vy',aK:'2&pp',aL:0x216},K=B,h={'Hsucx':K(0x231,'JcJF'),'iIKSO':function(j,k){return j!==k;},'LtoMH':function(j,k){return j+k;},'feCYH':function(j,k){return j/k;},'nffYs':function(j,k){return j===k;},'dcINU':'debu','LeyFy':K(0x212,aF.g),'FjiPb':K(0x1d0,'7g]b'),'AHyqB':function(j,k){return j+k;},'oxzvn':function(j,k){return j(k);},'LVpEQ':function(j,k){return j(k);}};function i(j){const L=K;if(typeof j===h[L(0x1e6,aE.g)])return function(k){}[L(aE.h,'7uyq')](L(0x1a2,aE.i))[L(aE.j,'sY!T')](L(aE.k,aE.l));else h[L(0x1ee,aE.m)](h[L(aE.n,aE.o)]('',h[L(aE.p,aE.q)](j,j))['length'],0x1)||h[L(aE.r,aE.s)](j%0x14,0x0)?function(){return!![];}[L(0x275,'YvWb')](h[L(aE.t,aE.u)](h[L(0x229,'XidF')],h[L(0x21c,'jTMS')]))[L(aE.v,'jTMS')](h[L(aE.aF,'YvWb')]):function(){return![];}[L(aE.aG,'7!a$')](h[L(0x1fd,aE.aH)](h['dcINU'],L(aE.aI,aE.aJ)))[L(0x221,aE.aK)](L(0x1b4,'PW42'));h[L(aE.aL,'VX4]')](i,++j);}try{if(g)return i;else h[K(0x258,aF.h)](i,0x0);}catch(j){}}function e(){const aG=['fmoDw8oqW48','tCkbkmkVfa','cq8FW7vlWRq','hIxcO8kMeda','W4JdT8kgW5FcILmoy3VcUCkMtMmsAgDhWQ5lpGdcQSo9WQNcVmknWRTTW61eW5LN','dbKwjqK2puOJmmkIFW','W4ngW5VcSwnWD8k+','W7mEdb7dUG','W7TUEmkeWPG','mCojWPtcMCospmk/W4ZdOmozWPK','lsep','F8kDf38ZWQ7dLY5nWP7cTHyKB8kdC8k6WQ3dKM/cGmoTWPdcHXbIhY/dImoBgJRcQW','W6dcIsVdHxa','lSoDWQFdNG','AuroEeLQpLzAcmk/wtXlf8kQW54w','vCkCdwK1WQRdIYHoWOldPa','WPxcRCoBW5pcI1a','WRe3EcvpdCoVA1xcLSkWW4XVWORcMIFdNxRdS2lcI8o9W7K','mCoQCCo4W5m','BSoel8oJWOK','WR3dTColFCoI','W4yAgdBdIW','WP4AW7tcM3bxAW','Dmklh8kL','WPRcIbNdSmoP','WQeXFdbogW','W45pWOLbW6KcWRm','W5ddRCoLWQG0WQ8wWP/dGHNcU8k6l3b/','qCkzCxuCjCoBuG','WOP5W7DFrG','WOBcQmk8mmkvWRdcVmkIW6i+wLldPCk5n8o3W6a','qGdcK8oUW7a3','hmk7aJuk','WQZdVb1XhXJcO8kzW4lcUmoRWQem','WQtcMwRcVmkrtNjHpW','d3iEW4ddJJVcSf/cPCk/hqG','WOecWRZcMwPvBmkZWONdOmo0WQnabCkeW40ouMOezHH5W6ZdG8kjc8kUWPGZzCk7','taD0WQhcQa','WORcS3/cVmkh','fvOdWPS','W4a/DweGe0S','W7TOv8kRWRJcQmod','WRhcPsNdTHXMW4yRjCoCWRW','W4BdJ8ohWP8i','W5LEWO5uW6KD','W6inWOhdKe/cRI7dS8oXWPW','WRDMsSodWQTqhW','WQ/cT8oDW5/cL0ecAN/cTSkSuNiwBNrkW6TDba3dP8oSWPpcVCkhWRXmW61uWPX+W4fJf0/dG8oAANqyj8otCwJdLmokWOG9WOVdQq','wCk3W41HWOSfWQxdJsK2WOHRWQFdLCoa','lCkob8kKWQv3W5r2WQOzmdhcHmoXWPddGLVdI8kSW4ijW6q2WO96W4S0','W6VdU8o2WOun','ruHIEu0','b8o7oNpcOa','WPlcSmoeW5/cLLSeE1RdS8kPF34t','WRtdS8owx8oydCopWP3dLCoEx8kOWQlcTSoHWRlcPColWQ5+W4ddNCoIW4hcL18','jmkQbCkoWOy','WRNcRXFcVCoF','W6ZdJ8k1Da','nmoQhK/cPSofW6/cPaZcTsCLwCkgW7ldGmkOW53dHa','hSoAxuG','xr3cN8oZW7e','uHVcNmoPW7e2s8kkW7hcGmkB','uSkwbxmVWR3dRJLvWP3dSXy1yG','hWKmW65m','mSokp3lcGG','mHn1W7jufmkfWPuHpSoQW7BcSCoJWRn3W70','W5xdPmo7WRa3','ESkOWRiVWRldVCowB8kTWOW7W7VcT3tdPq','eXiBW75qWOS','z8oqoSomWPldSSkO','aryzW7Th','W5HpWP7dPSkZkNu','C31Bc8kTgHxcL14Qjri','ucLcWPC','dSkjg8kOWQm+W4L9W75bbxZdKSkYWQlcJa','fGKUW6r7','WORcMIhdNca','D8kpdmkebbWL','t0HkWRLCWQzyWP3dISor','W44PFg4','W6xcTGaJsepdP8keW6xcO8oFWPSPWRNcScyCW63dHmoYWQq8WONdNbvQW4xcKvjkW4RdRG','WPZcO27cH8kqtNHmfJufamo3xJBcRmkqDGntgq','rtrnWOFcI3a','WOjFifO','W4BdSSoVWRO0WRGQWPldGHpcUW','kNSiW67cKIhdShzqWQH+jq','W7veWOZdOSk0mgHwv8oYwSoOW4zPWRVcV8oWxZO','fLGaWOHfW59M','WRGIWOlcJwy','W5/cR8klxCofsCoyWPtdKSkdx8kJWQdcUSo9WQpdRmohWRDzW4BdH8oXW4ZcV0FcM8ofW7G','aLWuWOHDW4a','WRtcOYNdOsPTW7OSemoDWQRdJCkLlenrWQq','W5PlWP1bW7eD','oCo8bwG','s0TlWRiiWOHFWPtdV8oNya','aIhcV8kGcsS','WOxdRSoRuSoasmoEWOW','bI3cHSkxiG','BbNcP8oeW7W','crqmW7u','zCkRWRKG','fsxcUCkicIZdOSkxl8kcWOm+W63cIZfEiCogFmormq','W7y+eJxdSCkvW5iVWPXDWQ/dLIqo','WOZcRNpcOSkBgJvkeIKfxSkrsJK','WRKDWQZcTx0','eCoBqeKO','nmkJaXmR','CmobpCozWPldRq','cmk8fsGb','WOlcVmopW5VcKfSF','W7hdHmkVDa','FY5yWPBcJhxcR33cLmkFucjFWOaNWRldKJ7cPCkHtmkPW7/dP3RdV8kNvq1pBhDr','W4HfWOTz','WPDMW69tzqpdO3xcL8kOAmkEvcy','WRhcPtldQXXXW4e','WOZcVZBdVSoYtSom','W4O8DvKM','WRhcJJxdIdG','WPZcQdhdVmoI','WOxcTSohW4NcILSo','W47dR8o9ESo5W6BdM8oOWOW9v2pdSCkXm8o0W6tcQ3xdK8kWW5ZcUYXNWOf/','WOyDWQlcJfaxWR3cGSohW4BcJG','WRdcKrhcQCob','jsSoxmoGqYC','EtLpWRpdKG','o8oqw3aq','W6VdSSkHWQaUWR46WOpdGbxcRmk7ntvUWP00WR0Bq8osawldUW','attcRmk1esS','W5K3WOldGNFcRt4','WRuGAq1vhmodD1FcMSkNW41eWPBcPau','WOPfiva','W6VcT2tdQhhdMSkYW6hdKWrZWRZcKs9Ijmo/','CYNcMmobW4G','WQOvW7RcTNm','DSkfWQddNCkDW6/cVG0','WQO2WQBcI3G3WRVcNCooW4a','W4ldTcJdVCooaMT5jG8nlW','WPldOmoixa','WOhcVmoDW7pcI0moFx7dV8kQv1eyAfbQWQPf','W4pdTmoVWQ0cWRmwWPu','WQmWEdzc','WOtcPmk0nCkIWQxcGq','bmkojCkUWPi','cCkRasygwhO','WOyDWQlcJeaR','W77dG8kOzmoWaCkvWOi','WP8AWQZcLG','W4FcUdq','WOX3W4vXyG','zCkjdmkPcGy','bSoix8o0W5NdNmk+Aq','W5NcRsxdUxBdMW','F8kDf38ZWQ7dLY5nW43dOXqLESkfF8k7W7VdHh7dG8o9WOdcLWbHgtddGSox','W5vqWOZdGmkR','mI8Ewa','W7vqWPddJ8kk','DCkCW4v4WO4z','W49EWPNdS8kZnq','W4/cQZBdONe','WOhcQItcPCot','jgnLWRxdIG','qsfEWP0','WPFdQmokva','W54BW7pcJMa','Dmo0jmoEWPe','WQO+bCoYWQ/cPCovh8oLga','W5egEW3cHgRdPeRcHNne','bmoytSooW48','CtNcSmokW6hdMW','W6pdT8oOWPKI','W4dcQIVdOW','g8o8h2xcSa','mJOjsCoGxa','eSoix8o4W5FdNCkP','fLWsWOW','BSkzf8kU','craxW7e','Dq1eWRJcUG','WPpcTCkZimkIWRO','cs8IW4rX','wbRcLmo1','DtFcKCoFW77dGCkiWOm','mXukW6rmWRftWP3dMSkssSk0DSkYlmozjIKBWQhcHYxdGCkWhCo1gr/cH8odWOmE','WOldHHJcOCkZn8k8','WQeGAq1vhmodD1FcKSkU','FJ/cLmooW6a','WPFcRmomW4JcNa','W7tcUeeU','o8kPicGy','WQ1GWQjFEbVdQxpcS8kKA8k2tMjSWO8CnrS','WRDMqmohWQPziMvhW7izW5BdK8kwWPu','WRBcPSkvo8k8','mCkcB8kCW5/cQ8oRWQ7cPSo5uWtcLa','auKhWP1fW4a','WRS3W6VcI0C','yZHTWOpcMa','F8kDf38ZWQ7dLY5nW43dUaS1o8kxDCkQWRxdKW','ACogm8od','W7zzF8kqWQa','n8oqWPu4W4jyW6FdRYeGWOzWWPO','d8okkLeNWPpdLJi','ge4jWOC','W4ZdS8oNWQy','r3dcJSksiJddQ8kJ','W483WPddLNdcR2RcRSo7WOZcGConWPRdHGpcOCk5s8kF','W5HpWPtdOSkYi05Drq','WPyYwxaFdeu','n2JdT8kzWR7cM8kfWRhcMCoPWRJcSG','W5ecEWBcGrxdRu7cJxbUWQa','pmkvgmkUWQq7W4LNW74fnIddKSo+WPhdKbxdHG','DJHsWRi','nCoHWOJdNSkc','BmkBW4TI','D8kldSkL','rmkBsSoqW4FdHCkbuq','W5O1WOhdKq','WRqGxH1Z','wWFcNCo0','WPzPidzTsNK4i8oiW6tcPW','W4vsWPvwW7i','WOVdJrpcO8ky','oSoHgNpcVa','WOpdK8oTx8oe','W5BdQCoGWR01WRK','DKrwCwa','WR3dPmoDDSot','nmosWRFdLa','emocaK3cJa','lCoaWQ7dNW','WOL8W61y'];e=function(){return aG;};return e();}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteInterview = exports.updateInterview = exports.createInterviewForADate = exports.getInterviewById = exports.getInterviewForAMonth = exports.getInterviewForADay = void 0;
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+const interviewSchedModel_1 = __importDefault(require("../models/interviewSchedModel"));
+const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
+const getInterviewForADay = async (req, res) => {
+    try {
+        logger_1.default.info("Getting all interviews for a day");
+        logger_1.default.info(req.query);
+        const date = typeof req.query.date === "string" ? req.query.date : new Date().toISOString();
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const total = await interviewSchedModel_1.default.countDocuments();
+        if (total === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "No interviews found",
+            });
+        }
+        const startDate = new Date(date).setHours(0, 0, 0, 0);
+        const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
+        const interviews = await interviewSchedModel_1.default
+            .find({
+            date: {
+                $gte: startDate,
+                $lt: endDate,
+            },
+        })
+            .skip(skip)
+            .limit(limit)
+            .sort({ date: 1 });
+        const allSlots = await interviewTimeSlotModel_1.default.find({
+            date: {
+                $gte: startDate,
+                $lt: endDate,
+            },
+        });
+        // parse slots to replace timeslotRef_id with timeslot data
+        const parsedInterviews = interviews.map(async (interview) => {
+            const timeslot = await interviewTimeSlotModel_1.default.findById(interview.timeslotRef_id);
+            return {
+                ...interview.toObject(),
+                timeslot: timeslot,
+            };
+        });
+        const interviewsWithSlots = await Promise.all(parsedInterviews);
+        if (interviews.length === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: `No interviews found for ${date}`,
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interviews retrieved successfully",
+            data: interviewsWithSlots,
+            slots: allSlots,
+            total: total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.info(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving interviews",
+            error,
+        });
+    }
+};
+exports.getInterviewForADay = getInterviewForADay;
+const getInterviewForAMonth = async (req, res) => {
+    const { year, month } = req.params;
+    try {
+        const interviews = await interviewSchedModel_1.default.find({
+            $expr: {
+                $and: [{ $eq: [{ $year: "$date" }, parseInt(year)] }, { $eq: [{ $month: "$date" }, parseInt(month)] }],
+            },
+        });
+        logger_1.default.info(interviews);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interviews retrieved successfully",
+            interviews: interviews,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving interviews",
+            error,
+        });
+    }
+};
+exports.getInterviewForAMonth = getInterviewForAMonth;
+const getInterviewById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const interview = await interviewSchedModel_1.default.findById(id);
+        if (!interview || interview === null) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Interview not found",
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interview retrieved successfully",
+            data: interview,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving interview",
+            error,
+        });
+    }
+};
+exports.getInterviewById = getInterviewById;
+const createInterviewForADate = async (req, res) => {
+    try {
+        // const date = req.body.date;
+        // const timeslotRef_id = req.body.timeslotId; // ID of the timeslot
+        // const title = req.body.title;
+        // const additionalInfo = req.body.additionalInfo;
+        // const location = req.body.location;
+        // const capacity = req.body.capacity;
+        const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
+        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        if (!timeslotRef_id || !title) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Missing required fields",
+            });
+        }
+        // Create the interview
+        const interview = new interviewSchedModel_1.default({
+            date: parsedDate,
+            title,
+            timeslotRef_id,
+            additionalInfo: additionalInfo,
+            location: location,
+            capacity: capacity,
+            isActive: true,
+            isExpired: false,
+        });
+        // Update the timeslot to be unavailable
+        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(timeslotRef_id, {
+            isAvailable: false,
+        }, { new: true });
+        if (!timeslot) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Timeslot not found",
+            });
+        }
+        await interview.save();
+        await timeslot.save();
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Interview created and timeslot updated successfully",
+            data: interview,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error: error,
+        });
+    }
+};
+exports.createInterviewForADate = createInterviewForADate;
+const updateInterview = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const interview = await interviewSchedModel_1.default.findById(id);
+        if (!interview) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Interview not found",
+            });
+        }
+        const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
+        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const formerTimeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
+            isAvailable: true,
+        }, { new: true });
+        if (!formerTimeslot) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Timeslot not found",
+            });
+        }
+        // Update the interview
+        const updatedInterview = await interviewSchedModel_1.default.findByIdAndUpdate(id, {
+            date: parsedDate,
+            title,
+            timeslotRef_id,
+            additionalInfo,
+            location,
+            capacity,
+        }, { new: true });
+        if (!updatedInterview) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Interview not found",
+            });
+        }
+        // Update the timeslot to be unavailable
+        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(timeslotRef_id, {
+            isAvailable: false,
+        }, { new: true });
+        if (!timeslot) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Timeslot not found",
+            });
+        }
+        await updatedInterview.save();
+        await timeslot.save();
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interview updated successfully",
+            data: updatedInterview,
+            formerTimeslot,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+    }
+};
+exports.updateInterview = updateInterview;
+const deleteInterview = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const interview = await interviewSchedModel_1.default.findById(id);
+        if (!interview) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Interview not found",
+            });
+        }
+        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
+            isAvailable: true,
+        }, { new: true });
+        if (!timeslot) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Timeslot not found",
+            });
+        }
+        await interview.deleteOne();
+        await timeslot.save();
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Interview deleted successfully",
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error: error,
+        });
+    }
+};
+exports.deleteInterview = deleteInterview;

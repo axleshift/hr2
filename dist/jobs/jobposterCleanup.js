@@ -1,1 +1,77 @@
-const w=f;function e(){const ar=['W5zHhSop','cCouWRBdIq','Ae0UBe7dK8oDobzou8opWODLWR0','et8vW7b8faNcPeNdN8o4bsHYqeuyWRFdVq','rbjMWOfD','W4r6imkcpMJcJq','yW48W69w','zH03W5Hh','bcD1WObsyCo4','W5WRWQ8W','ECoUk2VcMq','rmkQWRNdHmoWWR/cQuxcLKzHqq','dgRcSariwa','hMRcRaHdqZ7cPG','uZNcL2K','hSkvamk9qLPxu8omtW','bIzKFeG','vX3cQuDg','WOWUWO/dNrlcHgpcUCkM','W4jKpmo8mW','xtZcVCoXqa','DCoZWQulAZ4e','zmo7aJFdPIdcJmoV','WQPom8kyA35FF20','lfNcUryc','WOWyWPS','iCk8EwK','bSkqjWRdQq','W4RcN1ZdKSk9','CSkzqCkz','nCk4kCkyCCogy8kOpmoBqa3dRmoYl8oBWRfKWRO/u8ojer7dM3VdHaf0WP5Ix8kRBmkJWPDQW4VdJq','zCoJy8oYva','AbZcV1L5','W7JcGttcTSkNWP4BWQdcUmoGt8obW6tcJSkb','WRFdNY/cNCoYW4m','WOJdTGJcRSod','imkRW7nnnMnxW4xcR8oqW5GOFq','W70qvSo4WP4','ECoKkw3cMCo1zW','xdtcPN55WPC','WQ3cTSkFWR7cUWtdK8ob','m8kNadVdPGVcICozWPFcKCkGWOFcMM4','F8ksqCkxhxBcLa','WRCuWPNdJGJcNhG','WQ7cTmk6vW','dNFcMLvBWOH1WQ0VWO3cLMZdKbWdWQpdIMeuDCkKdSk9W4ddMgv9WOpdIrilWOZcHty','CgWcW47dJq','W43cKLVdMSkMxam','BtZcKf14WRpdHq','hCk5kSkKsa','WOVcSGFcOG','jXj3ob3cGmk9bZjRva','kXvozge','vt7dTfurrrRcImkMWR7cIG','CmouWO0CDq','bMddGd07W5feWOeSW7z4lq','xfb1zCkE','W5LiiZRcTG','imokW5vrtCkkW4SUWRNcICk/','Dmk9q35Te1a','FKBcUxLcW7Xc','jsK/','W7KbBColnsWapdnQW44','bmk3mmkfD8ogDq','tGRcP3f+','W5KUrCoQWRS','lK4Fqq0','y8k9uvz2c0eZbCoWW7C','EcBcIevaqW','W7zFcqRcNgxcSSk3hMO','zCkFWP4t','W4PVaGRcPxJcO8kHbMddQW','yCkvWP4tjSkfW6S','gwJcPGfc','utxcN2X4WOLc','W6RdO8kaWOxcIH7cUmkNWRpdI3BdUfuMqw4sW7DU','W4z8kmk0cq','p3OKAs10lSkSWRRcHtFdUmkNjx/dKImPemoQWRRdS8kQuCosjq','WRlcRSoXrGNcPSksW6nScCkeW6uupfybxhdcLeVdUSoOstabWRxcN3/dLWXNW7O','W55gaH7cOW','Emo5p2xcNSo8DW','dYKTdfdcJW','W6JdQCkhWOtcPXNdVa','nK3cPCoSW6y','FcFcK2vb','W6GJlmkavSofnv3cVmk8W5GtWQjOW6tcVSovWPJdRSk3x0fWj8oLW7tcShNcQmkYW6/cIcNcVq','pmogW7RcRCkZ','WQb1vIm0WOyd','W4hcQZpcUmkJWPGgWRRdNmkVDCkiWRhdImkPdG','oZiIoCovWOZdQCoRW5nqW49hyG','WOBcUqFcRgv6wq','FMurW4q','h2ZcOJjouG','WQCdWP7dJbG','ogNdHG41W63cGvHPq8oaWQeLW48','W7hdQmkDWOq','mSkWfd3dUG','W4vLaH7cPwi','xxSLWQbN','yCkYrmkqla','zmobkCo5W6xdIKnpu8oysHhdVmopwmoIW4GLma','F8oYWQ0x','sCobuSoW','msjEree','WQRcVmkQsXlcRCkt','W5LSdq3cT2xcPmkV','vCkFWQS3ca','WQJdUSofWOZdIGZcRCoZW6BdGIW','CefmruBcNalcSW','AmowqSoQCtbTuCoQBCkAW5pcKCoCWORdGmk/W5bWW5mYC0NcGmoBpSoSnGXDW6zmEe4','rSkVWRZdICo3WR/dP2/cSgrdzwW','W5n0W73dIuxcRMK7FrrqW6JdICkOqcG','W7KbBCollJiq','j8kVz2O8','qCkMW63cMmkQW4lcHe0','eq9Hdwq','AgvYFW','l0bGA3C8W5xdIIFcGG','W5zPjCoiaa','j8onW5vss8oDWRK4WRhcUCkFW6/cIW','gMJcTGm','W48pWQGEkG','CmkkWP0laa','l8kPpq','aSoLWPf3WQFcJq','a8kkh8oOANr5uSo8BSksW4/cK8kpW5hdM8k1W5jJWPyM','qYpcLhP5','fmoJWPfXWRS','CfOeWOvgA8k1aW','hflcI09F','nLvQBxCX','W5FdMX/dS1RdSCkK','dg/cRqO4','W7CNWRG','W6JcI3hdGSohW6fbxmoCWPK','ymkQsMT3c10XfG','BwT5Aq','xYpcO8oPxmk5W7O','WQdcVCkVubi'];e=function(){return ar;};return e();}(function(g,h){const H={g:0x1f9,h:0x221,i:0x228,j:0x24c,k:0x25a,l:'xR1N'},p=f,i=g();while(!![]){try{const j=parseInt(p(H.g,'##O['))/0x1+parseInt(p(H.h,'#nOE'))/0x2*(-parseInt(p(0x204,'BRr)'))/0x3)+parseInt(p(0x225,'[grB'))/0x4*(-parseInt(p(0x22a,'wzH5'))/0x5)+parseInt(p(0x274,'g2[m'))/0x6*(-parseInt(p(H.i,'#ni@'))/0x7)+parseInt(p(0x265,'#ni@'))/0x8+-parseInt(p(H.j,')4ii'))/0x9+-parseInt(p(H.k,H.l))/0xa*(-parseInt(p(0x25c,'##O['))/0xb);if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xbe8b5),(function(){const K={g:'7&Xk',h:0x222,i:0x231,j:'e1C]'},q=f,g={'Kgfnc':function(i,j){return i(j);},'ndiod':q(0x252,K.g),'sQqwE':function(i){return i();}};let h;try{const i=g['Kgfnc'](Function,g[q(K.h,'xR1N')]+'{}.constructor(\x22return\x20this\x22)(\x20)'+');');h=g['sQqwE'](i);}catch(j){h=window;}h[q(K.i,K.j)](c,0x9c4);}()));const d=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const T={g:'8LKN',h:'A5Wf',i:0x278},S={g:0x251,h:'I%8A',i:0x243,j:0x241,k:'A3bL',l:'d6q[',m:0x21c,n:'4]us'},r=f,g={'zEcfD':r(0x246,'PxW@'),'EXfJT':function(h,i){return h(i);},'BKoiZ':r(0x24d,T.g),'WGZXR':r(0x20a,T.h),'ggueR':function(h,i){return h+i;},'wFngr':r(T.i,'kajY'),'evbFP':function(h,i,j){return h(i,j);}};g['evbFP'](d,this,function(){const s=r,h=new RegExp(g[s(S.g,S.h)]),i=new RegExp(s(S.i,'#um3'),'i'),j=g['EXfJT'](c,g[s(S.j,S.k)]);!h[s(0x234,'#ni@')](j+g[s(0x1f5,S.l)])||!i[s(0x1f7,'RsYS')](g[s(S.m,'HoAi')](j,g[s(0x23d,S.n)]))?j('0'):c();})();}());function f(a,b){const c=e();return f=function(d,g){d=d-0x1f0;let h=c[d];if(f['HvaQtj']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['vrWkJr']=m,a=arguments,f['HvaQtj']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['gABEZQ']===undefined&&(f['gABEZQ']=!![]),h=f['vrWkJr'](h,g),a[k]=h):h=l,h;},f(a,b);}const b=(function(){let g=!![];return function(h,i){const j=g?function(){const t=f;if(i){const k=i[t(0x202,'SYg7')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const a2={g:0x23c,h:']SS^',i:0x26d,j:'z#P$',k:0x203,l:'xYYB',m:'YhuW',n:'wzH5',o:0x21f,a3:'Y[k&',a4:0x237,a5:'#&S)',a6:'sh#3',a7:'hYdN',a8:0x22c,a9:0x275,aa:'#um3',ab:0x200,ac:'sh#3',ad:'cpKn',ae:0x26e},a1={g:'JGuN',h:0x227},u=f,g={'ouTtH':function(l,m){return l+m;},'pHOCg':u(0x239,'8LKN'),'gAtZu':u(a2.g,'kajY'),'tSyOD':function(l){return l();},'YImzf':u(0x22b,a2.h),'WWcuv':u(0x266,'#&S)'),'zOGMc':'info','aEIet':u(a2.i,a2.j),'mysUK':'exception','YNrQS':function(l,m){return l<m;}},h=function(){const v=u;let l;try{l=Function(g['ouTtH'](g[v(0x22f,a1.g)](g[v(a1.h,'4]us')],g[v(0x267,'RsYS')]),');'))();}catch(m){l=window;}return l;},i=g[u(0x255,'xR1N')](h),j=i[u(a2.k,a2.l)]=i[u(0x25e,a2.m)]||{},k=[g['YImzf'],g[u(0x26f,a2.n)],g['zOGMc'],g[u(0x20e,')4ii')],g[u(a2.o,a2.a3)],u(a2.a4,a2.a5),u(0x24b,a2.a6)];for(let l=0x0;g[u(0x250,'unlE')](l,k[u(0x270,a2.a7)]);l++){const m=b[u(a2.a8,a2.m)][u(a2.a9,'e1C]')][u(0x279,a2.aa)](b),n=k[l],o=j[n]||m;m[u(a2.ab,a2.ac)]=b[u(0x276,a2.ad)](b),m[u(a2.ae,'unlE')]=o['toString']['bind'](o),j[n]=m;}});a();'use strict';var __importDefault=this&&this[w(0x20f,'PxW@')]||function(g){const x=w;return g&&g[x(0x233,'4]us')]?g:{'default':g};};Object[w(0x217,'BRr)')](exports,'__esModule',{'value':!![]});const node_cron_1=__importDefault(require('node-cron')),jobposterModel_1=__importDefault(require('../database/v1/models/jobposterModel')),jobpostingModel_1=__importDefault(require('../database/v1/models/jobpostingModel')),twitter_1=require(w(0x25d,'HA1g')),logger_1=__importDefault(require(w(0x26b,'IYRX'))),now=new Date(),fetchExpiredJobposters=async()=>{const a4={g:'975f',h:0x271,i:'KTMY',j:0x224,k:'xYYB'},y=w,g={'fHFdq':y(0x232,a4.g)},h=await jobposterModel_1[y(a4.h,a4.i)]['find']({'expiresAt':{'$lt':now},'status':g[y(a4.j,a4.k)]});return h;},fetchScheduledJobposters=async()=>{const z=w,g=await jobposterModel_1[z(0x248,'m9Ql')][z(0x1fc,'[grB')]({'postAt':{'$lt':now}});return g;},postApprovedJobposter=async()=>{const a6={g:0x23e,h:'$htY',i:0x269,j:'Y[k&',k:'#&S)',l:0x264,m:0x24e},A=w,g={'baUcv':'active'},h=await fetchScheduledJobposters();for(const i of h){try{const j=await(0x0,twitter_1['createTweet'])(i[A(0x277,'SYg7')]);await jobposterModel_1[A(a6.g,a6.h)]['updateOne']({'_id':i[A(a6.i,a6.j)]},{'post_id':j[A(0x215,'[grB')],'isPosted':!![]});const k=await jobpostingModel_1['default']['findById'](i[A(0x24a,a6.k)]);await jobpostingModel_1[A(0x21d,'A5Wf')]['updateOne']({'_id':k[A(0x273,'RsYS')]},{'status':g[A(a6.l,'#um3')]});}catch(l){logger_1['default'][A(a6.m,'BRr)')](A(0x25b,'IYRX')+i[A(0x207,'sh#3')]+':',l);}}},updateExpiredJobposters=async g=>{const a7={g:'$htY',h:0x229,i:'e1C]',j:'hYdN',k:'nZ$4'},B=w,h={'TLKAR':B(0x214,a7.g)},i=await jobposterModel_1[B(a7.h,a7.i)][B(0x263,a7.j)]({'_id':{'$in':g['map'](j=>j[B(0x207,'sh#3')])}},{'status':h[B(0x230,a7.k)]});return i;},removeFromTwitter=async g=>{const a8={g:0x22d,h:'4]us',i:0x1f4,j:0x236,k:0x219,l:0x25f,m:'8LKN'},C=w,h={'RTQoC':C(a8.g,'Y[k&')};for(const i of g){if(i[C(0x257,a8.h)]===h[C(a8.i,'d6q[')])try{await(0x0,twitter_1['removeTweet'])(i[C(a8.j,'#ni@')]);}catch(j){logger_1[C(a8.k,'sh#3')][C(a8.l,'VC![')]('Error\x20removing\x20tweet\x20'+i[C(0x240,a8.m)]+':',j);}}},jobposterCleanUp=()=>{const ad={g:'8LKN',h:'nZ$4',i:'Y[k&',j:0x21b,k:'I%8A',l:'#&S)',m:'YhuW'},ac={g:0x1f3,h:0x206,i:0x23f,j:']SS^',k:'d6q[',l:0x24f,m:'4]us',n:0x21e,o:')4ii',ad:0x220,ae:0x1ff,af:0x242,ag:'[%yw',ah:0x249,ai:'HoAi',aj:0x1f8,ak:0x20d,al:'IYRX'},D=w,g={'BRvYn':function(h){return h();},'TGuWE':function(h,i){return h>i;},'PbxoR':D(0x259,ad.g),'bMPJK':D(0x23b,ad.h),'IwjhL':function(h){return h();},'fcnWB':'Approved\x20jobposters\x20posted\x20to\x20Twitter','caUYS':D(0x20c,ad.i),'HGSwW':D(ad.j,'wzH5')};node_cron_1[D(0x218,ad.k)][D(0x1fb,ad.l)](D(0x205,ad.m),async()=>{const E=D;logger_1[E(ac.g,'gD4A')][E(0x253,'xYYB')]('Removing\x20expired\x20jobposters');try{const h=await g[E(ac.h,'hv5V')](fetchExpiredJobposters);logger_1['default'][E(0x20b,'I%8A')](E(ac.i,ac.j)+h['length']+E(0x1f1,ac.k));if(g['TGuWE'](h[E(ac.l,ac.m)],0x0)){const i=g['PbxoR']['split']('|');let j=0x0;while(!![]){switch(i[j++]){case'0':await updateExpiredJobposters(h);continue;case'1':logger_1[E(ac.n,ac.o)][E(ac.ad,'m9Ql')](g[E(ac.ae,'[grB')]);continue;case'2':await removeFromTwitter(h);continue;case'3':await g[E(ac.af,'[grB')](postApprovedJobposter);continue;case'4':logger_1[E(0x238,'[grB')]['info'](g[E(0x23a,'gD4A')]);continue;case'5':logger_1[E(0x245,ac.ag)][E(ac.ah,ac.ai)](g['caUYS']);continue;}break;}}}catch(k){logger_1['default'][E(ac.aj,'$htY')](g[E(ac.ak,ac.al)],k);}});};exports[w(0x218,'I%8A')]=jobposterCleanUp;function c(g){const aq={g:0x1f0,h:'#nOE',i:'g2[m',j:0x27a,k:']HCM',l:0x21a,m:'kajY',n:0x261},ap={g:0x272,h:'hv5V',i:0x211,j:'g2[m',k:'##O[',l:'#ni@',m:0x26c,n:0x201,o:'4]us',aq:0x254,ar:'IYRX',as:0x262,at:'cpKn',au:0x208,av:'VC![',aw:'#&S)',ax:')4ii',ay:0x209,az:0x213,aA:'JGuN',aB:0x226},F=w,h={'bdbET':function(j,k){return j===k;},'SLITE':F(0x26a,'z#P$'),'NYsPw':F(aq.g,aq.h),'JzbFt':function(j,k){return j+k;},'CWCwM':function(j,k){return j/k;},'EqwKG':F(0x210,aq.i),'vlLWE':function(j,k){return j===k;},'uvBBd':function(j,k){return j%k;},'DeFPq':function(j,k){return j+k;},'GSQMs':function(j,k){return j+k;},'gasLj':F(aq.j,aq.k),'QRAXa':F(aq.l,aq.m),'KKGfm':'stateObject','SRbhx':function(j,k){return j(k);}};function i(j){const G=F;if(h[G(ap.g,ap.h)](typeof j,h[G(ap.i,ap.j)]))return function(k){}['constructor'](h[G(0x244,ap.k)])[G(0x268,ap.l)](G(0x256,'kajY'));else h[G(ap.m,')4ii')]('',h[G(0x1fe,'xR1N')](j,j))[h['EqwKG']]!==0x1||h[G(ap.n,'#um3')](h[G(0x1f2,'GoLt')](j,0x14),0x0)?function(){return!![];}[G(0x235,ap.o)](h[G(0x258,ap.l)](G(ap.aq,ap.ar),G(ap.as,ap.at)))[G(ap.au,ap.av)](G(0x1fa,ap.aw)):function(){return![];}['constructor'](h[G(0x22e,ap.ax)](h['gasLj'],h[G(ap.ay,'BRr)')]))['apply'](h[G(ap.az,ap.aA)]);h[G(ap.aB,'cpKn')](i,++j);}try{if(g)return i;else h[F(aq.n,'ca%7')](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_cron_1 = __importDefault(require("node-cron"));
+const jobposterModel_1 = __importDefault(require("../database/v1/models/jobposterModel"));
+const jobpostingModel_1 = __importDefault(require("../database/v1/models/jobpostingModel"));
+const twitter_1 = require("../utils/twitter");
+const logger_1 = __importDefault(require("../middlewares/logger"));
+const now = new Date();
+const fetchExpiredJobposters = async () => {
+    const expiredJobposters = (await jobposterModel_1.default.find({
+        expiresAt: { $lt: now },
+        status: "active",
+    }));
+    return expiredJobposters;
+};
+const fetchScheduledJobposters = async () => {
+    const scheduledJobposters = (await jobposterModel_1.default.find({
+        postAt: { $lt: now },
+    }));
+    return scheduledJobposters;
+};
+const postApprovedJobposter = async () => {
+    const jobposters = await fetchScheduledJobposters();
+    for (const jobposter of jobposters) {
+        try {
+            const tweet = (await (0, twitter_1.createTweet)(jobposter.content));
+            await jobposterModel_1.default.updateOne({ _id: jobposter._id }, { post_id: tweet.id_str, isPosted: true });
+            const jobposting = (await jobpostingModel_1.default.findById(jobposter.ref_id));
+            await jobpostingModel_1.default.updateOne({ _id: jobposting._id }, { status: "active" });
+        }
+        catch (error) {
+            logger_1.default.error(`Error posting tweet for jobposter ${jobposter._id}:`, error);
+        }
+    }
+};
+const updateExpiredJobposters = async (expiredJobposters) => {
+    const updatedJobposters = await jobposterModel_1.default.updateMany({ _id: { $in: expiredJobposters.map((jobposter) => jobposter._id) } }, { status: "expired" });
+    return updatedJobposters;
+};
+const removeFromTwitter = async (expiredJobposters) => {
+    for (const jobposter of expiredJobposters) {
+        if (jobposter.platform === "twitter") {
+            try {
+                await (0, twitter_1.removeTweet)(jobposter.post_id);
+            }
+            catch (error) {
+                logger_1.default.error(`Error removing tweet ${jobposter.post_id}:`, error);
+            }
+        }
+    }
+};
+// Remove expired jobposters every 24 hours
+const jobposterCleanUp = () => {
+    // Run every day at midnight
+    node_cron_1.default.schedule("0 0 * * *", async () => {
+        logger_1.default.info("Removing expired jobposters");
+        try {
+            const expiredJobposters = await fetchExpiredJobposters();
+            logger_1.default.info(`Found ${expiredJobposters.length} expired jobposters`);
+            if (expiredJobposters.length > 0) {
+                await updateExpiredJobposters(expiredJobposters);
+                logger_1.default.info("Expired jobposters updated");
+                await removeFromTwitter(expiredJobposters);
+                logger_1.default.info("Expired jobposters removed from Twitter");
+                await postApprovedJobposter();
+                logger_1.default.info("Approved jobposters posted to Twitter");
+            }
+        }
+        catch (error) {
+            logger_1.default.error("Error removing expired jobposters:", error);
+        }
+    });
+};
+exports.default = jobposterCleanUp;

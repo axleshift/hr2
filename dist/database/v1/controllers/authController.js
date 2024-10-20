@@ -1,1 +1,164 @@
-function f(a,b){const c=e();return f=function(d,g){d=d-0x7f;let h=c[d];if(f['Yjoqqs']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['fRWvQZ']=m,a=arguments,f['Yjoqqs']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['FzvPKw']===undefined&&(f['FzvPKw']=!![]),h=f['fRWvQZ'](h,g),a[k]=h):h=l,h;},f(a,b);}const y=f;(function(g,h){const J={g:'$Hi2',h:0x115,i:0xef,j:'m6te',k:0xd6,l:'6Aj$',m:0xdc,n:'t!ss',o:'Jwdz'},s=f,i=g();while(!![]){try{const j=parseInt(s(0xb9,J.g))/0x1*(parseInt(s(J.h,'nC$]'))/0x2)+parseInt(s(J.i,'cIRk'))/0x3*(parseInt(s(0x8f,'y(8S'))/0x4)+-parseInt(s(0xf1,J.j))/0x5*(parseInt(s(J.k,'2vO]'))/0x6)+-parseInt(s(0xab,J.l))/0x7+-parseInt(s(0x11e,'s6wO'))/0x8*(parseInt(s(J.m,J.n))/0x9)+-parseInt(s(0x11d,'TXRq'))/0xa+parseInt(s(0xb4,J.o))/0xb;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xd96ca));const d=(function(){let g=!![];return function(h,i){const j=g?function(){const t=f;if(i){const k=i[t(0xfe,'!JVB')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const T={g:0x122,h:'j&Cp',i:0xd7,j:0xaa,k:'bN0K',l:0x9c,m:0xc5},S={g:0x9f,h:'64js',i:0xc0,j:0x123,k:'ZIe)',l:0xb6,m:'C)fB',n:'vxlS'},u=f,g={'xIohl':u(T.g,T.h),'AbuVq':u(T.i,'Lv[e'),'ozrcW':function(h,i){return h(i);},'hOYod':u(T.j,T.k),'PPjEa':function(h,i){return h+i;},'RhITr':u(T.l,'t!ss'),'PNXyw':function(h){return h();},'WqAIP':function(h,i,j){return h(i,j);}};g[u(T.m,'uODc')](d,this,function(){const v=u,h=new RegExp(g[v(S.g,'KsVG')]),i=new RegExp(g[v(0xa5,'KsVG')],'i'),j=g[v(0xcc,S.h)](c,g[v(0x106,'C)fB')]);!h['test'](j+v(S.i,'FuS$'))||!i[v(S.j,S.k)](g[v(S.l,S.m)](j,g['RhITr']))?g[v(0x101,S.n)](j,'0'):g['PNXyw'](c);})();}());const b=(function(){const U={g:'nC$]'};let g=!![];return function(h,i){const j=g?function(){const w=f;if(i){const k=i[w(0xe6,U.g)](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const a3={g:'t!ss',h:0xad,i:0xf2,j:'6uoy',k:0x9e,l:'$Hi2',m:'2t8T',n:0xa7,o:0xd8,p:'baPj',q:0x12d,r:'6uoy',a4:0x125,a5:'C)fB',a6:'baPj',a7:'cwMn',a8:'h%P4'},x=f,g={'JsVzl':function(l,m){return l(m);},'MFdis':function(l,m){return l+m;},'guSeY':function(l,m){return l+m;},'qGseD':x(0xa0,a3.g),'zFzmi':function(l){return l();},'uylCW':x(a3.h,'39SC'),'fEhws':'warn','mQFGh':x(a3.i,a3.j),'eSXVr':x(a3.k,a3.l),'ZAvvO':'exception','ULRnT':x(0x84,a3.m),'twTkK':'trace'},h=function(){let l;try{l=g['JsVzl'](Function,g['MFdis'](g['guSeY']('return\x20(function()\x20',g['qGseD']),');'))();}catch(m){l=window;}return l;},i=g[x(a3.n,'h%P4')](h),j=i[x(a3.o,a3.p)]=i[x(0xa2,'OqEd')]||{},k=[g[x(0xc1,'uODc')],g[x(0x90,'ZK3#')],g[x(a3.q,a3.r)],g[x(0xfb,'!JVB')],g[x(a3.a4,'$5GJ')],g[x(0x99,a3.a5)],g[x(0xc8,a3.a6)]];for(let l=0x0;l<k[x(0xf5,a3.a7)];l++){const m=b[x(0x107,a3.a8)][x(0x12b,'p8QC')]['bind'](b),n=k[l],o=j[n]||m;m[x(0xbc,'x0Kv')]=b[x(0x95,a3.a5)](b),m['toString']=o['toString'][x(0x97,'ZIe)')](o),j[n]=m;}});a();'use strict';var __importDefault=this&&this[y(0xa8,'p(NB')]||function(g){const z=y;return g&&g[z(0xe2,'eaOy')]?g:{'default':g};};Object[y(0x117,'vxlS')](exports,'__esModule',{'value':!![]}),exports[y(0x10c,'Lv[e')]=exports[y(0xc2,'$Hi2')]=exports['login']=exports[y(0x100,'!JVB')]=void 0x0;const hasher_1=require(y(0x109,'5[nf')),userModel_1=__importDefault(require(y(0xce,'y(8S'))),bcryptjs_1=__importDefault(require('bcryptjs'));(function(){const a6={g:'Ulv!',h:0xfc},A=y,g={'wFawm':function(i,j){return i(j);},'AwcQU':A(0x8d,a6.g)};let h;try{const i=g[A(0xf6,'2vO]')](Function,g[A(0xb1,'e@CP')]+'{}.constructor(\x22return\x20this\x22)(\x20)'+');');h=i();}catch(j){h=window;}h[A(a6.h,'p(NB')](c,0x9c4);}());const jsonwebtoken_1=__importDefault(require(y(0x102,'cIRk'))),config_1=require('../../../config'),dotenv_1=__importDefault(require(y(0xd3,'64js'))),logger_1=__importDefault(require(y(0x9d,'K5QR')));dotenv_1[y(0x118,'nC$]')][y(0xbd,'39SC')]();const salt=bcryptjs_1[y(0xca,'s6wO')][y(0xc6,'m6te')](0xa),createUser=async(g,h)=>{const a8={g:'OqEd',h:0x128,i:'nC$]',j:0x11b,k:0xaf,l:'FuS$',m:0xf0,n:0xa6,o:0x96,p:'Ulv!',q:'x0Kv'},B=y,i={'QANcw':function(q,r){return q||r;},'MQsAN':B(0x121,'eaOy'),'xGWnS':'User\x20created\x20successfully'},{firstname:j,lastname:k,email:l,username:m,password:n,status:o,role:p}=g['body'];if(i[B(0xb2,a8.g)](!j,!k)||!l||!m||!n||!o||!p)return h[B(0xae,'TXRq')](0x190)[B(a8.h,a8.i)]({'statusCode':0x190,'success':![],'message':i['MQsAN']});try{const q=await userModel_1[B(a8.j,'2vO]')][B(a8.k,']EIn')]({'firstname':await(0x0,hasher_1['hasher'])(j,salt),'lastname':await(0x0,hasher_1[B(0xc4,a8.l)])(k,salt),'email':l,'username':m,'password':await(0x0,hasher_1[B(a8.m,'OqEd')])(n,salt),'rememberToken':salt,'status':o,'role':p});h[B(a8.n,'Jwdz')](0xc9)['json']({'statusCode':0xc9,'success':!![],'message':i[B(0xcf,a8.i)],'user':q});}catch(r){console[B(a8.o,a8.p)](r),h[B(0xbb,'KsVG')](0x1f4)[B(0x91,'otPP')]({'statusCode':0x1f4,'success':![],'message':B(0x9b,a8.q),'error':r});}};exports[y(0x88,'OqEd')]=createUser;const login=async(g,h)=>{const aa={g:0x85,h:'6Aj$',i:0x80,j:'eraF',k:0xe7,l:0x116,m:'eaOy',n:0xe4,o:0xeb,p:0x10e,q:0x82,r:0xd9,ab:'Jwdz',ac:0x83,ad:0xdb,ae:'nC$]',af:'eaOy',ag:'eaOy',ah:'ZK3#',ai:0x103,aj:'FuS$',ak:'!JVB',al:0x104,am:'eaOy',an:0xb5,ao:'otPP',ap:0x129,aq:'TXRq',ar:'5[nf',as:'s6wO',at:0x119,au:'$5GJ'},a9={g:0xdd,h:'t!ss',i:0xa3,j:'eraF',k:0x12c,l:'p(NB',m:'Jwdz',n:0xed,o:0x92},C=y,i={'mXKnm':'Session\x20save\x20error:','RRWWj':C(aa.g,aa.h),'QEFUI':'Session\x20data\x20after\x20saving:','mFppT':C(aa.i,aa.j),'gIbKj':C(0x8a,'64js'),'YizRr':C(aa.k,'otPP'),'XwExO':C(aa.l,aa.m)},{username:j,password:k}=g[C(0x89,aa.h)];logger_1[C(aa.n,'Lv[e')]['info'](C(0xd2,'$Hi2')+j+C(0xd0,'5[nf'));try{const l=await userModel_1[C(aa.o,aa.j)]['findOne']({'username':j});if(!l)return h[C(aa.p,'OqEd')](0x194)['json']({'statusCode':0x194,'success':![],'error':i['gIbKj']});const m=l[C(aa.q,aa.j)],n=bcryptjs_1[C(0x10d,'39SC')][C(aa.r,aa.ab)](k,m);if(!n)return h[C(aa.ac,'K5QR')](0x191)[C(0xf4,'h%P4')]({'statusCode':0x191,'success':![],'message':i[C(aa.ad,aa.ae)]});const o=config_1[C(0xe5,aa.af)][C(0xf7,aa.ag)][C(0x114,'p(NB')][C(0x110,aa.ah)],p=jsonwebtoken_1[C(aa.ai,aa.aj)]['sign']({'username':j,'password':k},o,{'expiresIn':'1h'}),q={'username':l['username'],'role':l[C(0xa4,aa.ak)],'email':l['email'],'status':l[C(0x10b,'baPj')],'token':p};g[C(aa.al,'2t8T')][C(0xda,aa.am)]=q,g[C(aa.an,aa.ao)][C(aa.ap,aa.aq)](r=>{const D=C;if(r)return console[D(a9.g,a9.h)](i['mXKnm'],r),h[D(a9.i,a9.j)](0x1f4)[D(0xb8,'64js')]({'statusCode':0x1f4,'success':![],'message':i[D(a9.k,'ZK3#')]});console[D(0xa1,a9.l)](i[D(0xbe,'$Hi2')],g[D(0xb3,a9.m)][D(0x120,'Jwdz')]),h[D(a9.n,'nC$]')](0xc8)[D(a9.o,'cwMn')]({'statusCode':0xc8,'success':!![],'message':i[D(0x12e,'ZIe)')],'data':q});});}catch(r){console[C(0xa9,aa.ar)](r),h[C(0x11f,aa.as)](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i[C(aa.at,aa.au)],'error':r});}};function e(){const aq=['wNzsdI/dLtZcNa','wxawC1RcGN/dGaLwWOnewSoa','DSoQd8ouWO0sWRBdJG','n8kQgCoQWR0o','kCkcWPlcVG','zSoRW507omkndSkdW6FcISkljHRdPZjuW6zTrCkaAYxcPCoJW47cVXldGL9qWRO1zxu','WPldVCk2haudWQuRW5HPCSkma8o7W5mC','qSoVWRhcVq','ButcLG','auu5DKS','mIVdHComsq','WOu0hCkjWQ1TBhZcQ8kSW5SdsG','W486WRze','gYntiq','WQFdRCkRdbGfWQrLWPWIwSof','W73cPZXlzSkFtmkatG','amk0jNVcHW','mCkhW7hcRmk0','w8omWRlcUCkD','W6TGimkgWRK','W6xdPmkPW5hcVdNdNd5hWONcImkUa8odW4xcOcLWW6fkq8oRbwWrWOO','dmofW6pcVa','W4ddTSk/W5ddQYddIYG','xwbFp8o4Aq','ma7dPmoosa','jWtdLSoDW5lcOwumbSkHr1X8WQ5od2RcOhDJ','W4qmWQFcHZiF','W4xdPmkPW5e','WOW+tmkEaZhcTbJcHvC','abNdGmol','WQbVWOxdPSolwgRdHsWwWPBcNNS8','W6VdTMRcRW','h8o1D8o3W6i5DW','mbqJe8ozWQmvWQS8W5HrjCk8WOH2W75uWQ/cMa','ymorsb3dMSoaWPRcImkPW79XWP3cV8oE','e8kSW7/cTCkDq8kQWQn8WRhcUa','nmkJgvVcNG','fSoPBCo3','uSoNW6pdSG','kSkuWOxcPupdHW','W6exWOvW','W6KnWOr6','lH4W','vmoJWQZcRq','WQZcSZJdRc7dMd/dSfpcSSoQW6/cSG','W54OWRHWWRa','ibJcTfJdNG','W7fWvSouW6X4oKBcISkLW6CetWldJYS2wbm','WQVcKJ5isa','adOrzCkJnqRdVCkQzSopW7CYW4RcGKJcSLRcLmknW57dHSoWw8kbWPBcHG','zfNcG8k7W48','W7pcOmk7W7FcSW','WRNcGwbEuWVdSqO0rSo6W7WVW5FdUSkWr8k8WOFcHCkCeCoft8oYW4ddJdFdRIFcJSoZ','WO3cOa0','WOWJr8kmgdJcHa','W4pdO8kTW5FdQtW','iSkxgCkU','W4RcI8kHW4NcRG','l8kfWPBcUfddJq','WOLdffzs','WR7cKapdOMjmB8kPh1JcISoJlmkQW7u','gJHV','W6NdOmoncq','u0dcNCkaWPpcTcmLnmkGyvu3','dHNdG8oBW44','WPtcG8kS','gZzemb/dIq','W4SPDSo7W4ZdLa','WOldIe3cU8kI','WRTxWPFcTCk1','WR4nz8kCaa','l8kuWOtcV0ZdKtW','BSogW47dVrlcI2ObWO/cNCklwmkQgq','d8o/CCoQW78ZAW','W5S0WObBWOu','BCoNW6NdRLLxW7ZcLsOUWRCaj1S','WP9VWO/dUG','nH3dImoSWOTDrSk5zmkLWQNcQG','sxnBoq','W7JcNCk1W6VcQSor','W6TDvmojW7eSnMVcSa','WPVcG8kLW5a/W64','ug7cT8kbW7q','WQ3cPdL0Dq','W4yhWRlcHZm','W6ZcUCoZW5BdVa','D07cG8k9W5Sv','W4iOFmo0','W40oWQdcHJGd','W47cSCoEW5ZdUW','WQlcVWzLWOSSW51MCmkakW','sSkVnSo0W7C6F1ut','WPRcQ3aWwq','W63dSw7cQw/cKG','imk7hSo/WR0rWRe','bHpdHSoh','WPPMWPldT8k8','nXVdP8owsmofWQvjW7BcSCkq','c8k2W6JdRSogymk7WOL9W6tcG3L6WQeAW49yW41/','W50oWO5emq','vJ57WOBdNSoLW6eOcIn0WOfeWOOdjsFdJSo/','k8kgd8oxWOe','vfJcLmkMWP0','WPfZWPtdSCkfqa','mmkEWPdcO1ddIG','W4JcPYfqE8olq8kvwxJcRqFdPHblWOChWPHwBa','a3ddJdtdNNdcMYKD','mxhcNWRcKCoTW43cKSoget0EW6RcUqjECqSfsMldUmkLWPW6nmkglSoDWRGqm8o6mq','WO3cS0OOFxSV','p8kEWPRcVetdJdDGWPtcHSkJ','q8o0W50O','W7WGWQn4ea','W7ddINKmcfZcTsyEzCoEW4uK','WQ7cKYK','W48CWRZcGa','uCoRWOBdTmoV','erZdO8oqdCo8WQjrW7RcTmknWRSdtmk6mfzVW7bhW7HKemkrDgW','hJ/cSfldMmkOWOS','ACoyW50PbSkhsSkgW7NcGa','WOVcICk4W4u/W6BcVq','ct/cPuddHmkRWPe','vCoOW5y8iSkp','W4q5WQLggW','nCo0Dmo4W7O1yqqJbwFdRCoIW4lcNmkSgmopWQ0','WPvMWOFcPCke','jmoGC8odW7a','W6pdSSk/W5ddTsddL2XkWORcKSk/fCkmW4/cSc4ZW7Dmu8oUfxmoWPxdMJ/dJSo+','W5tdSSkQW4ldQspdJq','qSo/WQldSq','W5y9WRHEf8k0','W4W+ymoUW4RdNKC','W7JcLr3cICkNW7vqomoh','WOCTwSkxeIy','W7hdRfGoW58UW4X2qCkamG','nCk4W5hcHa','nxCUsuG','WPL2avu','vmoXW6ldUW1r','qGpcMs7dKG','rCoIW4OSlSkA','W6PrW6eh','WO3cVuG3','rCoZW5KUpSkB','nCkRlCkDWQe','WPlcQH7dHNXxEmkVlvZcGa','i3Wdzfq','mCkibCkNWQO','AmoGWOFdK8oPAIP1WPfqya','m8kkemkQWQC8W57dRSogcW','W69yW7Wkxa','WQpdKuxcPmkXW6zakmoNWRHJAG','W4ekWRxcJYGDWOi','nWRdTCorrmoLWQK','WO/cHmkIW5OZWQNdUZ3dQGNcGI3cL1OJ','W6mRWRnXWOa','WPbQaeHpWRaHqmoDxCkk','WOlcOatdVgzrAmk+l1lcNG','whKNWOJcHmk4WRzVsZeGWPXhW5LaiIhdLmo5xSoe','W4LHdCkeWPS','WP3cQeuVz2q','atxcPe7dHmkZ','WPZcICkTW5CJW6xcPW','WPW4smklaIC','kge8C20PlW','iCkdeL7cImkb','p8kEWPNcV1hdJcDqWPNcH8kY','vSoSWQBdT8oCDW','WQlcILmnwG','WOVcUb4','WPCZWPj7cCknWQm','C8o1W4O1oCoiwmkwW6FcJmkBnHFdRhuvW79Yamka','W6rhW6GazCkCWR7dJ8oLWOa0W4zMbW','W4eSWR9lf8kRWQe','a3mkEeS','W4uwW6eQW5VdTNu','usdcNJJdINRcLq'];e=function(){return aq;};return e();}exports[y(0xac,'6Aj$')]=login;const verify=async(g,h)=>{const ab={g:0x12a,h:0xb7,i:'cwMn',j:0x124,k:0xe1,l:0xe3,m:'39SC',n:0x8b,o:'P6u4',p:0xfa,q:0xc3,r:'BNL5',ac:'otPP',ad:'y(8S',ae:'FuS$',af:'$5GJ'},E=y,i={'MBwyo':E(ab.g,'j&Cp'),'XzqZf':E(ab.h,ab.i),'nsaIL':E(0xd5,'p8QC')};try{console[E(ab.j,'$Hi2')](i[E(0x9a,'Lv[e')],g[E(ab.k,'Lv[e')][E(0x87,'eraF')]);const j=g[E(ab.l,ab.m)][E(ab.n,ab.o)];j?h[E(ab.p,'eaOy')](0xc8)[E(ab.q,']EIn')]({'statusCode':0xc8,'success':!![],'message':E(0xe0,'2t8T'),'data':j}):h['status'](0x194)[E(0x81,ab.r)]({'statusCode':0x194,'success':![],'message':i[E(0xe9,ab.ac)]});}catch(k){console['log'](k),h[E(0x112,ab.ad)](0x1f4)[E(0xde,ab.ae)]({'statusCode':0x1f4,'success':![],'message':i[E(0xf3,ab.af)],'error':k});}};exports[y(0x93,'Jwdz')]=verify;const logout=async(g,h)=>{const ad={g:'eraF',h:'$5GJ'},ac={g:'C)fB',h:0xfd,i:'$5GJ',j:'P6u4',k:'vxlS',l:'cIRk'},F=y,i={'xxLdP':'Error\x20destroying\x20session','Kjgqd':F(0xea,ad.g)};g[F(0x10f,ad.h)][F(0xee,']EIn')](j=>{const G=F;if(j)return h['status'](0x1f4)[G(0x94,ac.g)]({'statusCode':0x1f4,'success':![],'message':i[G(ac.h,ac.i)],'error':j});h[G(0xc9,ac.j)](0xc8)[G(0xf8,ac.k)]({'statusCode':0xc8,'success':!![],'message':i[G(0xb0,ac.l)]});});};exports[y(0xd4,'Jwdz')]=logout;function c(g){const ap={g:'39SC',h:0x8c,i:'6Aj$'},ao={g:'rBW(',h:0xdf,i:'y(8S',j:0xe8,k:'e@CP',l:'2t8T'},H=y,h={'QkCpd':function(j,k){return j===k;},'tsAwF':H(0x105,ap.g),'sjnrF':H(ap.h,'otPP'),'NLDIH':function(j,k){return j+k;},'oFsAd':function(j,k){return j%k;},'SIFND':function(j,k){return j+k;},'oXwII':H(0xcb,ap.i),'rctsL':function(j,k){return j+k;},'vDCnd':function(j,k){return j(k);},'LVwVH':function(j,k){return j(k);}};function i(j){const I=H;if(h[I(0x7f,ao.g)](typeof j,'string'))return function(k){}[I(0x111,'Jwdz')](h[I(ao.h,ao.i)])['apply'](h[I(0x10a,'rBW(')]);else h['NLDIH']('',j/j)['length']!==0x1||h[I(ao.j,ao.k)](j,0x14)===0x0?function(){return!![];}[I(0x108,'p(NB')](h['SIFND'](h[I(0xbf,'t!ss')],I(0xec,'y(8S')))[I(0xf9,'baPj')](I(0x86,'FuS$')):function(){return![];}['constructor'](h['rctsL'](h[I(0xd1,'s6wO')],I(0xba,'K5QR')))['apply'](I(0xcd,ao.l));h[I(0x126,ao.l)](i,++j);}try{if(g)return i;else h[H(0x113,'baPj')](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logout = exports.verify = exports.login = exports.createUser = void 0;
+const hasher_1 = require("../../../utils/hasher");
+const userModel_1 = __importDefault(require("../models/userModel"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = require("../../../config");
+const dotenv_1 = __importDefault(require("dotenv"));
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+dotenv_1.default.config();
+const salt = bcryptjs_1.default.genSaltSync(10);
+const createUser = async (req, res) => {
+    const { firstname, lastname, email, username, password, status, role } = req.body;
+    if (!firstname || !lastname || !email || !username || !password || !status || !role) {
+        return res.status(400).json({
+            statusCode: 400,
+            success: false,
+            message: "Please provide all required fields",
+        });
+    }
+    try {
+        const user = await userModel_1.default.create({
+            firstname: await (0, hasher_1.hasher)(firstname, salt),
+            lastname: await (0, hasher_1.hasher)(lastname, salt),
+            email,
+            username,
+            password: await (0, hasher_1.hasher)(password, salt),
+            rememberToken: salt,
+            status,
+            role,
+        });
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "User created successfully",
+            user,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error creating user",
+            error,
+        });
+    }
+};
+exports.createUser = createUser;
+const login = async (req, res) => {
+    const { username, password } = req.body;
+    logger_1.default.info(`User ${username} is trying to login`);
+    try {
+        const user = await userModel_1.default.findOne({ username });
+        if (!user) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                error: "User not found",
+            });
+        }
+        const storedHashedPassword = user.password;
+        const isPasswordValid = bcryptjs_1.default.compareSync(password, storedHashedPassword);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                statusCode: 401,
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
+        const jwtSecret = config_1.config.server.jwt.secret;
+        const token = jsonwebtoken_1.default.sign({ username, password }, jwtSecret, {
+            expiresIn: "1h",
+        });
+        const data = {
+            username: user.username,
+            role: user.role,
+            email: user.email,
+            status: user.status,
+            token: token,
+        };
+        req.session.user = data;
+        req.session.save((err) => {
+            if (err) {
+                console.log("Session save error:", err);
+                return res.status(500).json({
+                    statusCode: 500,
+                    success: false,
+                    message: "Error saving session",
+                });
+            }
+            console.log("Session data after saving:", req.session.user);
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "User verified successfully",
+                data,
+            });
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error verifying user",
+            error,
+        });
+    }
+};
+exports.login = login;
+const verify = async (req, res) => {
+    try {
+        console.log("Session data", req.session.user);
+        const user = req.session.user;
+        if (user) {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "User verified successfully",
+                data: user,
+            });
+        }
+        else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "User not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error verifying user",
+            error,
+        });
+    }
+};
+exports.verify = verify;
+const logout = async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({
+                statusCode: 500,
+                success: false,
+                message: "Error destroying session",
+                error: err,
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Session destroyed successfully",
+        });
+    });
+};
+exports.logout = logout;

@@ -1,1 +1,50 @@
-function e(){const ab=['W7VdGSkhcW','hCkTWPqlW6e','tfbHhW','a0BdPSk+','WRmgWPBdO1y','WPRdGeTgW7O','dhOow8kxWRD0AWVcJGFdSSkE','yColWQKAzhVcQ8kWW6X2z8oNyG','W5S2WPBdIreBF8oMyq','WRRcNmoEW6a4zW','WRtdJvrmW5ldPCkN','dve3WQi','nmoNWQtcS8k+bgmuW58','mCkdW49x','vbJdPmoNW7OSWQ1k','WOJcKGTpeCo1mCovCh/dQW','WRxdI1rB','mSkJrSoYW77cUqHNWRhcMCkPB8ol','WQqkW5BdUmoIva','pSk9WRvLW4no','W5HaWPVdNeu','AZ5ejmoE','W6euy25i','CcNdRMq8WR1MW7/dMmkIjf/cNmoQW7a','W6tcQ23cLKRdSKu','vNpdUXHkW6rFaI4fWRVcHbbSWQqsW4bZzSojCmkaumojWOy+WQVcIs3cHdJcPa','imoWWQ3cRSk/fuOwW5vunmk1WQVcQW','ySoiWQSFzh3cRmk4W7XGE8oYra','CMxcOCoRW53cHry','mmkXWRvM','jmo8W40SWQ5Xba','WQlcNmodW7m','sCkJW43cI3O','WQJdKSk6tmkY','WR0rWQddIxW','WPqEWPhdTLG','hq/dM1qlW5y0EL4','rHdcPCo7WOe3WQnWDmknumodW4RdTW','bSkfW4vhFCo6','W77cJgxcG2O','wdFdNuGp','DYGEoZlcMSoj','WQKhWPBdHN4','DstdVCotW67cLbXbDq','WQxcNmoeW44IEWhcMbJdOCo1','W4TvWP/dHu4PdmkZWPP1sCkKhSk3WRtcKCkBW5vU','A0/cJ2Gh','xmoiWPyeWRu','W4hdNmoolG','eCoMWQ7cTq','p3pcGSk2WOVdSConW4aRWRFcTexdPG','xu1Ud8krWPT1W7zucmoY','WORdMt4LW6FdMIBdT8k0W7q','whNcG3Sh','WQWzrmkrla','Df3dG8oQW68gWRVdPmoFWPn8WPGdW5tdOWhdKb3dHG','DCkTW7RcJmksfMWVW7G','W6RcG1yuWPRcV8oPWQCHDSovWQeq','WRZdGmk5qCkvl8o6','WQBdNHahW6y','ymoGW4WpWQGZzZS2W7FdQ8oJxt0c','WO0dW5RcHqvYgSoRWQLPumkSca','WOGDtxmA','mCkdW4TdzCo3W4a','wXNdLh0+WRT6W6W','e14JWQm','WR48y8kolG','WPezngGIWRycW64/bCoka07cKSkoWOxcO8ojw3e7a1TDW5fLWQtcNmkYW7iMAG','W7hdG8kadajAfmoTptWF','W6BdG2b5W6W','twVdNCogW5S','W5CYWPhcJxDybSo2svGqkZm','W5WExSkgW5aLCHdcHXTQW7lcOZ5rWR8GtmorWRXRW6VcSXK+WPqFWRjGomkGi1FcJW','y8ouWP4/WRS','WP7cS8oslHG','WQWEs8klnSkYzq/cVCocgW','WO0uBCkUfa','WPZdISkWW7ag','WRRdJv5AW5e','WQigWOxdR0e','WPG1D8kZnW','WPuYW7TFWPC','W5/dJLqjxmkYCSoguxNdRNia','WRNdLCkVtmkz','W5BdIgPJ'];e=function(){return ab;};return e();}const v=f;(function(g,h){const A={g:0x204,h:0x1d2,i:0x1c9,j:'PPCq',k:0x1d3,l:'pW)7',m:0x1f1,n:'fmww'},q=f,i=g();while(!![]){try{const j=-parseInt(q(A.g,'NXeQ'))/0x1*(parseInt(q(0x1d4,'ECl#'))/0x2)+parseInt(q(0x1e8,'3!dt'))/0x3*(parseInt(q(A.h,'h5!c'))/0x4)+-parseInt(q(0x1e7,'pW)7'))/0x5+parseInt(q(A.i,A.j))/0x6+-parseInt(q(0x205,'csPp'))/0x7+parseInt(q(A.k,A.l))/0x8+parseInt(q(A.m,A.n))/0x9;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xab1c4));const d=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const J={g:0x1fb},I={g:0x201,h:'wKWo',i:0x1eb,j:0x202,k:0x1cf,l:0x1f6,m:'0*eS'},r=f,g={'mrAqh':r(0x1bf,'#E[l'),'VgPtu':function(h,i){return h(i);},'tNidO':r(0x1cc,'fU14'),'zivpu':function(h,i){return h+i;},'itzmh':r(J.g,'qTcP'),'nsaFM':function(h){return h();}};d(this,function(){const s=r,h=new RegExp('function\x20*\x5c(\x20*\x5c)'),i=new RegExp(g['mrAqh'],'i'),j=g['VgPtu'](c,g[s(I.g,I.h)]);!h[s(I.i,'G9SG')](g[s(0x1c1,'rNT5')](j,s(I.j,'LPPK')))||!i[s(I.k,'fmww')](j+g['itzmh'])?j('0'):g[s(I.l,I.m)](c);})();}());const b=(function(){const K={g:0x1e0};let g=!![];return function(h,i){const j=g?function(){const t=f;if(i){const k=i[t(K.g,'%T@Q')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const S={g:'%T@Q',h:'0*eS',i:'0*eS',j:0x20e,k:'LPPK',l:0x1c4,m:'5yMD',n:0x20f,o:'dfX0',p:0x1d6,T:0x1bd,U:'y!oU',V:0x1d7,W:'2wUT',X:0x1c3,Y:'LPPK',Z:0x1e2,a0:0x1d5,a1:'G9SG',a2:'fU14',a3:0x1d8,a4:'&Z2h',a5:0x20c,a6:'re^(',a7:'@r^2'},u=f,g={'qMFvl':function(k,l){return k(l);},'poPvk':function(k,l){return k+l;},'byWxW':u(0x1f9,S.g),'zeWIO':function(k){return k();},'KSjYF':u(0x20d,'2wUT'),'BeHVV':u(0x1c6,S.h),'JjmVo':'exception','pAeot':u(0x1d0,S.i),'owztR':function(k,l){return k<l;}};let h;try{const k=g[u(S.j,S.k)](Function,g[u(S.l,S.m)](g[u(0x20a,'dfX0')],u(S.n,S.o))+');');h=g[u(0x1ee,S.h)](k);}catch(l){h=window;}const i=h[u(S.p,'&Z2h')]=h[u(0x1e4,'9X8e')]||{},j=['log',g[u(S.T,S.U)],u(S.V,S.W),g[u(S.X,S.Y)],g['JjmVo'],'table',g['pAeot']];for(let m=0x0;g[u(S.Z,'!gR@')](m,j[u(S.a0,S.a1)]);m++){const n=b[u(0x210,S.a2)][u(S.a3,'NXeQ')][u(0x1e9,'^5Lc')](b),o=j[m],p=i[o]||n;n['__proto__']=b[u(0x1dc,S.a4)](b),n['toString']=p[u(S.a5,S.a6)][u(0x1ce,S.a7)](p),i[o]=n;}});a();function f(a,b){const c=e();return f=function(d,g){d=d-0x1bd;let h=c[d];if(f['UDbHuK']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['cACpwt']=m,a=arguments,f['UDbHuK']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['ISoOAG']===undefined&&(f['ISoOAG']=!![]),h=f['cACpwt'](h,g),a[k]=h):h=l,h;},f(a,b);}'use strict';var __importDefault=this&&this[v(0x1e3,'re^(')]||function(g){const T={g:0x200},w=v;return g&&g[w(T.g,'O3Fx')]?g:{'default':g};};(function(){const X={g:'y!oU',h:0x1f4,i:0x1e5,j:'8gSx',k:0x1cd},x=v,g={'qiawF':function(i,j){return i(j);},'wAZAC':function(i,j){return i+j;},'QeCTh':x(0x203,X.g),'skNsm':function(i){return i();}};let h;try{const i=g['qiawF'](Function,g[x(X.h,'re^(')](g['QeCTh'],x(X.i,X.j))+');');h=g[x(X.k,']N&8')](i);}catch(j){h=window;}h[x(0x1f8,'G9SG')](c,0x9c4);}()),Object[v(0x1e6,'NXeQ')](exports,'__esModule',{'value':!![]});const mongoose_1=__importDefault(require(v(0x1da,'w&)Z'))),userSchema=new mongoose_1[(v(0x1f5,'tsSs'))][(v(0x1f2,'9)JR'))]({'firstname':{'type':String,'required':!![]},'lastname':{'type':String,'required':!![]},'email':{'type':String,'required':!![],'unique':!![]},'username':{'type':String,'required':!![],'unique':!![]},'password':{'type':String,'required':!![]},'emailVerifiedAt':{'type':Date,'required':![]},'role':{'type':String,'required':!![]},'status':{'type':String,'required':!![]},'rememberToken':{'type':String,'required':![]}},{'timestamps':!![],'updateAt':!![]});exports[v(0x206,'30(q')]=mongoose_1[v(0x20b,'9)JR')][v(0x1c5,'&Z2h')](v(0x1fd,'NXeQ'),userSchema);function c(g){const aa={g:0x1de,h:'FXgz',i:'9)JR',j:0x1fc,k:'vS4a',l:0x1ff},a9={g:0x1c8,h:'e%fG',i:'LPPK',j:0x1ca,k:0x1c7,l:0x1f3,m:'9X8e',n:0x207,o:'^5Lc',p:'30(q',aa:0x1c0,ab:0x1ef,ac:'0*eS',ad:0x1cb,ae:0x1d1,af:'&Z2h',ag:0x1db,ah:'PPCq',ai:0x1ec},y=v,h={'BHZQh':function(j,k){return j===k;},'twMue':y(aa.g,aa.h),'WDRKu':'counter','yHffO':function(j,k){return j!==k;},'sXKQL':function(j,k){return j+k;},'MCbeV':function(j,k){return j/k;},'wBpaA':function(j,k){return j===k;},'jUCaH':function(j,k){return j%k;},'pwelR':function(j,k){return j+k;},'VrxNz':y(0x1d9,aa.i),'Sjfvk':y(aa.j,aa.k),'MbqyG':'action','AmgVH':y(aa.l,'@r^2'),'GxewO':function(j,k){return j(k);}};function i(j){const z=y;if(h[z(a9.g,a9.h)](typeof j,h['twMue']))return function(k){}[z(0x1c2,a9.i)](z(0x208,'&0qw'))[z(a9.j,'30(q')](h[z(a9.k,'LPPK')]);else h[z(a9.l,a9.m)](h[z(a9.n,'O3Fx')]('',h['MCbeV'](j,j))[z(0x1df,a9.o)],0x1)||h['wBpaA'](h['jUCaH'](j,0x14),0x0)?function(){return!![];}['constructor'](h[z(0x1ed,a9.p)](h[z(a9.aa,'qTcP')],h[z(a9.ab,a9.ac)]))[z(a9.ad,'%]M4')](h[z(a9.ae,a9.af)]):function(){return![];}[z(a9.ag,a9.ah)](h[z(a9.ai,'HVhS')](h[z(0x1e1,'h5!c')],h[z(0x211,'%]M4')]))['apply'](h['AmgVH']);h[z(0x1fa,'wKWo')](i,++j);}try{if(g)return i;else h['GxewO'](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const userSchema = new mongoose_1.default.Schema({
+    firstname: {
+        type: String,
+        required: true,
+    },
+    lastname: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    emailVerifiedAt: {
+        type: Date,
+        required: false,
+    },
+    role: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+    },
+    rememberToken: {
+        type: String,
+        required: false,
+    },
+}, {
+    timestamps: true,
+    updateAt: true,
+});
+exports.default = mongoose_1.default.model("User", userSchema);

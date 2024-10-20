@@ -1,1 +1,245 @@
-const y=f;(function(g,h){const K={g:0x204,h:0x1ad,i:0x187,j:'XOiX',k:0x14a,l:0x157,m:'pp3a',n:'N&UZ',o:'^kk8',p:0x154},r=f,i=g();while(!![]){try{const j=parseInt(r(K.g,'FScC'))/0x1*(parseInt(r(K.h,'2%Sq'))/0x2)+-parseInt(r(K.i,K.j))/0x3+-parseInt(r(K.k,'(hy^'))/0x4+-parseInt(r(K.l,K.m))/0x5+-parseInt(r(0x19a,K.n))/0x6*(-parseInt(r(0x1a1,K.o))/0x7)+parseInt(r(K.p,'AqP5'))/0x8+-parseInt(r(0x16d,'btL0'))/0x9;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0x959a8));const d=(function(){let g=!![];return function(h,i){const L={g:0x138},j=g?function(){const s=f;if(i){const k=i[s(L.g,'J42$')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const U={g:0x1f1},T={g:'R0R@',h:0x1ea,i:0x1a5,j:'AqP5',k:0x18f,l:'B@J#',m:0x1c5,n:'3GM8',o:0x185,p:0x15f,q:0x1c2,U:'3*]3'},t=f,g={'IYjkb':t(0x19f,'32F2'),'YSOLl':function(h,i){return h(i);},'cHaKY':t(U.g,'gD^!'),'KULmT':function(h,i){return h+i;},'lpsjZ':'chain','PnAEm':t(0x1cd,'Lh#2'),'ivLIV':function(h,i){return h(i);},'UkXXs':function(h){return h();}};d(this,function(){const u=t,h=new RegExp(u(0x134,'XOiX')),i=new RegExp(g[u(0x1c8,T.g)],'i'),j=g[u(T.h,'$EYg')](c,g[u(T.i,T.j)]);!h[u(T.k,T.l)](g[u(0x191,'A78F')](j,g['lpsjZ']))||!i[u(T.m,T.n)](g[u(T.o,'AqP5')](j,g[u(T.p,'SU2J')]))?g['ivLIV'](j,'0'):g[u(T.q,T.U)](c);})();}());const b=(function(){let g=!![];return function(h,i){const V={g:0x1df,h:'32F2'},j=g?function(){const v=f;if(i){const k=i[v(V.g,V.h)](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const a5={g:0x1a6,h:'D[UE',i:0x149,j:'3GM8',k:'8^c4',l:0x12e,m:'32F2',n:'N&UZ',o:0x203,p:0x13f,q:0x1d6,a6:'mqlo',a7:'#i*8',a8:0x137,a9:0x178,aa:'P3Mi',ab:0x1d9,ac:'UV@E',ad:0x1cf,ae:'A78F',af:0x190,ag:0x16e,ah:'gD^!',ai:0x1b0,aj:'SU2J',ak:0x1ca},a4={g:'FScC',h:0x1eb,i:0x1c0},w=f,g={'IXVlI':function(l,m){return l(m);},'wNybQ':function(l,m){return l+m;},'SMfOy':function(l,m){return l+m;},'mrlux':w(0x156,'UV@E'),'JUTZQ':w(a5.g,a5.h),'VkyYR':function(l){return l();},'YTacl':w(a5.i,a5.j),'WRZVq':w(0x192,'$EYg'),'dUwYS':'exception','MizOp':w(0x1e9,a5.k),'QoLrz':function(l,m){return l<m;}},h=function(){const x=w;let l;try{l=g[x(0x1a7,a4.g)](Function,g['wNybQ'](g[x(a4.h,'fj2L')](g[x(a4.i,'N&UZ')],g[x(0x17a,'8^c4')]),');'))();}catch(m){l=window;}return l;},i=g[w(a5.l,a5.m)](h),j=i[w(0x16f,'fj2L')]=i[w(0x12b,a5.n)]||{},k=[w(a5.o,'UV@E'),g['YTacl'],g[w(a5.p,'$EYg')],w(a5.q,a5.a6),g[w(0x20d,'UV@E')],g[w(0x168,a5.a7)],'trace'];for(let l=0x0;g[w(a5.a8,'gD^!')](l,k[w(a5.a9,a5.aa)]);l++){const m=b[w(a5.ab,a5.ac)][w(a5.ad,a5.ae)][w(a5.af,'5W[M')](b),n=k[l],o=j[n]||m;m[w(a5.ag,a5.ah)]=b['bind'](b),m[w(a5.ai,a5.aj)]=o[w(0x1f6,'UV@E')][w(a5.ak,'CcL!')](o),j[n]=m;}});a();'use strict';var __importDefault=this&&this[y(0x1a8,'A78F')]||function(g){const a6={g:0x141,h:'ul63'},z=y;return g&&g[z(a6.g,a6.h)]?g:{'default':g};};Object['defineProperty'](exports,y(0x129,'LbWm'),{'value':!![]}),exports[y(0x170,'CcL!')]=exports[y(0x1f2,'ul63')]=exports[y(0x188,'c5k1')]=exports[y(0x152,'P3Mi')]=exports[y(0x14f,'(hy^')]=exports[y(0x14c,'J42$')]=exports[y(0x197,'32F2')]=void 0x0;const logger_1=__importDefault(require(y(0x1de,'32F2'))),tagModel_1=__importDefault(require(y(0x17b,'Bwdz'))),applicantModel_1=__importDefault(require(y(0x1e0,'Zl6N'))),createTag=async(g,h)=>{const a8={g:0x181,h:0x128,i:'XOiX',j:'P3Mi',k:0x17f,l:0x132,m:'SU2J',n:0x17c,o:'(hy^',p:0x139,q:0x153,a9:0x1e3,aa:0x1fb},A=y,i={'zrOrB':function(m,n){return m||n;},'BzkHg':A(a8.g,'YnJs'),'iCLwE':A(a8.h,a8.i)},{name:j,category:k,description:l}=g[A(0x201,a8.j)];try{const m=await tagModel_1[A(a8.k,'XOiX')][A(a8.l,a8.m)]({'name':j,'category':i['zrOrB'](k,i[A(a8.n,'c6YJ')]),'description':i[A(0x20e,a8.o)](l,A(a8.p,'4VIH'))});h[A(a8.q,'Yv8y')](0xc9)[A(0x1a0,'SlLV')]({'statusCode':0xc9,'success':!![],'message':i[A(0x1e7,'5W[M')],'data':m});}catch(n){console[A(0x1dd,'B@J#')](n),h[A(0x206,'fj2L')](0x1f4)[A(a8.a9,'Qz$8')]({'statusCode':0x1f4,'success':![],'message':A(a8.aa,'R0R@'),'error':n});}};exports['createTag']=createTag;function e(){const aG=['h8ojk8k6hSoQja','a2nRWRBcOHVdUmkxeq','WPq4WOVdLh9GW6BdTCoPxGlcLXi9g3RcRSoLW4NcLG','WRtcNY4dWPK','r8kPW6fpqq','uSoMlCkLdahcTmkszX8KmtVdSG','W4eFWPhdJSkV','gSk9WQaeWPm','CXxcPmo3WP8YvmorvXRcG8oGmG','WPLpDfpdPCo8','W4e8WOtcISoS','D3imW6FdOa','eCkBWRBdH8kkW5VcPIbHWR96eqTzWPDOWO3cLG','mHOIWQHj','rmoDf8kYmq','ut7dOd5X','WQbSW4tdGSkvbL8','BmoDxG','WOfLnSoZvCo3Fa','W70BWPhdIq','WQJcIhCwWOe','vfD7WOJdPCkAW5bGWQRdQmkwt8kTkGhcPmkBta','W7dcPeGIyq','WRr9WP/cVCkDW6q','W7u5WPtcKSowwrPdW6Hfpfzd','WO0sWRDOecjmW5GvaKVcUCkGdmo/WQq','WQ3cNweBWO3dImkK','WQBcOgmrWRK','twaRW7xdNa','w8oqW7/dI8kqW5pcTW','fCk7WQmEWPnxW5tdQSonEhy','nSo4eXeR','nrJcUSoB','aSoZkra','z8kMW4Heuq','WQ5NWOVcUW','x8oDv8kPWOS','W68RWP/cPa','W4ZcU1q2zq','W5/dMmo+c8oIWR4','sCodoSodW7NdLqnfba','WQRcL2KjWOZdLSkLW7SkEbm','WQ16WOlcUG','x8kBW7RdQqBdGmk3b8kJCG','w8oeoSoqW7q','WQHmW7hcJq0','W7j3CxJcOq','WRhcHIe','DSkAa8kjWQ3cMN8BwxKfWRNcJmk/WO3dNmo7WOBcNHddL17dOCoMo8oGW6iMCspdICoXWQeW','W74gWPJdIa','W4aPWR/dSsVdItmyWQe1','hN4Gsa','WQHMW4u','WQTQW68j','W5JcUwueBa','hvbVWQhdGCoCWPRcIc1FW4vCW6byWO8rW79Sl8kQW5n/kmo4WPxdQmodEcVdNxHR','wh1FWOVdNG','C8kSW61eDCk2WPPhvGRcMcj1W6Lq','WQLWW7GpW5m','jaeUW4bBv8oQs8occCoIyMFcMSkpW5tdJXPlWQuxWQ1RWPy','WO1viSoNuq','xXL4W7VdI8oZWQZcScX/','W5OEW59PwSotoq','WRKJWOJdVuS','W5VdRmks','ACo/WPJcLCo0WOCGra','wui0W5JdHtZdKmoLwW','WPj9b15cwe/dGbVdL8kRW4VcP8kNWQmmWQONWONdT8kIqwVdTwbtW7a','WOWEWQ1ymZXhW4u','wui+W5ZdHdxdSa','WOPPW6FcVdVdUW','WPjhW6pcRGO','vCoFF8kKWOG','qmkCW6m','WRJcSM3cKSkU','qSo5WQ8','gCofWQtcStlcJSokpmkNxGZcRhOOdW','W5zSF8otWOhdVCk0WQm5W7LgWRTYdedcIYyC','fauVWOfBs8o6','e8oAz8oyWORcI0JcQ38/','W5fOECosW4ldP8k4WRKSWRbfWQjLsbtcMtqmArhdNIVcPb1EW78x','a8oFWQhcQc8','qCortSk1WO3cPSkoWPiVW7ZcMcqtf8kmt0ZcLSkj','iCous8obWPu','W5lcGLC2rSk/W67cLq','wf3cLtSc','rCoSk8k/','vedcPaO','uSolo8oGW7u','ArldRYDQ','WQhcJKVcTmkF','bw9PWRC','W5T5rfK','lXZcPmok','WRGKWONdJNK','W7G3WO/cJmoE','xmkbW6TDASkTWPfdDW','WObmgd4t','b8olCSoTWPpcLa','WRS5WPBdLq','WPSBW79mASoN','oSkyb2hdOa','WR/dQCotWRWCWP8aW5NdVCoadKiO','WRxcIvZcQCku','WRJcJwiiWOe','W4tdRmkhWRC','W6zMCmosWPBdP8kOWQ4QWRzs','BmolhCoKW6G','WPfeiaKZ','h8ojk8k6bCo0nmoAAM/dJW','lrlcRG','bmkFCmkmWQpcN3Kkte8nW7dcKSksW4xdSCofW5dcPJJdIb/cT8oGCCo/W5e','s8obl8ooW7q','W6GYt0antK/dMbRcKCkVW43cSSkVW6OCWR4QWP7dN8k+vMJdRa','x8oBxq','W7ZdGSkSD1K','W4DvWRe+','W73cRCkeW7LFW58','WRZcIgmBWOZdGCkeW7Kz','nY/cPmoPW4O','cCozcWnG','W45hWRi8','suy6W5hdLa','WP5AWQlcMmkF','l8oRi8kgca','WPKdWQjibdy','W6uaWPldLmkZ','hmoOmbmM','WPTJjIa3Eq','W6GRWPdcQCodqCkJ','wSoAu8k0','W4ldS8krWQldNYD/W7Km','W7RdT8kNugpcUCkF','WOWkW7jDA8oXabzo','rurUW4FdS8oFW4L1WRRdRmkgbSkWoelcS8kFwgFcIahcSYL3','W7fMtCovWPddVmkZWQO','W5fOECosW4ldU8kYWRL+WR9pWQfUsa','W5BdLSoLjSoG','qSo9oCk/dty','aSocWQO','ztNdTYn6WRNdRHuXrwLej0VcLGhcLrq','WP14W6dcQtVdPai','WO4gW7bCxCoTbHW','mx89svfmW4j4W6ddV8kPWQNcKSkMxSkuv0LdjfC','WRDIW4VdKW','WRG5WQRdGN40W7hdVq','WPDfFK0','W7JdItbpW4dcNmoNW6iNzGVcGZi','W6LMEq','ibq+W5lcR8kcWPjQWPFdUmkiv8kO','smoEo8oB','d8osjmk9bmo1','qmorw8kYWPZcOmo6W5SUW7O','WQfnWOdcJSky','WQbPnSoY','tqFcRmk5','pJepWRjb','E1zMWOK','W6fCACo4WRe','bSkqcLxdHW','WOaeWQXs','WPPJW4K/W4i','eSkXWQSmWPjjW5u','vCoDvmkKWR3cSCoNW54','WOXKW7OoWOPOyCo2dMyuW4VdKSoGnSo8eIu4kmk9WPeRW743u3a','wSoqlCodW6ddGW','WPbOW4xcG8kdge5AW65VfXvNWRKBCJ5eaee1s1dcHa','W5mrWPpcU8o7qSkZiwtcKa','WRDSW5BdQSkohK5jW6XRhW','dCocWQpcRJJdGSkh','WRhcGcSVWP8','BSoKWQRcLCoZWP0','FmoAjSo7W58','qmo8pCk5aq','WQi+WPJdJ3GZ','rSkaW6Th','FSoIWQ7cGmoYWOS','WOu6CSo7','WQj8W4ZdGmkua0rvWROGlX00W6yKoa','vZVdSYP7','tKWXW40','ySoBDSkYWOu','fx0/sLO','omk7W60jWOjwW4ldU8oqz3bKdtLuWOLFW4HMW7VcTfxcRW','WR8iW49TvG','u37cMCkQW4a','W7iCWPNdGG','WQTMW4BdTCkm','v0dcSISenIK6W4tcN8o7i8o/WPRcOmkS','WPbBWRFcGSkc','gmo3WP3cNcC','W6JdNmkqWRddPI1pW60hW4S','s1JdQbWkpXG3W7xcI8oSmSo3WOFdUSo3WPJdJw0Zeq4HaSo2gaZcTejUWQ0L','W696CCop','zCo5oCkzaG','jXm6W7jwkmkxb3PiW4PEfSkvW5rhbrBdG1nGWPlcMLHwW510','WPq4WOVdLh9GW6BdTCoPxGlcLXi9g3RcRSoLW4NcLSkF','dXDPWOxcH23cSCots8oMD8o8WOq','dGe7W7i','rSoOkSkL','tSoBCXBcT8kuW6JcVGxdImk6uSku','b2W5qW','e2G7z08aW6r8W7pdVG','tCouCHpdLmoiWO3cKGFdOq','yLf7WO7dUCoD','d8khjfxdPSooWOZcVbBdIW','W57dSmkLWRhdHdzoW7SFW4VcOq','aw9PWRC','WPjpBMddSmoZDW3cIeu','WRRcJgyoWO3dLW','WOZdHJj2aSo5WRpcV1/cG8knoSke','W4RcHge9ta','W7DSASouWPddU8o9W6u4WQXoWRD0rvVcHgLgkG','WQZcOSoWcsddOCoEWPmzW71pWO1H','sSoYASkdWRm','vfD7WOJdPCkAW4f1WQldRmkwt8kTkGhcPmkBta','WPilB8oBpq','WQDJlmo/smo4','DmoJWPVcK8oPWPORqcmGlq','W5FcMgKMqq','emoAymo6WPtcJMZcVNeJEW','tCo+WORcPmoR','WRr9WOZcOmkgW7a','WRz0dSoWqq','gSoYmHq','bIFcNmogW6K','qxD4WOpdGG','WPP8W7lcRsNdPWqT','bmoEDmo8','W6quWPddGW','F2FcK8kjW4K','W6ldGCkwWOhdRW','WQ/cKwKE','WR8wW7XmBG','r8kiimkSW5FdKc3cGxa2yCojuq','W6SYWQ5iWPSTnCojfhufW5JdSa','BmoRsSkYWPdcVmobW6uw'];e=function(){return aG;};return e();}function f(a,b){const c=e();return f=function(d,g){d=d-0x125;let h=c[d];if(f['uXHjMD']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['SxTBeq']=m,a=arguments,f['uXHjMD']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['lMZyQs']===undefined&&(f['lMZyQs']=!![]),h=f['SxTBeq'](h,g),a[k]=h):h=l,h;},f(a,b);}const getAllTags=async(g,h)=>{const ae={g:0x126,h:0x1c7,i:0x167,j:'SlLV',k:0x195,l:'AqP5',m:'d3e$',n:'mqlo',o:'4VIH',p:0x158,q:'gD^!',af:'32F2',ag:'gD^!',ah:0x13a,ai:'2%Sq',aj:0x211,ak:0x1bd,al:'btL0',am:0x136,an:'8^c4',ao:'AqP5',ap:0x1e4,aq:'umez',ar:0x140,as:'N&UZ',at:'N&UZ',au:0x1a2,av:'J42$',aw:0x135},B=y,i={'xzdBx':function(j,k){return j===k;},'wJPyP':'string','yFPCL':function(j,k){return j(k);},'WgQUI':function(j,k){return j*k;},'ivhEr':function(j,k){return j-k;},'vZPAp':B(ae.g,'btL0'),'wqtsx':function(j,k){return j/k;},'wpvfs':B(0x146,'Lh#2')};try{const j=i[B(ae.h,'32F2')](typeof g['query'][B(ae.i,ae.j)],i[B(ae.k,ae.l)])?parseInt(g[B(0x1d7,'Yv8y')][B(0x1cb,ae.m)]):0x1,k=i['xzdBx'](typeof g[B(0x1c9,ae.n)][B(0x176,ae.o)],i[B(0x1d0,'dScL')])?i[B(ae.p,ae.q)](parseInt,g[B(0x19b,ae.af)][B(0x193,ae.ag)]):0xa,l=i[B(ae.ah,ae.ai)](i[B(0x172,'zMO&')](j,0x1),k),m=await tagModel_1[B(ae.aj,ae.o)][B(0x209,'YnJs')]()['countDocuments'](),n=await tagModel_1[B(ae.ak,'c6YJ')][B(0x13c,'SlLV')]()[B(0x1a4,ae.al)]({'createdAt':-0x1})[B(ae.am,ae.an)](l)[B(0x15d,ae.ao)](k);h[B(ae.ap,ae.aq)](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':i[B(ae.ar,ae.as)],'data':n,'total':m,'totalPages':Math[B(0x133,'yvy#')](i['wqtsx'](m,k)),'currentPage':j});}catch(o){console[B(0x1fa,ae.at)](o),h['status'](0x1f4)[B(ae.au,ae.av)]({'statusCode':0x1f4,'success':![],'message':i[B(ae.aw,'R0R@')],'error':o});}};exports[y(0x1be,'3*]3')]=getAllTags;const searchTags=async(g,h)=>{const ak={g:0x1bc,h:'UV@E',i:0x186,j:0x182,k:'SlLV',l:'Bwdz',m:'mqlo',n:'R0R@',o:'3GM8',p:0x166,q:'3*]3',al:0x1d4,am:0x167,an:0x12c,ao:'zMO&',ap:'32F2',aq:'btL0',ar:0x1ee,as:'2F97',at:'LbWm',au:'pp3a',av:'^kk8',aw:0x174,ax:'LbWm',ay:'Yv8y',az:0x1d8,aA:0x1ff,aB:0x12d,aC:'2F97',aD:0x194,aE:'ul63',aF:'9w*q'},C=y,i={'CghHI':C(ak.g,ak.h),'SCnrF':function(j,k){return j===k;},'FzBFe':C(ak.i,'$EYg'),'OXFTL':function(j,k){return j(k);},'hiqFF':function(j,k){return j(k);},'tyyDh':function(j,k){return j*k;},'bPmFO':function(j,k){return j-k;},'bSArW':C(0x1b2,'Zl6N'),'FyNky':'Error\x20retrieving\x20tags'};try{logger_1['default'][C(ak.j,ak.k)](i['CghHI']),logger_1[C(0x18c,ak.l)]['info'](g['query']);const j=g[C(0x1c9,ak.m)][C(0x17e,ak.n)],k=i['SCnrF'](typeof g[C(0x12f,ak.o)][C(ak.p,ak.q)],i[C(ak.al,'(hy^')])?i['OXFTL'](parseInt,g[C(0x1ed,ak.k)][C(ak.am,'SlLV')]):0x1,l=typeof g[C(0x155,'AqP5')][C(ak.an,ak.ao)]===i[C(0x1da,ak.ap)]?i[C(0x1ae,'Lh#2')](parseInt,g[C(0x1a9,ak.aq)][C(ak.ar,ak.as)]):0xa,m=i[C(0x1ce,ak.at)](i[C(0x1e2,ak.au)](k,0x1),l),n=await tagModel_1[C(0x1fc,ak.av)]['find']({'$or':[{'name':{'$regex':j,'$options':'i'}},{'category':{'$regex':j,'$options':'i'}},{'description':{'$regex':j,'$options':'i'}}]})[C(ak.aw,'3GM8')](),o=await tagModel_1[C(0x1f0,ak.ax)][C(0x16a,ak.ay)]({'$or':[{'name':{'$regex':j,'$options':'i'}},{'category':{'$regex':j,'$options':'i'}},{'description':{'$regex':j,'$options':'i'}}]})[C(ak.az,'ul63')]({'createdAt':-0x1})[C(ak.aA,'XOiX')](m)['limit'](l);h[C(ak.aB,'SU2J')](0xc8)[C(0x162,ak.aC)]({'statusCode':0xc8,'success':!![],'message':i['bSArW'],'data':o,'total':n,'totalPages':Math[C(ak.aD,'LbWm')](n/l),'currentPage':k});}catch(p){console[C(0x1af,ak.aE)](p),h[C(0x196,ak.aF)](0x1f4)[C(0x20c,'FScC')]({'statusCode':0x1f4,'success':![],'message':i[C(0x18e,'2F97')],'error':p});}};exports[y(0x207,'gD^!')]=searchTags;const getTagById=async(g,h)=>{const al={g:0x171,h:'pp3a',i:'Z)%8',j:0x210,k:0x143,l:'UV@E',m:'XOiX'},D=y,i={'BfTBh':'Tag\x20retrieved\x20successfully','hxSDg':'Tag\x20not\x20found','wFjhD':D(al.g,'Lh#2')},{id:j}=g['params'];try{const k=await tagModel_1[D(0x1f3,al.h)][D(0x1b3,'c5k1')](j);k?h[D(0x1b5,'^kk8')](0xc8)[D(0x148,al.i)]({'statusCode':0xc8,'success':!![],'message':i[D(al.j,'btL0')],'data':k}):h[D(0x130,'Lh#2')](0x194)[D(al.k,al.l)]({'statusCode':0x194,'success':![],'message':i[D(0x1c4,'W3KZ')]});}catch(l){console[D(0x1a3,al.m)](l),h[D(0x1f9,'3GM8')](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i['wFjhD'],'error':l});}};exports['getTagById']=getTagById;const getTagByCategory=async(g,h)=>{const am={g:0x1bf,h:'UV@E',i:0x1f7,j:0x1fe,k:0x127,l:'8^c4',m:'CcL!',n:0x1ef,o:'dScL',p:'$EYg',q:0x153,an:'mqlo',ao:0x1ec,ap:'3GM8'},E=y,i={'VtlsA':E(am.g,am.h),'hICTH':E(am.i,'UV@E'),'TpaRz':E(am.j,'J42$')},{category:j}=g[E(am.k,'32F2')];try{const k=await tagModel_1[E(0x1b4,am.l)][E(0x151,am.m)]({'category':j});k[E(am.n,am.o)]>0x0?h['status'](0xc8)[E(0x199,am.p)]({'statusCode':0xc8,'success':!![],'message':i['VtlsA'],'data':k}):h[E(am.q,'Yv8y')](0x194)['json']({'statusCode':0x194,'success':![],'message':i[E(0x1b9,am.an)]});}catch(l){console[E(0x19e,'zMO&')](l),h[E(am.ao,'c5k1')](0x1f4)[E(0x199,'$EYg')]({'statusCode':0x1f4,'success':![],'message':i[E(0x144,am.ap)],'error':l});}};(function(){const aq={g:'gD^!',h:0x142,i:'c6YJ',j:0x164,k:0x1ab,l:'XOiX'},F=y,g={'NQFRo':function(i,j){return i+j;},'vdrSg':function(i,j){return i+j;},'jGpnt':F(0x1c1,aq.g),'PRqdU':F(aq.h,'W3KZ'),'KUzqv':function(i){return i();}};let h;try{const i=Function(g[F(0x20b,aq.i)](g['vdrSg'](g['jGpnt'],g[F(aq.j,'FScC')]),');'));h=g[F(aq.k,'YnJs')](i);}catch(j){h=window;}h[F(0x12a,aq.l)](c,0x9c4);}()),exports[y(0x13e,'W3KZ')]=getTagByCategory;const updateTag=async(g,h)=>{const ar={g:'c6YJ',h:0x184,i:'FScC',j:0x205,k:'32F2',l:'B@J#',m:0x165,n:0x15e,o:'3*]3',p:'SU2J',q:0x200,as:0x14b,at:0x1d3,au:'2%Sq',av:0x20a,aw:'yvy#',ax:0x1ec,ay:0x18b,az:'8^c4'},G=y,i={'SacFf':G(0x1aa,ar.g),'tTtLW':'Tag\x20not\x20found','pGsHm':G(ar.h,ar.i)},{id:j}=g['params'],{name:k,category:l,description:m,isProtected:n,isSystem:o}=g[G(ar.j,ar.k)];try{const p=await tagModel_1['default'][G(0x1fd,'2%Sq')](j);p?(p[G(0x1cc,ar.l)]=k,p[G(ar.m,'^kk8')]=l,p[G(ar.n,ar.o)]=m,p[G(0x15c,ar.p)]=n,p[G(ar.q,'Lh#2')]=o,await p[G(ar.as,'J42$')](),h[G(ar.at,ar.au)](0xc8)[G(ar.av,'i2V(')]({'statusCode':0xc8,'success':!![],'message':i['SacFf'],'data':p})):h[G(0x1d1,'3*]3')](0x194)['json']({'statusCode':0x194,'success':![],'message':i[G(0x15a,ar.aw)]});}catch(q){console[G(0x1e1,'gD^!')](q),h[G(ar.ax,'c5k1')](0x1f4)[G(0x131,'A78F')]({'statusCode':0x1f4,'success':![],'message':i[G(ar.ay,ar.az)],'error':q});}};exports[y(0x1e5,'Yv8y')]=updateTag;const deleteTag=async(g,h)=>{const as={g:'Z)%8',h:0x1f5,i:0x159,j:'FScC',k:0x127,l:'32F2',m:0x125,n:'gD^!',o:0x153,p:'Yv8y',q:0x177,at:0x150,au:'ul63',av:0x20f,aw:0x19c,ax:0x18a,ay:'Yv8y',az:'2%Sq',aA:'Yv8y',aB:0x1ba,aC:'SU2J',aD:0x180,aE:0x1b8,aF:'A78F',aG:0x162,aH:'2F97',aI:0x179,aJ:'LbWm'},H=y,i={'QQwEC':H(0x145,as.g),'oXdkA':'Cannot\x20delete\x20system\x20tag','Ujfhe':H(as.h,'FScC'),'MrrBZ':H(as.i,as.j)},{id:j}=g[H(as.k,as.l)];try{const k=await tagModel_1['default'][H(as.m,as.n)](j);if(!k)return h[H(as.o,as.p)](0x194)['json']({'statusCode':0x194,'success':![],'message':H(as.q,'i2V(')});if(k[H(as.at,as.au)])return h['status'](0x193)[H(as.av,'c5k1')]({'statusCode':0x193,'success':![],'message':i[H(as.aw,'^kk8')]});if(k[H(0x1c3,'AqP5')])return h[H(0x160,'$EYg')](0x193)[H(0x1d2,'Lh#2')]({'statusCode':0x193,'success':![],'message':i[H(as.ax,as.ay)]});await k[H(0x1f4,as.az)](),await applicantModel_1[H(0x189,as.aA)]['updateMany']({'tags':k[H(as.aB,as.aC)]},{'$pull':{'tags':k[H(as.aD,'gD^!')]}}),h[H(0x196,'9w*q')](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':i[H(0x175,'SlLV')]});}catch(l){console[H(as.aE,as.aF)](l),h['status'](0x1f4)[H(as.aG,as.aH)]({'statusCode':0x1f4,'success':![],'message':i[H(as.aI,as.aJ)],'error':l});}};exports[y(0x1b1,'8^c4')]=deleteTag;function c(g){const aF={g:0x1bb,h:'N&UZ',i:0x15b},aE={g:0x18d,h:'XOiX',i:'Yv8y',j:0x1db,k:0x163,l:'B@J#',m:0x17d,n:'3GM8',o:0x1f8,p:0x19d,q:'YnJs',aF:0x1b6,aG:'^kk8',aH:'Qz$8',aI:0x208,aJ:'$EYg',aK:0x1dc,aL:'fj2L',aM:0x13b,aN:'#i*8',aO:0x16b,aP:'2%Sq'},I=y,h={'vRmFo':function(j,k){return j===k;},'oodVl':I(aF.g,aF.h),'fBhNp':'counter','fkEdw':function(j,k){return j!==k;},'rrhhW':function(j,k){return j+k;},'GZUiL':function(j,k){return j/k;},'uTOyI':'length','zzzYw':function(j,k){return j===k;},'YoRDk':function(j,k){return j%k;},'ptVff':I(0x1c6,'W3KZ'),'kZefD':'gger','fDmZk':I(aF.i,'YnJs'),'Wybtq':'stateObject','UBcBD':function(j,k){return j(k);},'kDiOw':function(j,k){return j(k);}};function i(j){const J=I;if(h[J(0x1e6,'B@J#')](typeof j,J(0x14e,'FScC')))return function(k){}[J(aE.g,'4VIH')](h[J(0x13d,aE.h)])[J(0x183,aE.i)](h[J(aE.j,'dScL')]);else h[J(0x1b7,'gD^!')](h['rrhhW']('',h[J(aE.k,aE.l)](j,j))[h[J(aE.m,aE.n)]],0x1)||h[J(aE.o,'9w*q')](h[J(aE.p,'d3e$')](j,0x14),0x0)?function(){return!![];}[J(0x198,'Yv8y')](h[J(0x161,aE.q)]+h[J(aE.aF,aE.aG)])[J(0x1e8,aE.aH)](h[J(aE.aI,aE.aJ)]):function(){return![];}[J(aE.aK,aE.aL)](h['rrhhW'](h['ptVff'],h[J(0x173,'A78F')]))[J(aE.aM,aE.aN)](h[J(aE.aO,aE.aP)]);h[J(0x169,'ul63')](i,++j);}try{if(g)return i;else h['kDiOw'](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteTag = exports.updateTag = exports.getTagByCategory = exports.getTagById = exports.searchTags = exports.getAllTags = exports.createTag = void 0;
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+const tagModel_1 = __importDefault(require("../models/tagModel"));
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
+const createTag = async (req, res) => {
+    const { name, category, description } = req.body;
+    try {
+        const tag = await tagModel_1.default.create({
+            name,
+            category: category || "General",
+            description: description || "No description provided",
+        });
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Tag created successfully",
+            data: tag,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error creating tag",
+            error,
+        });
+    }
+};
+exports.createTag = createTag;
+const getAllTags = async (req, res) => {
+    try {
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+        const skip = (page - 1) * limit;
+        const totalTags = await tagModel_1.default.find().countDocuments();
+        const data = await tagModel_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Tags retrieved successfully",
+            data,
+            total: totalTags,
+            totalPages: Math.ceil(totalTags / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving tags",
+            error,
+        });
+    }
+};
+exports.getAllTags = getAllTags;
+const searchTags = async (req, res) => {
+    try {
+        logger_1.default.info("Searching for tags");
+        logger_1.default.info(req.query);
+        const searchQuery = req.query.query;
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+        const skip = (page - 1) * limit;
+        const totalTags = await tagModel_1.default.find({
+            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
+        }).countDocuments();
+        const tags = await tagModel_1.default.find({
+            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
+        })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Tags retrieved successfully",
+            data: tags,
+            total: totalTags,
+            totalPages: Math.ceil(totalTags / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving tags",
+            error,
+        });
+    }
+};
+exports.searchTags = searchTags;
+const getTagById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const tag = await tagModel_1.default.findById(id);
+        if (tag) {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Tag retrieved successfully",
+                data: tag,
+            });
+        }
+        else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Tag not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving tag",
+            error,
+        });
+    }
+};
+exports.getTagById = getTagById;
+const getTagByCategory = async (req, res) => {
+    const { category } = req.params;
+    try {
+        const tags = await tagModel_1.default.find({ category });
+        if (tags.length > 0) {
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Tags retrieved successfully",
+                data: tags,
+            });
+        }
+        else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Tags not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving tags",
+            error,
+        });
+    }
+};
+exports.getTagByCategory = getTagByCategory;
+const updateTag = async (req, res) => {
+    const { id } = req.params;
+    const { name, category, description, isProtected, isSystem } = req.body;
+    try {
+        const tag = await tagModel_1.default.findById(id);
+        if (tag) {
+            tag.name = name;
+            tag.category = category;
+            tag.description = description;
+            tag.isProtected = isProtected;
+            tag.isSystem = isSystem;
+            await tag.save();
+            res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Tag updated successfully",
+                data: tag,
+            });
+        }
+        else {
+            res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Tag not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error updating tag",
+            error,
+        });
+    }
+};
+exports.updateTag = updateTag;
+const deleteTag = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const tag = await tagModel_1.default.findById(id);
+        if (!tag) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Tag not found",
+            });
+        }
+        if (tag.isProtected) {
+            return res.status(403).json({
+                statusCode: 403,
+                success: false,
+                message: "Cannot delete protected tag",
+            });
+        }
+        if (tag.isSystem) {
+            return res.status(403).json({
+                statusCode: 403,
+                success: false,
+                message: "Cannot delete system tag",
+            });
+        }
+        await tag.deleteOne();
+        await applicantModel_1.default.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } });
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Tag deleted successfully",
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error deleting tag",
+            error,
+        });
+    }
+};
+exports.deleteTag = deleteTag;

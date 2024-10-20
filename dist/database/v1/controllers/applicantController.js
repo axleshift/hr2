@@ -1,1 +1,330 @@
-const w=f;function f(a,b){const c=e();return f=function(d,g){d=d-0x12d;let h=c[d];if(f['HFhDXb']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['SFLaaZ']=m,a=arguments,f['HFhDXb']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['hyYqjK']===undefined&&(f['hyYqjK']=!![]),h=f['SFLaaZ'](h,g),a[k]=h):h=l,h;},f(a,b);}(function(g,h){const O={g:0x255,h:'I9u7',i:0x1dd,j:'D7[]',k:0x219,l:0x156,m:'eR(9',n:'$zWt',o:0x249,p:'!9DJ'},s=f,i=g();while(!![]){try{const j=parseInt(s(O.g,'ItQy'))/0x1+parseInt(s(0x135,O.h))/0x2*(parseInt(s(O.i,O.j))/0x3)+parseInt(s(0x1b3,'umoK'))/0x4*(parseInt(s(O.k,'T0(Z'))/0x5)+parseInt(s(O.l,'!9DJ'))/0x6+-parseInt(s(0x22f,O.m))/0x7+-parseInt(s(0x1ba,O.n))/0x8+parseInt(s(O.o,'QoAk'))/0x9*(-parseInt(s(0x194,O.p))/0xa);if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xdf14b));const d=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const Y={g:'[MIS',h:0x15c,i:'^PIN'},X={g:0x14e,h:0x246,i:'^PIN',j:0x201,k:'!mcs',l:0x140,m:')0Nm',n:0x18e,o:'S)kr',p:'gyq@',q:'aQlS',r:'ZSK8',Y:0x1f8},t=f,g={'LJPyp':t(0x16a,Y.g),'AwIGr':t(0x197,'I9u7'),'kPTBp':t(Y.h,Y.i),'LVQKg':function(h,i){return h+i;},'WCdYc':function(h,i){return h+i;},'OuNKs':t(0x162,'eR(9'),'Jubzx':function(h,i){return h(i);},'EALnx':function(h,i,j){return h(i,j);}};g[t(0x15f,'$zWt')](d,this,function(){const u=t,h=new RegExp(g['LJPyp']),i=new RegExp(g[u(X.g,')#4I')],'i'),j=c(g[u(X.h,X.i)]);!h[u(X.j,X.k)](g[u(X.l,X.m)](j,u(X.n,X.o)))||!i[u(0x23b,X.p)](g[u(0x209,X.q)](j,g[u(0x1e9,X.r)]))?g[u(X.Y,')#4I')](j,'0'):c();})();}());const b=(function(){let g=!![];return function(h,i){const j=g?function(){if(i){const k=i['apply'](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const a7={g:0x22b,h:'[MIS',i:0x1d9,j:'dpmA',k:0x1c7,l:'jkcn',m:0x182,n:'um!q',o:0x17b,p:0x1bd,q:'KKeL',r:0x21f,a8:'a6Z3',a9:'QoAk',aa:0x19e,ab:'Mi(Y',ac:0x1ad,ad:'eR(9',ae:0x216,af:'ZDLS',ag:')%C3',ah:')0Nm'},v=f,g={'xwxqx':function(k,l){return k(l);},'VnIBk':function(k,l){return k+l;},'DleUt':function(k,l){return k+l;},'qTpls':v(a7.g,a7.h),'TpQHK':v(0x16e,'iF#W'),'qlVTt':function(k){return k();},'Lueny':'warn','PRNWC':v(a7.i,a7.j),'KLHVe':v(a7.k,'ZSK8'),'NvQyL':'exception','zaSIZ':v(0x13d,'T0(Z')};let h;try{const k=g['xwxqx'](Function,g['VnIBk'](g['DleUt'](g['qTpls'],g[v(0x22e,a7.l)]),');'));h=g[v(a7.m,'blSd')](k);}catch(l){h=window;}const i=h[v(0x1f4,a7.n)]=h['console']||{},j=['log',g[v(a7.o,'@[[d')],g['PRNWC'],g['KLHVe'],g[v(a7.p,a7.q)],v(a7.r,a7.a8),g['zaSIZ']];for(let m=0x0;m<j[v(0x1d0,a7.a9)];m++){const n=b['constructor'][v(a7.aa,a7.ab)][v(a7.ac,a7.ad)](b),o=j[m],p=i[o]||n;n[v(a7.ae,a7.af)]=b[v(0x173,'ItQy')](b),n[v(0x203,a7.ag)]=p[v(0x211,a7.ah)][v(0x143,'*4bY')](p),i[o]=n;}});a();'use strict';var __importDefault=this&&this[w(0x24a,'eKCr')]||function(g){const a8={g:0x15b},x=w;return g&&g[x(a8.g,')0Nm')]?g:{'default':g};};Object['defineProperty'](exports,w(0x245,'aQlS'),{'value':!![]}),exports['deleteResume']=exports['getResumeById']=exports[w(0x144,'QoAk')]=exports[w(0x1fb,'0#u8')]=exports[w(0x232,'*4bY')]=exports[w(0x1e8,'h1xC')]=exports[w(0x218,')0Nm')]=exports['handleFileUpload']=void 0x0;const promises_1=__importDefault(require(w(0x20b,'Pj#t'))),path_1=__importDefault(require(w(0x1fe,'nv!2'))),logger_1=__importDefault(require(w(0x136,'Mi(Y'))),fileUploadHandler_1=require(w(0x1ee,'!)Io')),applicantModel_1=__importDefault(require(w(0x1f1,'!9DJ'))),config_1=require(w(0x1c0,'QoAk')),handleFileUpload=(g,h)=>{const ac={g:0x206,h:'eR(9',i:0x1f9,j:'[MIS'},ab={g:0x1d6,h:'dpmA'},y=w,i={'qaMOm':function(j,k){return j(k);},'qZerP':y(ac.g,ac.h),'YQsWq':y(ac.i,ac.j)};return new Promise((j,k)=>{const aa={g:0x159,h:0x212,i:')0Nm'},z=y;(0x0,fileUploadHandler_1['upload'])(i['qZerP'])[z(ab.g,ab.h)](i[z(0x1d4,'QoAk')])(g,h,l=>{const A=z;l&&i[A(aa.g,'5M8^')](k,l),i[A(aa.h,aa.i)](j,g['file']);});});};exports[w(0x24b,'jkcn')]=handleFileUpload;const addNewResume=async(g,h)=>{const ad={g:'!)Io',h:'4jRD',i:0x204,j:0x227,k:0x22c,l:0x1af,m:0x141,n:'!9DJ',o:0x1a6,p:'$zWt',q:'iF#W',r:0x1cd,ae:0x1a2,af:0x242,ag:'rrQP',ah:0x161,ai:'ZSK8',aj:0x1b0,ak:'QoAk',al:'h1xC',am:0x19d,an:0x190,ao:'lVHa',ap:0x133,aq:')%C3',ar:'T0(Z',as:0x1ce,at:'um!q',au:0x13b,av:0x22d,aw:'eKCr',ax:0x1ac,ay:'eR(9'},B=w,i={'xrmrk':B(0x1de,ad.g),'shLbW':B(0x189,'I9u7'),'rjRku':B(0x146,ad.h)};try{const j=await(0x0,exports[B(0x14d,'dpmA')])(g,h);if(!j)return h[B(ad.i,'eR(9')](0x190)[B(ad.j,'QoAk')]({'statusCode':0x190,'success':![],'message':B(ad.k,'h1xC'),'error':i['xrmrk']});const k=i[B(ad.l,'Ix0B')],l='/'+k+'/'+j[B(0x180,'QoAk')],m={'firstname':g[B(0x1a9,'QkAI')]['firstname'],'middlename':g['body']['middlename'],'lastname':g['body'][B(0x14a,'!)Io')],'email':g['body'][B(ad.m,ad.n)],'phone':g[B(0x222,'4jRD')]['phone'],'address':g[B(ad.o,ad.p)]['address'],'portfolioURL':g[B(0x1da,ad.q)]['portfolioURL'],'professionalSummary':g[B(ad.r,'!mcs')][B(ad.ae,'$P&0')],'skills':g[B(ad.af,ad.ag)][B(0x248,'um!q')],'workExperience':g[B(0x13a,'5M8^')][B(ad.ah,ad.ai)],'education':g[B(ad.aj,'*4bY')][B(0x217,'gyq@')],'certifications':JSON[B(0x1c1,ad.ak)](g[B(0x18b,ad.al)][B(0x235,'2(Ee')]),'tags':JSON['parse'](g['body'][B(ad.am,'ZDLS')]),'remarks':g[B(ad.an,ad.ao)]['remarks'],'resumeFileLoc':l},n=await applicantModel_1[B(0x1ed,ad.p)][B(ad.ap,ad.aq)](m);return h[B(0x23d,ad.ar)](0xc9)[B(ad.as,ad.at)]({'statusCode':0xc9,'success':!![],'message':i[B(ad.au,'Ix0B')],'data':n});}catch(o){logger_1[B(ad.av,ad.aw)][B(ad.ax,'um!q')](o),h[B(0x1c5,ad.ak)](0x1f4)[B(0x214,'0#u8')]({'statusCode':0x1f4,'success':![],'message':B(0x1c4,ad.ay),'error':o});}};exports[w(0x205,'0#u8')]=addNewResume,(function(){const aj={g:'$P&0'},ai={g:'nv!2',h:0x1b4},D=w,g={'LNNwM':function(j,k){return j(k);},'gUGun':function(j,k){return j+k;},'wUjAL':function(j,k){return j+k;},'zsMuP':function(j){return j();}},h=function(){const C=f;let j;try{j=g['LNNwM'](Function,g[C(0x175,ai.g)](g['wUjAL'](C(ai.h,'jkcn'),C(0x164,'*4bY')),');'))();}catch(k){j=window;}return j;},i=g['zsMuP'](h);i[D(0x230,aj.g)](c,0x9c4);}());const updateResume=async(g,h)=>{const am={g:'nv!2',h:0x24e,i:'T0(Z',j:0x16f,k:0x19c,l:0x16b,m:'ZDLS',n:0x1ef,o:'Mi(Y',p:'iF#W',q:'dpmA',r:0x244,an:'2(Ee',ao:0x1a0,ap:0x1a8,aq:'0thu',ar:0x19a,as:0x226,at:0x1c3,au:'S)kr',av:'ItQy',aw:0x1ea,ax:0x148,ay:'Zm3h',az:0x1f2,aA:'um!q',aB:'gNzp',aC:'*4bY',aD:0x18a,aE:0x12f,aF:0x210,aG:'[MIS',aH:0x14c,aI:'D7[]',aJ:0x1fa,aK:'QoAk',aL:0x1b5,aM:0x131,aN:0x183,aO:'!)Io',aP:'rrQP'},al={g:'Pj#t',h:0x1ca,i:')0Nm',j:0x1f6,k:0x257,l:'!)Io',m:0x1bb,n:0x240,o:'$P&0'},E=w,i={'BVQGC':function(j,k){return j===k;},'rfUsz':E(0x1d8,am.g),'kuPyk':'firstname','MQoQb':E(am.h,am.i),'ZbtRw':E(am.j,'S)kr'),'CHuTM':E(0x170,'S)kr'),'KGRPY':E(am.k,'QoAk'),'oLEby':E(am.l,am.m),'DOjDC':E(am.n,am.o),'ZSQcm':E(0x12e,am.p),'RAxZc':E(0x166,am.q),'HyTrB':'Error\x20deleting\x20file:\x20'};try{const j=await(0x0,exports['handleFileUpload'])(g,h),k={},l=[i['kuPyk'],i[E(am.r,'aQlS')],i[E(0x253,am.an)],'email',E(am.ao,'f)Kt'),i[E(am.ap,am.aq)],E(am.ar,'iF#W'),i[E(am.as,'QkAI')],i[E(am.at,am.au)],i[E(0x1fd,'s)&M')],'education',i[E(0x21c,am.av)],i[E(am.aw,')%C3')],i[E(am.ax,am.ay)]];l[E(0x229,')%C3')](n=>{const F=E;g[F(0x168,al.g)][n]&&(k[n]=i[F(al.h,al.i)](n,'certifications')||n===i[F(al.j,'ZDLS')]?JSON[F(al.k,al.l)](g[F(al.m,'s)&M')][n]):g[F(al.n,al.o)][n]);});if(j){const n=await applicantModel_1[E(am.az,am.aA)][E(0x199,am.aB)](g[E(0x1f3,am.o)]['id'])[E(0x16c,am.aC)](),o='applicants';if(!n)return h['status'](0x194)[E(am.aD,'umoK')]({'statusCode':0x194,'success':![],'message':E(am.aE,'4jRD')});const p='/'+o+'/'+n['resumeFileLoc'];try{await promises_1[E(0x153,'D7[]')][E(0x196,'KKeL')](p);}catch(q){logger_1['default'][E(0x1ac,am.aA)](i[E(am.aF,am.aG)],q);}k['resumeFileLoc']='/'+o+'/'+j[E(am.aH,am.aI)];}const m=await applicantModel_1[E(am.aJ,am.aK)][E(0x15e,'ItQy')](g[E(am.aL,'5M8^')]['id'],k,{'new':!![]});return h[E(0x258,'0thu')](0xc8)[E(am.aM,'!9DJ')]({'statusCode':0xc8,'success':!![],'message':E(0x155,'$zWt'),'data':m});}catch(r){logger_1['default'][E(am.aN,'^PIN')](r),h[E(0x1a1,am.aO)](0x1f4)[E(0x1db,am.aP)]({'statusCode':0x1f4,'success':![],'message':E(0x237,'@[[d'),'error':r});}};exports[w(0x1d2,'umoK')]=updateResume;const getAllResumeData=async(g,h)=>{const at={g:0x21e,h:0x17e,i:0x184,j:'gNzp',k:0x157,l:0x1f5,m:'0thu',n:'lVHa',o:0x17f,p:0x228,q:0x1d7,r:'gyq@',au:')0Nm',av:'2(Ee',aw:')%C3',ax:0x1b1,ay:'$P&0',az:'nv!2',aA:0x227,aB:'QoAk',aC:0x1ae,aD:'S)kr',aE:0x142,aF:'Mi(Y'},G=w,i={'HfzXE':function(j,k){return j===k;},'CIjdf':G(0x160,'aQlS'),'iQphp':function(j,k){return j(k);},'vByhe':function(j,k){return j(k);},'XXuyz':function(j,k){return j*k;},'hzZeC':function(j,k){return j-k;},'cDCIe':function(j,k){return j/k;},'gzzVA':G(at.g,'$zWt'),'gxWyR':'An\x20error\x20occurred'};try{const j=i[G(at.h,'f)Kt')](typeof g['query']['page'],i['CIjdf'])?i[G(at.i,at.j)](parseInt,g['query'][G(at.k,'dpmA')]):0x1,k=i['HfzXE'](typeof g[G(at.l,at.m)][G(0x18c,at.n)],i[G(0x200,'Ix0B')])?i[G(at.o,'S)kr')](parseInt,g[G(at.p,')#4I')][G(at.q,at.r)]):0x9,l=i[G(0x202,at.au)](i[G(0x150,at.av)](j,0x1),k),m=await applicantModel_1['default'][G(0x188,at.aw)]()[G(at.ax,at.ay)]({'createdAt':-0x1})[G(0x186,'2(Ee')](l)[G(0x241,'gNzp')](k),n=await applicantModel_1['default'][G(0x236,at.az)](),o=Math['ceil'](i[G(0x1b6,'gNzp')](n,k));return h['status'](0xc8)[G(at.aA,at.aB)]({'statusCode':0xc8,'success':!![],'message':i['gzzVA'],'data':m,'totalItems':n,'totalPages':o,'currentPage':j});}catch(p){logger_1['default'][G(at.aC,'nv!2')](p),h['status'](0x1f4)[G(0x145,at.aD)]({'statusCode':0x1f4,'success':![],'message':i[G(at.aE,at.aF)],'error':p});}};exports[w(0x21b,'eR(9')]=getAllResumeData;const getResumeFile=async(g,h)=>{const av={g:0x132,h:'aQlS',i:'Mi(Y',j:0x130,k:'0#u8',l:'h1xC',m:0x147,n:')%C3',o:0x1ff,p:0x137,q:'4jRD',r:'2(Ee',aw:0x20d,ax:'KKeL'},au={g:'*4bY',h:0x1e0,i:'h1xC'},H=w,i={'lezSr':'Applicant\x20not\x20found','mnnay':'An\x20error\x20occurred'};try{const j=await applicantModel_1[H(av.g,av.h)][H(0x152,'QkAI')](g[H(0x1f3,av.i)]['id']);if(!j)return h[H(av.j,av.k)](0x194)[H(0x1aa,av.l)]({'statusCode':0x194,'success':![],'message':i[H(av.m,'s)&M')]});const k=config_1[H(0x223,')%C3')]['fileServer']['dir']+'/'+j[H(0x1bc,'@z9^')];logger_1[H(0x167,av.n)]['info'](H(av.o,'S)kr')+k),h[H(av.p,'um!q')](k,l=>{const I=H;if(l)return logger_1[I(0x208,'h1xC')]['error'](l),h['status'](0x1f4)[I(0x179,au.g)]({'statusCode':0x1f4,'success':![],'message':I(au.h,au.i)});});}catch(l){logger_1['default'][H(0x176,av.q)](l),h[H(0x259,av.r)](0x1f4)[H(av.aw,av.ax)]({'statusCode':0x1f4,'success':![],'message':i['mnnay'],'error':l});}};exports[w(0x234,'ZSK8')]=getResumeFile;const searchResume=async(g,h)=>{const aB={g:'T0(Z',h:'h1xC',i:'Zm3h',j:'5M8^',k:'Pj#t',l:0x163,m:0x19b,n:'um!q',o:0x1cc,p:'jkcn',q:'gNzp',r:'*4bY',aC:'lVHa',aD:0x187,aE:'rrQP',aF:0x1d3,aG:'eR(9',aH:0x23c,aI:0x24f,aJ:')%C3',aK:'^PIN',aL:'blSd',aM:0x221,aN:0x215,aO:'eKCr',aP:'lVHa',aQ:'T0(Z',aR:'gyq@',aS:0x224,aT:0x22a,aU:'dpmA',aV:0x149,aW:'s)&M',aX:0x231,aY:0x23e,aZ:0x1cf,b0:'!mcs',b1:0x252,b2:'5M8^'},J=w,i={'peqTN':J(0x13c,aB.g),'Ulrey':'Search\x20Query:','zIUPl':function(j,k){return j===k;},'sJYdx':'string','BaSjh':function(j,k){return j(k);},'KlPnS':function(j,k){return j*k;},'duDYD':function(j,k){return j-k;},'ulNgW':function(j,k){return j>k;},'BKniV':'No\x20applicants\x20found','xFhQX':J(0x14f,'5M8^'),'srUbL':'An\x20error\x20occurred'};try{logger_1[J(0x208,aB.h)]['info'](i[J(0x24c,aB.i)]),logger_1[J(0x15d,'rrQP')][J(0x19f,aB.j)](i[J(0x254,aB.k)]),logger_1[J(aB.l,'^PIN')][J(0x1f7,'[MIS')](g[J(aB.m,'*4bY')][J(0x1ec,aB.n)]);const j=g['query'][J(aB.o,'jkcn')],k=g[J(0x1cb,'^PIN')][J(0x1f0,aB.k)]?Array['isArray'](g[J(aB.o,aB.p)][J(0x251,aB.q)])?g[J(0x239,'$zWt')][J(0x195,aB.r)]['map'](String):g['query'][J(0x247,aB.aC)][J(aB.aD,aB.aE)](','):[],l=i[J(aB.aF,'rrQP')](typeof g[J(0x169,aB.aG)][J(0x250,')0Nm')],i[J(aB.aH,aB.aC)])?parseInt(g['query'][J(aB.aI,'S)kr')]):0x1,m=typeof g[J(0x14b,aB.aJ)][J(0x23f,'I9u7')]==='string'?i[J(0x1e3,aB.aK)](parseInt,g['query'][J(0x224,aB.aL)]):0x9,n=i[J(aB.aM,'eR(9')](i[J(aB.aN,aB.aO)](l,0x1),m);let o={'$or':[{'firstname':{'$regex':j,'$options':'i'}},{'lastname':{'$regex':j,'$options':'i'}},{'email':{'$regex':j,'$options':'i'}},{'phone':{'$regex':j,'$options':'i'}},{'address':{'$regex':j,'$options':'i'}},{'skills':{'$regex':j,'$options':'i'}},{'workExperience':{'$regex':j,'$options':'i'}},{'education':{'$regex':j,'$options':'i'}},{'remarks':{'$regex':j,'$options':'i'}},{'certifications':{'$elemMatch':{'$regex':j,'$options':'i'}}}]};i[J(0x1a3,aB.aP)](k[J(0x1d0,'QoAk')],0x0)&&(j?o={'$and':[o,{'tags':{'$in':k}}]}:o={'tags':{'$in':k}});const p=await applicantModel_1[J(0x181,aB.aQ)]['find'](o)['sort']({'createdAt':-0x1})[J(0x151,aB.aR)](n)[J(aB.aS,'blSd')](m),q=await applicantModel_1['default'][J(aB.aT,aB.aU)](o);if(!p||i['zIUPl'](p['length'],0x0))return h['status'](0x194)[J(0x227,'QoAk')]({'statusCode':0x194,'success':![],'message':i[J(aB.aV,'[MIS')]});return h[J(0x171,aB.aW)](0xc8)[J(0x158,'eR(9')]({'statusCode':0xc8,'success':!![],'message':i[J(0x1bf,'$P&0')],'data':p,'totalItems':q,'totalPages':Math[J(aB.aX,aB.k)](q/m),'tags':k,'currentPage':l});}catch(r){logger_1[J(0x1d1,'dpmA')][J(aB.aY,'S)kr')](r),h[J(aB.aZ,aB.b0)](0x1f4)[J(aB.b1,aB.b2)]({'statusCode':0x1f4,'success':![],'message':i['srUbL'],'error':r});}};exports[w(0x154,'f)Kt')]=searchResume;const getResumeById=async(g,h)=>{const aC={g:'eKCr',h:0x1b9,i:'ZDLS',j:0x17c,k:0x13f,l:0x20c,m:'h1xC',n:0x17d,o:'*4bY',p:0x1c8,q:0x213},K=w,i={'MWYhD':'Applicant\x20not\x20found','txPuh':K(0x1df,aC.g)};try{const j=await applicantModel_1[K(aC.h,'QkAI')][K(0x13e,'aQlS')](g['params']['id']);if(!j)return h[K(0x1be,aC.i)](0x194)['json']({'statusCode':0x194,'success':![],'message':i['MWYhD']});return h[K(aC.j,'umoK')](0xc8)[K(aC.k,aC.g)]({'statusCode':0xc8,'success':!![],'message':i[K(aC.l,aC.m)],'data':j});}catch(k){logger_1[K(aC.n,aC.o)][K(aC.p,'$zWt')](k),h['status'](0x1f4)[K(aC.q,'ZSK8')]({'statusCode':0x1f4,'success':![],'message':'An\x20error\x20occurred','error':k});}};exports[w(0x21a,')0Nm')]=getResumeById;const deleteResume=async(g,h)=>{const aD={g:0x1e1,h:'dpmA',i:0x21d,j:'um!q',k:'dpmA',l:'gyq@',m:'$zWt',n:'QkAI',o:0x1ab,p:'gNzp',q:0x23a,r:0x178,aE:'Zm3h',aF:0x20e,aG:'ZDLS',aH:0x1ac,aI:'a6Z3',aJ:0x1b8,aK:'4jRD',aL:'rrQP',aM:0x1a7,aN:'[MIS',aO:0x1dc,aP:0x225,aQ:'D7[]'},L=w,i={'ActVy':'Error\x20deleting\x20file:\x20','TRjoq':L(aD.g,aD.h),'bxkhb':L(aD.i,aD.j)};try{const j=await applicantModel_1['default'][L(0x1fc,aD.k)](g['params']['id']);if(!j)return h[L(0x15a,aD.l)](0x194)[L(0x1e5,aD.m)]({'statusCode':0x194,'success':![],'message':L(0x1eb,'QkAI')});const k=path_1['default'][L(0x20a,aD.n)](config_1['config'][L(aD.o,aD.p)][L(aD.q,'I9u7')],j[L(0x20f,'ZDLS')]);try{await promises_1[L(aD.r,aD.aE)][L(0x1c9,aD.n)](k),await promises_1[L(0x163,'^PIN')][L(aD.aF,'@[[d')](k);}catch(l){return logger_1[L(0x220,aD.aG)][L(aD.aH,'um!q')](i['ActVy'],l),h[L(0x193,aD.aI)](0x1f4)[L(aD.aJ,'a6Z3')]({'statusCode':0x1f4,'success':![],'message':L(0x207,aD.aK),'error':l});}return await applicantModel_1[L(0x15d,aD.aL)][L(0x1b2,aD.j)](g['params']['id']),h[L(0x174,')0Nm')](0xc8)[L(aD.aM,aD.aN)]({'statusCode':0xc8,'success':!![],'message':i['TRjoq']});}catch(m){logger_1[L(0x220,'ZDLS')][L(aD.aO,'@z9^')](m),h['status'](0x1f4)[L(aD.aP,aD.aQ)]({'statusCode':0x1f4,'success':![],'message':i['bxkhb'],'error':m});}};function e(){const aO=['C8ktW5xcTq','W7/dVSkpWPi','W7vpfKu','W4nfkSo/W4W','Ae7cTmo0W5xcQuj2W5a6WPJcKG','q8kvB8oLWQFcQKVdTCkBDmoQW6HhEmkWWO0','ymoucmoOs1FdLv9jpSkAExyTW7i','W4nDW4bGWPJcGxpcUfeeW4SjWReBW4TnW45QxbRcV8knWRi','w8knW4pcTSoBWPmoWRa7W543WOTirCoNEmoTiXBdRmkQW5aDW7qQW63cJYqCW54','vvj6W5iZ','BfZcTfC2','edRcJCocWPFdJmoiumkZW55WW4q','W5maWPqi','dmoIif8j','WOdcSSoHnmoU','W7bmW41TWONcGahcQu1rW4id','wey/EuS','W4TyDmo6iG','W6XJWR7dONjSj8opb8oEsmoav1JcT8oaqYJcGa','z8kCWReWW74','W50wWP0hECkHEW','i8ouymkTW6ddQqddU8obCCoYW65kB8o6WO/cPCoyWOb7EJ3cQYtdJbDGv0hdRSonW4S','WPBcRCoJm8oslfxcOY/cTmk0W6pcNmkq','WPHFrdu','Bmo1B3P+W47dNCkfCmksW7BdQby8zSkuD8oEWQGMWOvtsXq','CSkmWRiJW7lcUCoc','WPhcO8oJoCo6jW','DCkgWROXW6JcUCot','h8oUFSoaW6G','WQ56WQDLW7O','xZxdK8oa','WPmaWPrgea','udldMCok','m8oDr8obsCohWPe','tMJdGmkPW4tcISovBmk5W6HEW7aW','FmkuW53cVSoWWOKMWRO','W5FcLXSnW54','WQayW71D','ymouCgJdHu5QW7zyrMDZbIidW64Avq','WRzXo17cQG','rH5cgq','WRa8icpdIW','W41rCSo9kGtcOrq','iCkicSoWWR1Y','sgNdKmk1W4tcJSoYzmkVW5TAW7K','m8kmg8oOWQfIzdGEiW','WQVdLw8UW6hdNSobdJj/jCkvfWeiWPBcQ8kEgmojgmkQiW','W6fzW49TWOJcIsC','WQxdG3lcKSo7','W4D8WQFdOa','WOPnddBdVmoLW4dcSYNdImon','W7feW7L5WPu','cCoEkMi','WPddHWGlDCoL','WQ55WOfJW61aWPGyW7W7A8oztW','FIldOCoDmW','WPWlbI7dG3z8WQe','WPKfgbxdNa','FuaExa','q37dM8kv','rCorpmoDzG','WOndWOjKW69rWReUW48','l8oFuWTnWPpcLWDE','WOKamrtdLgHaWQnxWRS+W5K','W50luCo/imowWRpdGSojuq','WO8biqJdLgXNWQTbWOWQW7uv','nCkzh8ofWQrTvZmzjCkpW4tdGmkbW5eQ','cd8Ecu4','v8khW7qNW7xcP8ozmd4UW4pdJqBdTdJdPea','W7GdWOSkzCkUBSoTFwBcPgr4pmochW','WQxdOZSvW5C','WRH5WPr3W7vjWQO','gCkqo8oQWPS','WOZdIhK4','W5Prt8oVmqO','dwBdRCo2W6y','mq7dRSkJ','W6zuWPZdNKi','pColtSoo','WQGaWPnoeq','W59ru8omoq7cPW','ECksW4BcTmogWRqaWR06WPm2WObquW','rd7dGCoAa1pcPXGnimoxF8k0W6/cMLGDWPJdPq','W5vqW4XTWO7cGhpcUu5iW4ahWQjvW4ycW4LNebK','rCobhSoLv1JdGa','W5BcImoPC2K','A8oluSk9W740BqCfimkLW7K','WPpdQG8WzLLNCK8OWOu','WO9BsIO','FCkfWR7dK3hcV8kNWPZcJHPpWQBcVM3cVau','WQL8wWZdUW','Cfyfyf3cTueoW63dGfX2lW','wmklgmkPwuldM8omWPG/WRxcHgVdOq','WRmwW7XBWQBcUCkukuy0W7nXWPldLW','WQtdH0qhACo8W71bWO/dHmoCWO3cTSopW6NdJ8ov','W4qnzGRcNSkAxSoEDWy','W4GgWP4uDq','DxHl','pSoEvrW','WR/cSgpcGSog','WPLicmk+hCop','qCojDwNdMW','FxHuW70Y','WOldOb8a','W6PCWPnKea','W71thvi','obldTmkJWPFdUeG','WR/dKxNcMSo6','WQ3dN3pcUmovWPbMWPhdQSk9','rw3cS38U','WRJcM13cLq','zCkcWR0UW6VcPG','zSkpgmkqdmkAWPtdL2mVESoy','FSo7eCoPuLVdHKv5E8kAD3yVW6i','W6RcMCowx07cSgbwEmoEWOjsASkZW7JcVG','WRFcSvFdVSoQ','hJRcJmooW6NcK8oxr8keW7W','WODvdCkUbmozWQRdPCo8zG','vmoAygm','WPGfmJ8','W7juWPL+','z3ygWO0','yCkmhSkprW','WRLsuspdTW','y1X6wXyWWQXQW5RcGCoIWRK0','WOtdQHCCFeHqzuO8WOtdSq','FCkBpCoWWQS','hCoVESogW6tcHG','smkAc8kPrvC','cmovrZfE','W77dTmkzWP8CbcSbWQxdGmkeo8kmWQu','WQ/dL20TW7RcNCoebsO6p8ktduzoWO3cTSkvxa','wNNdLCkpW5tcIG','kmkOl3K','WPBdPxdcQSoTWPn2','W5PmrmoOlaG','WOjSuaJdPa','icDkW6ewWOtcMI8','W4/dRmk+DSk5EWVdQhlcSmk4W6NcM8kzf0jnrqFcQ8kMW445x8owW6i9','CSkgWQmSW6VcUSoxjG','F8kTkCkBrq','W5DSuSohmG','B2OnWPO','WODsa1hcUq','WRLzcmk4c8ouWQ3dQSo2i8kcWPZdTKJdJmodlmkRWRBdP8k1WRddOCk4','WP5ocmkPdq','WPtdQxJcR8oAWOzlWOa','s8oxf8oQ','WQqYbbhdLG','j8k2ix59','WOBcUSogiCof','EmkjWQtdTG','jmoDqmosx8odWRFdHuKWw8oN','tSoiAgG','WQ/dL20TW7RcNCoebsO6mSkohaDCWOFcP8oBs8oAeSkLi8o9WOpcQCkwtmoAqq','W7/cVqSAW68','WPxcLv7dSmoh','DbddM8ogjW','yCkBpmo3WQdcP0pcSa','W4Hlrmo7iq','prtdRCkOWO3dVfDc','CSkCW53cVSoEWPuPWRCJWPSgWP5it8oYEq','WPGcWR97gG','thuzWO/dQbFdMu7dI8k3xYS1kvri','u8kummk4CW','oCoqtXG','W4T6WQddQLL2d8of','pXJdP8kSWPBdSu4','Dbm4W7FdLhz9W67dOqFdT0m','W7GdWOSkzCkUBSoTFtxdSxjZkmoyhSkzh13dG8k5zmomEGldHCkJbLfE','DCoICIiKWPJcImkbymo1W5ZdSG8','ASkCW5tcVW','omkpbmoQ','FgqKWQZdRa','oCoprXXzWPq','WRC7mcNdVhb2WRniWQS','r1pcJKK','W7Tzh0RcJmkxW5e','nauHdMf4W5DPW6/cJmo3WRyOx8kWoCo3','W7WYWRCiDa','WOhdTgtcOSo2WPG','yfWdwx3cVKqgW7RdR1b0kCox','o8ksg8oXWRW','sLJcGvWRqWu','yCkDW6tdSxlcVCkgWO3cJXPbWRFcLx7dOeBdN8kLqSk7z8k/hgBdQSomsuD7cG3dNG','WRddOs0qW53cRG','AmkyW57cU8oaWPSC','W51Br8oOlqhcUW','WO5rrZ8','i8kjdSo2WRe','uc7dM8ombvtdQf5lF8oLnmoGWQZcQr8','WQ93WPT6W6Xw','F8kyWQ/dSq','WPOQW7ZcUY49DSojemk2BCofsG','W6BdRmofWOGAddewWRBdGCkoimknWQtdGGpcSdeWCmkqlCoYW5BdKmoRArLvimk7W7e','smoADhldH0bMW7C','rCoFy3tdJfj4','W6dcRba9W6Gd','W4pcScpdUSkTW44WWOpdSSk7WRNdO8oN','mauHdG','WPSqnc7dHgW','WRCSW45aWRW','WOVdLw8UW6e','WRxdJIyHyW','WQpcSuddI8orq1a','CmktWQxdVa','kaNdS8kKWO3dUG','WQNdNaemyG','W7ZcOmkPW43dR8km','FSkfWQZdS2JcV8kb','tXaJW53dSG','uSo5FM7dJa','mCortCofuSokWOJdHq','WO5zd8kRhCoqWRa','egpdLSolW6y','s0/cLviS','W69KWO5Lfa','mq0JbG','smkfa8kT','W6XmfulcJq','W59xt8oT','CgfjW7GVWR7cRcpcS8k1','W6xcP8kNW5C','W6DtW411','WQdcK1FcJ8ok','f8kimJ/cNXvZW4n6EgeY','r8otzM/dHW','WPDEWRfEW4q','WQ7cLv7cNW','WOTmgCkMeq','FSkfWQJdPW','WQldTJGnW4FcSW','C8oUDYDdW4hdMCk7sSot','BSkbWQ3dOq','fSodkwumW6i','ttPLWR9MW7FdPxldVCkDW4zNWRm9W5/cQCkLq24wCh7cTWVdJIvDF8oajXbIW4bC','WQ4DWP9qdCk2umoQWROeW6VcSWNcGSoD','W6bCWPbPjSkeWQSD','W63dVSkzWP8tds4lWQVdOCk/ga','A8kvWQ/dOgq','j8oktSogwCoyWPBdIvuRv8oUW6ZcKIpdTYGWWQ8','WQH9WPvL','WPhcSmo+lmo4ifZcTJG','zgSpWOW','DX42W6VdKG','FSkolSo3WRVcTq','WPddVrqFBv5XAvyNWOJdUeuSvSoZWOHnCq','WRNcLNtcGCoP','qSolfSo3vKBdGvjjCCko','t8kQWOq0W4i','W5SCWP8F','xcJdMSob','lCotBSoMW5W','W498WQRdTW','W69pW4zI','W6bCWPjOn8kyWPapfCoy','C8kBWQyTW7u','mmkvbCoG','WRulW7TAWQa','WOzqhvJcMW','EmkpWQ7dQW','WPpdOaKn','CmkaWROMW4xcRmo/jL8VW4tdQHBdQI/dTue','WRVdOSoXWOVdOSk0yCkYoCoL','W7dcNComtLdcUWyxCSooWRLbCSk1W7BcTmozk2G','FwqBWOldRaC','W6vXWR1eaq','WQldR0H5WQ1biszbWP4osW','WRVdStyx','W4L2WQJdR25JmG','WO5aW49rpCo/p8o3zKhdNu1Z','W7hcTXuW','W5rsk8oLW5pdL8oqW4PYxmoAAmkX','lCoBfhuU','WQ9OWPnIW7vw','WPJdIrmOua','ECkwdSkoeSkeW4VcJHuMwCoSW5NcJIK','j8ozu8otwq','WRhdJriZsG','s8o3qMtdKa','e8kss8oHWRPZAIrkp8kbW4ldSCksW5CUyW','jmomqmousCoy','WRBcHmohcCot','CKedxuO','W5WbWOKjFG','W4XWWQ3dQ2H8','WQOYbb3dSG','x0JcGK8N','W7pcJCoDsvS','ubrvfa','FmkAWRSS','qq9qgCoAEG','o8oDt8ohsmod','FSkyW5xcU8ohWPWB','W7RcPmkSW5JdRSkAEmkWlCohsCoo','W6v1lhVcLq','dSoPuSo3tq','WPhdR3JcUmoSWO13WOFdSSk3WRO','ACkuW53cVCoEWPu','jSossWfy','WQqyW65g'];e=function(){return aO;};return e();}exports[w(0x256,'$P&0')]=deleteResume;function c(g){const aN={g:0x17a,h:'D7[]',i:0x198,j:')#4I',k:'*4bY',l:0x165,m:'a6Z3',n:0x1e6,o:'KKeL'},aM={g:0x1a5,h:'um!q',i:0x1a4,j:'eKCr',k:0x177,l:0x1e7,m:'Mi(Y',n:0x1c2,o:'@[[d',p:0x233,q:'Pj#t',r:0x139,aN:')%C3',aO:0x138,aP:'2(Ee',aQ:'ItQy',aR:0x18f,aS:'ZDLS',aT:0x1d5,aU:'aQlS',aV:'gyq@',aW:'I9u7',aX:0x1c6},M=w,h={'nRsNj':function(j,k){return j===k;},'YCPvE':M(aN.g,aN.h),'PgBCx':M(aN.i,aN.j),'TdvQQ':M(0x243,'D7[]'),'FIjbH':function(j,k){return j+k;},'EBxJu':function(j,k){return j/k;},'NWnDg':'length','BnaYr':M(0x192,aN.k),'DCCFu':'gger','KBCHD':M(aN.l,aN.m),'WFVQD':function(j,k){return j(k);},'oOeSk':function(j,k){return j(k);}};function i(j){const N=M;if(h[N(0x134,'Pj#t')](typeof j,h[N(aM.g,aM.h)]))return function(k){}[N(aM.i,aM.j)](h[N(aM.k,'@[[d')])[N(aM.l,aM.m)](h[N(aM.n,aM.o)]);else h['FIjbH']('',h[N(aM.p,aM.q)](j,j))[h['NWnDg']]!==0x1||h[N(aM.r,aM.aN)](j%0x14,0x0)?function(){return!![];}['constructor'](h['BnaYr']+h[N(aM.aO,aM.aP)])[N(0x185,aM.aQ)](h[N(aM.aR,aM.aS)]):function(){return![];}[N(aM.aT,aM.aU)](h[N(0x12d,aM.aV)]+h[N(0x1e2,aM.aW)])[N(0x191,'T0(Z')]('stateObject');h[N(aM.aX,aM.m)](i,++j);}try{if(g)return i;else h[M(aN.n,aN.o)](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteResume = exports.getResumeById = exports.searchResume = exports.getResumeFile = exports.getAllResumeData = exports.updateResume = exports.addNewResume = exports.handleFileUpload = void 0;
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+const fileUploadHandler_1 = require("../../../utils/fileUploadHandler");
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
+const config_1 = require("../../../config");
+const handleFileUpload = (req, res) => {
+    return new Promise((resolve, reject) => {
+        (0, fileUploadHandler_1.upload)("applicants").single("file")(req, res, (err) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(req.file);
+        });
+    });
+};
+exports.handleFileUpload = handleFileUpload;
+const addNewResume = async (req, res) => {
+    try {
+        const file = (await (0, exports.handleFileUpload)(req, res));
+        if (!file) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Please upload a file",
+                error: "No file uploaded",
+            });
+        }
+        const childDir = "applicants";
+        const filePath = `/${childDir}/${file.filename}`;
+        const data = {
+            firstname: req.body.firstname,
+            middlename: req.body.middlename,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            portfolioURL: req.body.portfolioURL,
+            professionalSummary: req.body.professionalSummary,
+            skills: req.body.skills,
+            workExperience: req.body.workExperience,
+            education: req.body.education,
+            certifications: JSON.parse(req.body.certifications),
+            tags: JSON.parse(req.body.tags),
+            remarks: req.body.remarks,
+            resumeFileLoc: filePath,
+        };
+        const newApplicant = await applicantModel_1.default.create(data);
+        return res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Applicant created successfully",
+            data: newApplicant,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.addNewResume = addNewResume;
+const updateResume = async (req, res) => {
+    try {
+        const file = (await (0, exports.handleFileUpload)(req, res));
+        const data = {};
+        const fieldsToUpdate = ["firstname", "middlename", "lastname", "email", "phone", "address", "portfolioURL", "professionalSummary", "skills", "workExperience", "education", "certifications", "tags", "remarks"];
+        fieldsToUpdate.forEach((field) => {
+            if (req.body[field]) {
+                data[field] = field === "certifications" || field === "tags" ? JSON.parse(req.body[field]) : req.body[field];
+            }
+        });
+        if (file) {
+            const applicant = (await applicantModel_1.default.findById(req.params.id).exec());
+            const childDir = "applicants";
+            if (!applicant) {
+                return res.status(404).json({
+                    statusCode: 404,
+                    success: false,
+                    message: "Applicant not found",
+                });
+            }
+            const filePath = `/${childDir}/${applicant.resumeFileLoc}`;
+            try {
+                await promises_1.default.unlink(filePath);
+            }
+            catch (error) {
+                logger_1.default.error("Error deleting file: ", error);
+            }
+            data.resumeFileLoc = `/${childDir}/${file.filename}`;
+        }
+        const updatedApplicant = await applicantModel_1.default.findByIdAndUpdate(req.params.id, data, {
+            new: true,
+        });
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Applicant updated successfully",
+            data: updatedApplicant,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.updateResume = updateResume;
+const getAllResumeData = async (req, res) => {
+    try {
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const applicants = await applicantModel_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalItems = await applicantModel_1.default.countDocuments();
+        const totalPages = Math.ceil(totalItems / limit);
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Applicants found",
+            data: applicants,
+            totalItems,
+            totalPages,
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.getAllResumeData = getAllResumeData;
+const getResumeFile = async (req, res) => {
+    try {
+        // Find the applicant by ID
+        const applicant = await applicantModel_1.default.findById(req.params.id);
+        if (!applicant) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Applicant not found",
+            });
+        }
+        // Construct the file path
+        const filePath = `${config_1.config.fileServer.dir}/${applicant.resumeFileLoc}`;
+        logger_1.default.info(`Downloading file: ${filePath}`);
+        // Check if file exists before attempting to download
+        res.download(filePath, (err) => {
+            if (err) {
+                logger_1.default.error(err);
+                return res.status(500).json({
+                    statusCode: 500,
+                    success: false,
+                    message: "Failed to download file",
+                });
+            }
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.getResumeFile = getResumeFile;
+const searchResume = async (req, res) => {
+    try {
+        logger_1.default.info("Searching for resumes...");
+        logger_1.default.info("Search Query:");
+        logger_1.default.info(req.query.query);
+        const searchQuery = req.query.query;
+        const tags = req.query.tags ? (Array.isArray(req.query.tags) ? req.query.tags.map(String) : req.query.tags.split(",")) : [];
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        let searchCriteria = {
+            $or: [
+                { firstname: { $regex: searchQuery, $options: "i" } },
+                { lastname: { $regex: searchQuery, $options: "i" } },
+                { email: { $regex: searchQuery, $options: "i" } },
+                { phone: { $regex: searchQuery, $options: "i" } },
+                { address: { $regex: searchQuery, $options: "i" } },
+                { skills: { $regex: searchQuery, $options: "i" } },
+                { workExperience: { $regex: searchQuery, $options: "i" } },
+                { education: { $regex: searchQuery, $options: "i" } },
+                { remarks: { $regex: searchQuery, $options: "i" } },
+                {
+                    certifications: {
+                        $elemMatch: {
+                            $regex: searchQuery,
+                            $options: "i",
+                        },
+                    },
+                },
+            ],
+        };
+        if (tags.length > 0) {
+            if (searchQuery) {
+                searchCriteria = {
+                    $and: [searchCriteria, { tags: { $in: tags } }],
+                };
+            }
+            else {
+                searchCriteria = { tags: { $in: tags } };
+            }
+        }
+        const applicants = await applicantModel_1.default.find(searchCriteria).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalItems = await applicantModel_1.default.countDocuments(searchCriteria);
+        if (!applicants || applicants.length === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "No applicants found",
+            });
+        }
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Applicants found",
+            data: applicants,
+            totalItems,
+            totalPages: Math.ceil(totalItems / limit),
+            tags: tags,
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.searchResume = searchResume;
+const getResumeById = async (req, res) => {
+    try {
+        const applicant = await applicantModel_1.default.findById(req.params.id);
+        if (!applicant) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Applicant not found",
+            });
+        }
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Applicant found",
+            data: applicant,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.getResumeById = getResumeById;
+const deleteResume = async (req, res) => {
+    try {
+        const applicant = await applicantModel_1.default.findById(req.params.id);
+        if (!applicant) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Applicant not found",
+            });
+        }
+        const filePath = path_1.default.join(config_1.config.fileServer.dir, applicant.resumeFileLoc);
+        try {
+            await promises_1.default.access(filePath); // Check if the file exists
+            await promises_1.default.unlink(filePath); // Delete the file
+        }
+        catch (fileError) {
+            logger_1.default.error("Error deleting file: ", fileError);
+            return res.status(500).json({
+                statusCode: 500,
+                success: false,
+                message: "Error deleting the file",
+                error: fileError,
+            });
+        }
+        await applicantModel_1.default.findByIdAndDelete(req.params.id);
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Applicant deleted successfully",
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.deleteResume = deleteResume;

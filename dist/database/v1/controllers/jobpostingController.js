@@ -1,1 +1,387 @@
-const H=f;(function(g,h){const S={g:0x110,h:0x182,i:0x1a1,j:0x166,k:'bet%',l:'4k(a',m:0x137},z=f,i=g();while(!![]){try{const j=parseInt(z(S.g,'NneX'))/0x1+-parseInt(z(S.h,'VqUX'))/0x2+-parseInt(z(0x17f,'4k(a'))/0x3+-parseInt(z(0x185,'OyN3'))/0x4*(parseInt(z(S.i,'WJ0q'))/0x5)+-parseInt(z(S.j,S.k))/0x6*(-parseInt(z(0x1b0,S.l))/0x7)+parseInt(z(0x1ce,'@j$&'))/0x8+parseInt(z(S.m,'nS19'))/0x9;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0x3291d));const d=(function(){let g=!![];return function(h,i){const T={g:'XT@F'},j=g?function(){const A=f;if(i){const k=i[A(0x1f8,T.g)](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const a3={g:0x138,h:'vg[q',i:0x190,j:0x19b,k:'WUb8',l:0x1fa,m:0x1a3,n:'6x!P'},a2={g:0x17e,h:'vg[q',i:0x1ae,j:0x1b5,k:'6DWB',l:0x16a,m:'xQ(C',n:0x117,o:0x109,p:'KK1Z',q:'nS19'},B=f,g={'XlQuP':B(a3.g,a3.h),'hFbyk':B(a3.i,a3.h),'jAcIF':function(h,i){return h(i);},'ddGGH':B(a3.j,a3.k),'irjUs':function(h,i){return h+i;},'DzJbi':B(0xf5,'Zjb5'),'uTemd':function(h,i){return h+i;},'ZmbgD':B(a3.l,'VqUX'),'fcHxP':function(h,i){return h(i);},'HRfjp':function(h,i,j){return h(i,j);}};g[B(a3.m,a3.n)](d,this,function(){const C=B,h=new RegExp(g[C(a2.g,a2.h)]),i=new RegExp(g[C(a2.i,'WUb8')],'i'),j=g[C(a2.j,a2.k)](c,g[C(a2.l,a2.m)]);!h[C(a2.n,'vg[q')](g[C(0x1f5,'32PZ')](j,g[C(0xeb,'OyN3')]))||!i[C(a2.o,a2.p)](g[C(0xe8,a2.q)](j,g['ZmbgD']))?g['fcHxP'](j,'0'):c();})();}()),(function(){const a6={g:0x1ec,h:'Et2[',i:'xQ(C'},D=f,g={'OPRXH':function(i,j){return i+j;},'XWnil':function(i,j){return i+j;},'kWDkE':D(a6.g,'L%AD')};let h;try{const i=Function(g['OPRXH'](g[D(0x1cf,a6.h)](D(0x124,'Cmmf'),g['kWDkE']),');'));h=i();}catch(j){h=window;}h[D(0x178,a6.i)](c,0x9c4);}());function f(a,b){const c=e();return f=function(d,g){d=d-0xe6;let h=c[d];if(f['ErYqLa']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['SCjWNd']=m,a=arguments,f['ErYqLa']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['aePcPt']===undefined&&(f['aePcPt']=!![]),h=f['SCjWNd'](h,g),a[k]=h):h=l,h;},f(a,b);}const b=(function(){let g=!![];return function(h,i){const j=g?function(){const E=f;if(i){const k=i[E(0x1d3,'N$@G')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const ag={g:0xff,h:'L%AD',i:0x186,j:0xf1,k:0x142,l:'xQ(C',m:0x168,n:0x1dc,o:'WUb8',p:'BwpD',q:0x19a,r:'4k(a',s:'UDGZ',t:0x10c,u:0x177,v:0x102,w:'WZT*',x:0x171,y:0x18a,ah:'vg[q',ai:0x154,aj:'xQ(C'},af={g:0x115,h:'xQ(C',i:0x1f2,j:'(gFV'},F=f,g={'fuZMQ':function(l,m){return l(m);},'LBJVG':function(l,m){return l+m;},'zqEpe':F(ag.g,ag.h),'IfdGw':'{}.constructor(\x22return\x20this\x22)(\x20)','PfyZK':function(l){return l();},'Jbfvu':'info','HIccH':F(ag.i,'9$A^'),'VCSSV':F(ag.j,'Zjb5'),'SpUbQ':function(l,m){return l<m;}},h=function(){const G=F;let l;try{l=g[G(af.g,af.h)](Function,g['LBJVG'](g['LBJVG'](g[G(af.i,'T)[D')],g[G(0x100,af.j)]),');'))();}catch(m){l=window;}return l;},i=g[F(0x1d1,'9$A^')](h),j=i[F(ag.k,ag.l)]=i[F(ag.m,'bet%')]||{},k=[F(ag.n,'&q!Z'),F(0x1b7,ag.o),g[F(0x1c7,ag.p)],F(ag.q,ag.r),g[F(0x10f,ag.s)],F(ag.t,'([Cz'),g[F(ag.u,'E9]K')]];for(let l=0x0;g[F(ag.v,'WJ0q')](l,k[F(0x1dd,ag.w)]);l++){const m=b['constructor'][F(0xf8,'32PZ')][F(ag.x,'Et2[')](b),n=k[l],o=j[n]||m;m[F(ag.y,ag.ah)]=b[F(ag.ai,ag.aj)](b),m['toString']=o['toString']['bind'](o),j[n]=m;}});a();'use strict';var __importDefault=this&&this[H(0x1a7,'XerD')]||function(g){return g&&g['__esModule']?g:{'default':g};};Object['defineProperty'](exports,H(0x120,'XerD'),{'value':!![]}),exports[H(0x129,']zOb')]=exports[H(0x159,'Zjb5')]=exports[H(0x184,'XT@F')]=exports[H(0x108,'bet%')]=exports[H(0x152,'A(ah')]=exports[H(0x17c,'UDGZ')]=exports[H(0x163,'XerD')]=exports[H(0x114,'NneX')]=void 0x0;const mongoose_1=__importDefault(require(H(0x1ef,')hO0'))),jobpostingModel_1=__importDefault(require('../models/jobpostingModel')),jobposterModel_1=__importDefault(require(H(0x1c3,'vg[q'))),logger_1=__importDefault(require(H(0x181,'32PZ'))),createJobposting=async(g,h)=>{const ai={g:'bet%',h:0x1e8,i:0x15e,j:'vg[q',k:'xSC3',l:'Cmmf',m:0xfa},I=H,i={'lbjRA':I(0xf2,ai.g),'Nhvaz':I(0x1da,'VqUX')},{title:j,type:k,salary_min:l,salary_max:m,location:n,description:o,requirements:p,responsibilities:q,benefits:r,status:s,schedule_start:t,schedule_end:u}=g[I(ai.h,'AjFk')];try{const v=await jobpostingModel_1[I(0x170,'1Zqc')][I(ai.i,ai.j)]({'title':j,'type':k,'salary_min':l,'salary_max':m,'location':n,'description':o,'requirements':p,'responsibilities':q,'benefits':r,'status':s,'schedule_start':t,'schedule_end':u,'isExpired':![]});h[I(0x135,'A(ah')](0xc9)[I(0x104,ai.k)]({'statusCode':0xc9,'success':!![],'message':i[I(0x153,ai.l)],'jobposting':v});}catch(w){logger_1[I(0x1c1,'KK1Z')][I(0x167,ai.g)](I(0x18d,'9$A^'),w),h[I(ai.m,'WZT*')](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i['Nhvaz'],'error':w});}};exports['createJobposting']=createJobposting;const searchJobpostings=async(g,h)=>{const ap={g:'vg[q',h:0x187,i:'AjFk',j:'@j$&',k:'NneX',l:'4[BT',m:0x14e,n:'NneX',o:'Zjb5',p:'vT6S',q:'XerD',r:0x116,s:'T)[D',t:0x15c,u:'m9E%',v:0x140,w:'L%AD',x:0x1a5,y:'vg[q',aq:0x14a,ar:'1Zqc',as:'n5%$',at:'MgyB',au:0x11b,av:'A(ah',aw:0x188,ax:0xec,ay:'L%AD'},J=H,i={'ZuNls':function(n,o){return n===o;},'yoGTB':J(0x1e2,'T)[D'),'KjELI':function(n,o){return n(o);},'seCFL':function(n,o){return n(o);},'vYlVt':function(n,o){return n*o;},'hvPXI':function(n,o){return n-o;},'hWBsf':J(0x1fb,ap.g),'cTvNk':function(n,o){return n/o;},'eaMuq':J(ap.h,ap.i),'BfDxT':'Error\x20retrieving\x20jobpostings'},j=g[J(0xee,ap.j)]['query'],k=i[J(0x14e,ap.k)](typeof g['query'][J(0xfb,ap.l)],i[J(0x132,'6DWB')])?i[J(0x1af,'vg[q')](parseInt,g['query']['page']):0x1,l=i[J(ap.m,ap.n)](typeof g[J(0x180,ap.o)][J(0x15a,'L%AD')],J(0xf7,ap.p))?i[J(0x1d5,ap.q)](parseInt,g['query']['limit']):0x9,m=i[J(ap.r,'(gFV')](i[J(0x101,ap.s)](k,0x1),l);try{const n=await jobpostingModel_1['default'][J(ap.t,ap.u)]({'$or':[{'title':{'$regex':j,'$options':'i'}},{'type':{'$regex':j,'$options':'i'}},{'company':{'$regex':j,'$options':'i'}},{'location':{'$regex':j,'$options':'i'}}]}),o=await jobpostingModel_1[J(ap.v,ap.w)][J(ap.x,ap.y)]({'$or':[{'title':{'$regex':j,'$options':'i'}},{'type':{'$regex':j,'$options':'i'}},{'company':{'$regex':j,'$options':'i'}},{'location':{'$regex':j,'$options':'i'}}]})['sort']({'createdAt':-0x1})['skip'](m)['limit'](l);h[J(ap.aq,ap.ar)](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':i[J(0x1e5,ap.l)],'data':o,'total':n,'totalPages':Math['ceil'](i[J(0x15b,'(gFV')](n,l)),'currentPage':k});}catch(p){logger_1[J(0x1ee,ap.as)][J(0x193,ap.at)](i[J(ap.au,ap.av)],p),h[J(ap.aw,'@j$&')](0x1f4)[J(ap.ax,'22%$')]({'statusCode':0x1f4,'success':![],'message':i[J(0x149,ap.ay)],'error':p});}};exports['searchJobpostings']=searchJobpostings;const getAllJobpostings=async(g,h)=>{const av={g:0x173,h:'22%$',i:0xed,j:0x12e,k:0x113,l:'1Zqc',m:0xf6,n:'OyN3',o:0x162,p:'WJ0q',q:0x12d,r:'BwpD',s:0x169,t:'(6d3',u:'n5%$',v:'Alxa',w:0xfd,x:'&q!Z',y:'&q!Z',aw:0x1b9,ax:0x146,ay:0xf3,az:')hO0',aA:0x125},K=H,i={'oFIPF':function(j,k){return j===k;},'hJgwx':function(j,k){return j(k);},'YRCil':function(j,k){return j===k;},'YAwzU':function(j,k){return j-k;},'cZuqR':K(av.g,av.h),'XBJwC':function(j,k){return j/k;},'gFoXq':K(av.i,'KK1Z'),'sJLxx':'Error\x20retrieving\x20job\x20postings'};try{const j=i[K(av.j,'vg[q')](typeof g[K(av.k,av.l)][K(0x147,'([Cz')],'string')?i[K(av.m,av.n)](parseInt,g[K(av.o,av.p)][K(av.q,'BwpD')]):0x1,k=i['YRCil'](typeof g[K(0x162,'WJ0q')][K(0x1e0,'vg[q')],K(0x17a,av.r))?i[K(av.s,'xQ(C')](parseInt,g['query'][K(0x1f9,'WJ0q')]):0x9,l=i[K(0x1ac,av.t)](j,0x1)*k,m=await jobpostingModel_1[K(0xf4,'6x!P')]['countDocuments'](),n=await jobpostingModel_1[K(0x1ee,av.u)][K(0x1ea,av.v)]()['skip'](l)[K(av.w,av.x)](k);h[K(0x19f,av.y)](0xc8)[K(0x10d,'m9E%')]({'statusCode':0xc8,'success':!![],'message':i['cZuqR'],'data':n,'total':m,'totalPages':Math['ceil'](i[K(0x1b1,'OyN3')](m,k)),'currentPage':j});}catch(o){logger_1[K(av.aw,'Zjb5')][K(av.ax,'AjFk')](i[K(av.ay,'Zjb5')],o),h[K(0x1a2,av.az)](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i[K(av.aA,'vg[q')],'error':o});}};exports['getAllJobpostings']=getAllJobpostings;function e(){const aX=['WO7cPq/dNq','WOFcILFcTmo2','W57cMCo7B8k1','WQlcOWpdIrldH1BcRCopW73cIGe3WR7dS8o5i8k+q8kWwH3dT0JcNGhdMXbnFmk2','W43cRCo1vmkH','W48PW7dcTsRcOmoK','W4NcG8o7zCk+','lmoyW6v3WR8','uSoxW5VcS8k7kG','W4raWP5yWQzoW5yuWR4','D23cQMH2W4LIwaHWlCox','ySkjW78hWO3dPW','W5BcVu8A','emk3Fmo8','lthdTta7','heTIb28','mXmGW4FcTbPtW5pcLCocWQJdLYVdUKfvWRzFfa','e1b9kcu','WRScW7nQBG','AZn+W54u','W5dcHgKWW6S','WP3cVYjg','cmkcBXNcRa','rSkJxHFdKmkhW4K/dfRcQue2WOZcI8kqeX3cICkrWPVcMmkjFXFcG8kwW7Ha','CmkLtqZdL8ou','WO/cQrxdUbhdMhhcP8ojW7/dJHCPWR7dTSohkCk4e8kSxaRdVupcIGe','amk3BCo9','WOb0WQhcPCkW','ovnWaW','WRyzWOKWW4m','vWDTWPK','ubJcRaLC','gSknW4dcMmoZ','W5X/x8oElSo3w8o4W4KZDmo6','EazWWPJcGvu+W7RdVdCInmkAr8kiFmownmkpW7ZdJcGyW7jp','k8o4umk+WRq','WOyObX3cLa','WO06dCkkAmkJE8oLW7ewBmo/W7WdW5qX','uX/cHcT/','lg91osy','WORcMe/cVW','WOvHCHW','WPhcMWRdIqS','fXzwW6vG','WOpcHfVcHSoY','WPBcUeNdLW','nmoZW7bHWQRdJa','hX4vW49maZ0qzmovsuS0WOW','hSkHCCoN','WR5KWQJcK8kCW6tdVN3dG3i','mev2aq','WQ7cQxpcSmo6','aw06nq','xCkUcbJdI8ozfmo2WRe4kfTpW7WdxmoquuK','WO3cT3dcS8kL','W5dcKmkKWRRdVYS','fZWzW7rn','W4ddLL/dNSoc','gbqmW4rmiHGCC8oiq1y0WPBdNw4','n8oeD8kiWR/cGCorW51iB8kDWQ7dHmksw24GwSoBh8kBW5BcTK0kA8kysq','WONcQwhcICoS','bsKHW5fv','W7hdTqhcJq','WPhcU3xcM8kB','W6pcRLOqW7JdU8ogWOLLW7tcJwldSCo9W4FcKNmeuSkXpCoyu3eDDCkThZK','W51bWQDnWQvtW4S','uSoxW4JcRSkGpG','dmkNeYVcNG','W6fdWPqhfsTYtsJcG8kZaq','DXTGWOFcNay/W6pdTJf2kmkermojySoCmSoFW6ddIJ8sW7LBfCk1xs0kca','WPxcKxFcH8o2CW','WP3cKLlcUmkPWRuvavHFnG','mmoOguJcLmkxWO8vlg/cP2eR','WPJcIflcQmkPWQ4pdaWAgfeFdmkIdG','jmo/W491WPeSWOG','imkHtcu1yt0','tSo3bfy','BdPBW5K2','WOZcLNNcNq','omozz8kxWQldKSoxW5fsESouWQ/dL8kxuh1LvmkudSkEW5RcPLWqDSkzbNNdHmoW','jt3dVJG6WPf8','jrmYW5pcSXGh','mc3dVsS2','vGxcSbvbWQVcOq','k8kNvIhcVJXQyau3W7S','uCo0d1NdJsOvtxfT','WPztWQtcJmk0WQVcSNZdNwlcGmolqf7cQa','W4BcLSkKWRZdOW','WRizWOW5','WQpcL2tcNmoXid5sWPtcSYWDAvbJjchcVZdcRSo7WRtdVmoiW4C','aXaqW4RcKG','WOqPaXVcMd8','WRqiWQy+W4O','WRFcK0RcQSkXWQ4eqKzFjGLqvCkktSkqWPxdVr7dNG','W4xcJCk4WRC','WRq9jSkhBW','WQtcPXtdTIG','WOZcQqFdMaJdMfy','iZn1DuRdKMlcHfbWwb4','WOhcGglcSSoVBa9hWPVcUtuDAvajisZcRs/cSSo8WQNdU8obW5m','q8kPfJ/dUa','vWpcSai','jcD2W5XL','tGbWWP7cNri','k8kNvIhcRGa','i8kJtZy','W5/cM8o+BCkKWOVcISkxW4LehZ7dGSoIW7TQ','lr85W5VcSG','owjVitK','xHT3WPNcHZeKW6NdRtSZm8kauW','kuj4gYDS','WP3cJ1NcQSkPWQi','FSoud1JdH8o5xG','xczyW58','WO7cPq/dNt/dJwVcOmoGW7tdJJC1WR/dS8o5iW','stzoW448','WPjEWQZcKSkYW6pdKgFdJwFcISkrfeZcU28R','WOKThmkQCmkQySoPW7Sdz8o5W6qpW54Cu8oIWPChBSkGiCkzq20','mmo7W45X','W5NdVGxdStldS0hcOa','WO3cVHpdLG8','WOVcOW/dIHldMeC','xsdcUrfw','uq7cMsfM','yNuKmG/cKW','W7hcMeJdRCoFW6vMv3Hfymk/W6GCAmobxCoRWP3cKG4EW5xdHCklBCk8WQNdQSklW6dcUvjZEmoimSoWDYqAm8kYWPa','WOvEWQVcGCkKW6FdRG','W4RdJ1bJ','z8oMiKhdTW','WPm4ba7cMcab','bCkOWPZcQW','f0D7jhtdM8owW6VdMCk/WO5vW4C2W57cV8kK','dSkRsgqWyJRdQmk0WO3dMhWfmG94W67dMxSUAH5nbSkPiCorW67cRIyPtCk1xae','A8oedeVdIW','iYnpW4nFW6O','kWu7W5W','r0iwfsW','rG/cQI9aWRpcOCotb0mG','CSkyW7CF','W7ldObtcGCkCBq','xgJcPSkyWPKzyW','nCkHW5FcUSoxWP8sW5pdHGRcUCkIo8k4WOZdP8kE','bSk8nqVcQCkh','WQBcKw3cVSkn','fSk2wWVcIx03EvPxy2W','W5VcNSo/FSkP','WPOCW54cW6CvWOfkW7qKF2VcHbS0s30UW4JdN8ospCo5E8ocW6ZcSW','W5KNl0pdIYiMsSkoC8kgW6i','cSoCD8koWO4','uN7cHmkZWPOsDXHiAmkzW4FcTCoHyGldVW','CmkMWRa1W7hcI8kWuYr5dgG','fvPSc2VdJCopW6VdHa','W6BcLSkKWRZdO2WxW5vmAgGLfhXPW5T5WPmwW4ubW5nLW6dcSstcJNhcKG','m8oUW4HGWPeZ','W5STW7hcSq','WQhcOKZcUCkYWRmppxm','WO/cHKtcI8oh','DMyGna','nvb9awNcMCofW7BdJ8kQWPnsW44tWOFcNmkVWPxcH25ShCoqWRBcMmoi','r8oLb1q','W5ldKwRdR8ob','WQldLMddOmo9W61ixrzRjvrfz8otFCkHW5BcGcZcILddR8oDo8kiW6JcISkjW6COiCoJWPi','fCk2d3ddTGG7sa','WQhcOHFdMbhdNuBdPmolW7xdIbiQWQJdPSoKkmk9q8kQsW','nsvCW5Hy','W40LW7RcOdRcVG','e2mSlCkGW7W','tSkNea','FXPlWOtcPG','rCk4eWm','ibuGW5VcQrO','qCo2gvFdIW','WPVcS0ldLG','W5ldSdpcJmkb','zr14WO94','qmotW5NcTSkS','mIZdUs06WO4','WP0uWPpcNHG','cxzLW7GgyxWi','ehy/omk4W7W','W6mEW7dcVI8','W5lcKCkZWQhdQa','WPJcLflcRW','WOVcOW/dIGNdHLFcP8ovW7xdMa','WR5KWQtcJCkHW6tdQhZdQ3lcG8kdfuNcOq','WQexWP4YW5janfLbWPzLW6/dGmki','fYNdQsmM','W4CLW7VcVsS','WP89dCkzzq','W7NdVuH3hq','tH9RWOC','WPRcM0NdM8kJ','WRxcL3NcH8ku','eSk3xW/cIhCksfz+uwO','hmoqW4H3WOq','fsvCW5HyWRNdLmoqWRVcRmkVlqlcUSkUp8kiCmoTc8kImmksgwbOWRdcSaVcJW','FYvZW6qS','q8ojaLxdTq','h8kjnZBcMG','WRqoeCkAuW','WOxcVfNdJa','WPhcSL7dJmk8W4rr','W47cJSo8BCkLWOlcTa','b8kMF8o9W7xcTG','WO5IBr7cIW','pLn/dIDZca','WQGlWOqY','WPuEWRtcRZy','a8oQW7vpWPa','r8oRk8k5WRBdTr1MWQxcKSo+xKG','emk3EmoOW7xcQv0','WOnrtt7cMa','W5ddKXpcPSkYWQmfdL8FlHzDvSkrvmkkWPFcRZRdLrNcS8oq','yhqGnam','f8kXxtdcUaDbBG','ymkiW7SbWOe','W4VdTGdcNSkh','p0rRaca','WQCMhSkkCmkVvCkQW7KjyCo8W6CzW44/uSoNW4CbEq','gmkRW4hcI8ouWOaSW5xdIH3dTSkJkSkLWPddQCkiWRZcO8o/kvNcVZ0qAwldLmkjWR7dJCotfq','WPdcGsrfua','eg0Soa','aCkOWPZcQ8ktkvGe','C8kOWP8KW512WO7dQu7dLvhcHq','p8kwWPZcPSk9','e01Hhw/dI8otW6FdNSkKWPu','ier2nfa','tmkZrH3dGCotW7i+','WRackmk2dW','WPXIAHNcOa','WPjEWO7cPSkD','aCk2wcSYltVdUCkPWPhdLMPtkqrRWRZdMNe6FXuEaCk1lmov','EGX1WRJcPa','iCoVW6fJWQe','n8oMW6nYWRm','WQPGBX3cGdyVDSkFDCkgW4X5WRSKWR1dehZcOCk6yMeijW','uCocW47cVW','ltFdVW','FCkyW7auWOZdVa','gefFh1e','dSkRWQJcLCk6','WPlcLfhcOSkP','mSkGwdS','WQaaW5fBsx0','lmo/W4DZWPaO','a8kKWP7cQSkLnvSpnCkUySkYhmkTW7ZcRW','W47cI2OmW6W','scjmW5K','WPNcVKVcGCkl','W4hcI8kYWQO','mXmkW4rBmXSx','pSk6wte','WP4Una7cGsur','oGT6W5hcQrOaWO/cGCocWQxdGdddOqyzW6WtqmkmEfryWQxdQSkgW6ldSCkRW6OIWRO','hmo5sL3cGmkbrSkeWPige3q','fSoty8kgWRJdJCox','dM0Wk8kIW6b1yq','W7TuWPjGWPG','kCkMuIFcOG','WQKfW6zcqG','e8kWoXhcJW','WOibW4uBW7GcW70aWPiJDfS','W51aWPT5WRO','nSkHW4xcMSooWP8S','nCo0W79KWO4','vgVcGmkvWOW','vcPgW5uX','WOz8BqFcHG','WRtcKL7cU8kYWRquc0jxn1Lnq8kkvCkxWPFcQXldNL3cPCojDCkrW4ZdLmkGW555emkLW4i','WR8DW45BuW','jNaSi8k/WQ90yCkgpCkzWP/dHgFdKfJcHKyFjGNdGe5YW7NcV8kuW6JcKSoB','nH4cWOfikcehEmows1zGWO3dLN05W48qW5JcJq12W7zRm8kcFK7dKePun8o3FG','DSkfsrxdHG','feDPd27dLCos','kvmsbSkL','amoOW4HIWQ4','lSk3rsO','mCkGBmoMW7ldPvTmWOxcP8oWFLuOWOWZqatdN8owW5ftxIhcSSk2W7pdI8oyrq','mCoVW4XMWP0'];e=function(){return aX;};return e();}const getAllUpcomingJobpostings=async(g,h)=>{const aA={g:'AjFk',h:0x1b2,i:'MgyB',j:0x106,k:0x1cb,l:'xSC3',m:'MgyB',n:0x1c6,o:'WZT*',p:0x1db,q:'vT6S',r:'4k(a',s:0xfe,t:0x112,u:'n5%$',v:0x10a,w:0x11e,x:0x16e,y:'(6d3',aB:'Et2[',aC:0x1f7,aD:'@j$&',aE:0x12b,aF:'A(ah',aG:'Cmmf',aH:0x1d4,aI:'VqUX'},L=H,i={'gMimL':L(0x126,aA.g),'GAxRJ':function(j,k){return j(k);},'YNUYy':function(j,k){return j*k;},'aOlEa':function(j,k){return j-k;},'ijZZk':L(0x16c,'vxh6'),'unVpj':function(j,k){return j/k;},'oLwzo':L(aA.h,aA.i),'spwkR':L(aA.j,'nS19')};try{const j=typeof g['query'][L(0x165,'@j$&')]===i[L(aA.k,aA.l)]?i[L(0x11a,aA.m)](parseInt,g[L(aA.n,aA.o)][L(aA.p,aA.q)]):0x1,k=typeof g[L(0x1f1,'Alxa')]['limit']===i[L(0x1b4,aA.r)]?parseInt(g[L(0x174,'oyR(')][L(aA.s,'9$A^')]):0x9,l=i[L(aA.t,aA.u)](i[L(aA.v,'XerD')](j,0x1),k),m=await jobpostingModel_1['default'][L(aA.w,']zOb')](),n=await jobpostingModel_1[L(0x1f6,'UDGZ')][L(0xef,'bet%')]({'schedule_start':{'$gte':new Date()}})['skip'](l)['limit'](k);h['status'](0xc8)[L(aA.x,aA.y)]({'statusCode':0xc8,'success':!![],'message':i[L(0x1df,aA.aB)],'data':n,'total':m,'totalPages':Math[L(0x10b,'(gFV')](i[L(aA.aC,'@j$&')](m,k)),'currentPage':j});}catch(o){logger_1[L(0x139,aA.aD)]['error'](i[L(aA.aE,aA.aF)],o),h['status'](0x1f4)[L(0x198,aA.aG)]({'statusCode':0x1f4,'success':![],'message':i[L(aA.aH,aA.aI)],'error':o});}};exports['getAllUpcomingJobpostings']=getAllUpcomingJobpostings;const getAllScheduledJobpostings=async(g,h)=>{const aH={g:0x196,h:'Cmmf',i:0xe7,j:')hO0',k:'4[BT',l:0x1d9,m:'m9E%',n:0x174,o:'oyR(',p:0x1e6,q:'WJ0q',r:0x1d7,s:'I#bt',t:0x141,u:'6x!P',v:'E9]K',w:'T)[D',x:'BwpD',y:0x14b,aI:'([Cz',aJ:0x1ab,aK:'NneX',aL:'WJ0q',aM:'6x!P',aN:'([Cz',aO:0x14d,aP:'m9E%',aQ:'KK1Z',aR:'bet%',aS:'WZT*',aT:'xQ(C',aU:'Alxa',aV:'(gFV',aW:0x13d,aX:'A(ah',aY:0x1d8},M=H,i={'BnIsU':function(j,k){return j===k;},'GxwOW':'string','Kzagi':function(j,k){return j(k);},'crPCz':function(j,k){return j===k;},'EofMI':function(j,k){return j*k;},'SdUds':function(j,k){return j-k;},'vpMbl':function(j,k){return j===k;},'AbjJa':M(aH.g,aH.h),'yWkpv':M(aH.i,']zOb'),'PQXLw':M(0xe6,aH.j),'auHwE':M(0x12f,aH.k)};try{const j=g[M(0x162,'WJ0q')][M(0x128,'Dgoz')],k=g['query'][M(aH.l,'OyN3')]||new Date(),l=g[M(0x1a4,'AjFk')]['end']||new Date(),m=i[M(0x197,aH.m)](typeof g[M(aH.n,aH.o)][M(aH.p,aH.q)],i[M(aH.r,aH.m)])?i[M(0x1a0,aH.s)](parseInt,g[M(aH.t,'&q!Z')][M(0x189,aH.u)]):0x1,n=i[M(0x18f,'Dgoz')](typeof g[M(0x1c4,aH.v)]['limit'],i[M(0x1bf,'OyN3')])?i['Kzagi'](parseInt,g['query'][M(0x1fc,aH.w)]):0x9,o=i['EofMI'](i[M(0x19c,aH.x)](m,0x1),n),p=i[M(aH.y,aH.aI)](g[M(aH.aJ,aH.aK)]['sort'],M(0x160,aH.aL))?-0x1:0x1,q=g['query'][M(0x194,aH.aM)]||i['AbjJa'];let r={};q!==i['AbjJa']&&(r={'status':q});let s={};j&&(s={'$or':[{'title':{'$regex':j,'$options':'i'}}]});const t=await jobpostingModel_1['default'][M(0x1a8,aH.aN)]({...r,...s,'schedule_start':{'$gte':k},'schedule_end':{'$lte':l}}),u=await jobpostingModel_1['default'][M(aH.aO,'AjFk')]({...r,...s,'schedule_start':{'$gte':k},'schedule_end':{'$lte':l}})[M(0x1cc,')hO0')]({'schedule_start':p})[M(0x1ad,aH.aP)](o)[M(0x1aa,'6x!P')](n);h[M(0x17d,'6DWB')](0xc8)[M(0x11f,aH.aQ)]({'statusCode':0xc8,'success':!![],'message':i[M(0x119,aH.aR)],'startDate':k,'endDate':l,'data':u,'total':t,'totalPages':Math[M(0x179,aH.aS)](t/n),'currentPage':m});}catch(v){logger_1[M(0x1bc,'(gFV')][M(0x10e,aH.aT)](i[M(0x105,aH.aU)],v),h[M(0x15d,aH.aV)](0x1f4)[M(aH.aW,aH.aX)]({'statusCode':0x1f4,'success':![],'message':i[M(aH.aY,'@j$&')]});}};exports[H(0x164,'NneX')]=getAllScheduledJobpostings;const getJobpostingById=async(g,h)=>{const aI={g:'bet%',h:'UDGZ',i:0x12a,j:'n5%$',k:0x1d6,l:0x1d2,m:'nS19',n:0x1ba,o:'KK1Z',p:0x121,q:'(gFV',r:0x122,s:0x1cd,t:'Et2[',u:0x175,v:0x1bd,w:0x1de,x:'9$A^',y:0x1c8,aJ:'(gFV',aK:0x107,aL:0x121,aM:0x1c2,aN:'VqUX'},N=H,i={'HLeCy':N(0x192,aI.g),'hcPqJ':N(0x1ca,aI.h),'QbOIw':N(aI.i,aI.j),'lCPLj':N(aI.k,'22%$')},{id:j}=g['params'];if(!mongoose_1[N(0x16d,'XerD')]['Types'][N(aI.l,aI.m)][N(0x17b,'XT@F')](j))return h[N(aI.n,aI.o)](0x190)[N(aI.p,aI.q)]({'statusCode':0x190,'success':![],'message':i[N(aI.r,'A(ah')]});try{const k=await jobpostingModel_1['default'][N(aI.s,aI.t)](j);h[N(aI.u,'MgyB')](0xc8)[N(aI.v,'([Cz')]({'statusCode':0xc8,'success':!![],'message':i[N(aI.w,aI.x)],'data':k});}catch(l){logger_1[N(0x13f,'&q!Z')][N(aI.y,aI.aJ)](i['QbOIw'],l),h[N(aI.aK,'nS19')](0x1f4)[N(aI.aL,'(gFV')]({'statusCode':0x1f4,'success':![],'message':i[N(aI.aM,aI.aN)],'error':l});}};exports[H(0x172,'9$A^')]=getJobpostingById;const updateJobposting=async(g,h)=>{const aJ={g:'m9E%',h:'Zjb5',i:0x1eb,j:'1Zqc',k:0x16b,l:'E9]K',m:0x176,n:0x14c,o:'bet%',p:'22%$',q:0x144,r:'4k(a',s:'Alxa',t:0x131,u:'vT6S',v:0x103},O=H,i={'OfcLQ':O(0x134,aJ.g),'vXAOa':O(0x111,'m9E%')},{id:j}=g[O(0x195,')hO0')];if(!mongoose_1[O(0x1b9,aJ.h)]['Types'][O(0x1c5,'Alxa')][O(aJ.i,aJ.j)](j))return h[O(aJ.k,aJ.l)](0x190)[O(aJ.m,'L%AD')]({'statusCode':0x190,'success':![],'message':O(aJ.n,'vg[q')});const {title:k,type:l,salary_min:m,salary_max:n,location:o,description:p,requirements:q,responsibilities:r,benefits:s,status:t,schedule_start:u,schedule_end:v}=g[O(0x123,')hO0')];try{const w=await jobpostingModel_1['default'][O(0x161,'bet%')](j,{'title':k,'type':l,'salary_min':m,'salary_max':n,'location':o,'description':p,'requirements':q,'responsibilities':r,'benefits':s,'status':t,'schedule_start':u,'schedule_end':v},{'new':!![]}),x=await jobposterModel_1[O(0x150,aJ.o)]['findOne']({'ref_id':j});x&&await jobposterModel_1[O(0x13a,aJ.p)][O(aJ.q,aJ.r)]({'ref_id':j},{'expiresAt':v}),h[O(0x157,aJ.s)](0xc9)[O(0x118,'VqUX')]({'statusCode':0xc9,'success':!![],'message':i[O(0x1f0,'32PZ')],'jobposting':w});}catch(y){h[O(aJ.t,aJ.u)](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i[O(aJ.v,'4[BT')],'error':y});}};exports['updateJobposting']=updateJobposting;const deleteJobposting=async(g,h)=>{const aK={g:'NneX',h:'A(ah',i:'OyN3',j:0x1e9,k:'&q!Z',l:0x157,m:'Alxa',n:0x193,o:'MgyB',p:0x17d,q:'6DWB',r:'xSC3'},P=H,i={'Vqqzi':P(0x1c9,aK.g),'CpFVG':P(0x13e,'n5%$'),'CbIyN':P(0x148,aK.h)},{id:j}=g[P(0x11d,aK.i)];if(!mongoose_1['default'][P(0x13c,'WJ0q')][P(aK.j,']zOb')][P(0x130,'32PZ')](j))return h[P(0x175,'MgyB')](0x190)[P(0x13b,'4k(a')]({'statusCode':0x190,'success':![],'message':i[P(0x1a9,aK.k)]});try{const k=await jobpostingModel_1[P(0xe9,'9$A^')]['findByIdAndDelete'](j);h[P(aK.l,'Alxa')](0xc8)[P(0x1e1,aK.m)]({'statusCode':0xc8,'success':!![],'message':i[P(0x1be,'I#bt')],'jobposting':k});}catch(l){logger_1[P(0x15f,'oyR(')][P(aK.n,aK.o)]('Error\x20deleting\x20jobposting:',l),h[P(aK.p,aK.q)](0x1f4)[P(0x104,aK.r)]({'statusCode':0x1f4,'success':![],'message':i[P(0x16f,'4k(a')],'error':l});}};exports[H(0x1e4,'Et2[')]=deleteJobposting;function c(g){const aW={g:0x156,h:0x1b8,i:'KK1Z',j:0x199,k:'L%AD',l:0x1f3},aV={g:0x127,h:0x136,i:'vg[q',j:0x19e,k:0xea,l:')hO0',m:0x1b3,n:0x1e7,o:0x1d0,p:'9$A^',q:0xf0,r:0x1b6,s:'NneX',t:0x18e,u:'4k(a',v:'n5%$',w:'WUb8',x:0x158,y:'22%$',aW:0x1bb},Q=H,h={'sQxQS':function(j,k){return j===k;},'kMyUu':Q(aW.g,'m9E%'),'FvcTG':Q(0x145,'XerD'),'LkuOU':Q(aW.h,'WUb8'),'JQLJh':function(j,k){return j!==k;},'icRxD':function(j,k){return j+k;},'GfXXi':function(j,k){return j/k;},'tpXkO':Q(0x1e3,'@j$&'),'gCwJV':function(j,k){return j%k;},'aoAGu':function(j,k){return j+k;},'ZFyqO':Q(0xfc,aW.i),'yXApm':Q(0x18c,'E9]K'),'xjriC':Q(aW.j,aW.k),'mXMkO':Q(0x143,'Alxa'),'fxonS':function(j,k){return j(k);}};function i(j){const R=Q;if(h[R(0x19d,'vTcb')](typeof j,h[R(aV.g,']zOb')]))return function(k){}[R(aV.h,aV.i)](h['FvcTG'])[R(aV.j,'vT6S')](h[R(0x14f,'bet%')]);else h[R(aV.k,aV.l)](h[R(0x18b,'A(ah')]('',h[R(aV.m,'WJ0q')](j,j))[h[R(0x155,'MgyB')]],0x1)||h[R(aV.n,'vg[q')](j,0x14)===0x0?function(){return!![];}[R(aV.o,aV.p)](h[R(aV.q,'A(ah')](h[R(aV.r,aV.s)],h[R(0x12c,']zOb')]))[R(aV.t,aV.u)](h[R(0x183,aV.v)]):function(){return![];}[R(0x1a6,'bet%')](R(0x11c,aV.w)+R(aV.x,aV.y))[R(aV.aW,'VqUX')](h['mXMkO']);i(++j);}try{if(g)return i;else h[Q(aW.l,'6DWB')](i,0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteJobposting = exports.updateJobposting = exports.getJobpostingById = exports.getAllScheduledJobpostings = exports.getAllUpcomingJobpostings = exports.getAllJobpostings = exports.searchJobpostings = exports.createJobposting = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
+const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+/**
+ * Creates a new job posting in the database.
+ *
+ * @param req - The HTTP request object containing the job posting data.
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response with the created job posting.
+ */
+const createJobposting = async (req, res) => {
+    const { title, type, 
+    // company,
+    salary_min, salary_max, location, description, requirements, responsibilities, benefits, status, schedule_start, schedule_end, } = req.body;
+    try {
+        const jobposting = await jobpostingModel_1.default.create({
+            title,
+            type,
+            // company,
+            salary_min,
+            salary_max,
+            location,
+            description,
+            requirements,
+            responsibilities,
+            benefits,
+            status,
+            schedule_start,
+            schedule_end,
+            isExpired: false,
+        });
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Jobposting created successfully",
+            jobposting,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error creating jobposting:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error creating jobposting",
+            error,
+        });
+    }
+};
+exports.createJobposting = createJobposting;
+/**
+ * Searches for job postings in the database based on the search query.
+ *
+ * @param req - The HTTP request object containing the search query.
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the search results.
+ */
+const searchJobpostings = async (req, res) => {
+    const searchQuery = req.query.query;
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+    const skip = (page - 1) * limit;
+    try {
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments({
+            $or: [{ title: { $regex: searchQuery, $options: "i" } }, { type: { $regex: searchQuery, $options: "i" } }, { company: { $regex: searchQuery, $options: "i" } }, { location: { $regex: searchQuery, $options: "i" } }],
+        });
+        const data = await jobpostingModel_1.default.find({
+            $or: [{ title: { $regex: searchQuery, $options: "i" } }, { type: { $regex: searchQuery, $options: "i" } }, { company: { $regex: searchQuery, $options: "i" } }, { location: { $regex: searchQuery, $options: "i" } }],
+        })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Jobpostings retrieved successfully",
+            data,
+            total: totalJobpostings,
+            totalPages: Math.ceil(totalJobpostings / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error retrieving jobpostings:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving jobpostings",
+            error,
+        });
+    }
+};
+exports.searchJobpostings = searchJobpostings;
+/**
+ * Retrieves all job postings from the database.
+ *
+ * @param req - The HTTP request object.
+ * @param res - The HTTP response object.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing all the job postings.
+ */
+const getAllJobpostings = async (req, res) => {
+    try {
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments();
+        const jobpostings = await jobpostingModel_1.default.find().skip(skip).limit(limit);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Job postings retrieved successfully",
+            data: jobpostings,
+            total: totalJobpostings,
+            totalPages: Math.ceil(totalJobpostings / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error retrieving job postings:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving job postings",
+            error,
+        });
+    }
+};
+exports.getAllJobpostings = getAllJobpostings;
+/**
+ * Retrieves all upcoming job postings from the database.
+ *
+ * @param req - The HTTP request object.
+ * @param res - The HTTP response object.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing all the upcoming job postings.
+ */
+const getAllUpcomingJobpostings = async (req, res) => {
+    try {
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments();
+        const jobpostings = await jobpostingModel_1.default.find({
+            schedule_start: { $gte: new Date() },
+        })
+            .skip(skip)
+            .limit(limit);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Upcoming Job postings retrieved successfully",
+            data: jobpostings,
+            total: totalJobpostings,
+            totalPages: Math.ceil(totalJobpostings / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error retrieving job postings:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving job postings",
+            error,
+        });
+    }
+};
+exports.getAllUpcomingJobpostings = getAllUpcomingJobpostings;
+/**
+ * Retrieves job postings from the database with sorting and filtering based on status.
+ *
+ * @param req - The HTTP request object containing query parameters:
+ *              - start: The start date for filtering job postings.
+ *              - end: The end date for filtering job postings.
+ *              - page: The current page for pagination (defaults to 1).
+ *              - limit: The maximum number of results per page (defaults to 9).
+ *              - sort: Sorting order, either 'asc' or 'desc' (defaults to 'asc').
+ *              - filter: Job status filter, either 'all', 'active', or 'inactive' (defaults to 'all').
+ * @param res - The HTTP response object to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the filtered, sorted, and paginated job postings.
+ */
+const getAllScheduledJobpostings = async (req, res) => {
+    try {
+        // Extracting query parameters
+        // I prolly should do more commenting so I don't forget what I did lol
+        // also, for whoever is reading this, I'm sorry for the mess
+        const searchQuery = req.query.query;
+        const startDate = req.query.start || new Date();
+        const endDate = req.query.end || new Date();
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        // Sorting order: 1 for 'asc', -1 for 'desc'
+        const sortOrder = req.query.sort === "desc" ? -1 : 1;
+        // Filter by job status (default: 'all') with Enim: ['active', 'inactive', 'all']
+        const filter = req.query.filter || "all";
+        // Build the filter query based on statuss
+        let statusFilter = {};
+        if (filter !== "all") {
+            statusFilter = { status: filter };
+        }
+        // if search query is provided, filter by search query
+        let searchFilter = {};
+        if (searchQuery) {
+            searchFilter = {
+                $or: [{ title: { $regex: searchQuery, $options: "i" } }],
+            };
+        }
+        const totalJobPostings = await jobpostingModel_1.default.countDocuments({
+            ...statusFilter,
+            ...searchFilter,
+            schedule_start: { $gte: startDate },
+            schedule_end: { $lte: endDate },
+        });
+        const data = await jobpostingModel_1.default.find({
+            ...statusFilter,
+            ...searchFilter,
+            schedule_start: { $gte: startDate },
+            schedule_end: { $lte: endDate },
+        })
+            .sort({ schedule_start: sortOrder })
+            .skip(skip)
+            .limit(limit);
+        // Sending the response
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Job postings retrieved successfully",
+            startDate,
+            endDate,
+            data,
+            total: totalJobPostings,
+            totalPages: Math.ceil(totalJobPostings / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error retrieving job postings:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving job postings",
+        });
+    }
+};
+exports.getAllScheduledJobpostings = getAllScheduledJobpostings;
+/**
+ * Retrieves a job posting from the database by its unique identifier.
+ *
+ * @param req - The HTTP request object, which should contain the `id` parameter in the URL path.
+ * @param res - The HTTP response object, which will be used to send the retrieved job posting.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the retrieved job posting.
+ */
+const getJobpostingById = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            statusCode: 400,
+            success: false,
+            message: "Invalid jobposting id",
+        });
+    }
+    try {
+        const jobposting = await jobpostingModel_1.default.findById(id);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Jobposting retrieved successfully",
+            data: jobposting,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error retrieving jobposting:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving jobposting",
+            error,
+        });
+    }
+};
+exports.getJobpostingById = getJobpostingById;
+/**
+ * Updates a job posting in the database.
+ *
+ * @param req - The HTTP request object, which should contain the `id` parameter in the URL path and the updated job posting data in the request body.
+ * @param res - The HTTP response object, which will be used to send the updated job posting.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response containing the updated job posting.
+ */
+const updateJobposting = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            statusCode: 400,
+            success: false,
+            message: "Invalid jobposting id",
+        });
+    }
+    const { title, type, 
+    // company,
+    salary_min, salary_max, location, description, requirements, responsibilities, benefits, status, schedule_start, schedule_end, } = req.body;
+    try {
+        const jobposting = await jobpostingModel_1.default.findByIdAndUpdate(id, {
+            title,
+            type,
+            // company,
+            salary_min,
+            salary_max,
+            location,
+            description,
+            requirements,
+            responsibilities,
+            benefits,
+            status,
+            schedule_start,
+            schedule_end,
+        }, { new: true });
+        const jobposter = await jobposterModel_1.default.findOne({ ref_id: id });
+        if (jobposter) {
+            await jobposterModel_1.default.updateMany({ ref_id: id }, { expiresAt: schedule_end });
+        }
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Jobposting updated successfully",
+            jobposting: jobposting,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error updating jobposting",
+            error,
+        });
+    }
+};
+exports.updateJobposting = updateJobposting;
+/**
+ * Deletes a job posting from the database.
+ *
+ * @param req - The HTTP request object, which should contain the `id` parameter in the URL path.
+ * @param res - The HTTP response object, which will be used to send the result.
+ * @param next - The next middleware function in the request-response cycle.
+ * @returns A JSON response indicating whether the job posting was deleted successfully.
+ */
+const deleteJobposting = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            statusCode: 400,
+            success: false,
+            message: "Invalid jobposting id",
+        });
+    }
+    try {
+        const jobposting = await jobpostingModel_1.default.findByIdAndDelete(id);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Jobposting deleted successfully",
+            jobposting: jobposting,
+        });
+    }
+    catch (error) {
+        logger_1.default.error("Error deleting jobposting:", error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error deleting jobposting",
+            error,
+        });
+    }
+};
+exports.deleteJobposting = deleteJobposting;

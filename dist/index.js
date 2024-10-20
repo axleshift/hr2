@@ -1,1 +1,155 @@
-const C=f;(function(g,h){const V={g:0x96,h:'P@%e',i:0xe2,j:0xbb,k:'jUR#',l:0xc9,m:'$Ic9',n:0xc6,o:0x148,p:'j#H%'},v=f,i=g();while(!![]){try{const j=parseInt(v(V.g,V.h))/0x1*(parseInt(v(0x12d,'kdmH'))/0x2)+parseInt(v(0x14f,'oiAs'))/0x3+parseInt(v(V.i,'DRgw'))/0x4*(-parseInt(v(V.j,V.k))/0x5)+-parseInt(v(V.l,V.m))/0x6+-parseInt(v(0x14d,'MaN2'))/0x7+parseInt(v(V.n,'bYR$'))/0x8*(parseInt(v(V.o,'PFZA'))/0x9)+-parseInt(v(0x8b,V.p))/0xa*(parseInt(v(0x95,'SSeJ'))/0xb);if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xec4b5));const d=(function(){let g=!![];return function(h,i){const j=g?function(){const w=f;if(i){const k=i[w(0x101,'1H#Q')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());function e(){const aY=['iCkviCkbwW','af7dOmka','nSoYoXFcUCkOs8oBDq','eSoyW4XGxZJcVa','W5yhg8k+W5W','W5tcN8kiFhdcRCkktZJdLa8','yCoPamkQrmkTWR3dPmkuW5XfW4OlWQFdHCoxWPn3a8o5','yrmOWQO','WQPGnGSG','WP0QW5ddMNj8W70','g8kHbCoxp1BdHGXdAKJcOLFdVSkV','sv8QF8k5WP1nC8okkmobCq','afpdTSkA','ocXUW7OP','WP7dM24V','imkpymk0W655WR7cK8oHcW','W4aKW5xdHZH5','avhdQmojWQZcU8kF','W5hcISkLemkm','WQtcSmohmCoj','auxdOa','gX9EW5GdqJZcL8km','pwKkWQOyWPnEB1WmFKXWWOHkod3cGhBdHSoMwt1y','WR93DmkcWQi','p1ZdSmkVqW','W6mxzctdPa','yMuWzG','WPKeea','W6STp8kxW5lcKW','W6rQeqHga8k/','W7rGjb1bbSkLW54','WOlcHSo7eSo6','qqhcNCodyqZcMG','W6BdKHfEW6ep','WP7dJvui','W4uAW6VdHG0','WP8tdCoeW4O4lwRdPCkeWOW','W6VcP8k0dCkBW6icu8oMWORdJWFcL33cRW','W7FdHmktma','W7KmpCkvveFdQq','zwuXzmkSWOa','WQDoW6SvWO4','WPq1oSoGW7u','fqzFW5afDa','WQ1uWPK','WPxdQSo5DsbRlryUW4ddV8oHb8k6W7rsfsBcQmoMWRBdUM9mW55lW4zoW4XYi8kl','h8oWW7NdHSkK','W6ykFsRdQ2D/qNdcJIq1F8kgD1zHhrD2ee86BSkvWRCNdG','WPT2W68','W7FcVSkqw08','W4C4W4u','W6hcG8kjW7ZdIG','oCoNW4y','hvJdO8kb','pCoKmaJcHq','WQ3dVLKfWP0','W4aTfSkwrq','ECoSvmk0W5u','WQpcHf/cT8oH','WQdcUgRcHCocxCkE','W6fsWPtdJuFdRSkQ','W6NcP8kNW4ZdJq','W6/dLaLAW6Sv','WPldMwJdT8o4bmkRCbJcKrC','WQJcR8ozoSoFWRpdSa','dg4q','WPXrasCK','W5GKW4NdNq','W7ZdG8kuia','erfoW74gFXxcI8kaF1/dLZK2WPdcI2XYWRDxeSoSW4JdQW','b1pdT8kyBSks','DNm6wbzoW5tdGSo9rWi','WRiWW7OVW63cHHKjW5C','k8otAHBcPq','W6iWiCkcW4pcIea','iSotCsJcMG','fbTyW6iC','W5axBdNdVMe2rg0','WRddHSkviW','jSkOaSkK','jdfSdfjXW5xdQ8kyoZTtWOiQWPur','kL9MWPPro23dHSovvfVcIdCoW7NcTea1WPHLuSk1WP7dUdi9WO/dL8odW5edW53dSau','pmoZnHxcQCkVwSoS','WRmPhmo+W6KJlg3dV8ka','W6irb8kgt0ddTdS','a8ooW49Z','p8kNemkJ','WQ3dV8kdvqy','B8oDD8kWW7TV','WR7dL241cW','W4zQW7uuWQi8WOm','jeGc','Cheau8kE','W5rbW4uCvb3cHW','efpdO8kpFSkmpq','W51fsCk5WPX6FsNdTSkbWQfAp0i','WOuoW7KsW7xcNcyKW6CjWQ0qWPpdSW','ChuZxXeSWOZdHmoWsbe+W4a','W4xcHdRcPCk1mCkk','W4dcMCk1e8kB','W6JdQSo/m1W','CHm0WQ3cPSkSWOHwk8oQW74','kmoXW4xdTSk3W6xdOW','w8kiWPxdNKy','W4pcISk+c8kFW6eAuW','iSo7W4HUEG','W4PlW5euuqxcHq','W6RcOCohnmkFWOhcGW','rMSnWQW','oSk1aq','imkBcSoBoLxdGa','gMqY','W7Tuamox','ieBdVmohWQVdRCol','W43cPGBcT8ks','WQKueSkOWPZcLmo7W5ZcJCkSW44','WRNdSJZcIb0','W43dHCkfwmoxWQldLXKUWPPk','awKeWQq','rYxcVCoHwq','c3iXWR0CfWC','W5JdKCo8oG','W7/cImkiqMq','WO/dTaVcQIeLW6b4W5/dKYZcOxBcLx3dSmkX','WOOiW68V','W7i7na','oCogAqNcTxiP','WRRcGeueWRqTW5bCemooW6C','bCoRoXRcLa','frTiW4i','h28lWQCtW5CAFKPzsqa6WPzu','qu9XwSoCnSoo','DrK8WR/cP8kYWOK','WQ5kECktWOPF','ECoCDW','W5ekEq','rKv5xCoapq','WQVcMSomcxuTW6dcHCoh','W4/cHMOMa3mUW5O','W5tcJSkkENdcLG','h3ulWR8tWRfBzL1/vuD5','iSkaCCk+W6fSWRJcMG','W4NdImkswW','WP5XhWuBWRZcVW','WO4aW6q7W6VcLq','W5xdMCknz8ou','W57dR8opW5u1W4pcLCoLeW','WRGEhCk/WOZcJ8o8W6ZcGmkTW58','nwCFWPS9','W7jAbCov','WR0CDCoOW78','W63cJSk7cSkR','dxuqWQqe','W4VdHq9CW7zBW5j0nmo8W6VdTsKAr8kwW4tcUM3dLGRdVa','n8kBhSomkKS','W7iBmSkBu0ZdII7dGWhcTKVcMG4','j8kraSoCjL4','lSogFbVcQxeZ','WR8JgmkPWRy','W4/dUConW4G0','WP7dVW7cQIeUW7W','W7a6omkeW4pcVvP9WQCGmmk3pq','kMeBWRC6','W4lcJJlcT8k0l8kluG3cMYG','W7XHg8oxfa','xszMW6XEt0uKW5aqW61fDG','imoXW43dSmk2W6e','W7LWdSoilW','WOZcSCo7kCod','W5yUW4BdKIHMWRS','W6VdR8oDmSosWOtcNCk8D8k5WP1q','W43cJJVcO8kPm8kz','W4SMs1bFW6NdS8o0WQGpW7mvWQVdRa','W5rbW4igsGxdGSk2W4VdSN7cVsisntBcGfdcQa','WQhcPCorpmofWPVdHG','vGhcU8kEW6NcHSknFKuNW4K','W5eKW47dLtrT','aWDF','W7rjg8owba','WPZdSSkJyZ1RFKO6W4ddSSo2hmkHWRmEt2RdVa','WQJdQM0ZlfGbW78nDG','W45lW4uh','W7CPjCky','WRNcPgG','f1ZdMCkuj1VcMmkLo8kdpqm','CSk5WPpdMvO','qrNdImkoW5/cO0fWW6znW53dI8kTjW','W5abAY/dMxWRqW','WODyiSkeWObddSk+dmknCbzBuColcZRcO8kOzuVcP8kkW6ldMKrhhSoFW4BdGSoi','WR/dH8oWWQ/cLSofAuBdKCoUWPHj','mtbWbKH/','h2SYW4RdPG','nSkramoF','WRVcPwtcLSooDCkqjbddQY3dTsa','WP9McWSC','WP8gfCoKW5a','W6/cJCkOW6xdKmkesNtdTmoo','fCosW4rNqZm','WPpdKg4HffSr','j8kwdCotiq','rGVcJSomyaxcNa','eHfCW5aeFte','fCopW49GxJe','WPVdMM8','W65xbmkYWP8XlMRdR2G7W7NdJHm','bxG+WRi','WQldM2SHffanW75bvSkMBha6ocRcV2m4WQ0','W7NdPJzgW5q','WO3dJu0m','8yYzLY3cSmoerSknlqBcMdJdTcitFCotW6hcKmoaWRiknKBcLg03W6dcUN8','W6RdGSo8o0pcKvC','mtrUbLi','WPtdMMyMcfa','lSkrbCou','zSkLBr7cT8kOuCosqW','gmoworJcKa','WQBcPglcJa','qxS4WRS','W5BcKCk5gW','W7VdKmkZn1m','W4iQW5tdMW','nYPQdKH8W5BdOmoCqWirW4DJWR1rg3i','W6jMgq0','8kQiNxuRWRpcVKVdUHFdJ8kaWQ/dQCogySoBDa','W4VdHq9CW7zbWP4','W4jbW5aAvG7cSSoSW4ldT3xcRcic'];e=function(){return aY;};return e();}function f(a,b){const c=e();return f=function(d,g){d=d-0x7e;let h=c[d];if(f['uMMGZn']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['LkEkBh']=m,a=arguments,f['uMMGZn']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['MYQjUh']===undefined&&(f['MYQjUh']=!![]),h=f['LkEkBh'](h,g),a[k]=h):h=l,h;},f(a,b);}(function(){const a6={g:0x13f,h:'Uc8d',i:'SSeJ',j:'PCHk',k:0xb0,l:'o%m9'},a5={g:0x13e,h:'oiAs',i:0x124,j:0x12b,k:'$Ic9',l:'mnqT',m:0x108,n:'[)^Q',o:'zNlv',p:0x130,q:0xfa,r:'1jh0',s:0xc5,t:'dXO[',u:0xcb},x=f,g={'hyeqY':x(a6.g,a6.h),'cRfZi':function(h,i){return h(i);},'hpkRF':x(0x114,a6.i),'ChTCI':function(h,i){return h+i;},'fExCJ':x(0xd3,a6.j),'HAvke':function(h,i){return h(i);},'NPUJy':function(h){return h();},'mZrnb':function(h,i,j){return h(i,j);}};g[x(a6.k,a6.l)](d,this,function(){const y=x,h=new RegExp(y(a5.g,a5.h)),i=new RegExp(g[y(a5.i,'DRgw')],'i'),j=g[y(a5.j,a5.k)](c,g[y(0x139,a5.l)]);!h[y(a5.m,a5.n)](g[y(0x80,a5.o)](j,g[y(a5.p,'CPr)')]))||!i[y(a5.q,a5.r)](g[y(0x145,'sFoN')](j,'input'))?g[y(a5.s,a5.t)](j,'0'):g[y(a5.u,'lLTZ')](c);})();}());const b=(function(){let g=!![];return function(h,i){const j=g?function(){const z=f;if(i){const k=i[z(0x137,'mnqT')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const ag={g:0x11b,h:0xd7,i:0x85,j:'4T2^',k:0x13d,l:0x100,m:'fYq[',n:0x13b,o:0xb4,p:'1H#Q',q:0xa3,r:'26x%',s:'fYq[',t:0xb2,u:'1h%H',ah:'UdFl',ai:0xea,aj:'QG2[',ak:'K81)',al:0x10c},af={g:0x111,h:0xdb,i:'sFoN'},A=f,g={'PtOoN':function(l,m){return l(m);},'wQKuP':function(l,m){return l+m;},'ghYdQ':A(ag.g,'sFoN'),'IqLts':function(l){return l();},'yaccu':A(ag.h,'P@%e'),'YvluU':A(ag.i,ag.j),'ZasPj':A(ag.k,'e^WU'),'lGZsR':A(ag.l,ag.m),'eKULL':A(ag.n,'VMPp'),'fqCAW':'trace','bobSm':function(l,m){return l<m;}},h=function(){const B=A;let l;try{l=g[B(0xf6,'CPr)')](Function,g[B(af.g,'lz)6')](g[B(af.h,'j#H%')](B(0xbf,af.i),g['ghYdQ']),');'))();}catch(m){l=window;}return l;},i=g[A(ag.o,ag.p)](h),j=i['console']=i['console']||{},k=[g['yaccu'],g[A(ag.q,'fYq[')],g['ZasPj'],g[A(0x7e,'kdmH')],g[A(0x83,ag.r)],A(0x151,ag.s),g[A(0x14a,'[)^Q')]];for(let l=0x0;g[A(0x13a,'Uc8d')](l,k[A(ag.t,ag.u)]);l++){const m=b[A(0x153,ag.ah)][A(0x9e,'53o1')][A(ag.ai,ag.aj)](b),n=k[l],o=j[n]||m;m[A(0x136,'&gV0')]=b[A(0xe6,'fYq[')](b),m[A(0x142,ag.ak)]=o[A(ag.al,ag.aj)][A(0x132,'SSeJ')](o),j[n]=m;}});a();'use strict';var __createBinding=this&&this[C(0x113,'fYq[')]||(Object[C(0x146,'NCr&')]?function(g,h,i,j){const aj={g:0xe3,h:0x133,i:0x156},D=C,l={'MKlaL':function(p,q){return p===q;}};if(l[D(aj.g,'DRgw')](j,undefined))j=i;var n=Object[D(aj.h,'Uc8d')](h,i);(!n||('get'in n?!h[D(0x141,'MaN2')]:n[D(aj.i,'fYq[')]||n['configurable']))&&(n={'enumerable':!![],'get':function(){return h[i];}}),Object['defineProperty'](g,j,n);}:function(g,h,i,j){const al={g:0x11f,h:'8]Q9'},E=C,l={'PUySZ':function(n,p){return n===p;}};if(l[E(al.g,al.h)](j,undefined))j=i;g[j]=h[i];}),__setModuleDefault=this&&this['__setModuleDefault']||(Object[C(0xd6,'%W4Z')]?function(g,h){const am={g:0xa7,h:'K81)',i:'qfZH'},F=C,i={'bxAnX':'default'};Object[F(am.g,am.h)](g,i[F(0xa2,am.i)],{'enumerable':!![],'value':h});}:function(g,h){const an={g:0x150,h:'kdmH'},G=C;g[G(an.g,an.h)]=h;}),__importStar=this&&this[C(0xf9,'[)^Q')]||function(g){const as={g:'4T2^',h:'Gzzu',i:0x14e},H=C,h={'VSBdx':function(l,m){return l!=m;},'GZqgm':function(l,m){return l!==m;},'dRkeN':'default','FhwVi':function(l,m,n,o){return l(m,n,o);},'TFboP':function(l,m,n){return l(m,n);}};if(g&&g['__esModule'])return g;var i={};if(h[H(0x126,'K81)')](g,null)){for(var j in g)if(h[H(0x152,as.g)](j,h[H(0xaa,as.h)])&&Object['prototype'][H(as.i,'&gV0')][H(0xa1,'o%m9')](g,j))h['FhwVi'](__createBinding,i,g,j);}return h[H(0x157,'%W4Z')](__setModuleDefault,i,g),i;},__importDefault=this&&this[C(0xf8,'PCHk')]||function(g){return g&&g['__esModule']?g:{'default':g};};Object[C(0xed,'n2Q)')](exports,C(0xc0,'P@%e'),{'value':!![]});const express_1=__importDefault(require(C(0x138,'k2e6'))),express_session_1=__importDefault(require('express-session')),cors_1=__importDefault(require(C(0x8d,'Uc8d'))),morgan_1=__importDefault(require('morgan')),helmet_1=__importDefault(require(C(0x10f,'j#H%'))),express_rate_limit_1=__importDefault(require('express-rate-limit')),fs_1=__importDefault(require('fs')),path_1=__importDefault(require(C(0xe8,'lz)6'))),pino_http_1=__importDefault(require('pino-http')),logger_1=__importDefault(require('./middlewares/logger')),verifySession_1=__importDefault(require('./middlewares/verifySession')),index_1=__importDefault(require(C(0xb6,'1H#Q'))),config_1=require(C(0x99,'NCr&'));(function(){const ax={g:'iv3B',h:0x11c,i:'1h%H',j:'SSeJ'},I=C,g={'hKgqY':function(i,j){return i+j;},'BBkTP':function(i,j){return i+j;},'uzfZo':I(0xb9,'n2Q)'),'SdZQf':I(0xc8,ax.g),'ezIsr':function(i){return i();}};let h;try{const i=Function(g[I(0xb3,'o%m9')](g['BBkTP'](g['uzfZo'],g[I(ax.h,ax.i)]),');'));h=g[I(0xe7,ax.j)](i);}catch(j){h=window;}h[I(0x112,'MaN2')](c,0x9c4);}());const sanitize_1=__importDefault(require('./middlewares/sanitize')),connectDB_1=require(C(0xf4,'e^WU')),connect_mongo_1=__importDefault(require('connect-mongo')),app=(0x0,express_1['default'])(),host=config_1[C(0x94,'rO@a')][C(0xa6,'PCHk')][C(0xc1,'n2Q)')],port=config_1[C(0xa8,'PCHk')][C(0x116,'[)^Q')][C(0xf5,'UdFl')],date=new Date()['toISOString']()[C(0xcf,'MaN2')]('T')[0x0],initializeFolders=()=>{const ay={g:0xb7,h:0xd4,i:'26x%',j:0xba,k:'1H#Q',l:0x103,m:'Uc8d'},J=C,g=config_1['config'][J(ay.g,'kdmH')]['dir'];!fs_1[J(ay.h,ay.i)][J(0xd0,'$Ic9')](g)&&fs_1[J(ay.j,ay.k)][J(ay.l,ay.m)](g,{'recursive':!![]});};initializeFolders(),app[C(0x11a,'RuO2')]((0x0,cors_1[C(0x154,'1h%H')])({'origin':config_1[C(0x9c,'&gV0')]['server'][C(0x115,'K81)')],'credentials':!![]})),app[C(0x102,'1jh0')]((0x0,morgan_1[C(0xb5,'lz)6')])(C(0x93,'VMPp'))),app[C(0x15d,'eDB0')](express_1[C(0xac,'zNlv')][C(0xe4,'J)N@')]()),app[C(0x15b,'e^WU')]((0x0,express_session_1['default'])({'secret':config_1[C(0xe0,'P@%e')][C(0x134,'1jh0')][C(0x8a,'mnqT')][C(0x97,'8]Q9')],'resave':![],'saveUninitialized':!![],'cookie':{'secure':![],'maxAge':0x18*0x3c*0x3c*0x3e8},'store':connect_mongo_1[C(0xff,'jUR#')][C(0x119,'Uc8d')]({'mongoUrl':config_1['config'][C(0x12e,'1H#Q')][C(0x109,'MaN2')],'ttl':0x18*0x3c*0x3c})})),app[C(0xc3,'J)N@')]((0x0,helmet_1[C(0xa9,'mnqT')])()),app[C(0x149,'lLTZ')]((0x0,pino_http_1[C(0x15c,'PCHk')])({'logger':logger_1[C(0xd5,'Uc8d')]}));const limiter=(0x0,express_rate_limit_1[C(0x90,'UdFl')])({'windowMs':0xf*0x3c*0x3e8,'max':0x12c,'standardHeaders':!![],'legacyHeaders':![],'skip':g=>{const aA={g:'MaN2',h:'%W4Z',i:0xcc,j:'PCHk'},K=C,h={'xCCmQ':function(i,j){return i===j;}};return h[K(0x118,aA.g)](g['session'][K(0x143,aA.h)]?.[K(aA.i,aA.j)],K(0xab,'53o1'));}});app[C(0x92,'NCr&')](limiter),app[C(0x89,'k2e6')](sanitize_1[C(0xac,'zNlv')]),process['on'](C(0xe9,'oiAs'),(g,h)=>{const aB={g:'1jh0',h:0xce,i:0x104,j:0xfd,k:'NCr&',l:0x8f,m:'rO@a',n:0xad,o:'k2e6',p:0x8f,q:'rO@a',r:0xe5,s:'jUR#'},L=C;logger_1[L(0x14c,aB.g)][L(aB.h,'CPr)')](L(aB.i,'g51d')+h+L(aB.j,aB.k)+g),fs_1[L(aB.l,aB.m)][L(aB.n,aB.o)](path_1[L(aB.p,aB.q)][L(0xd9,'eDB0')](config_1[L(0xbc,'lz)6')][L(0x158,'n2Q)')][L(0x12f,'g51d')],date+L(aB.r,'eDB0')),L(0x15f,aB.s)+g+'\x0a',{'flag':'a'});}),process['on'](C(0x87,'zNlv'),g=>{const aC={g:0xa4,h:'g51d',i:0xda,j:'P@%e',k:0x98,l:'g51d',m:0x10b,n:'QG2[',o:0x131,p:0x11e,q:'PFZA',r:0x13c,s:'j#H%'},M=C;logger_1['default'][M(aC.g,aC.h)](M(aC.i,aC.j)+g),fs_1[M(0xd4,'26x%')][M(aC.k,aC.l)](path_1[M(aC.m,aC.n)][M(aC.o,'lz)6')](config_1['config'][M(0x129,'J)N@')][M(aC.p,aC.q)],date+M(aC.r,'SSeJ')),M(0xec,aC.s)+g+'\x0a',{'flag':'a'});}),(0x0,connectDB_1[C(0xf0,'DRgw')])()[C(0x9a,'wL6K')](async()=>{const aL={g:0x159,h:'1H#Q',i:0xf7,j:'lz)6',k:0xdd,l:0x15e,m:'o%m9',n:0xd1,o:'J)N@',p:0x15a,q:0xde},aK={g:0xbe,h:'j#H%'},aJ={g:0xfb,h:'Uc8d'},aH={g:0x121,h:'$Ic9',i:0xbd,j:0x106},aG={g:0xf1,h:'%W4Z',i:0xe1,j:'lz)6',k:0xd2,l:'Gzzu',m:'VMPp',n:0x14b,o:'n2Q)',p:0xef,q:'1jh0',r:0xa9,s:0xdf,t:'oiAs',u:0x140,aH:0x122,aI:'1h%H',aJ:0x120,aK:0x144,aL:'e^WU',aM:'g51d',aN:'DRgw',aO:0x110},N=C,g={'QOJNz':'.ts','LJUUm':function(h,i,j){return h(i,j);},'kvHjn':function(h,i,j){return h(i,j);},'KjuAH':N(aL.g,aL.h),'XcaJq':N(aL.i,aL.j),'NXTKX':N(aL.k,'J)N@'),'KKwrl':function(h){return h();}};try{const h=async(j,k)=>{const O=N,l=path_1[O(aG.g,aG.h)][O(aG.i,'PCHk')](__dirname,O(0xfe,aG.j),j),m=express_1['default'][O(0x91,'iv3B')](),n=fs_1[O(aG.k,'P@%e')][O(0x7f,aG.l)](l);for(const o of n){if(o[O(0xc7,aG.m)](g[O(0xf2,'k2e6')])||o['endsWith']('.js')){const p=await Promise[O(aG.n,aG.o)](''+path_1['default']['join'](l,o))[O(aG.p,aG.q)](u=>__importStar(require(u))),{metadata:q,router:r}=p[O(aG.r,'mnqT')],s=o[O(aG.s,aG.t)]('.')[0x0],t=config_1['config']['route']['sessionExceptions'];if(t[O(aG.u,'DRgw')](s))m[O(aG.aH,aG.aI)](q[O(0xc2,'k2e6')],r);else k?m[O(aG.aJ,'lz)6')](q[O(aG.aK,aG.aL)],(0x0,verifySession_1['default'])(q[O(0x81,'wL6K')]),r):m['use'](q['path'],r);logger_1[O(0xac,'zNlv')][O(0x82,aG.aM)](O(0xeb,aG.aN)+q[O(aG.aO,'^wP0')]);}}return m;},i=async()=>{const P=N,j=await g['LJUUm'](h,'v1',!![]),k=await g[P(aH.g,aH.h)](h,'v2',!![]);app[P(aH.i,'Uc8d')](g[P(aH.j,'1jh0')],j),app['use'](g[P(0x86,'8]Q9')],k);};g['KKwrl'](i)['then'](()=>{const aI={g:0x11d,h:'VMPp'},R=N;app['listen'](port,()=>{const Q=f;logger_1[Q(0xd4,'26x%')][Q(0xfc,'P@%e')](Q(aI.g,aI.h)+host+':'+port);}),logger_1['default'][R(0x123,'1jh0')](g[R(aJ.g,aJ.h)]),(0x0,index_1['default'])();})['catch'](j=>{const S=N;logger_1[S(0x84,'eDB0')][S(aK.g,'o%m9')](S(0xa5,aK.h)+j);});}catch(j){fs_1['default'][N(0xcd,'J)N@')](path_1[N(0x9b,'CPr)')][N(aL.l,aL.m)](config_1[N(aL.n,'%W4Z')][N(0x129,aL.o)]['dir'],date+N(aL.p,'g51d')),N(aL.q,'4T2^')+j+'\x0a',{'flag':'a'});}});function c(g){const aX={g:0x8e,h:'g51d',i:0x10e,j:'k2e6',k:0x12c,l:'j#H%',m:0xae},aW={g:0xa0,h:'eDB0',i:'kdmH',j:0x8c,k:'iv3B',l:0x9d,m:'wL6K',n:0xdc,o:'^wP0',p:'PFZA',q:0x125,r:0x88,s:'&gV0',t:'J)N@'},T=C,h={'ZpHGT':function(j,k){return j===k;},'GFLOJ':T(aX.g,aX.h),'DJeAl':T(aX.i,'26x%'),'uCFeZ':function(j,k){return j!==k;},'PvncH':function(j,k){return j/k;},'nSEJk':T(0x10a,aX.j),'Ibfuj':function(j,k){return j%k;},'Vxkxj':function(j,k){return j+k;},'CRxeM':'debu','hyzRj':'gger','XQvbv':T(aX.k,aX.l),'oSRUJ':T(0xf3,'8]Q9'),'agIJD':function(j,k){return j(k);},'EvLkS':function(j,k){return j(k);}};function i(j){const U=T;if(h[U(aW.g,aW.h)](typeof j,U(0xca,'oiAs')))return function(k){}[U(0xaf,aW.i)](h[U(0x10d,'1H#Q')])[U(0x155,'dXO[')](h['DJeAl']);else h[U(0x127,'NCr&')]((''+h[U(aW.j,'DRgw')](j,j))[h[U(0xee,'e^WU')]],0x1)||h[U(0x147,'P@%e')](j,0x14)===0x0?function(){return!![];}[U(0x9f,'Gzzu')](h[U(0x107,'VMPp')](h[U(0x105,aW.k)],h[U(aW.l,aW.m)]))[U(aW.n,aW.o)](h[U(0x117,aW.p)]):function(){return![];}['constructor'](h[U(aW.q,aW.o)]+U(aW.r,aW.s))['apply'](h[U(0x128,aW.t)]);h['agIJD'](i,++j);}try{if(g)return i;else h[T(aX.m,'eDB0')](i,0x0);}catch(j){}}
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
+const cors_1 = __importDefault(require("cors"));
+const morgan_1 = __importDefault(require("morgan"));
+const helmet_1 = __importDefault(require("helmet"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const pino_http_1 = __importDefault(require("pino-http"));
+const logger_1 = __importDefault(require("./middlewares/logger"));
+const verifySession_1 = __importDefault(require("./middlewares/verifySession"));
+const index_1 = __importDefault(require("./jobs/index"));
+const config_1 = require("./config");
+const sanitize_1 = __importDefault(require("./middlewares/sanitize"));
+// import { errorHandler } from "./middlewares/errorHandler";
+const connectDB_1 = require("./database/connectDB");
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
+const app = (0, express_1.default)();
+const host = config_1.config.server.host;
+const port = config_1.config.server.port;
+const date = new Date().toISOString().split("T")[0];
+const initializeFolders = () => {
+    const lodDir = config_1.config.logging.dir;
+    if (!fs_1.default.existsSync(lodDir)) {
+        fs_1.default.mkdirSync(lodDir, { recursive: true });
+    }
+};
+initializeFolders();
+// Middlewares
+app.use((0, cors_1.default)({
+    // multiple origins can be added
+    origin: config_1.config.server.origins,
+    credentials: true, // Enable credentials
+}));
+app.use((0, morgan_1.default)("dev"));
+app.use(express_1.default.json());
+app.use((0, express_session_1.default)({
+    secret: config_1.config.server.session.secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // Change to true in production
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+    store: connect_mongo_1.default.create({
+        mongoUrl: config_1.config.mongoDB.uri,
+        ttl: 24 * 60 * 60, // 24 hours
+    }),
+}));
+app.use((0, helmet_1.default)());
+app.use((0, pino_http_1.default)({ logger: logger_1.default }));
+const limiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => {
+        return req.session.user?.role === "admin";
+    },
+});
+app.use(limiter);
+app.use(sanitize_1.default);
+// app.use(errorHandler);
+process.on("unhandledRejection", (reason, promise) => {
+    logger_1.default.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${reason}\n`, {
+        flag: "a",
+    });
+});
+process.on("uncaughtException", (error) => {
+    logger_1.default.error(`Uncaught Exception: ${error}`);
+    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
+        flag: "a",
+    });
+});
+(0, connectDB_1.connectDB)().then(async () => {
+    try {
+        const loadRoutes = async (version, useSession) => {
+            const routesPath = path_1.default.join(__dirname, "routes", version);
+            const router = express_1.default.Router();
+            // Read the directory to get route files
+            const files = fs_1.default.readdirSync(routesPath);
+            // Import each route file dynamically
+            for (const file of files) {
+                if (file.endsWith(".ts") || file.endsWith(".js")) {
+                    const route = await Promise.resolve(`${path_1.default.join(routesPath, file)}`).then(s => __importStar(require(s)));
+                    const { metadata, router: routeRouter } = route.default;
+                    const routeName = file.split(".")[0];
+                    const sessionExceptions = config_1.config.route.sessionExceptions;
+                    if (sessionExceptions.includes(routeName)) {
+                        router.use(metadata.path, routeRouter);
+                    }
+                    else if (useSession) {
+                        router.use(metadata.path, (0, verifySession_1.default)(metadata.permissions), routeRouter);
+                    }
+                    else {
+                        router.use(metadata.path, routeRouter);
+                    }
+                    logger_1.default.info(`🚀 Route loaded: ${metadata.path}`);
+                }
+            }
+            return router;
+        };
+        const initRoutes = async () => {
+            const v1Routes = await loadRoutes("v1", true);
+            const v2Routes = await loadRoutes("v2", true);
+            app.use("/api/v1", v1Routes);
+            app.use("/api/v2", v2Routes);
+        };
+        initRoutes()
+            .then(() => {
+            app.listen(port, () => {
+                logger_1.default.info(`Server is running at http://${host}:${port}`);
+            });
+            logger_1.default.info("🚀 Routes loaded successfully");
+            (0, index_1.default)();
+        })
+            .catch((error) => {
+            logger_1.default.error(`Error loading routes: ${error}`);
+        });
+    }
+    catch (error) {
+        fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
+            flag: "a",
+        });
+    }
+});

@@ -1,1 +1,172 @@
-const B=f;(function(g,h){const J={g:0x198,h:'cfK4',i:'uu*H',j:'Gw6k',k:0x174,l:0x1b7,m:'okh0'},s=f,i=g();while(!![]){try{const j=-parseInt(s(J.g,J.h))/0x1*(-parseInt(s(0x1a4,J.i))/0x2)+parseInt(s(0x14e,'#]s#'))/0x3+-parseInt(s(0x115,J.j))/0x4+-parseInt(s(J.k,'mcUB'))/0x5+parseInt(s(J.l,'4jjl'))/0x6*(-parseInt(s(0x159,J.m))/0x7)+-parseInt(s(0x1aa,'h@@c'))/0x8+parseInt(s(0x186,'QQ]h'))/0x9;if(j===h)break;else i['push'](i['shift']());}catch(k){i['push'](i['shift']());}}}(e,0xb2aa0));const d=(function(){const K={g:0x12d};let g=!![];return function(h,i){const j=g?function(){const t=f;if(i){const k=i[t(K.g,'h@@c')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}());(function(){const U={g:'!#rP',h:'H3Bx'},T={g:0x116,h:'C0V6',i:0x173,j:'P&10',k:0x1a7,l:'iC[C',m:0x120,n:0x18f,o:'iC[C',p:0x163,q:'P&10',r:'79^*',U:'Yte8'},u=f,g={'BqUaY':u(0x11e,'ZZ(!'),'gwIkp':function(h,i){return h(i);},'ggDyo':'init','khpSC':'chain','HSSZH':function(h,i){return h+i;},'iIbxc':u(0x136,U.g),'yXwSd':function(h,i){return h(i);},'hGwJt':function(h){return h();},'OddKr':function(h,i,j){return h(i,j);}};g[u(0x109,U.h)](d,this,function(){const v=u,h=new RegExp(g[v(T.g,T.h)]),i=new RegExp(v(T.i,'4jjl'),'i'),j=g[v(0x155,T.j)](c,g[v(T.k,T.l)]);!h[v(T.m,'H3Bx')](j+g[v(T.n,T.o)])||!i[v(0x124,'uu*H')](g[v(T.p,T.q)](j,g[v(0x15f,'uu*H')]))?g[v(0x175,T.r)](j,'0'):g[v(0x13c,T.U)](c);})();}());const b=(function(){let g=!![];return function(h,i){const V={g:0x12a},j=g?function(){const w=f;if(i){const k=i[w(V.g,'#]s#')](h,arguments);return i=null,k;}}:function(){};return g=![],j;};}()),a=b(this,function(){const a3={g:0x154,h:'iC[C',i:'4jjl',j:0x146,k:'IdKi',l:0x18c,m:'2QWy',n:0x11f,o:0x123,p:0x182,q:0x1b3,r:'79^*',a4:0x143,a5:'OzSk',a6:0x129,a7:0x107},a2={g:0x195},x=f,g={'UOaUG':function(l,m){return l+m;},'qwsgU':x(0x113,'3k78'),'qCXUQ':x(a3.g,a3.h),'rzWIX':function(l){return l();},'IMFRA':x(0x132,a3.i),'NChCk':x(0x19e,'LB)M'),'VmMTP':x(a3.j,a3.k),'OkeMM':x(a3.l,a3.m),'ADPWP':x(a3.n,a3.k),'XJWHk':function(l,m){return l<m;}},h=function(){const y=x;let l;try{l=Function(g[y(a2.g,'QhND')](g['UOaUG'](g['qwsgU'],g[y(0x1b6,'ucjH')]),');'))();}catch(m){l=window;}return l;},i=g[x(a3.o,'LChD')](h),j=i['console']=i[x(0x126,'LB)M')]||{},k=[g['IMFRA'],g['NChCk'],x(a3.p,'4jjl'),x(a3.q,a3.r),g['VmMTP'],g[x(a3.a4,a3.a5)],g[x(a3.a6,'uiTU')]];for(let l=0x0;g[x(0x177,a3.m)](l,k[x(0x180,'nAjK')]);l++){const m=b[x(0x139,'P&10')]['prototype']['bind'](b),n=k[l],o=j[n]||m;m[x(a3.a7,'Ptwp')]=b[x(0x150,'4jjl')](b),m['toString']=o[x(0x137,'d%vB')][x(0x162,'okh0')](o),j[n]=m;}});a(),(function(){const a8={g:'FP71',h:0x1b9,i:'Vexf'},a7={g:0x1a3,h:0x11c},z=f,g={'PhLMp':function(j,k){return j+k;},'TtQSf':function(j,k){return j+k;},'sMaYj':'return\x20(function()\x20','znfdj':z(0x10f,a8.g),'MHjEt':function(j){return j();}},h=function(){const A=z;let j;try{j=Function(g[A(0x111,'79^*')](g[A(a7.g,'UfEP')](g[A(a7.h,'uu*H')],g['znfdj']),');'))();}catch(k){j=window;}return j;},i=g[z(0x12c,'UfEP')](h);i[z(a8.h,a8.i)](c,0x9c4);}());'use strict';var __importDefault=this&&this[B(0x166,'QQ]h')]||function(g){const C=B;return g&&g[C(0x15a,'^%Ei')]?g:{'default':g};};Object[B(0x13d,'nAjK')](exports,B(0x19d,'d%vB'),{'value':!![]}),exports[B(0x144,'QhND')]=exports[B(0x178,'xZaQ')]=exports[B(0x130,'iC[C')]=exports['getSlotById']=void 0x0;const logger_1=__importDefault(require(B(0x19f,'Loru'))),interviewTimeSlotModel_1=__importDefault(require(B(0x18b,'H5fR'))),getSlotById=async(g,h)=>{const ab={g:0x121,h:0x164,i:'IdKi',j:0x160,k:0x156,l:0x10a,m:'P&10',n:0x114,o:0x189},D=B,i={'MfwFZ':function(k,l){return k===l;},'GsPiL':D(0x117,'UfEP'),'ENEcg':D(ab.g,'H5fR')},{id:j}=g['params'];try{const k=await interviewTimeSlotModel_1[D(ab.h,ab.i)]['findById'](j);if(!k||i[D(ab.j,'#]s#')](k,null))return h[D(0x1a1,'rv$X')](0x194)[D(ab.k,'FP71')]({'statusCode':0x194,'success':![],'message':'Slot\x20not\x20found'});logger_1[D(ab.l,'Ptwp')][D(0x18d,ab.m)](k),h[D(0x127,'nAjK')](0xc8)['json']({'statusCode':0xc8,'success':!![],'message':i[D(0x11b,'usGy')],'data':k});}catch(l){logger_1[D(ab.n,'^%Ei')][D(0x118,'okh0')](l),h[D(0x17c,'cfK4')](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i[D(ab.o,'#]s#')],'error':l});}};exports[B(0x17b,'^%Ei')]=getSlotById;const getAllSlotsForADate=async(g,h)=>{const ah={g:'uu*H',h:'y^[5',i:0x168,j:'gtyC',k:0x10c,l:'uiTU',m:0x16c,n:'FP71',o:0x1a5,p:'0OoU',q:0x14c,r:'P&10',ai:'^%Ei',aj:0x14f,ak:'iC[C',al:0x1ad,am:0x145,an:'4jjl',ao:0x17e,ap:'OzSk',aq:0x161,ar:'ZZ(!',as:'rv$X',at:0x164,au:'IdKi',av:0x152,aw:0x19c,ax:0x193,ay:'H3Bx',az:0x16b,aA:'rQUd',aB:0x1a0,aC:'C0V6',aD:0x15e,aE:0x1b5,aF:'Yte8',aG:0x16e,aH:0x13b,aI:'H3Bx',aJ:0x11a,aK:'mcUB',aL:'79^*',aM:'rJ3i'},E=B,i={'xeYFL':'string','WkIYI':function(j,k){return j===k;},'XgSzU':function(j,k){return j(k);},'FzmIB':function(j,k){return j===k;},'dfaOA':function(j,k){return j*k;},'tbSte':E(0x13f,ah.g),'fbJIp':function(j,k){return j/k;},'DjbHc':'Error\x20retrieving\x20slots'};try{const j=typeof g['query'][E(0x17f,ah.h)]===i[E(ah.i,ah.j)]?g['query'][E(ah.k,'eQDJ')]:new Date()['toISOString'](),k=i[E(0x149,ah.l)](typeof g[E(ah.m,ah.n)][E(ah.o,'#]s#')],E(0x1a9,ah.p))?i[E(ah.q,ah.r)](parseInt,g['query'][E(0x14a,ah.ai)]):0x1,l=i[E(0x142,'uiTU')](typeof g[E(ah.aj,ah.ak)]['limit'],i['xeYFL'])?i[E(ah.al,'WSn@')](parseInt,g[E(ah.am,ah.an)][E(ah.ao,ah.ap)]):0x9,m=i[E(0x15d,'ilc]')](k-0x1,l),n=await interviewTimeSlotModel_1[E(ah.aq,ah.ar)][E(0x17a,ah.as)]();logger_1[E(ah.at,ah.au)][E(ah.av,'Yte8')](E(ah.aw,ah.ap)),logger_1[E(0x1af,'xZaQ')][E(0x199,'5lMy')](j);if(!j||i[E(0x141,'Ptwp')](isNaN,new Date(j)[E(ah.ax,ah.ay)]()))return h[E(0x185,'0OoU')](0x190)[E(ah.az,ah.aA)]({'statusCode':0x190,'success':![],'message':E(0x167,'d%vB')});const o=new Date(j)[E(0x165,'3k78')](0x0,0x0,0x0,0x0),p=new Date(o)['setDate'](new Date(o)[E(ah.aB,ah.aC)]()+0x1),q=await interviewTimeSlotModel_1[E(0x1b4,'uiTU')]['find']({'date':{'$gte':o,'$lt':p}})[E(0x171,'Vexf')](m)[E(ah.aD,'#]s#')](l)[E(ah.aE,'^%Ei')]({'start':0x1});if(!q||i[E(0x12f,ah.aF)](q,null))return h[E(0x112,'rJ3i')](0x194)[E(ah.aG,'Loru')]({'statusCode':0x194,'success':![],'message':E(0x190,'3xa8')});h['status'](0xc8)[E(ah.aH,'OzSk')]({'statusCode':0xc8,'success':!![],'date':o,'message':i['tbSte'],'data':q,'total':n,'totalPages':Math[E(0x13a,ah.aI)](i['fbJIp'](n,l)),'currentPage':k});}catch(r){logger_1[E(ah.aJ,ah.aK)][E(0x1b3,ah.aL)](r),h[E(0x112,ah.aM)](0x1f4)[E(0x181,'ilc]')]({'statusCode':0x1f4,'success':![],'message':i[E(0x197,'79^*')],'error':r});}};function f(a,b){const c=e();return f=function(d,g){d=d-0x107;let h=c[d];if(f['jBOyQk']===undefined){var i=function(n){const o='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let p='',q='';for(let r=0x0,s,t,u=0x0;t=n['charAt'](u++);~t&&(s=r%0x4?s*0x40+t:t,r++%0x4)?p+=String['fromCharCode'](0xff&s>>(-0x2*r&0x6)):0x0){t=o['indexOf'](t);}for(let v=0x0,w=p['length'];v<w;v++){q+='%'+('00'+p['charCodeAt'](v)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(q);};const m=function(n,o){let p=[],q=0x0,r,t='';n=i(n);let u;for(u=0x0;u<0x100;u++){p[u]=u;}for(u=0x0;u<0x100;u++){q=(q+p[u]+o['charCodeAt'](u%o['length']))%0x100,r=p[u],p[u]=p[q],p[q]=r;}u=0x0,q=0x0;for(let v=0x0;v<n['length'];v++){u=(u+0x1)%0x100,q=(q+p[u])%0x100,r=p[u],p[u]=p[q],p[q]=r,t+=String['fromCharCode'](n['charCodeAt'](v)^p[(p[u]+p[q])%0x100]);}return t;};f['wCsVKf']=m,a=arguments,f['jBOyQk']=!![];}const j=c[0x0],k=d+j,l=a[k];return!l?(f['nbpxyB']===undefined&&(f['nbpxyB']=!![]),h=f['wCsVKf'](h,g),a[k]=h):h=l,h;},f(a,b);}exports[B(0x157,'QQ]h')]=getAllSlotsForADate;const createSlotForADate=async(g,h)=>{const aj={g:0x14b,h:'LB)M',i:0x183,j:'xZaQ',k:0x169,l:'rQUd',m:0x19a,n:'FP71',o:0x13e,p:'OzSk',q:0x140,r:0x12b,ak:0x11d,al:'cfK4',am:0x1b8,an:'iC[C',ao:0x191,ap:'H5fR',aq:'mcUB',ar:0x1a6,as:'C0V6',at:0x1a8},F=B,i={'SbnSD':function(j,k){return j+k;},'exmOB':F(aj.g,'rJ3i'),'fJQLx':'An\x20error\x20occurred\x20while\x20creating\x20the\x20time\x20slots'};try{logger_1[F(0x164,'IdKi')][F(0x196,aj.h)]('Creating\x20a\x20time\x20slot\x20for\x20a\x20date'),logger_1[F(0x1af,'xZaQ')]['info'](g['body']);const {date:j,timeslot:k}=g[F(0x10d,'usGy')],l=new Date(j)[F(aj.i,'OzSk')](0x0,0x0,0x0,0x0),m=await interviewTimeSlotModel_1[F(0x1af,aj.j)][F(aj.k,aj.l)]({'data':{'$gte':l,'$lt':new Date(l)[F(0x128,'Ptwp')](i[F(aj.m,'LChD')](new Date(l)[F(0x12e,aj.n)](),0x1))}});if(m)return h[F(aj.o,aj.p)](0x199)[F(aj.q,'!#rP')]({'statusCode':0x199,'success':![],'message':F(aj.r,'ZZ(!')});const n=new interviewTimeSlotModel_1[(F(aj.ak,aj.al))]({'date':l,'start':k[F(aj.am,aj.an)],'end':k[F(0x14d,aj.j)],'isAvailable':!![]});await n[F(aj.ao,aj.ap)](),h[F(0x158,aj.aq)](0xc9)[F(0x188,aj.ap)]({'statusCode':0xc9,'success':!![],'message':i[F(aj.ar,'6OPR')],'data':n});}catch(o){logger_1[F(0x119,aj.as)][F(0x118,'okh0')](o),h[F(aj.at,'IdKi')](0x1f4)['json']({'statusCode':0x1f4,'success':![],'message':i['fJQLx'],'error':o});}};exports[B(0x147,'P&10')]=createSlotForADate;const deleteSlotById=async(g,h)=>{const al={g:0x176,h:0x108,i:0x19b,j:'^%Ei',k:0x11a,l:'^%Ei',m:0x1b2,n:0x18a,o:'eQDJ',p:'79^*',q:0x118,r:'okh0',am:0x1ab,an:'Vexf',ao:0x10b,ap:'Gw6k'},G=B,i={'pNiIa':function(k,l){return k===l;},'AGzww':G(al.g,'Gw6k'),'mquyR':G(al.h,'!#rP'),'ObFZT':G(al.i,al.j)},{id:j}=g['params'];try{const k=await interviewTimeSlotModel_1[G(al.k,'mcUB')][G(0x16f,'usGy')](j);if(!k||i[G(0x110,al.l)](k,null))return h[G(al.m,'3xa8')](0x194)['json']({'statusCode':0x194,'success':![],'message':i['AGzww']});logger_1[G(0x172,'WSn@')][G(0x131,'xZaQ')](k),h[G(al.n,al.o)](0xc8)[G(0x17d,al.p)]({'statusCode':0xc8,'success':!![],'message':i[G(0x170,'Vexf')],'data':k});}catch(l){logger_1['default'][G(al.q,al.r)](l),h[G(al.am,al.an)](0x1f4)[G(0x179,'uu*H')]({'statusCode':0x1f4,'success':![],'message':i[G(al.ao,al.ap)],'error':l});}};exports[B(0x138,'rv$X')]=deleteSlotById;function e(){const ax=['W54UAWlcVYhcQaK','WPtdGqpcI8oZW5HghdJcOfJcK8oNymko','WQddTCktCYdcT8keWQRcJmo/WRj3WOmPvCoWW4hdPmku','W4XwaSkRWOu','t8oPW5bbW53dLCk0','rLqBdfzYWQZdOCk8WO7cUZqrEqC','q8oZW5fl','W6ZdHhFcGmob','WPndWPNdOmoHWQmjvIBdKG','WOpdPHrm','c8kAW7hdUCozWOP6hmoFW7RdLIPJWPLUnCoc','ymkpbfuy','FSkvgfW','WRuPvYVdNG3dGW','zmkbFvumo8kpwai1WQZdUwz1aKddNvZdT8komHCEWQ1tW6/dKv3cMmoNWQdcK8oqBa','W75sf1X1tmktrb/cKebpW6a','eYjfhs4','W4lcKcZdR0mQW6epW5ddSConWPTcW7y','cxhcPXxcNq','WQZcJKddQ050ymkWW6f7tSo6C8oFsSkpxSos','W4DDW5dcTW','WRVdKmo8WRVcScOwW6u1WOPUWO0GAa','WRBdN8oxvr/cKmofWRpdQJBdPa','W5hdVIHPCmkg','aaLDia','FCklBCoYWO0','W4BdISooDq','BrVcU8oyASor','W5hdLfNdUq','uCoerXe','ySkhDmotWPBdQ3BcQa','WPGwWO7cGalcJxfSW6G','pICoWQyWW4W','W7NcQLNdLSk2WOymxddcKvxcQ8o9va','Ahq0oNrhW6ddIhHhmX8','WPe3aNy','WPPZWPpcHha','WOFcHaeKsCos','W5vQqNvQW5ahWQOiWOxdHeGqWR1XWOxdVSk0W5W3WOBcHSouAL1waX7cPCodW78m','jvRcKJhcKW','W4xcQ1xdNa','WOmjq8kDW50','W6RcUmoddmk5','gCk4WPJcK03dGe5Ma8oqW67dIKiy','WOGLg30','WQ/dUWJcKW','F8ktumovWRRcHSko','W6dcTSokoSku','zSoOW5pdGSoI','wfiudW','lHbqbIK','WPtcSNP/q8kNWR42WOu','WOilWRPa','m13cLvtcTW','WPtdImorAqhdN8ovWPtdVXRdTfqXW5RcTComvqJdJW','vSkhDmoVWPddSgpdU1m0paBcPG/dT8oaW4hcHha2CcKOW4PSWPD5WRK','WRBdHmkayqhcSCkeW7/cHmo7','rL0adG','W4FcU1qmW6z7g2xdHCo/W5NdL3JcOSkMW4C7W7FdMSkxaSkCjmoZW6hcP2m','f8oBW6/cICkyFLi','WQVdI8oOWQhcSr0','W77dTHbvyG','W7NdRflcHKu','WP4zWOJdOsxcJeX/W5ldGq','WQ9CWRhcGG','hGCFW5JdGq','W6BcT8o3jSkv','ESkvnGRdVCk4','pICDWRSRW5G','gmo2WPfLlXhcPCkupJz5W5yzWPm','FSkkefG/AW','W7RdLNFcGa','WOKRyJddVG','W4zNW6RcKae','WQVcMupdQ099rW','W6FcPLbylW','sSoHW5jj','jmkJW5NcLftdNa','dWHaitG','cahcGSkvg8o7iW','WQldLCorCG','W61DWOpdSwm','amkBfeyuECoDmLO3WOu','W7lcPmoslCko','FSkBbwuKBff1WO/cKCoM','W78RW57cQSoCWRiiCaS','WRq8ymkzWOHCn2KLW404zbvBWQaIW5tcLf1lW67cJCo6WRNdOq','rSkwwmoRWQ0','W4qrW4JcUCogWQOt','W57cNGxdGtC','WPdcKrq1','d8kCW7VdPa','WPONgxfQW5O','W6BdJdZcKCoxWPLQEKXEWOFcNSoUWRFdStxdIKBcHSk8FqlcUCkMvdtcPCkCW6TLymkW','WQhdTmoktXi','oHj+aZO','kM7cGtSbWPy','W58UAZ/cOJRdULldU8onW7FdThNdVColW64pd8kd','WRxdN8ofzWBcK8of','WQNdIhRcR1f8W40OWRNdOColWQ8','mSopW47cRmkG','W77dTgZcOqpcGLOwBWLbW6FcG8kkW75XW73cQhBcGMX2mmkBW6ldG8oj','W7xcVfHoga','fmoBW73cRmkmzKm','WQWprq8Zfmox','kSkaW4/dTmox','W55JW57cGb0','W4BdRY98CmkzWPm','nJvJBtiwW4ZdTreBbNzLWQddUmkx','FCktnH3dRq','FCkxt8ou','WR42h3D3WPqqWQmpW5JdHemsWRfTWPtcT8kIW4CmWPS','BCkQsmohWO0','eKxcRe7cQW','W5LlW4ZcRq','WQVdI8oOWQhcOseBW6WLWOr/','uLmCe1W+W6e','CGRcTmolA8ok','W5mrW5RcNmosWRic','lsdcTmkJpG','WR5nWQBcI24','bcLGAZutW4ZdRXfqnIWGW6VdGmohW6XAwuFdVmkRWOPyWQtcQGG1WP/cICo1W7b3W64VrHWCDxuEWRG+grpcLq','W6ddKgNcKfC','smk2W5CWya','W7RdLgBcTSozWOn8','lI4nnmkz','W6BcTCohhSkwurJcGCk5WRNcRCk7W77dIfmhWRhdJZ8','WQBcKKpdPq','vmofrG','WO4XBSkLW5i','o8ogd8kqW6RdUmoqW57dRMddQSovzcS','WQNcQf0cpXpdPSoaWRjHE33cPq','WO4+F8kyW5W','WP3dTmk2zJ7cT8koW60','WRZdMSoLWRdcSaSQW6OVWPnjWPODFW','W4/cQL3dGmkQW7CEWOtcJWhcUa','ASkxvCom','E8krB8o1','eqiZj8kK','zrVcS8owCmoCz2mEW6DZfmk9W5C','ySkwyCoVWOZdRq','W75cW5dcRqtdIvbJW5tdKeG6ESo/WPSNW4xdVmkBW69shConW61CWOJcOt4','WO0Jymkd','W7GtW73cOSoM','kH7cICk9la','xSkjzCowWRq','v8ocW57dSSorW5hdI8oODWldVSkeW5tdKW','sCoFraXv','BmkznbVdUmk/W6FcKNy','W4/cT1BdKSkQW6a4WOVcLbRcJmo0uWxcILyFWR8','W7WytbZcOq','oW/cRCkTjW','WQhdM8oeyW','dxpcJsPuWPz4C1npW47dGCkGwSkOWOdcGaZcPsZdNsldNrf7tdHQW6qE','W7tcOMddICkl','WQRcKKe','W60oW6ddLsddK8k/WRrCW7dcHNFdIW','W7dcPCowlCkd','wSodtXO','WPtcK8kjCSkkW7ldL8kFra','ecSIaG','W6lcV8oDlmkotZ7cJSkIWQlcRa','W7RcRCkDpmkvuZJcMCkKWRJcVCkjW77dIdPHWQldNI7dOCoKWOXjeCodW4euw8oKW7pcVfS','W4VcSNRdMmkU','W7FdGN3cNa','WQZdUX7cP8oVW5TNbbpcSu3cTmo9FSk7ue0Jcq','WRSEqHOZcW','WQxdTHT4h8kVDd/cNW','WO7dPCogDt7cKmovWOtdVXO','nx/cJIGaWO0','xSk3BCoEWQ4','W5/dGvFdMmon','WRnuWRVcJMm','W4rNW53cOrq','WPjBWQhcOu0','ncvRBZmtW5C','W7lcP0rf','W6tcLMddQCkw','BCkemr/dVCkNW7O'];e=function(){return ax;};return e();}function c(g){const aw={g:0x16a,h:0x15b,i:'rJ3i',j:0x1ac,k:'H5fR',l:0x125},av={g:0x1b0,h:0x122,i:0x15c,j:0x148,k:'3k78',l:0x153,m:'iC[C',n:0x133,o:'!#rP',p:0x1b1,q:'o#rM',r:0x192,aw:'QQ]h',ax:0x1ae},H=B,h={'whzyE':function(j,k){return j===k;},'UWVSF':'string','dXtgR':H(aw.g,'LB)M'),'OUmEW':function(j,k){return j!==k;},'QSSVq':function(j,k){return j/k;},'dYLpu':H(aw.h,aw.i),'YTfqd':function(j,k){return j===k;},'afyen':function(j,k){return j+k;},'EBRJm':'debu','iaaHz':H(aw.j,'FP71'),'nIuYg':H(0x10e,aw.k),'RiQDE':H(aw.l,'rv$X'),'kIUIv':function(j,k){return j(k);}};function i(j){const I=H;if(h[I(av.g,'okh0')](typeof j,h['UWVSF']))return function(k){}['constructor'](h[I(av.h,'H3Bx')])['apply']('counter');else h[I(av.i,'OzSk')]((''+h[I(av.j,av.k)](j,j))[h[I(0x18e,'!#rP')]],0x1)||h['YTfqd'](j%0x14,0x0)?function(){return!![];}[I(av.l,av.m)](h[I(0x194,av.m)](h['EBRJm'],h[I(av.n,av.o)]))[I(av.p,'rQUd')](h['nIuYg']):function(){return![];}['constructor'](h[I(0x1a2,av.q)](I(av.r,av.aw),h['iaaHz']))['apply'](h['RiQDE']);h[I(av.ax,'uu*H')](i,++j);}try{if(g)return i;else i(0x0);}catch(j){}}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteSlotById = exports.createSlotForADate = exports.getAllSlotsForADate = exports.getSlotById = void 0;
+const logger_1 = __importDefault(require("../../../middlewares/logger"));
+const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
+const getSlotById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const slot = await interviewTimeSlotModel_1.default.findById(id);
+        if (!slot || slot === null) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Slot not found",
+            });
+        }
+        logger_1.default.info(slot);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Slot retrieved successfully",
+            data: slot,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving slot",
+            error,
+        });
+    }
+};
+exports.getSlotById = getSlotById;
+const getAllSlotsForADate = async (req, res) => {
+    try {
+        const date = typeof req.query.date === "string" ? req.query.date : new Date().toISOString();
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const total = await interviewTimeSlotModel_1.default.countDocuments();
+        logger_1.default.info("Getting all slots for a date");
+        logger_1.default.info(date);
+        // Validate date input
+        if (!date || isNaN(new Date(date).valueOf())) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Invalid date format",
+            });
+        }
+        const startDate = new Date(date).setHours(0, 0, 0, 0);
+        const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
+        const slots = await interviewTimeSlotModel_1.default
+            .find({
+            date: {
+                $gte: startDate,
+                $lt: endDate,
+            },
+        })
+            .skip(skip)
+            .limit(limit)
+            .sort({ start: 1 });
+        if (!slots || slots === null) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "No slots found",
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            date: startDate,
+            message: "Slots retrieved successfully",
+            data: slots,
+            total: total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error retrieving slots",
+            error: error,
+        });
+    }
+};
+exports.getAllSlotsForADate = getAllSlotsForADate;
+const createSlotForADate = async (req, res) => {
+    try {
+        logger_1.default.info("Creating a time slot for a date");
+        logger_1.default.info(req.body);
+        const { date, timeslot } = req.body;
+        // Ensure the date is valid, clean it up and set the time to 00:00:00
+        const startDate = new Date(date).setHours(0, 0, 0, 0);
+        // Check if the timeslot already exists
+        const existingSlot = await interviewTimeSlotModel_1.default.findOne({
+            data: {
+                $gte: startDate,
+                $lt: new Date(startDate).setDate(new Date(startDate).getDate() + 1),
+            },
+        });
+        if (existingSlot) {
+            return res.status(409).json({
+                statusCode: 409,
+                success: false,
+                message: "Timeslot already exists for the specified date",
+            });
+        }
+        const newSlot = new interviewTimeSlotModel_1.default({
+            date: startDate,
+            start: timeslot.start,
+            end: timeslot.end,
+            isAvailable: true,
+        });
+        await newSlot.save();
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Time slot created successfully",
+            data: newSlot,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred while creating the time slots",
+            error: error,
+        });
+    }
+};
+exports.createSlotForADate = createSlotForADate;
+const deleteSlotById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const slot = await interviewTimeSlotModel_1.default.findByIdAndDelete(id);
+        if (!slot || slot === null) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Slot not found",
+            });
+        }
+        logger_1.default.info(slot);
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Slot deleted successfully",
+            data: slot,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error deleting slot",
+            error,
+        });
+    }
+};
+exports.deleteSlotById = deleteSlotById;
