@@ -17,6 +17,7 @@ import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 
 const app: Application = express();
+const host = config.server.host;
 const port = config.server.port;
 const date = new Date().toISOString().split("T")[0];
 
@@ -124,7 +125,7 @@ connectDB().then(async () => {
         initRoutes()
             .then(() => {
                 app.listen(port, () => {
-                    logger.info(`Server is running at http://localhost:${port}`);
+                    logger.info(`Server is running at http://${host}:${port}`);
                 });
                 logger.info("🚀 Routes loaded successfully");
                 startJobs();

@@ -28,6 +28,12 @@ import {
   CBadge,
   CPagination,
   CPaginationItem,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CInputGroup,
+  CInputGroupText,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -46,6 +52,8 @@ import {
   faCalendar,
   faSave,
   faSearch,
+  faLock,
+  faUnlock,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   formattedDate,
@@ -97,6 +105,10 @@ const Tags = () => {
       .string()
       .min(3, { message: 'Category name must be at least 3 characters long' })
       .max(50, { message: 'Category name must not exceed 50 characters' }),
+    isProtected: z
+      .preprocess((val) => val === 'true' || val === true, z.boolean())
+      .optional()
+      .default(false),
     description: z.string().optional(),
   })
 
@@ -134,6 +146,7 @@ const Tags = () => {
           id: '',
           name: '',
           category: '',
+          isProtected: false,
         })
         setIsEdit(false)
         setIsTagsExpanded(true)
@@ -156,6 +169,7 @@ const Tags = () => {
           id: res.data.data._id,
           name: res.data.data.name,
           category: res.data.data.category,
+          protected: res.data.data.protected || false,
         }
         tagsFormReset(data)
       }
@@ -306,6 +320,42 @@ const Tags = () => {
                         )}
                       </CCol>
                     </CRow>
+                    <CRow>
+                      <CCol>
+                        <CFormLabel>is Protected?</CFormLabel>
+                        <CInputGroup>
+                          <CFormInput
+                            type="text"
+                            id="protected"
+                            placeholder="Protected"
+                            readOnly
+                            {...tagsFormRegister('isProtected')}
+                            invalid={!!tagsFormErrors.isProtected}
+                          />
+                          <CTooltip content="Protect" placement="top">
+                            <CButton
+                              onClick={() => tagsFormReset({ isProtected: true })}
+                              className={'btn btn-primary'}
+                            >
+                              <FontAwesomeIcon icon={faLock} />
+                            </CButton>
+                          </CTooltip>
+                          <CTooltip content="Unprotect" placement="top">
+                            <CButton
+                              onClick={() => tagsFormReset({ isProtected: false })}
+                              className={'btn btn-warning'}
+                            >
+                              <FontAwesomeIcon icon={faUnlock} />
+                            </CButton>
+                          </CTooltip>
+                        </CInputGroup>
+                        {tagsFormErrors && tagsFormErrors.isProtected && (
+                          <CFormFeedback className="text-danger">
+                            {tagsFormErrors.isProtected.message}
+                          </CFormFeedback>
+                        )}
+                      </CCol>
+                    </CRow>
                     <div className="d-flex justify-content-end">
                       <CButton color="primary" type="submit" className="mb-3 w-25">
                         {isEdit ? 'Update' : 'Submit'}
@@ -319,90 +369,81 @@ const Tags = () => {
         </CContainer>
       </CRow>
       <CRow>
-        <CContainer>
-          <CCard>
-            <CCardHeader>
-              <div className="d-flex justify-content-between">
-                <div className="d-flex justify-content-between align-items-center">
-                  <strong>All Tags</strong>
-                </div>
-                <div>
-                  <CForm
-                    onSubmit={searchHandleSubmit(submitSearch)}
-                    className="d-flex flex-row gap-2"
-                  >
-                    <div>
-                      <CFormInput
-                        placeholder="..."
-                        id="searcInput"
-                        {...searchRegister('searchInput')}
-                        invalid={!!searchErrors.searchInput}
-                      />
-                      {searchErrors && searchErrors.searchInput && (
-                        <CFormFeedback className="text-danger">
-                          {searchErrors.searchInput.message}
-                        </CFormFeedback>
-                      )}
-                    </div>
-                    <CTooltip content="Search tags" placement="top">
-                      <CButton type="submit" className="btn btn-primary">
-                        <FontAwesomeIcon icon={faSearch} />
-                      </CButton>
-                    </CTooltip>
-                  </CForm>
-                </div>
+        <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between align-items-center">
+            <strong>All Tags</strong>
+          </div>
+          <div>
+            <CForm onSubmit={searchHandleSubmit(submitSearch)} className="d-flex flex-row gap-2">
+              <div>
+                <CFormInput
+                  placeholder="..."
+                  id="searcInput"
+                  {...searchRegister('searchInput')}
+                  invalid={!!searchErrors.searchInput}
+                />
+                {searchErrors && searchErrors.searchInput && (
+                  <CFormFeedback className="text-danger">
+                    {searchErrors.searchInput.message}
+                  </CFormFeedback>
+                )}
               </div>
-            </CCardHeader>
-            <CCardBody>
-              <CContainer>
+              <CTooltip content="Search tags" placement="top">
+                <CButton type="submit" className="btn btn-primary">
+                  <FontAwesomeIcon icon={faSearch} />
+                </CButton>
+              </CTooltip>
+            </CForm>
+          </div>
+        </div>
+      </CRow>
+      <CRow>
+        {allTagData.map((tag, index) => (
+          <CCol key={index} md={4} className="mb-3">
+            <CCard className="h-100">
+              <CCardBody>
                 <CRow>
-                  {allTagData.map((tag, index) => (
-                    <CCol key={index} md={4} className="mb-3">
-                      <CCard className="h-100">
-                        <CCardBody>
-                          <CRow>
-                            <CCol>
-                              <h5>{firstLetterUppercase(tag.name)}</h5>
-                              <p>{tag.category}</p>
-                            </CCol>
-                          </CRow>
-                        </CCardBody>
-                        <CCardFooter>
-                          <CRow>
-                            <CCol>
-                              <CButtonGroup>
-                                <CTooltip content="Edit tag" placement="top">
-                                  <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
-                                    <FontAwesomeIcon icon={faPencil} />
-                                  </CButton>
-                                </CTooltip>
-                                <CTooltip content="Delete tag" placement="top">
-                                  <CButton color="danger" onClick={() => handleDeleteTag(tag._id)}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </CButton>
-                                </CTooltip>
-                              </CButtonGroup>
-                            </CCol>
-                          </CRow>
-                        </CCardFooter>
-                      </CCard>
-                    </CCol>
-                  ))}
+                  <CCol>
+                    <h5>{firstLetterUppercase(tag.name)}</h5>
+                    <p>{tag.category}</p>
+                  </CCol>
                 </CRow>
-              </CContainer>
-            </CCardBody>
-            <CCardFooter className="d-flex justify-content-center">
-              <AppPagination
-                currentPage={currentPage}
-                totalPages={totalPages || 1}
-                onPageChange={setCurrentPage}
-              />
-            </CCardFooter>
-          </CCard>
-        </CContainer>
+                <CRow>
+                  <CCol>Protected: {tag.isProtected ? 'Yes' : 'No'}</CCol>
+                </CRow>
+              </CCardBody>
+              <CCardFooter>
+                <CRow>
+                  <CCol>
+                    <CButtonGroup>
+                      <CTooltip content="Edit tag" placement="top">
+                        <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
+                          <FontAwesomeIcon icon={faPencil} />
+                        </CButton>
+                      </CTooltip>
+                      <CTooltip content="Delete tag" placement="top">
+                        <CButton color="danger" onClick={() => handleDeleteTag(tag._id)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </CButton>
+                      </CTooltip>
+                    </CButtonGroup>
+                  </CCol>
+                </CRow>
+              </CCardFooter>
+            </CCard>
+          </CCol>
+        ))}
+      </CRow>
+      <CRow>
+        <div className="d-flex justify-content-center">
+          <AppPagination
+            currentPage={currentPage}
+            totalPages={totalPages || 1}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </CRow>
     </CContainer>
   )
 }
-
 export default Tags

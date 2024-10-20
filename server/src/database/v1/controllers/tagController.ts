@@ -211,6 +211,15 @@ export const deleteTag = async (req: req, res: res) => {
                 message: "Tag not found",
             });
         }
+
+        if (tag.isProtected) {
+            return res.status(403).json({
+                statusCode: 403,
+                success: false,
+                message: "Cannot delete protected tag",
+            });
+        }
+
         await tag.deleteOne();
 
         await Applicant.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } });
