@@ -1,5 +1,5 @@
 import logger from "../../../middlewares/logger";
-import interviewSchedModel from "../models/interviewSchedModel";
+import interviewSchedSchema from "../models/interviewSchedModel";
 import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
 import { Request as req, Response as res } from "express";
 
@@ -11,7 +11,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const total = await interviewSchedModel.countDocuments();
+        const total = await interviewSchedSchema.countDocuments();
 
         if (total === 0) {
             return res.status(404).json({
@@ -21,13 +21,10 @@ export const getInterviewForADay = async (req: req, res: res) => {
             });
         }
 
-        logger.info("Getting all interviews for a day");
-        logger.info(date);
-
         const startDate = new Date(date).setHours(0, 0, 0, 0);
         const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
 
-        const interviews = await interviewSchedModel
+        const interviews = await interviewSchedSchema
             .find({
                 date: {
                     $gte: startDate,
@@ -62,9 +59,6 @@ export const getInterviewForADay = async (req: req, res: res) => {
                 message: `No interviews found for ${date}`,
             });
         }
-
-        // console.log(interviewsWithSlots);
-
         res.status(200).json({
             statusCode: 200,
             success: true,
@@ -89,7 +83,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
 export const getInterviewForAMonth = async (req: req, res: res) => {
     const { year, month } = req.params;
     try {
-        const interviews = await interviewSchedModel.find({
+        const interviews = await interviewSchedSchema.find({
             $expr: {
                 $and: [{ $eq: [{ $year: "$date" }, parseInt(year)] }, { $eq: [{ $month: "$date" }, parseInt(month)] }],
             },
@@ -117,7 +111,7 @@ export const getInterviewForAMonth = async (req: req, res: res) => {
 export const getInterviewById = async (req: req, res: res) => {
     const { id } = req.params;
     try {
-        const interview = await interviewSchedModel.findById(id);
+        const interview = await interviewSchedSchema.findById(id);
 
         if (!interview || interview === null) {
             return res.status(404).json({
@@ -166,7 +160,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
         }
 
         // Create the interview
-        const interview = new interviewSchedModel({
+        const interview = new interviewSchedSchema({
             date: parsedDate,
             title,
             timeslotRef_id,
@@ -216,7 +210,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
 export const updateInterview = async (req: req, res: res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedModel.findById(id);
+        const interview = await interviewSchedSchema.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
@@ -224,7 +218,9 @@ export const updateInterview = async (req: req, res: res) => {
                 message: "Interview not found",
             });
         }
+
         const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
+        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
 
         const formerTimeslot = await interviewTimeSlotModel.findByIdAndUpdate(
             interview.timeslotRef_id,
@@ -243,10 +239,10 @@ export const updateInterview = async (req: req, res: res) => {
         }
 
         // Update the interview
-        const updatedInterview = await interviewSchedModel.findByIdAndUpdate(
+        const updatedInterview = await interviewSchedSchema.findByIdAndUpdate(
             id,
             {
-                date,
+                date: parsedDate,
                 title,
                 timeslotRef_id,
                 additionalInfo,
@@ -297,7 +293,7 @@ export const updateInterview = async (req: req, res: res) => {
 export const deleteInterview = async (req: req, res: res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedModel.findById(id);
+        const interview = await interviewSchedSchema.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
