@@ -27,7 +27,7 @@ jobs:
         run: |
           cd client
           echo "VITE_NODE_ENV=production" > .env
-          echo "VITE_REACT_SERVER_URL=https://hr2-backend.axleshift.com" >> .env
+          echo "VITE_REACT_SERVER_URL=https://hr2-backend.axleshift.com/api/v1" >> .env
 
       - name: Build Client
         run: |
