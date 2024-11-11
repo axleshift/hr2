@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: "freight-capstone/core1"
+        repository: "${{secrets.DESTINATION_GITHUB_USERNAME}}/${{secrets.DESTINATION_REPOSITORY_NAME}}"
     - uses: actions/labeler@v5
       with:
         repo-token: "${{ secrets.API_TOKEN_GITHUB }}"
