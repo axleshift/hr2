@@ -36,7 +36,7 @@ jobs:
 
       - name: Check container logs
         run: |
-          docker logs core1-server
+          docker logs hr2-server
 
       - name: Stop and remove container
         if: always()
