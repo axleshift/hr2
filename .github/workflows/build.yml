@@ -41,9 +41,9 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: client/build
-          destination-github-username: freight-capstone
-          destination-repository-name: hr2
-          target-branch: hr2-frontend
+          destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
+          destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
+          target-branch: ${{secrets.CLIENT_TARGET_BRANCH}}
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build client"
 
@@ -78,8 +78,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: server
-          destination-github-username: freight-capstone
-          destination-repository-name: hr2
-          target-branch: hr2-backend
+          destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
+          destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
+          target-branch: ${{secrets.SERVER_TARGET_BRANCH}}
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build server"
