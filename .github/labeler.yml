@@ -1,0 +1,25 @@
+root:
+- changed-files:
+  - any-glob-to-any-file: '*'
+
+documentation:
+- changed-files:
+  - any-glob-to-any-file: '**/*.md'
+
+workflow:
+- changed-files:
+  - any-glob-to-any-file: '**/*.yml'
+
+test:
+- changed-files:
+  - any-glob-to-any-file: 'server'
+
+frontend:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 'client/src/**/*'
+
+backend:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 'server/src/**/*'
