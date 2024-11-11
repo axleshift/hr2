@@ -1,5 +1,9 @@
 # Human Resources Management System 2 (HRMS - 2)
 
+[![Build](https://github.com/Podjisin/hr2/actions/workflows/build.yml/badge.svg)](https://github.com/Podjisin/hr2/actions/workflows/build.yml)
+[![Docker CI](https://github.com/Podjisin/hr2/actions/workflows/docker.yml/badge.svg)](https://github.com/Podjisin/hr2/actions/workflows/docker.yml)
+[![Terraform CI](https://github.com/Podjisin/hr2/actions/workflows/terraform.yml/badge.svg)](https://github.com/Podjisin/hr2/actions/workflows/terraform.yml)
+
 ## Description
 
 Its **imperative** that you read this `README.md` file before you proceed to use this project.
