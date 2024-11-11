@@ -1,0 +1,45 @@
+name: Docker CI
+
+on:
+  push:
+    branches: ["hr2-backend"]
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          ref: hr2-backend
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.APP_DOCKER_USERNAME }}
+          password: ${{ secrets.APP_DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t podjisin/hr2-server:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push podjisin/hr2-server:latest
+
+      - name: Run Docker container
+        run: |
+          docker run -d -p 5056:5056 --name hr2-server podjisin/hr2-server:latest
+
+      - name: Check container logs
+        run: |
+          docker logs hr2-server
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop hr2-server
+          docker rm hr2-server
