@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/authContext'
 import { AppContext } from '../../../context/appContext'
-import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -27,6 +26,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const Login = () => {
   const navigate = useNavigate()
   const { login, isAuthenticated } = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState('')
   const [isLoginError, setIsLoginError] = useState(false)
   const loginSchema = z.object({
     username: z
@@ -48,10 +49,14 @@ const Login = () => {
   })
 
   const onSubmit = (data) => {
+    setIsLoading(true)
     login(data.username, data.password, (success) => {
       if (success) {
+        setIsLoading(false)
+        setLoadingMessage('Login successful')
         navigate('/dashboard')
       } else {
+        setLoadingMessage('Invalid username or password')
         setIsLoginError(true)
       }
     })
@@ -69,7 +74,7 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md={6}>
             <CCardGroup>
-              <CCard className="p-4">
+              <CCard>
                 <CCardBody>
                   <CForm className="text-center" onSubmit={loginHandleSubmit(onSubmit)}>
                     <h1>Login</h1>
@@ -107,22 +112,23 @@ const Login = () => {
                           )}
                         </CInputGroup>
                       </CRow>
-                      {isLoginError ? (
-                        <CRow>
-                          <CCol>
-                            <div className="text-danger">Invalid username or password</div>
-                          </CCol>
-                        </CRow>
-                      ) : null}
                       <CRow>
                         <CCol className="d-flex flex-row gap-3 justify-content-center">
-                          <CButton type="submit" color="primary" className="px-4">
+                          <CButton type="submit" color="primary" className="px-5">
                             Login
                           </CButton>
-                          <CButton color="success" className="px-4">
+                          {/* <CButton color="success" className="px-4">
                             Sign Up
-                          </CButton>
+                          </CButton> */}
                         </CCol>
+                      </CRow>
+                      <CRow>
+                        {/* loading */}
+                        {isLoading && (
+                          <div className="text-danger text-capitalize">
+                            <p>{loadingMessage}</p>
+                          </div>
+                        )}
                       </CRow>
                     </CContainer>
                   </CForm>
