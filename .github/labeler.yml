@@ -1,25 +1,48 @@
 root:
-- changed-files:
-  - any-glob-to-any-file: '*'
+  - changed-files:
+      - any-glob-to-any-file: '*'
 
 documentation:
-- changed-files:
-  - any-glob-to-any-file: '**/*.md'
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
 
 workflow:
-- changed-files:
-  - any-glob-to-any-file: '**/*.yml'
+  - changed-files:
+      - any-glob-to-any-file: '**/*.yml'
+      - any-glob-to-any-file: '**/*.yaml'
+      - any-glob-to-any-file: '.github/workflows/*'
 
 test:
-- changed-files:
-  - any-glob-to-any-file: 'server'
+  - changed-files:
+      - any-glob-to-any-file: 'tests/**/*'
+      - any-glob-to-any-file: 'server/tests/**/*'
+      - any-glob-to-any-file: 'client/tests/**/*'
 
 frontend:
-- all:
-  - changed-files:
-    - any-glob-to-any-file: 'client/src/**/*'
+  - all:
+      - changed-files:
+          - any-glob-to-any-file: 'client/src/**/*'
 
 backend:
-- all:
+  - all:
+      - changed-files:
+          - any-glob-to-any-file: 'server/src/**/*'
+          - any-glob-to-any-file: 'server/config/**/*'
+          - any-glob-to-any-file: 'server/database/**/*'
+
+assets:
   - changed-files:
-    - any-glob-to-any-file: 'server/src/**/*'
+      - any-glob-to-any-file: 'public/**/*'
+      - any-glob-to-any-file: 'client/assets/**/*'
+
+config:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.json'
+      - any-glob-to-any-file: '**/*.env'
+      - any-glob-to-any-file: '**/*.ini'
+
+scripts:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.sh'
+      - any-glob-to-any-file: '**/*.bat'
+      - any-glob-to-any-file: '**/*.ps1'
