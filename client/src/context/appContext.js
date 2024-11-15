@@ -14,6 +14,37 @@ export const AppContext = createContext()
 // I might forget how all this works, so I'll add some comments to help me remember later.
 // Note to self: The Concerta is wearing off, so I'm going to take a break and come back to this later.
 
+/**
+ * Countdown timer that updates the remaining time for the toast until it expires.
+ * @param {number} expiryTime - The time when the toast will expire.
+ * @param {boolean} isHovered - A flag indicating whether the toast is being hovered over.
+ * @returns {JSX.Element|null} - A countdown timer element or null if the countdown has finished.
+ */
+const Countdown = ({ expiryTime, isHovered }) => {
+  const [remainingTime, setRemainingTime] = useState(Math.ceil((expiryTime - Date.now()) / 1000)) // Initialize the remaining time in seconds
+
+  useEffect(() => {
+    if (isHovered || remainingTime <= 0) return // Freeze the countdown if hovered or if time is 0
+
+    // Update the remaining time every second
+    const interval = setInterval(() => {
+      setRemainingTime((prev) => Math.max(0, prev - 1)) // Decrease remaining time
+    }, 1000)
+
+    // Cleanup the interval when the component unmounts or when remainingTime changes
+    return () => clearInterval(interval)
+  }, [isHovered, remainingTime])
+
+  if (remainingTime <= 0) return null // If time is 0 or less, don't show the countdown
+
+  return <small className="ms-2">({remainingTime}s)</small> // Return the countdown timer element
+}
+
+Countdown.propTypes = {
+  expiryTime: propTypes.number.isRequired,
+  isHovered: propTypes.bool.isRequired,
+}
+
 const AppProvider = ({ children }) => {
   // State for holding the active toasts
   const [toasts, setToasts] = useState([])
@@ -100,32 +131,6 @@ const AppProvider = ({ children }) => {
     return minutes === 0 ? 'Just now' : `${minutes} minute${minutes > 1 ? 's' : ''} ago` // Return the formatted time
   }
 
-  /**
-   * Countdown timer that updates the remaining time for the toast until it expires.
-   * @param {number} expiryTime - The time when the toast will expire.
-   * @param {boolean} isHovered - A flag indicating whether the toast is being hovered over.
-   * @returns {JSX.Element|null} - A countdown timer element or null if the countdown has finished.
-   */
-  const Countdown = ({ expiryTime, isHovered }) => {
-    const [remainingTime, setRemainingTime] = useState(Math.ceil((expiryTime - Date.now()) / 1000)) // Initialize the remaining time in seconds
-
-    useEffect(() => {
-      if (isHovered || remainingTime <= 0) return // Freeze the countdown if hovered or if time is 0
-
-      // Update the remaining time every second
-      const interval = setInterval(() => {
-        setRemainingTime((prev) => Math.max(0, prev - 1)) // Decrease remaining time
-      }, 1000)
-
-      // Cleanup the interval when the component unmounts or when remainingTime changes
-      return () => clearInterval(interval)
-    }, [isHovered, remainingTime])
-
-    if (remainingTime <= 0) return null // If time is 0 or less, don't show the countdown
-
-    return <small className="ms-2">({remainingTime}s)</small> // Return the countdown timer element
-  }
-
   return (
     <AppContext.Provider value={{ addToast }}>
       <CToaster className="position-fixed bottom-0 end-0 p-3">
@@ -174,11 +179,6 @@ const AppProvider = ({ children }) => {
       {children}
     </AppContext.Provider>
   )
-}
-
-Countdown.propTypes = {
-  expiryTime: propTypes.number.isRequired,
-  isHovered: propTypes.bool.isRequired,
 }
 
 AppProvider.propTypes = {
