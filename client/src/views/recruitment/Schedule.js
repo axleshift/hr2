@@ -1,4 +1,4 @@
-import React, { act, useEffect, useState } from 'react'
+import React, { act, useContext, useEffect, useState } from 'react'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,7 +7,7 @@ import { get } from '../../api/axios'
 import dayjs from 'dayjs'
 
 import AppPagination from '../../components/AppPagination'
-
+import { AppContext } from '../../context/appContext'
 import {
   CButton,
   CCard,
@@ -54,6 +54,7 @@ import { formattedDate, formattedDateMMM } from '../../utils'
 import { useNavigate } from 'react-router-dom'
 
 const Schedule = () => {
+  const { addToast } = useContext(AppContext)
   const [isSmall, setIsSmall] = useState(false)
   const [allData, setAllData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -145,7 +146,7 @@ const Schedule = () => {
   const navigate = useNavigate()
   const handleReview = (id) => {
     navigate(`/recruitment/jobposter/${id}`)
-    console.log('Reviewing: ', id)
+    addToast('Review', 'Redirecting to Job Poster', 'info')
   }
 
   const handleLegendOnLick = (text) => {
@@ -205,49 +206,46 @@ const Schedule = () => {
       <CContainer>
         <CRow>
           <CContainer>
-            <CCard>
-              <CCardHeader>
-                <div className="d-flex justify-content-between align-items-center">
-                  <strong>Scheduled Job Postings</strong>
-                </div>
-              </CCardHeader>
-              <CCardBody>
-                <p className="text-muted">
-                  You can view all scheduled job postings here. The system will not post the job
-                  posting until its given approval. by Default, the system will display all
-                  scheduled job postings from today to next week.
-                </p>
-                {/* <p className='text-muted text-small'>
+            <div className="d-flex justify-content-between align-items-center">
+              <strong>Scheduled Job Postings</strong>
+            </div>
+
+            <small className="text-muted">
+              You can view all scheduled job postings here. The system will not post the job posting
+              until its given approval. by Default, the system will display all scheduled job
+              postings from today to next week.
+            </small>
+            {/* <p className='text-muted text-small'>
                   Displaying all scheduled job postings from today to next week as default
                 </p> */}
-                <CForm onSubmit={handleSubmit(getAllScheduled)}>
-                  <CRow className="d-flex gap-2 align-items-end">
-                    <CCol>
-                      <CFormLabel htmlFor="jpfSchedStart">Start Date</CFormLabel>
-                      <CFormInput
-                        type="date"
-                        id="jpfSchedStart"
-                        name="jpfSchedStart"
-                        value={formattedDate(params.today)}
-                        onChange={(e) => setParams({ ...params, today: e.target.value })}
-                      />
-                    </CCol>
-                    <CCol>
-                      <CFormLabel htmlFor="jpfSchedEnd">End Date</CFormLabel>
-                      <CFormInput
-                        type="date"
-                        id="jpfSchedEnd"
-                        name="jpfSchedEnd"
-                        value={formattedDate(params.nextWeek)}
-                        onChange={(e) =>
-                          setParams({
-                            ...params,
-                            nextWeek: e.target.value,
-                          })
-                        }
-                      />
-                    </CCol>
-                    {/* <CCol md={1}>
+            <CForm onSubmit={handleSubmit(getAllScheduled)}>
+              <CRow className="d-flex gap-2 align-items-end">
+                <CCol>
+                  <CFormLabel htmlFor="jpfSchedStart">Start Date</CFormLabel>
+                  <CFormInput
+                    type="date"
+                    id="jpfSchedStart"
+                    name="jpfSchedStart"
+                    value={formattedDate(params.today)}
+                    onChange={(e) => setParams({ ...params, today: e.target.value })}
+                  />
+                </CCol>
+                <CCol>
+                  <CFormLabel htmlFor="jpfSchedEnd">End Date</CFormLabel>
+                  <CFormInput
+                    type="date"
+                    id="jpfSchedEnd"
+                    name="jpfSchedEnd"
+                    value={formattedDate(params.nextWeek)}
+                    onChange={(e) =>
+                      setParams({
+                        ...params,
+                        nextWeek: e.target.value,
+                      })
+                    }
+                  />
+                </CCol>
+                {/* <CCol md={1}>
                       <CButton
                         color='primary'
                         onClick={getAllScheduled}
@@ -256,102 +254,136 @@ const Schedule = () => {
                         Search
                       </CButton>
                     </CCol> */}
-                  </CRow>
-                </CForm>
+              </CRow>
+            </CForm>
 
-                <div>
-                  {/* Legends */}
-                  <CButtonGroup className="d-flex flex-row gap-2 mt-3">
-                    {legends.map((legend, index) => (
-                      <div
-                        key={index}
-                        className={`d-flex flex-row gap-2 d-flex align-items-center`}
-                      >
-                        <CButton
-                          onClick={() => handleLegendOnLick(legend.text)}
-                          className={
-                            legend.isChecked
-                              ? `btn btn-${legend.color}`
-                              : 'btn btn-outline-secondary'
-                          }
-                        />
-                        <div className="text-lowercase text-muted text-small">{legend.text}</div>
-                      </div>
-                    ))}
-                  </CButtonGroup>
-                </div>
-
-                {isLoading ? (
-                  <p>Loading...</p>
+            <div>
+              {/* Legends */}
+              <CButtonGroup className="d-flex flex-row gap-2 mt-3">
+                {legends.map((legend, index) => (
+                  <div key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
+                    <CButton
+                      onClick={() => handleLegendOnLick(legend.text)}
+                      className={
+                        legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
+                      }
+                    />
+                    <small className="text-capitalize text-muted">{legend.text}</small>
+                  </div>
+                ))}
+              </CButtonGroup>
+            </div>
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <div>
+                {allData && allData.length > 0 ? (
+                  <small className="text-capitalize text-muted mt-3">
+                    Fetched total of {totalItems} job postings for
+                    <span className="text-info mx-2">{formattedDateMMM(params.today)}</span>-
+                    <span className="text-info mx-2">{formattedDateMMM(params.nextWeek)}</span>
+                  </small>
                 ) : (
-                  <div>
-                    <hr />
-                    {allData && allData.length > 0 && (
-                      <div className="mb-3 text-uppercase d-flex flex-row gap-2">
-                        <div>Fetched total of {totalItems} job postings for</div>
-                        <span className="text-info mx-2">{formattedDateMMM(params.today)}</span>-
-                        <span className="text-info mx-2">{formattedDateMMM(params.nextWeek)}</span>
-                      </div>
-                    )}
-                    <ul className="list-group">
-                      {allData.length === 0 ? (
-                        <p className="text-uppercase">
-                          No scheduled jobpostings found for
-                          <span className="text-info mx-2">{formattedDateMMM(params.today)}</span>-
-                          <span className="text-info mx-2">
-                            {formattedDateMMM(params.nextWeek)}
-                          </span>
-                        </p>
-                      ) : (
-                        allData.map((data, index) => (
-                          <li
-                            key={index}
-                            className={`list-group-item d-flex flex-row gap-2 justify-content-between align-items-center `}
-                          >
-                            <div className="d-flex flex-row gap-2">
-                              <div>
-                                <strong>{data.title}</strong>
-                                <div className="text-muted d-flex flex-row gap-2 align-items-center">
-                                  <div
-                                    style={{
-                                      width: '15px',
-                                      height: '15px',
-                                    }}
-                                    className={`rounded
+                  <small className="text-capitalize text-muted mt-3">
+                    No scheduled jobpostings found for
+                    <span className="text-info mx-2">{formattedDateMMM(params.today)}</span>-
+                    <span className="text-info mx-2">{formattedDateMMM(params.nextWeek)}</span>
+                  </small>
+                )}
+                <ul className="list-group">
+                  {/* {allData.length === 0 ? (
+                    <small className="text-capitalize text-muted mt-3">
+                      No scheduled jobpostings found for
+                      <span className="text-info mx-2">{formattedDateMMM(params.today)}</span>-
+                      <span className="text-info mx-2">{formattedDateMMM(params.nextWeek)}</span>
+                    </small>
+                  ) : (
+                    allData.map((data, index) => (
+                      <li
+                        key={index}
+                        className={`list-group-item d-flex flex-row gap-2 justify-content-between align-items-center `}
+                      >
+                        <div className="d-flex flex-row gap-2">
+                          <div>
+                            <strong>{data.title}</strong>
+                            <div className="text-muted d-flex flex-row gap-2 align-items-center">
+                              <div
+                                style={{
+                                  width: '15px',
+                                  height: '15px',
+                                }}
+                                className={`rounded
                                                 ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
-                                  />
-                                  <div>
-                                    {formattedDateMMM(data.schedule_start)} -{' '}
-                                    {formattedDateMMM(data.schedule_end)}
-                                  </div>
-                                </div>
+                              />
+                              <div>
+                                {formattedDateMMM(data.schedule_start)} -{' '}
+                                {formattedDateMMM(data.schedule_end)}
                               </div>
                             </div>
-                            <CTooltip content="Review" placement="top">
-                              <CButton
-                                type="button"
-                                onClick={() => handleReview(data._id)}
-                                className="btn btn-primary d-flex flex-row gap-2 align-items-center"
-                              >
-                                <FontAwesomeIcon icon={faClipboardCheck} />
-                              </CButton>
-                            </CTooltip>
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                )}
-              </CCardBody>
-              <CCardFooter className="d-flex justify-content-center">
-                <AppPagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
-              </CCardFooter>
-            </CCard>
+                          </div>
+                        </div>
+                        <CTooltip content="Review" placement="top">
+                          <CButton
+                            type="button"
+                            onClick={() => handleReview(data._id)}
+                            className="btn btn-primary d-flex flex-row gap-2 align-items-center"
+                          >
+                            <FontAwesomeIcon icon={faClipboardCheck} />
+                          </CButton>
+                        </CTooltip>
+                      </li>
+                    ))
+                  )} */}
+                  {
+                    allData.map((data, index) => (
+                      <li
+                        key={index}
+                        className={`list-group-item d-flex flex-row gap-2 justify-content-between align-items-center `}
+                      >
+                        <div className="d-flex flex-row gap-2">
+                          <div>
+                            <strong>{data.title}</strong>
+                            <div className="text-muted d-flex flex-row gap-2 align-items-center">
+                              <div
+                                style={{
+                                  width: '15px',
+                                  height: '15px',
+                                }}
+                                className={`rounded
+                                                    ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
+                              />
+                              <div>
+                                {formattedDateMMM(data.schedule_start)} -{' '}
+                                {formattedDateMMM(data.schedule_end)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <CTooltip content="Review" placement="top">
+                          <CButton
+                            type="button"
+                            onClick={() => handleReview(data._id)}
+                            className="btn btn-primary d-flex flex-row gap-2 align-items-center"
+                          >
+                            <FontAwesomeIcon icon={faClipboardCheck} />
+                          </CButton>
+                        </CTooltip>
+                      </li>
+                      ))
+                  }
+                </ul>
+              </div>
+            )}
           </CContainer>
+        </CRow>
+        <CRow>
+          <div className="mt-3 d-flex flex-row gap-2 justify-content-center align-items-center">
+            <AppPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </CRow>
       </CContainer>
     </>

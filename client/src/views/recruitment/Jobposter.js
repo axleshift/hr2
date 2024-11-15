@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { post, get, del } from '../../api/axios'
@@ -49,6 +49,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AppContext } from '../../context/appContext'
 
 import {
   firstLetterUppercase,
@@ -59,6 +60,7 @@ import {
 } from '../../utils'
 
 const Jobposter = () => {
+  const { addToast } = useContext(AppContext)
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
@@ -105,11 +107,11 @@ const Jobposter = () => {
       const res = await del(`/jobposter/${id}`)
       console.log('deleteTrackerData:', res)
       if (res.status === 200) {
-        alert('Deleted successfully')
+        addToast('Success', 'Deleted successfully', 'success')
         getData()
         getTrackerData()
       } else {
-        alert('Failed to delete')
+        addToast('Failed', 'Failed to delete', 'danger')
       }
       getTrackerData()
     } catch (error) {
@@ -162,16 +164,16 @@ const Jobposter = () => {
       }
       const res = await post(`/jobposter/${id}/post`, content)
       if (res.status === 201) {
-        alert('Posted successfully')
+        addToast('Success', 'Posted successfully', 'success')
         getData()
         getTrackerData()
       } else {
         console.log('submitSummary: ', res)
-        alert('Failed to post')
+        addToast('Failed', 'Failed to post', 'danger')
       }
     } catch (error) {
       // console.log("ERROR", error);
-      alert('Failed to post')
+      addToast('Failed', 'Failed to post', 'danger')
     }
   }
 

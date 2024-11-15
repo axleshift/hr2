@@ -32,17 +32,18 @@ import {
   faRefresh,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { get } from '../../api/axios'
 import AppPagination from '../../components/AppPagination'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-
+import { AppContext } from '../../context/appContext'
 import ApplicantForm from './modals/ApplicantForm'
 
 const Applicants = ({ theme }) => {
   const isDarkMode = theme === 'dark'
+  const { addToast } = useContext(AppContext)
   const [tagLoading, setTagLoading] = useState(false)
   const [formTags, setFormTags] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -79,11 +80,11 @@ const Applicants = ({ theme }) => {
         setTotalPages(res.data.totalPages)
         setIsLoading(false)
       } else {
-        console.log('Failed')
+        addToast('Error', 'Failed to fetch data', 'danger')
         setIsLoading(false)
       }
     } catch (error) {
-      console.error(error)
+      addToast('Error', 'Failed to fetch data', 'danger')
     }
   }
 
@@ -93,7 +94,7 @@ const Applicants = ({ theme }) => {
       const applicant = applicantsData.find((applicant) => applicant._id === id)
       setApplicantData(applicant)
     } catch (error) {
-      console.error(error)
+      addToast('Error', 'Failed to fetch data', 'danger')
     }
   }
 
@@ -106,11 +107,11 @@ const Applicants = ({ theme }) => {
         setFormTags(res.data.data)
         setTagLoading(false)
       } else {
-        console.log('Failed')
+        addToast('Error', 'Failed to fetch data', 'danger')
         setTagLoading(false)
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'Failed to fetch data', 'danger')
     }
   }
 

@@ -16,6 +16,9 @@ const Tags = React.lazy(() => import('./views/tags/Tags'))
 const CreateInterview = React.lazy(() => import('./views/interviews/Applicants'))
 const Interviews = React.lazy(() => import('./views/interviews/Schedules'))
 
+// Configuration | HR2
+const TestPage = React.lazy(() => import('./views/settings/TestPage'))
+
 // Errors
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 
@@ -42,6 +45,9 @@ const routes = [
   { path: '/interviews/schedules', name: 'Interviews', element: Interviews },
 
   { path: '/widgets', name: 'Widgets', element: Widgets },
+
+  // Configuration | HR2
+  { path: '/settings/TestPage', name: 'Test Page', element: TestPage },
 ]
 
 export default routes

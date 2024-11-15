@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { post, put, get, del } from '../../api/axios'
 import { AuthContext } from '../../context/authContext'
+import { AppContext } from '../../context/appContext'
 
 import {
   CButton,
@@ -74,6 +75,7 @@ import {
 } from '../../utils'
 
 const Tags = () => {
+  const { addToast} = useContext(AppContext)
   // Tags
   const [allTagData, setAllTagData] = useState([])
   const [isEdit, setIsEdit] = useState(false)
@@ -162,7 +164,7 @@ const Tags = () => {
       console.log(data)
       const res = isEdit ? await put(`/tags/${data.id}`, data) : await post('/tags', data)
       if (res.status === 200 || res.status === 201) {
-        alert(res.data.message)
+        addToast('Success', 'Tag has been added successfully', 'success')
         tagsFormReset({
           id: '',
           name: '',
@@ -174,10 +176,10 @@ const Tags = () => {
         setIsTagsExpanded(true)
         getAllTagData()
       } else {
-        console.log(res)
+        addToast('Error', 'An error occurred while adding the tag', 'danger')
       }
     } catch (error) {
-      console.error
+      addToast('Error', 'An error occurred while adding the tag', 'danger')
     }
   }
 
@@ -195,9 +197,10 @@ const Tags = () => {
           isSystem: res.data.data.isSystem || false,
         }
         tagsFormReset(data)
+        addToast('Success', `Tag is successfully retrieved`, 'success')
       }
     } catch (error) {
-      console.error
+      addToast('Error', 'An error occurred while fetching the tag', 'danger')
     }
   }
 
@@ -209,7 +212,7 @@ const Tags = () => {
         getAllTagData()
       }
     } catch (error) {
-      console.error
+      addToast('Error', 'An error occurred while deleting the tag', 'danger')
     }
   }
 
@@ -218,6 +221,8 @@ const Tags = () => {
       id: '',
       name: '',
       category: '',
+      isProtected: false,
+      isSystem: false,
     })
     setIsEdit(false)
     setIsTagsExpanded(true)
@@ -352,6 +357,7 @@ const Tags = () => {
                             id="protected"
                             placeholder="Protected"
                             readOnly
+                            defaultValue={false}
                             {...tagsFormRegister('isProtected')}
                             invalid={!!tagsFormErrors.isProtected}
                           />
@@ -388,6 +394,7 @@ const Tags = () => {
                             id="system"
                             placeholder="..."
                             readOnly
+                            defaultValue={false}
                             {...tagsFormRegister('isSystem')}
                             invalid={!!tagsFormErrors.isSystem}
                           />

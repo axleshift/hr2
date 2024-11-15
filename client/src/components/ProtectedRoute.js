@@ -4,9 +4,8 @@ import { AuthContext } from '../context/authContext'
 import propTypes from 'prop-types'
 const ProtectedRoute = ({ children }) => {
   const env = import.meta.env.VITE_NODE_ENV
-  console.log(env)
+  console.log("ProtectedRoute.js: env: ", env)
   const { isAuthenticated } = useContext(AuthContext)
-  const navigate = useNavigate()
 
   if (env === 'development') {
     return children

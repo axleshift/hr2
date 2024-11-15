@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,14 +33,11 @@ import {
   CInputGroup,
   CBadge,
 } from '@coreui/react'
-
 import { CChart } from '@coreui/react-chartjs'
-
 import AppPagination from '../../components/AppPagination'
-
 import { pdfjs, Document, Page } from 'react-pdf'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AppContext } from '../../context/appContext'
 import {
   faChevronDown,
   faChevronUp,
@@ -51,12 +48,14 @@ import {
   faTrash,
   faRefresh,
   faPencil,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 import { firstLetterUppercase, formattedDateMMM } from '../../utils'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const Applicant = () => {
+  const { addToast } = useContext(AppContext)
   const [stats, setStats] = useState({
     applications: [
       {
@@ -74,7 +73,7 @@ const Applicant = () => {
     ],
   })
 
-  const [isFormExpanded, setIsFormExpanded] = useState(true)
+  const [isFormExpanded, setIsFormExpanded] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
@@ -91,6 +90,7 @@ const Applicant = () => {
   // Form Elements states
   const [isEdit, setIsEdit] = useState(false)
   const [isFormChecked, setIsFormChecked] = useState(false)
+
   // Tags
   const [formTags, setFormTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
@@ -180,17 +180,10 @@ const Applicant = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(applicantSchema),
-
-    // resolver: async (data, context, options) => {
-    //   const result = await zodResolver(applicantSchema)(data, context, options);
-    //   console.log("Validation result:", result);
-    //   return result;
-    // },
   })
 
   const handlePreview = (data) => {
     try {
-      // console.log(data)
       const x = {
         ...data,
         file: data.file[0],
@@ -199,7 +192,7 @@ const Applicant = () => {
       setIsPreview(true)
       setData(x)
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -214,12 +207,12 @@ const Applicant = () => {
         certifications.length === 0
           ? []
           : certifications.map((cert) => {
-            return {
-              name: cert.name,
-              authority: cert.authority,
-              year: cert.year,
-            }
-          })
+              return {
+                name: cert.name,
+                authority: cert.authority,
+                year: cert.year,
+              }
+            })
 
       const formData = new FormData()
       formData.append('firstname', data.firstname)
@@ -240,27 +233,20 @@ const Applicant = () => {
 
       // Append the file
       formData.append('file', data.file)
-
-      // Log FormData for debugging
-      formData.forEach((value, key) => {
-        console.log(key, value)
-      })
-      console.log("Is Edit: ", isEdit)
       const res = isEdit
         ? await put(`/applicant/${data.id}`, formData)
         : await post(`/applicant`, formData)
 
-      console.log(res)
       if (res.status === 200 || res.status === 201) {
         alert(res.data.message)
         getAllData()
         handleReset()
         handlePreviewClose()
       } else {
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -271,20 +257,19 @@ const Applicant = () => {
         ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}&tags=`)
         : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
       if (res.status === 200 || res.status === 201) {
-
-        isSearchMode && console.log(res.data)
         setAllData(res.data.data)
         setCurrentPage(res.data.currentPage)
         setTotalPages(res.data.totalPages)
         setTotalItems(res.data.totalItems || 0)
         setIsLoading(false)
       } else {
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
         setIsLoading(false)
         setSearchMode(false)
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
+      setIsLoading(false)
     }
   }
 
@@ -297,10 +282,10 @@ const Applicant = () => {
         const url = window.URL.createObjectURL(blob)
         setPdfFile(url)
       } else {
-        console.log('Failed')
+        addToast('Error', "Error Downloading Resume File", 'danger')
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -335,21 +320,18 @@ const Applicant = () => {
         // fetch tags data
         res.data.data.tags.map(async (tag) => {
           const res = await get(`/tags/${tag}`)
-          // console.log("Tag: ", res)
           if (res.status === 200) {
             setSelectedTags((prev) => [...prev, res.data.data])
-          } else {
-            console.log('Failed')
           }
         })
         setIsEdit(true)
         setIsFormExpanded(true)
+        addToast('Success',`You are now editing ${res.data.data.firstname} ${res.data.data.lastname}`, 'success')
       } else {
-        alert('Failed')
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -360,13 +342,13 @@ const Applicant = () => {
       }
       const res = await del(`/applicant/${id}`)
       if (res.status === 200) {
-        alert('Success')
+        addToast('Success', res.data.message, 'success')
         getAllData()
       } else {
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -411,11 +393,7 @@ const Applicant = () => {
     formState: { errors: tagErrors },
   } = useForm({
     resolver: zodResolver(tagSchema),
-    // resolver: async (data, context, options) => {
-    //   const result = await zodResolver(tagSchema)(data, context, options);
-    //   console.log("Validation result:", result);
-    //   return result;
-    // },
+
   })
 
   const getAllTagOptions = async () => {
@@ -427,11 +405,11 @@ const Applicant = () => {
         setFormTags(res.data.data)
         setTagLoading(false)
       } else {
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
         setTagLoading(false)
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -444,27 +422,26 @@ const Applicant = () => {
         setSelectedTags((prev) => [...prev, tag])
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
   const handleAddTag = async (data) => {
     try {
-      console.log(data)
       const tag = {
         name: data.name,
         category: 'applicant',
       }
       const res = await post('/tags', tag)
       if (res.status === 200) {
-        alert(res.message)
+        addToast('Success', res.data.message, 'success')
         getAllTagOptions()
         setTagModalVisible(false)
       } else {
-        console.log('Failed')
+        addToast('Error', 'An error occurred', 'danger')
       }
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -490,11 +467,6 @@ const Applicant = () => {
     formState: { errors: certErrors },
   } = useForm({
     resolver: zodResolver(certificationSchema),
-    // resolver: async (data, context, options) => {
-    //   const result = await zodResolver(certificationSchema)(data, context, options);
-    //   console.log("Validation result:", result);
-    //   return result;
-    // }
   })
 
   // Certification Fields Manipulation
@@ -510,7 +482,6 @@ const Applicant = () => {
   }
 
   const handleRemoveCertField = (name) => {
-    console.log(name)
     if (certifications.length === 0) return
     setCertifications((prev) => prev.filter((cert) => cert.name !== name))
   }
@@ -525,11 +496,6 @@ const Applicant = () => {
     formState: { errors: searchErrors },
   } = useForm({
     resolver: zodResolver(searchSchema),
-    // resolver: async (data, context, options) => {
-    //   const result = await zodResolver(searchSchema)(data, context, options);
-    //   console.log("Validation result:", result);
-    //   return result;
-    // },
   })
 
   const searchSubmit = async (data) => {
@@ -538,7 +504,7 @@ const Applicant = () => {
       setSearchInput(data.searchInput)
       getAllData()
     } catch (error) {
-      console.log(error)
+      addToast('Error', 'An error occurred', 'danger')
     }
   }
 
@@ -553,7 +519,6 @@ const Applicant = () => {
   }
 
   useEffect(() => {
-    //
     const delayDebounceFn = setTimeout(() => {
       getAllData()
       getAllTagOptions()
@@ -565,7 +530,7 @@ const Applicant = () => {
 
   return (
     <CContainer className="d-flex flex-column gap-2 mb-3">
-      <CRow className="d-flex justify-content-center ">
+      {/* <CRow className="d-flex justify-content-center ">
         {stats.applications.map((stat, index) => {
           return (
             <CCol key={index} sm={6} xl={4} xxl={3}>
@@ -628,7 +593,7 @@ const Applicant = () => {
             </CCol>
           )
         })}
-      </CRow>
+      </CRow> */}
       <CRow>
         <CCol>
           <CCard>
@@ -649,7 +614,7 @@ const Applicant = () => {
                 {isEdit && (
                   <CTooltip content="Reset" placement="top">
                     <CButton className="btn btn-danger" onClick={() => handleReset()}>
-                      <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                      <FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>
                     </CButton>
                   </CTooltip>
                 )}
@@ -1077,182 +1042,104 @@ const Applicant = () => {
         </CCol>
       </CRow>
       <CRow>
-        <CCol>
-          <CCard>
-            <CCardHeader>
-              <CForm
-                onSubmit={searchHandleSubmit(searchSubmit)}
-                className="d-flex flex-row gap-2 justify-content-end align-items-center"
-              >
-                <div>
-                  <CFormInput
-                    type="text"
-                    id="searchInput"
-                    name="searchInput"
-                    placeholder="..."
-                    {...searchRegister('searchInput')}
-                    invalid={!!searchErrors.searchInput}
-                  />
-                  {searchErrors.searchInput && (
-                    <CFormFeedback className="text-danger">
-                      {searchErrors.searchInput.message}
-                    </CFormFeedback>
-                  )}
-                </div>
+        <div>
+          <CForm
+            onSubmit={searchHandleSubmit(searchSubmit)}
+            className="d-flex flex-row gap-2 justify-content-end align-items-center"
+          >
+            <CInputGroup>
+              <CFormInput
+                type="text"
+                id="searchInput"
+                name="searchInput"
+                placeholder="Search..."
+                {...searchRegister('searchInput')}
+                invalid={!!searchErrors.searchInput}
+              />
+              <CTooltip content="Search" placement="top">
                 <CButton type="submit" className="btn btn-primary">
-                  Search
+                  <FontAwesomeIcon icon={faSearch} />
                 </CButton>
+              </CTooltip>
+              <CTooltip content="Reset" placement="top">
                 <CButton onClick={() => resetAllData()} type="button" className="btn btn-primary">
                   <FontAwesomeIcon icon={faRefresh} />
                 </CButton>
-              </CForm>
-            </CCardHeader>
-            <CCardBody>
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
-                <div>
-                  {/* <ul className='list-group'>
-                        {
-                          allData.length === 0 ? (
-                            <p>
-                              No Data
-                            </p>
-                          )
-                            : (
-                              allData.map((item, index) => {
-                                return (
-                                  <li key={index} className='list-group-item d-flex justify-content-between align-items-center'>
-                                    <div>
-                                      <div className='text-muted' style={{
-                                        fontSize: '0.8rem'
-                                      }}>
-                                        {item._id}
-                                      </div>
-                                      <div>
-                                        <strong>
-                                          {item.firstName} {item.lastName}
-                                        </strong>
-                                      </div>
-                                      <div>
-                                        {item.email}
-                                      </div>
-                                      <div>
-                                        {item.phone}
-                                      </div>
-                                      <div>
-                                        {item.address}
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <CButtonGroup>
-                                        <CTooltip
-                                          content='Edit'
-                                          placement='top'
-                                        >
-                                          <CButton
-                                            onClick={() => handleEdit(item._id)}
-                                            className='btn btn-outline-primary'
-                                          >
-                                            <FontAwesomeIcon icon={faPencil} />
-                                          </CButton>
-                                        </CTooltip>
-                                        <CTooltip
-                                          content='Delete'
-                                          placement='top'
-                                        >
-                                          <CButton
-                                            onClick={() => handleDelete(item._id)}
-                                            className='btn btn-outline-danger'
-                                          >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                          </CButton>
-                                        </CTooltip>
-                                      </CButtonGroup>
-                                    </div>
-                                  </li>
-                                )
-                              })
-                            )
-                        }
-                      </ul> */}
-                  {allData.length === 0 ? (
-                    <p>No Data</p>
-                  ) : (
-                    allData.map((item, index) => {
-                      return (
-                        <CCard key={index}>
-                          <CCardBody>
-                            <div className="d-flex gap-2">
-                              {/* expired? */}
-                              {item.expired < new Date().toISOString() ? (
-                                <CBadge color="danger">Expired</CBadge>
-                              ) : (
-                                <CBadge color="success">Active</CBadge>
-                              )}
-                              {item.tags.map((tag, index) => {
-                                return (
-                                  <CBadge key={index} color="primary">
-                                    {/* // get tag name from formtags */}
-                                    {formTags.find((item) => item._id === tag) &&
-                                      formTags.find((item) => item._id === tag).name}
-                                  </CBadge>
-                                )
-                              })}
-                            </div>
-                            <div>
-                              <div
-                                className="text-muted d-flex gap-2"
-                                style={{
-                                  fontSize: '0.8rem',
-                                }}
-                              >
-                                {item._id}
-                              </div>
-                              <div>
-                                <strong>
-                                  {item.firstname}, {item.lastname} {item?.middlename}
-                                </strong>
-                              </div>
-                            </div>
+              </CTooltip>
+            </CInputGroup>
+          </CForm>
+        </div>
+      </CRow>
+      <CRow>
+        <CContainer>
+          <ul className="list-group">
+            {allData.map((item, index) => {
+              return (
+                <li
+                  key={index}
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div className="d-flex flex-column text-capitalize">
+                    <strong>
+                      {item.firstname}, {item.lastname} {item?.middlename}
+                    </strong>
+                    <div
+                      className="text-muted d-flex gap-2"
+                      style={{
+                        fontSize: '0.8rem',
+                      }}
+                    >
+                      {item._id}
+                    </div>
+                    <div className="mt-3 text-capitalize d-flex gap-2">
+                      <CBadge color={item.expired < new Date().toString() ? 'danger' : 'success'}>
+                        {item.expired < new Date().toString() && 'Expired'}
+                      </CBadge>
+                      {item.tags.map((tag, index) => {
+                        return (
+                          <CBadge key={index} color="primary">
+                            {formTags.find((item) => item._id === tag) &&
+                              formTags.find((item) => item._id === tag).name}
+                          </CBadge>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div>
+                    <CButtonGroup>
+                      <CTooltip content="Edit" placement="top">
+                        <CButton
+                          onClick={() => handleEdit(item._id)}
+                          className="btn btn-outline-primary"
+                        >
+                          <FontAwesomeIcon icon={faPencil} />
+                        </CButton>
+                      </CTooltip>
+                      <CTooltip content="Delete" placement="top">
+                        <CButton
+                          onClick={() => handleDelete(item._id)}
+                          className="btn btn-outline-danger"
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </CButton>
+                      </CTooltip>
+                    </CButtonGroup>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </CContainer>
+      </CRow>
 
-                            <div className="d-flex justify-content-end">
-                              <CButtonGroup>
-                                <CTooltip content="Edit" placement="top">
-                                  <CButton
-                                    onClick={() => handleEdit(item._id)}
-                                    className="btn btn-outline-primary"
-                                  >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                  </CButton>
-                                </CTooltip>
-                                <CTooltip content="Delete" placement="top">
-                                  <CButton
-                                    onClick={() => handleDelete(item._id)}
-                                    className="btn btn-outline-danger"
-                                  >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </CButton>
-                                </CTooltip>
-                              </CButtonGroup>
-                            </div>
-                          </CCardBody>
-                        </CCard>
-                      )
-                    })
-                  )}
-                </div>
-              )}
-            </CCardBody>
-            <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-              <AppPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </CCardFooter>
-          </CCard>
-        </CCol>
+      <CRow>
+        <div className="d-flex flex-row gap-2 justify-content-center align-items-center">
+          <AppPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </CRow>
 
       {/* Modals */}
@@ -1477,14 +1364,6 @@ const Applicant = () => {
                 </CRow>
               </CContainer>
               <hr />
-              {/* <div className='d-flex justify-content-end'>
-                  <CButton type='button' onClick={() => setPdfScale(prev => prev + 0.1)}>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </CButton>
-                  <CButton type='button' onClick={() => setPdfScale(prev => prev - 0.1)}>
-                    <FontAwesomeIcon icon={faMinus} />
-                  </CButton>
-                </div> */}
               <Document file={data.file || pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
                 <Page pageNumber={pageNumber} />
               </Document>

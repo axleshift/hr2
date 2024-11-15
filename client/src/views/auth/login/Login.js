@@ -19,13 +19,15 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CSpinner,
 } from '@coreui/react'
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useContext(AuthContext)
+  const { login, isAuthenticated, userInformation } = useContext(AuthContext)
+  const { addToast } = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('')
   const [isLoginError, setIsLoginError] = useState(false)
@@ -53,11 +55,19 @@ const Login = () => {
     login(data.username, data.password, (success) => {
       if (success) {
         setIsLoading(false)
-        setLoadingMessage('Login successful')
+        const username = userInformation.username
+        console.log('Login.js: onSubmit: username: ', username)
+        addToast(
+          'Login successful',
+          `
+          Welcome back, ${data.username}! You have successfully logged in.
+          `,
+          'success',
+        )
         navigate('/dashboard')
       } else {
-        setLoadingMessage('Invalid username or password')
-        setIsLoginError(true)
+        addToast('Login failed', 'Invalid username or password', 'danger')
+        setIsLoading(false)
       }
     })
   }
@@ -115,20 +125,9 @@ const Login = () => {
                       <CRow>
                         <CCol className="d-flex flex-row gap-3 justify-content-center">
                           <CButton type="submit" color="primary" className="px-5">
-                            Login
+                            {isLoading ? <CSpinner color="light" size="sm" /> : 'Login'}
                           </CButton>
-                          {/* <CButton color="success" className="px-4">
-                            Sign Up
-                          </CButton> */}
                         </CCol>
-                      </CRow>
-                      <CRow>
-                        {/* loading */}
-                        {isLoading && (
-                          <div className="text-danger text-capitalize">
-                            <p>{loadingMessage}</p>
-                          </div>
-                        )}
                       </CRow>
                     </CContainer>
                   </CForm>

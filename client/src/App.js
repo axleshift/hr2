@@ -35,37 +35,39 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <AuthProvider>
-      <AppProvider>
-        <BrowserRouter>
-          <Suspense
-            fallback={
-              <div className="pt-3 text-center">
-                <CSpinner color="primary" variant="grow" />
-              </div>
-            }
-          >
-            <Routes>
-              <Route path="/login" name="Login Page" element={<Login />} />
-              <Route path="/register" name="Register Page" element={<Register />} />
-              <Route path="/404" name="Page 404" element={<Page404 />} />
-              <Route path="/500" name="Page 500" element={<Page500 />} />
+    <>
+      <AuthProvider>
+        <AppProvider>
+          <BrowserRouter>
+            <Suspense
+              fallback={
+                <div className="pt-3 text-center">
+                  <CSpinner color="primary" variant="grow" />
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/login" name="Login Page" element={<Login />} />
+                <Route path="/register" name="Register Page" element={<Register />} />
+                <Route path="/404" name="Page 404" element={<Page404 />} />
+                <Route path="/500" name="Page 500" element={<Page500 />} />
 
-              {/* Protect DefaultLayout route */}
-              <Route
-                path="*"
-                name="Home"
-                element={
-                  <ProtectedRoute>
-                    <DefaultLayout theme={storedTheme} />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </AppProvider>
-    </AuthProvider>
+                {/* Protect DefaultLayout route */}
+                <Route
+                  path="*"
+                  name="Home"
+                  element={
+                    <ProtectedRoute>
+                      <DefaultLayout theme={storedTheme} />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </AppProvider>
+      </AuthProvider>
+    </>
   )
 }
 
