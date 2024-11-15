@@ -83,14 +83,14 @@ const AppProvider = ({ children }) => {
       },
     ])
 
-    // Set a timeout to automatically remove the toast after 5 seconds
+    // Set a timeout to automatically remove the toast after # seconds
     const timeoutId = setTimeout(() => removeToast(id), milliseconds)
     setTimeouts((prev) => ({ ...prev, [id]: timeoutId }))
   }
 
   /**
    * Function to remove a toast by its ID.
-   * It first sets the toast's visibility to false, and after 5 seconds, removes it from the state.
+   * It first sets the toast's visibility to false, and after # seconds, removes it from the state.
    * @param {number} id - The ID of the toast to remove.
    */
   const removeToast = (id) => {
