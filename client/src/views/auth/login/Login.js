@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/authContext'
 import { AppContext } from '../../../context/appContext'
-import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,13 +19,17 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CSpinner,
 } from '@coreui/react'
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useContext(AuthContext)
+  const { login, isAuthenticated, userInformation } = useContext(AuthContext)
+  const { addToast } = useContext(AppContext)
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState('')
   const [isLoginError, setIsLoginError] = useState(false)
   const loginSchema = z.object({
     username: z
@@ -48,11 +51,23 @@ const Login = () => {
   })
 
   const onSubmit = (data) => {
+    setIsLoading(true)
     login(data.username, data.password, (success) => {
       if (success) {
+        setIsLoading(false)
+        const username = userInformation.username
+        console.log('Login.js: onSubmit: username: ', username)
+        addToast(
+          'Login successful',
+          `
+          Welcome back, ${data.username}! You have successfully logged in.
+          `,
+          'success',
+        )
         navigate('/dashboard')
       } else {
-        setIsLoginError(true)
+        addToast('Login failed', 'Invalid username or password', 'danger')
+        setIsLoading(false)
       }
     })
   }
@@ -69,7 +84,7 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md={6}>
             <CCardGroup>
-              <CCard className="p-4">
+              <CCard>
                 <CCardBody>
                   <CForm className="text-center" onSubmit={loginHandleSubmit(onSubmit)}>
                     <h1>Login</h1>
@@ -107,20 +122,10 @@ const Login = () => {
                           )}
                         </CInputGroup>
                       </CRow>
-                      {isLoginError ? (
-                        <CRow>
-                          <CCol>
-                            <div className="text-danger">Invalid username or password</div>
-                          </CCol>
-                        </CRow>
-                      ) : null}
                       <CRow>
                         <CCol className="d-flex flex-row gap-3 justify-content-center">
-                          <CButton type="submit" color="primary" className="px-4">
-                            Login
-                          </CButton>
-                          <CButton color="success" className="px-4">
-                            Sign Up
+                          <CButton type="submit" color="primary" className="px-5">
+                            {isLoading ? <CSpinner color="light" size="sm" /> : 'Login'}
                           </CButton>
                         </CCol>
                       </CRow>

@@ -98,10 +98,17 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faStar} size="lg" className="nav-icon" />,
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: 'Configuration',
-    to: '/settings/configuration',
+    // to: '/settings/configuration',
     icon: <FontAwesomeIcon icon={faCogs} size="lg" className="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Test Page',
+        to: '/settings/TestPage',
+      },
+    ],
   },
 ]
 

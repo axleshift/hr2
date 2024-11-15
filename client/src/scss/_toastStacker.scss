@@ -1,0 +1,18 @@
+/* Toast container styles */
+.c-toast-stack {
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Offset each toast */
+  .c-toast-stack:not(:first-child) {
+    margin-top: -10px; /* Overlap each toast slkightly */
+  }
+  
+  /* Hover effect to expand */
+  .c-toast-stack:hover {
+    transform: translateY(-10px); /* Lift on hover */
+    z-index: 10; /* Ensure the hovered toast is on top */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+  }
+  

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState, useContext } from 'react'
+import { AppContext } from '../../context/appContext'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,6 +23,7 @@ import {
   CCollapse,
   CButtonGroup,
   CTooltip,
+  CInputGroup,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -38,10 +39,13 @@ import {
   faTrash,
   faPencil,
   faCalendar,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 import AppPagination from '../../components/AppPagination'
 import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
 const Jobposting = () => {
+  const { addToast } = useContext(AppContext)
+
   const [isFormExpanded, setIsFormExpanded] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -144,13 +148,13 @@ const Jobposting = () => {
         ? await put(`/jobposting/${data.jpf_id}`, formattedData)
         : await post('/jobposting', formattedData)
       if (res.status === 201) {
-        alert(res.data.message)
+        addToast('Jobposting', res.data.message, 'success')
         getAllJobPosting(1)
         formReset()
       }
     } catch (error) {
       console.log(error)
-      alert('Error creating jobposting')
+      addToast('Jobposting', 'Error creating jobposting', 'danger')
     }
   }
 
@@ -159,7 +163,7 @@ const Jobposting = () => {
     try {
       const res = await get(`/jobposting/${id}`)
       if (res.status === 200) {
-        alert(res.data.message)
+        addToast('Jobposting', `Jobposting for ${id} retrieved`, 'success')
         setIsEdit(true)
         setIsFormExpanded(true)
         // console.log('Edit: ', res.data)
@@ -181,11 +185,11 @@ const Jobposting = () => {
         formReset(formattedData)
         window.scrollTo(0, 0)
       } else {
-        alert('Error getting jobposting')
+        addToast('Jobposting', 'Error getting jobposting', 'danger')
       }
     } catch (error) {
       console.log(error)
-      alert('Error getting jobposting')
+      addToast('Jobposting', 'Error getting jobposting', 'danger')
     }
   }
 
@@ -227,7 +231,7 @@ const Jobposting = () => {
         setTotalPages(res.data.totalPages)
         setIsLoading(false)
       } else {
-        alert('Error getting jobposting')
+        addToast('Jobposting', 'Error getting jobposting', 'danger')
         console.log('Error: ', res.data)
         setIsLoading(false)
         setIsSearchMode(false)
@@ -301,13 +305,15 @@ const Jobposting = () => {
                   </div>
                   <div className="d-flex gap-2 justify-content-between align-items-center">
                     {isEdit && (
-                      <CButton
-                        type="button"
-                        onClick={() => handleEditReset()}
-                        className="btn btn-danger w-30"
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </CButton>
+                      <CTooltip content="Reset Fields" placement="top">
+                        <CButton
+                          type="button"
+                          onClick={() => handleEditReset()}
+                          className="btn btn-danger w-30"
+                        >
+                          <FontAwesomeIcon icon={faRefresh} />
+                        </CButton>
+                      </CTooltip>
                     )}
                     <CTooltip content={isFormExpanded ? 'Collapse' : 'Expand'} placement="top">
                       <CButton
@@ -550,131 +556,68 @@ const Jobposting = () => {
             </CCard>
           </CContainer>
         </CRow>
-        <CRow>
+        <CRow className="d-flex gap-2 justify-content-between align-items-center">
           <CContainer>
-            <CCard>
-              <CCardHeader>
-                <CForm
-                  onSubmit={searchHandleSubmit(searchSubmit)}
-                  className="d-flex flex-row gap-2 justify-content-end align-items-center"
-                >
-                  <div>
-                    <CFormInput
-                      type="text"
-                      id="jpSearchInput"
-                      placeholder="..."
-                      {...searchRegister('jpSearchInput')}
-                      invalid={!!errors.jpSearchInput}
-                    />
-                    {errors.jpSearchInput && (
-                      <CFormFeedback invalid>{errors.jpSearchInput.message}</CFormFeedback>
-                    )}
-                  </div>
+            <CForm
+              onSubmit={searchHandleSubmit(searchSubmit)}
+              className="d-flex flex-row gap-2 justify-content-end align-items-center"
+            >
+              <CInputGroup>
+                <CFormInput
+                  type="text"
+                  id="jpSearchInput"
+                  placeholder="..."
+                  {...searchRegister('jpSearchInput')}
+                  invalid={!!errors.jpSearchInput}
+                />
+
+                <CTooltip content="Search" placement="top">
                   <CButton type="submit" className="btn btn-primary">
-                    Search
+                    <FontAwesomeIcon icon={faSearch} />
                   </CButton>
+                </CTooltip>
+                <CTooltip content="Reset" placement="top">
                   <CButton onClick={() => resetData()} type="button" className="btn btn-primary">
                     <FontAwesomeIcon icon={faRefresh} />
                   </CButton>
-                </CForm>
-              </CCardHeader>
-              <CCardBody>
-                {isLoading ? (
-                  <div>Loading</div>
-                ) : (
-                  <div>
-                    {displayMode === 'grid' ? (
-                      <CContainer>
-                        <CRow xs={{ cols: 1 }} md={{ cols: 3 }} className="g-3">
-                          {allData.map((data) => {
-                            if (!data) {
-                              return <div key={Math.random()}>Loading</div>
-                            }
-                            return (
-                              <CCol key={data._id}>
-                                <CCard className="mb-3 h-100">
-                                  <CCardHeader className="fw-bold text-uppercase text-primary">
-                                    <div>
-                                      <span
-                                        className={
-                                          data.status === 'active'
-                                            ? 'badge rounded-pill text text-success'
-                                            : 'badge rounded-pill text text-danger'
-                                        }
-                                      >
-                                        {data.status === 'active' ? 'Active' : 'Inactive'}
-                                      </span>
-                                      <p className="fw-bold text-uppercase text-primary">
-                                        {data.title}
-                                      </p>
-                                    </div>
-                                  </CCardHeader>
-                                  <CCardBody>
-                                    <div className="d-flex flex-column justify-content-between">
-                                      <div className="d-flex flex-row gap-2 justify-content-start">
-                                        <FontAwesomeIcon icon={faLocationPin} />
-                                        <p>{data.location}</p>
-                                      </div>
-                                      <div className="d-flex flex-row gap-2 justify-content-start">
-                                        <FontAwesomeIcon icon={faCalendar} />
-                                        <p>
-                                          {formattedDateMMM(data.schedule_start)} -{' '}
-                                          {formattedDateMMM(data.schedule_end)}
-                                        </p>
-                                      </div>
-                                      <div className="d-flex flex-row gap-2 justify-content-start">
-                                        <FontAwesomeIcon icon={faMoneyBill} />
-                                        <p>
-                                          {formatCurency(data.salary_min)} -{' '}
-                                          {formatCurency(data.salary_max)}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="fw-bold text-uppercase">Description</p>
-                                        <p>{trimString(data.description, 150)}</p>
-                                      </div>
-                                    </div>
-                                  </CCardBody>
-                                  <CCardFooter>
-                                    <div className="d-flex justify-content-end">
-                                      <CButton
-                                        onClick={() => handleEdit(data._id)}
-                                        className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
-                                      >
-                                        <FontAwesomeIcon icon={faPencil} />
-                                        Edit
-                                      </CButton>
-                                    </div>
-                                  </CCardFooter>
-                                </CCard>
-                              </CCol>
-                            )
-                          })}
-                        </CRow>
-                      </CContainer>
-                    ) : (
-                      <ul className="list-group list-group-flush">
-                        {allData.map((data) => {
-                          if (!data) {
-                            return null
-                          }
-                          return (
-                            <li key={data._id} className="list-group-item">
-                              <div>
-                                <span
-                                  className={
-                                    data.status === 'active'
-                                      ? 'badge rounded-pill text text-bg-success'
-                                      : 'badge rounded-pill text text-danger'
-                                  }
-                                >
-                                  {data.status === 'active' ? 'Active' : 'Inactive'}
-                                </span>
-                                <p className="fw-bold text-uppercase text-primary">{data.title}</p>
-                              </div>
+                </CTooltip>
+              </CInputGroup>
+            </CForm>
+          </CContainer>
+        </CRow>
+        <CRow>
+          {isLoading ? (
+            <div>Loading</div>
+          ) : (
+            <div>
+              {displayMode === 'grid' ? (
+                <CRow xs={{ cols: 1 }} md={{ cols: 3 }} className="g-3">
+                  {allData.map((data) => {
+                    if (!data) {
+                      return <div key={Math.random()}>Loading</div>
+                    }
+                    return (
+                      <CCol key={data._id}>
+                        <CCard className="mb-3 h-100">
+                          <CCardHeader className="fw-bold text-uppercase text-primary">
+                            <div>
+                              <span
+                                className={
+                                  data.status === 'active'
+                                    ? 'badge rounded-pill text text-success'
+                                    : 'badge rounded-pill text text-danger'
+                                }
+                              >
+                                {data.status === 'active' ? 'Active' : 'Inactive'}
+                              </span>
+                              <p className="fw-bold text-uppercase text-primary">{data.title}</p>
+                            </div>
+                          </CCardHeader>
+                          <CCardBody>
+                            <div className="d-flex flex-column justify-content-between">
                               <div className="d-flex flex-row gap-2 justify-content-start">
                                 <FontAwesomeIcon icon={faLocationPin} />
-                                <div>{data.location}</div>
+                                <p>{data.location}</p>
                               </div>
                               <div className="d-flex flex-row gap-2 justify-content-start">
                                 <FontAwesomeIcon icon={faCalendar} />
@@ -694,36 +637,90 @@ const Jobposting = () => {
                                 <p className="fw-bold text-uppercase">Description</p>
                                 <p>{trimString(data.description, 150)}</p>
                               </div>
-                              <div className="d-flex justify-content-end">
-                                <div className="d-flex justify-content-end">
-                                  <CButton
-                                    onClick={() => handleEdit(data._id)}
-                                    className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
-                                  >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                    Edit
-                                  </CButton>
-                                </div>
-                              </div>
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    )}
-                  </div>
-                )}
-              </CCardBody>
-              <CCardFooter className="d-flex flex-row gap-2 justify-content-center align-items-center">
-                {totalPages > 1 && (
-                  <AppPagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
-                )}
-              </CCardFooter>
-            </CCard>
-          </CContainer>
+                            </div>
+                          </CCardBody>
+                          <CCardFooter>
+                            <div className="d-flex justify-content-end">
+                              <CButton
+                                onClick={() => handleEdit(data._id)}
+                                className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
+                              >
+                                <FontAwesomeIcon icon={faPencil} />
+                                Edit
+                              </CButton>
+                            </div>
+                          </CCardFooter>
+                        </CCard>
+                      </CCol>
+                    )
+                  })}
+                </CRow>
+              ) : (
+                <ul className="list-group list-group-flush">
+                  {allData.map((data) => {
+                    if (!data) {
+                      return null
+                    }
+                    return (
+                      <li key={data._id} className="list-group-item">
+                        <div>
+                          <span
+                            className={
+                              data.status === 'active'
+                                ? 'badge rounded-pill text text-bg-success'
+                                : 'badge rounded-pill text text-danger'
+                            }
+                          >
+                            {data.status === 'active' ? 'Active' : 'Inactive'}
+                          </span>
+                          <p className="fw-bold text-uppercase text-primary">{data.title}</p>
+                        </div>
+                        <div className="d-flex flex-row gap-2 justify-content-start">
+                          <FontAwesomeIcon icon={faLocationPin} />
+                          <div>{data.location}</div>
+                        </div>
+                        <div className="d-flex flex-row gap-2 justify-content-start">
+                          <FontAwesomeIcon icon={faCalendar} />
+                          <p>
+                            {formattedDateMMM(data.schedule_start)} -{' '}
+                            {formattedDateMMM(data.schedule_end)}
+                          </p>
+                        </div>
+                        <div className="d-flex flex-row gap-2 justify-content-start">
+                          <FontAwesomeIcon icon={faMoneyBill} />
+                          <p>
+                            {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="fw-bold text-uppercase">Description</p>
+                          <p>{trimString(data.description, 150)}</p>
+                        </div>
+                        <div className="d-flex justify-content-end">
+                          <div className="d-flex justify-content-end">
+                            <CButton
+                              onClick={() => handleEdit(data._id)}
+                              className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
+                            >
+                              <FontAwesomeIcon icon={faPencil} />
+                              Edit
+                            </CButton>
+                          </div>
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </div>
+          )}
+          <div className="mt-3 d-flex flex-row gap-2 justify-content-center align-items-center">
+            <AppPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </CRow>
       </CContainer>
     </>

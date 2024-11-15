@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
         console.log('AuthContext.js: login: res: ', res)
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
+        console.log('AuthContext.js: login: userInformation: ', res.data.data)
         Cookies.set('isAuthenticated', true)
         Cookies.set('userInformation', res.data.data)
         callback(true)
@@ -35,7 +36,7 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = async () => {
+  const logout = async (callback) => {
     try {
       const res = await get('/auth/logout')
       console.log('AuthContext.js: logout: res: ', res)
@@ -48,10 +49,12 @@ const AuthProvider = ({ children }) => {
           role: '',
           token: '',
         })
+        callback(true)
         // Cookies.remove('isAuthenticated')
         // Cookies.remove('userInformation')
       }
     } catch (error) {
+      callback(false)
       console.error(error)
     }
   }
@@ -71,8 +74,8 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    // verifySession()
-  }, [isAuthenticated, userInformation])
+    verifySession()
+  }, [isAuthenticated])
 
   return (
     <AuthContext.Provider value={{ userInformation, isAuthenticated, login, logout }}>
