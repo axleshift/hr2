@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { config } from '../config'
 
-const baseUrl = import.meta.env.VITE_REACT_SERVER_URL
+const baseUrl = config.server.url
 
 const instance = axios.create({
   baseURL: baseUrl,
