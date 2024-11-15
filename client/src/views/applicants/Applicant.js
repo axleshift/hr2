@@ -32,6 +32,13 @@ import {
   CFormSelect,
   CInputGroup,
   CBadge,
+  CTable,
+  CTableHead,
+  CTableBody,
+  CTableHeaderCell,
+  CTableDataCell,
+  CTableRow,
+  CSpinner,
 } from '@coreui/react'
 import { CChart } from '@coreui/react-chartjs'
 import AppPagination from '../../components/AppPagination'
@@ -49,6 +56,7 @@ import {
   faRefresh,
   faPencil,
   faSearch,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { firstLetterUppercase, formattedDateMMM } from '../../utils'
 
@@ -282,7 +290,7 @@ const Applicant = () => {
         const url = window.URL.createObjectURL(blob)
         setPdfFile(url)
       } else {
-        addToast('Error', "Error Downloading Resume File", 'danger')
+        addToast('Error', 'Error Downloading Resume File', 'danger')
       }
     } catch (error) {
       addToast('Error', 'An error occurred', 'danger')
@@ -326,7 +334,11 @@ const Applicant = () => {
         })
         setIsEdit(true)
         setIsFormExpanded(true)
-        addToast('Success',`You are now editing ${res.data.data.firstname} ${res.data.data.lastname}`, 'success')
+        addToast(
+          'Success',
+          `You are now editing ${res.data.data.firstname} ${res.data.data.lastname}`,
+          'success',
+        )
       } else {
         addToast('Error', 'An error occurred', 'danger')
       }
@@ -393,7 +405,6 @@ const Applicant = () => {
     formState: { errors: tagErrors },
   } = useForm({
     resolver: zodResolver(tagSchema),
-
   })
 
   const getAllTagOptions = async () => {
@@ -1072,63 +1083,74 @@ const Applicant = () => {
       </CRow>
       <CRow>
         <CContainer>
-          <ul className="list-group">
-            {allData.map((item, index) => {
-              return (
-                <li
-                  key={index}
-                  className="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  <div className="d-flex flex-column text-capitalize">
-                    <strong>
-                      {item.firstname}, {item.lastname} {item?.middlename}
-                    </strong>
-                    <div
-                      className="text-muted d-flex gap-2"
-                      style={{
-                        fontSize: '0.8rem',
-                      }}
-                    >
-                      {item._id}
-                    </div>
-                    <div className="mt-3 text-capitalize d-flex gap-2">
-                      <CBadge color={item.expired < new Date().toString() ? 'danger' : 'success'}>
-                        {item.expired < new Date().toString() && 'Expired'}
-                      </CBadge>
-                      {item.tags.map((tag, index) => {
-                        return (
-                          <CBadge key={index} color="primary">
-                            {formTags.find((item) => item._id === tag) &&
-                              formTags.find((item) => item._id === tag).name}
-                          </CBadge>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  <div>
-                    <CButtonGroup>
-                      <CTooltip content="Edit" placement="top">
-                        <CButton
-                          onClick={() => handleEdit(item._id)}
-                          className="btn btn-outline-primary"
-                        >
-                          <FontAwesomeIcon icon={faPencil} />
-                        </CButton>
-                      </CTooltip>
-                      <CTooltip content="Delete" placement="top">
-                        <CButton
-                          onClick={() => handleDelete(item._id)}
-                          className="btn btn-outline-danger"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </CButton>
-                      </CTooltip>
-                    </CButtonGroup>
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
+          <CCard>
+            <CCardBody>
+              <CTable align="middle" hover responsive striped>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell>
+                      <FontAwesomeIcon icon={faUser} />
+                    </CTableHeaderCell>
+                    <CTableHeaderCell>Email</CTableHeaderCell>
+                    <CTableHeaderCell>Phone</CTableHeaderCell>
+                    <CTableHeaderCell>Tags</CTableHeaderCell>
+                    <CTableHeaderCell>Actions</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {isLoading ? (
+                    <CTableRow>
+                      <CTableDataCell colSpan="5">
+                        <CSpinner color="primary" />
+                      </CTableDataCell>
+                    </CTableRow>
+                  ) : (
+                    allData.map((item, index) => {
+                      return (
+                        <CTableRow key={index}>
+                          <CTableDataCell>
+                            {item.firstname}, {item.lastname} {item?.middlename}
+                          </CTableDataCell>
+                          <CTableDataCell>{item.email}</CTableDataCell>
+                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          <CTableDataCell>
+                            {item.tags.map((tag, index) => {
+                              return (
+                                <CBadge key={index} color="primary">
+                                  {formTags.find((item) => item._id === tag) &&
+                                    formTags.find((item) => item._id === tag).name}
+                                </CBadge>
+                              )
+                            })}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CButtonGroup>
+                              <CTooltip content="Edit" placement="top">
+                                <CButton
+                                  onClick={() => handleEdit(item._id)}
+                                  className="btn btn-outline-primary"
+                                >
+                                  <FontAwesomeIcon icon={faPencil} />
+                                </CButton>
+                              </CTooltip>
+                              <CTooltip content="Delete" placement="top">
+                                <CButton
+                                  onClick={() => handleDelete(item._id)}
+                                  className="btn btn-outline-danger"
+                                >
+                                  <FontAwesomeIcon icon={faTrash} />
+                                </CButton>
+                              </CTooltip>
+                            </CButtonGroup>
+                          </CTableDataCell>
+                        </CTableRow>
+                      )
+                    })
+                  )}
+                </CTableBody>
+              </CTable>
+            </CCardBody>
+          </CCard>
         </CContainer>
       </CRow>
 
