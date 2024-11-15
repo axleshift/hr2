@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, { useContext, useState } from 'react'
 import {
   CAvatar,
   CBadge,
@@ -8,7 +8,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CSpinner
+  CSpinner,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import { faSignOut } from '@fortawesome/free-solid-svg-icons'

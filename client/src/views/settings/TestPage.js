@@ -7,7 +7,8 @@ import React from 'react'
 
 const TestPage = () => {
   const { addToast } = useContext(AppContext)
-  const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  const lorem =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   const randomColor = () => {
     const colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info']
     return colors[Math.floor(Math.random() * colors.length)]
@@ -17,7 +18,7 @@ const TestPage = () => {
     const c = randomColor()
     const res = await get('/test/')
     if (res.status === 200) {
-      addToast('Test',  lorem, c, alertMsg, 'Try Again')
+      addToast('Test', lorem, c, alertMsg, 'Try Again')
     } else {
       addToast('Test', 'Test route is not working', 'error')
     }

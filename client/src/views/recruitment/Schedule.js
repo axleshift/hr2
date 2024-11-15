@@ -334,43 +334,41 @@ const Schedule = () => {
                       </li>
                     ))
                   )} */}
-                  {
-                    allData.map((data, index) => (
-                      <li
-                        key={index}
-                        className={`list-group-item d-flex flex-row gap-2 justify-content-between align-items-center `}
-                      >
-                        <div className="d-flex flex-row gap-2">
-                          <div>
-                            <strong>{data.title}</strong>
-                            <div className="text-muted d-flex flex-row gap-2 align-items-center">
-                              <div
-                                style={{
-                                  width: '15px',
-                                  height: '15px',
-                                }}
-                                className={`rounded
+                  {allData.map((data, index) => (
+                    <li
+                      key={index}
+                      className={`list-group-item d-flex flex-row gap-2 justify-content-between align-items-center `}
+                    >
+                      <div className="d-flex flex-row gap-2">
+                        <div>
+                          <strong>{data.title}</strong>
+                          <div className="text-muted d-flex flex-row gap-2 align-items-center">
+                            <div
+                              style={{
+                                width: '15px',
+                                height: '15px',
+                              }}
+                              className={`rounded
                                                     ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
-                              />
-                              <div>
-                                {formattedDateMMM(data.schedule_start)} -{' '}
-                                {formattedDateMMM(data.schedule_end)}
-                              </div>
+                            />
+                            <div>
+                              {formattedDateMMM(data.schedule_start)} -{' '}
+                              {formattedDateMMM(data.schedule_end)}
                             </div>
                           </div>
                         </div>
-                        <CTooltip content="Review" placement="top">
-                          <CButton
-                            type="button"
-                            onClick={() => handleReview(data._id)}
-                            className="btn btn-primary d-flex flex-row gap-2 align-items-center"
-                          >
-                            <FontAwesomeIcon icon={faClipboardCheck} />
-                          </CButton>
-                        </CTooltip>
-                      </li>
-                      ))
-                  }
+                      </div>
+                      <CTooltip content="Review" placement="top">
+                        <CButton
+                          type="button"
+                          onClick={() => handleReview(data._id)}
+                          className="btn btn-primary d-flex flex-row gap-2 align-items-center"
+                        >
+                          <FontAwesomeIcon icon={faClipboardCheck} />
+                        </CButton>
+                      </CTooltip>
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
