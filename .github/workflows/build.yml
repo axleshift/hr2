@@ -28,6 +28,8 @@ jobs:
           cd client
           echo "VITE_NODE_ENV=${{ secrets.CLIENT_NODE_ENV}}" > .env
           echo "VITE_REACT_SERVER_URL=${{ secrets.CLIENT_VITE_REACT_SERVER_URL}}" >> .env
+          echo "VITE_REACT_GOOGLE_RECAPTCHA_SITE_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SITE_KEY}}" >> .env
+          echo "VITE_REACT_GOOGLE_RECAPTCHA_SECRET_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SECRET_KEY}}" >> .env
 
       - name: Build Client
         run: |
