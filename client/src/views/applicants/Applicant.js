@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useContext } from 'react'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { post, put, get, del, getFile } from '../../api/axios'
@@ -12,10 +12,7 @@ import {
   CCard,
   CCardHeader,
   CCardBody,
-  CCardFooter,
-  CWidgetStatsA,
   CForm,
-  CFormText,
   CFormTextarea,
   CFormLabel,
   CFormInput,
@@ -29,7 +26,6 @@ import {
   CModalBody,
   CModalFooter,
   CTooltip,
-  CFormSelect,
   CInputGroup,
   CBadge,
   CTable,
@@ -40,7 +36,6 @@ import {
   CTableRow,
   CSpinner,
 } from '@coreui/react'
-import { CChart } from '@coreui/react-chartjs'
 import AppPagination from '../../components/AppPagination'
 import { pdfjs, Document, Page } from 'react-pdf'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -48,8 +43,6 @@ import { AppContext } from '../../context/appContext'
 import {
   faChevronDown,
   faChevronUp,
-  faChevronLeft,
-  faChevronRight,
   faMinus,
   faPlus,
   faTrash,
@@ -58,7 +51,7 @@ import {
   faSearch,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import { firstLetterUppercase, formattedDateMMM } from '../../utils'
+import { firstLetterUppercase } from '../../utils'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
