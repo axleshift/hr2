@@ -64,33 +64,46 @@ exports.getAllTags = getAllTags;
 const searchTags = async (req, res) => {
     try {
         logger_1.default.info("Searching for tags");
-        logger_1.default.info(req.query);
-        const searchQuery = req.query.query;
+        const searchQuery = typeof req.query.query === "string" ? req.query.query.trim() : "";
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
         const skip = (page - 1) * limit;
-        const totalTags = await tagModel_1.default.find({
-            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
-        }).countDocuments();
-        const tags = await tagModel_1.default.find({
-            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
+        if (!searchQuery) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Search query is required",
+            });
+        }
+        const totalTags = await tagModel_1.default.countDocuments({
+            name: { $regex: searchQuery, $options: "i" },
+        });
+        const data = await tagModel_1.default.find({
+            name: { $regex: searchQuery, $options: "i" },
         })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
-            message: "Tags retrieved successfully",
-            data: tags,
-            total: totalTags,
-            totalPages: Math.ceil(totalTags / limit),
-            currentPage: page,
+        if (data.length > 0) {
+            return res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Tags retrieved successfully",
+                data,
+                total: totalTags,
+                totalPages: Math.ceil(totalTags / limit),
+                currentPage: page,
+            });
+        }
+        return res.status(404).json({
+            statusCode: 404,
+            success: false,
+            message: "No tags found",
         });
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({
+        logger_1.default.error("Error retrieving tags:", error);
+        return res.status(500).json({
             statusCode: 500,
             success: false,
             message: "Error retrieving tags",

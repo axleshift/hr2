@@ -10,15 +10,15 @@ dotenv_1.default.config();
 const tagController_1 = require("../../database/v1/controllers/tagController");
 router.post("/", tagController_1.createTag);
 router.get("/all", tagController_1.getAllTags);
-router.get("/:id", tagController_1.getTagById);
 router.get("/search", tagController_1.searchTags);
 router.get("/category/:category", tagController_1.getTagByCategory);
+router.get("/:id", tagController_1.getTagById);
 router.put("/:id", tagController_1.updateTag);
 router.delete("/:id", tagController_1.deleteTag);
 exports.default = {
     metadata: {
         path: "/tags",
-        method: ["POST", "GET"],
+        method: ["POST", "GET", "PUT", "DELETE"],
         description: "This route is used to add, update, delete, get all, get by id and search tag data",
         permissions: ["admin", "user"],
     },
