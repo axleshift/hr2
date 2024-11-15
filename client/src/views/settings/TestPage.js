@@ -19,6 +19,7 @@ const TestPage = () => {
     const res = await get('/test/')
     if (res.status === 200) {
       addToast('Test', lorem, c, alertMsg, 'Try Again')
+
     } else {
       addToast('Test', 'Test route is not working', 'error')
     }
