@@ -176,6 +176,11 @@ const AppProvider = ({ children }) => {
   )
 }
 
+Countdown.propTypes = {
+  expiryTime: propTypes.number.isRequired,
+  isHovered: propTypes.bool.isRequired,
+}
+
 AppProvider.propTypes = {
   children: propTypes.node.isRequired,
 }

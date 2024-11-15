@@ -75,7 +75,7 @@ import {
 } from '../../utils'
 
 const Tags = () => {
-  const { addToast} = useContext(AppContext)
+  const { addToast } = useContext(AppContext)
   // Tags
   const [allTagData, setAllTagData] = useState([])
   const [isEdit, setIsEdit] = useState(false)
