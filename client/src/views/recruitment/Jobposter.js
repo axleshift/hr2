@@ -456,7 +456,8 @@ const Jobposter = () => {
                 <hr />
                 <h2>Tracker</h2>
                 <small>
-                  This is a tracker for the job posting. It will show the status of the job posting for this job.
+                  This is a tracker for the job posting. It will show the status of the job posting
+                  for this job.
                 </small>
                 <CCard>
                   <CCardBody>
@@ -506,7 +507,9 @@ const Jobposter = () => {
                                     interactive
                                     offset={[-10, 0]}
                                   >
-                                  <div className="text-capitalize text-center">{trimString(item._id, 2)}</div>
+                                    <div className="text-capitalize text-center">
+                                      {trimString(item._id, 2)}
+                                    </div>
                                   </CTooltip>
                                 </CTableDataCell>
                                 <CTableDataCell>
