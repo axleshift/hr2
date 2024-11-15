@@ -31,7 +31,7 @@ const Login = () => {
   const navigate = useNavigate()
   const recaptchaRef = useRef()
   const { login, isAuthenticated, userInformation } = useContext(AuthContext)
-  const [ captchaValue, setCaptchaValue ] = useState('')
+  const [captchaValue, setCaptchaValue] = useState('')
   const { addToast } = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
   const loginSchema = z.object({
@@ -78,9 +78,7 @@ const Login = () => {
     })
   }
 
-  const handleGoogleLogin = () => {
-
-  }
+  const handleGoogleLogin = () => {}
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -105,7 +103,7 @@ const Login = () => {
                   <p className="text-body-secondary">Sign In to your account</p>
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    size='invisible'
+                    size="invisible"
                     sitekey={config.google.recaptcha.siteKey}
                   />
                   <CInputGroup className="mb-3">
@@ -141,12 +139,18 @@ const Login = () => {
                   <p>
                     <small>
                       By continuing, you agree to our
-                      <a className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                      <a
+                        onClick={() => navigate('/policy')}
+                        className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                      >
                         {' '}
                         Privacy Policy{' '}
                       </a>
                       and
-                      <a className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                      <a
+                        onClick={() => navigate('/terms')}
+                        className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                      >
                         {' '}
                         Terms of Service
                       </a>
@@ -163,8 +167,10 @@ const Login = () => {
                       </CButton>
                     </CButtonGroup>
                   </div>
-                  <div className="text-center">
-                    <span className="text-muted d-block mb-1"><small>Or continue with</small></span>
+                  <div className="text-center visually-hidden">
+                    <span className="text-muted d-block mb-1">
+                      <small>Or continue with</small>
+                    </span>
                     <CButton color="outline-primary" className="me-2" onClick={handleGoogleLogin}>
                       <FontAwesomeIcon icon={faGoogle} />
                     </CButton>

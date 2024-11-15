@@ -18,7 +18,7 @@ import { AppSidebarNav } from './AppSidebarNav'
 import { sygnet } from 'src/assets/brand/sygnet'
 
 import logo from './../../public/images/hr2.png'
-import icon from './../../public/images/favicon.ico'
+import icon from './../../public/favicon.ico'
 
 // sidebar nav config
 import navigation from '../_nav'
