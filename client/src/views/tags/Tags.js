@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import dayjs from 'dayjs'
 import { post, put, get, del } from '../../api/axios'
 import { AuthContext } from '../../context/authContext'
 import { AppContext } from '../../context/appContext'
@@ -21,69 +20,46 @@ import {
   CForm,
   CFormInput,
   CFormLabel,
-  CFormTextarea,
   CFormCheck,
   CFormFeedback,
   CCollapse,
   CButtonGroup,
   CTooltip,
-  CBadge,
-  CPagination,
-  CPaginationItem,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CInputGroup,
-  CInputGroupText,
   CModal,
   CModalHeader,
   CModalTitle,
   CModalBody,
   CModalFooter,
+  CSpinner,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronDown,
   faChevronUp,
-  faChevronLeft,
-  faCircleChevronLeft,
-  faChevronRight,
-  faCircleChevronRight,
-  faLocationPin,
-  faMoneyBill,
-  faRefresh,
   faTrash,
   faPencil,
-  faCalendar,
-  faSave,
   faSearch,
   faLock,
   faUnlock,
-  faCog,
-  faCogs,
   faGear,
   faUserGear,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-  formattedDate,
-  formattedDateMMM,
-  formatCurency,
-  trimString,
-  firstLetterUppercase,
-} from '../../utils'
+import { firstLetterUppercase } from '../../utils'
 
 const Tags = () => {
   const { addToast } = useContext(AppContext)
   // Tags
   const [allTagData, setAllTagData] = useState([])
+  const [tagData, setTagData] = useState({})
   const [isEdit, setIsEdit] = useState(false)
   const [isTagsExpanded, setIsTagsExpanded] = useState(true)
 
   // modal
   const [deleteModal, setDeleteModal] = useState(false)
   const [isConfirmed, setIsConfirmed] = useState(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
 
   // Search
   const [searchInput, setSearchInput] = useState('')
@@ -204,15 +180,29 @@ const Tags = () => {
     }
   }
 
-  const handleDeleteTag = async (tag) => {
+  const handlePreDeleteTag = (id) => {
+    // set tag data
+    const tag = allTagData.find((tag) => tag._id === id)
+    setTagData(tag)
+    setDeleteModal(true)
+  }
+
+  const handleDeleteTag = async (id) => {
     try {
-      if (!confirm('Are you sure you want to delete this tag?')) return
-      const res = await del(`/tags/${tag}`)
+      setIsDeleteLoading(true)
+      const res = await del(`/tags/${id}`)
       if (res.status === 200) {
+        addToast('Success', 'Tag has been deleted successfully', 'success')
         getAllTagData()
+        setDeleteModal(false)
+      } else {
+        console.log(res)
+        addToast('Error', res.message.message, 'danger')
+        setIsDeleteLoading(false)
       }
     } catch (error) {
       addToast('Error', 'An error occurred while deleting the tag', 'danger')
+      setIsDeleteLoading(false)
     }
   }
 
@@ -493,7 +483,7 @@ const Tags = () => {
                       <CTooltip content="Delete tag" placement="top">
                         <CButton
                           color="danger"
-                          onClick={() => setDeleteModal(true)}
+                          onClick={() => handlePreDeleteTag(tag._id)}
                           disabled={tag.isProtected}
                         >
                           <FontAwesomeIcon icon={tag.isProtected ? faLock : faTrash} />
@@ -502,67 +492,65 @@ const Tags = () => {
                     </CButtonGroup>
                   </CCol>
                 </CRow>
-                <CRow>
-                  <CCol>
-                    <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
-                      <CModalHeader>
-                        <CModalTitle>Warning</CModalTitle>
-                      </CModalHeader>
-                      <CModalBody>
-                        <div>
-                          <p>Are you sure you want to delete this tag?</p>
-                          <p>
-                            Name: <strong>{tag.name}</strong>
-                            <br />
-                            Category: <strong>{tag.category}</strong>
-                          </p>
-                          <p>
-                            <strong>Note:</strong> This action cannot be undone.
-                          </p>
-                          <p>There&apos;s no way to recover the tag once it&apos;s deleted.</p>
-                          <p>
-                            This is important because tags are used to categorize and organize
-                            content. Deleting a tag can result in the loss of important information
-                            and make it difficult to find and manage content.
-                          </p>
-                          <p>
-                            <strong>What this action does:</strong>
-                          </p>
-                          <p>
-                            It removes the tag from the system and removes the tag from any content.
-                          </p>
-                          <p>
-                            if the tag is used in any content, it will no longer be associated with
-                            that content.
-                          </p>
-                        </div>
-                      </CModalBody>
-                      <CModalFooter>
-                        <CCol className="d-flex justify-content-end">
-                          <CFormCheck
-                            type="checkbox"
-                            id="invalidCheck"
-                            label="I confirm that I understand the consequences of this action."
-                            checked={isConfirmed}
-                            onChange={() => setIsConfirmed(!isConfirmed)}
-                          />
-                          <CFormFeedback invalid>You must agree before submitting.</CFormFeedback>
-                        </CCol>
-                        <CButton
-                          onClick={() => handleDeleteTag(tag._id)}
-                          disabled={!isConfirmed}
-                          className="btn btn-danger"
-                        >
-                          Delete
-                        </CButton>
-                      </CModalFooter>
-                    </CModal>
-                  </CCol>
-                </CRow>
               </CCardFooter>
             </CCard>
           </CCol>
         ))}
+      </CRow>
+      <CRow>
+        <CCol>
+          <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
+            <CModalHeader>
+              <CModalTitle className="text-danger">Warning</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <div>
+                <p>Are you sure you want to delete this tag?</p>
+                <p>
+                  Name: <strong>{tagData.name}</strong>
+                  <br />
+                  Category: <strong>{tagData.category}</strong>
+                </p>
+                <p>
+                  <strong>Note:</strong> This action cannot be undone.
+                </p>
+                <p>There&apos;s no way to recover the tag once it&apos;s deleted.</p>
+                <p>
+                  This is important because tags are used to categorize and organize content.
+                  Deleting a tag can result in the loss of important information and make it
+                  difficult to find and manage content.
+                </p>
+                <p>
+                  <strong>What this action does:</strong>
+                </p>
+                <p>It removes the tag from the system and removes the tag from any content.</p>
+                <p>
+                  if the tag is used in any content, it will no longer be associated with that
+                  content.
+                </p>
+              </div>
+            </CModalBody>
+            <CModalFooter>
+              <CCol className="d-flex justify-content-end">
+                <CFormCheck
+                  type="checkbox"
+                  id="invalidCheck"
+                  label="I confirm that I understand the consequences of this action."
+                  checked={isConfirmed}
+                  onChange={() => setIsConfirmed(!isConfirmed)}
+                />
+                <CFormFeedback invalid>You must agree before submitting.</CFormFeedback>
+              </CCol>
+              <CButton
+                onClick={() => handleDeleteTag(tagData._id)}
+                disabled={!isConfirmed}
+                className="btn btn-danger"
+              >
+                {isDeleteLoading ? <CSpinner color="primary" variant="grow" /> : 'Delete'}
+              </CButton>
+            </CModalFooter>
+          </CModal>
+        </CCol>
       </CRow>
       <CRow>
         <div className="d-flex justify-content-center">
