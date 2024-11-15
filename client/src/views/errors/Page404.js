@@ -1,13 +1,7 @@
 import React from 'react'
-import {
-  CContainer,
-  CRow,
-  CCol,
-  CButton,
-} from '@coreui/react'
+import { CContainer, CRow, CCol, CButton } from '@coreui/react'
 
 const Page404 = () => {
-
   const goBack = () => {
     window.history.back()
   }
@@ -26,9 +20,9 @@ const Page404 = () => {
             </div>
           </CCol>
         </CRow>
-        <CRow  className='d-flex justify-content-center'>
+        <CRow className="d-flex justify-content-center">
           <CCol md={6}>
-            <CButton onClick={goBack} className='btn btn-link'>
+            <CButton onClick={goBack} className="btn btn-link">
               <span>Go back</span>
             </CButton>
           </CCol>
