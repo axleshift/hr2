@@ -18,9 +18,7 @@ import {
   CButtonGroup,
   CTooltip,
 } from '@coreui/react'
-import {
-  faClipboardCheck,
-} from '@fortawesome/free-solid-svg-icons'
+import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { formattedDate, formattedDateMMM } from '../../utils'
