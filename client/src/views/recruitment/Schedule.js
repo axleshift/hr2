@@ -1,53 +1,24 @@
-import React, { act, useContext, useEffect, useState } from 'react'
-import { set, z } from 'zod'
+import React, { useContext, useEffect, useState } from 'react'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { get } from '../../api/axios'
-import dayjs from 'dayjs'
 
 import AppPagination from '../../components/AppPagination'
 import { AppContext } from '../../context/appContext'
 import {
   CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CCol,
   CForm,
   CFormInput,
   CFormLabel,
-  CFormTextarea,
-  CFormCheck,
-  CFormFeedback,
-  CCollapse,
   CButtonGroup,
   CTooltip,
-  CPagination,
-  CPaginationItem,
 } from '@coreui/react'
-import {
-  faChevronDown,
-  faChevronUp,
-  faChevronLeft,
-  faCircleChevronLeft,
-  faChevronRight,
-  faCircleChevronRight,
-  faLocationPin,
-  faMoneyBill,
-  faRefresh,
-  faTrash,
-  faPencil,
-  faCalendar,
-  faClipboard,
-  faClipboardCheck,
-  faForward,
-  faBackward,
-} from '@fortawesome/free-solid-svg-icons'
-import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
+import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { formattedDate, formattedDateMMM } from '../../utils'

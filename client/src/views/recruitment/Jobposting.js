@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { AppContext } from '../../context/appContext'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { post, put, get } from '../../api/axios'
@@ -21,7 +21,6 @@ import {
   CFormCheck,
   CFormFeedback,
   CCollapse,
-  CButtonGroup,
   CTooltip,
   CInputGroup,
 } from '@coreui/react'
@@ -29,14 +28,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronDown,
   faChevronUp,
-  faChevronLeft,
-  faCircleChevronLeft,
-  faChevronRight,
-  faCircleChevronRight,
   faLocationPin,
   faMoneyBill,
   faRefresh,
-  faTrash,
   faPencil,
   faCalendar,
   faSearch,
