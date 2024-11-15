@@ -61,35 +61,49 @@ export const getAllTags = async (req: req, res: res) => {
 export const searchTags = async (req: req, res: res) => {
     try {
         logger.info("Searching for tags");
-        logger.info(req.query);
-        const searchQuery = req.query.query;
+        const searchQuery = typeof req.query.query === "string" ? req.query.query.trim() : "";
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
         const skip = (page - 1) * limit;
+        if (!searchQuery) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Search query is required",
+            });
+        }
 
-        const totalTags = await Tag.find({
-            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
-        }).countDocuments();
+        const totalTags = await Tag.countDocuments({
+            name: { $regex: searchQuery, $options: "i" },
+        });
 
-        const tags = await Tag.find({
-            $or: [{ name: { $regex: searchQuery, $options: "i" } }, { category: { $regex: searchQuery, $options: "i" } }, { description: { $regex: searchQuery, $options: "i" } }],
+        const data = await Tag.find({
+            name: { $regex: searchQuery, $options: "i" },
         })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
-            message: "Tags retrieved successfully",
-            data: tags,
-            total: totalTags,
-            totalPages: Math.ceil(totalTags / limit),
-            currentPage: page,
+        if (data.length > 0) {
+            return res.status(200).json({
+                statusCode: 200,
+                success: true,
+                message: "Tags retrieved successfully",
+                data,
+                total: totalTags,
+                totalPages: Math.ceil(totalTags / limit),
+                currentPage: page,
+            });
+        }
+
+        return res.status(404).json({
+            statusCode: 404,
+            success: false,
+            message: "No tags found",
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+        logger.error("Error retrieving tags:", error);
+        return res.status(500).json({
             statusCode: 500,
             success: false,
             message: "Error retrieving tags",
@@ -202,7 +216,6 @@ export const updateTag = async (req: req, res: res) => {
 
 export const deleteTag = async (req: req, res: res) => {
     const { id } = req.params;
-
     try {
         const tag = await Tag.findById(id);
         if (!tag) {
