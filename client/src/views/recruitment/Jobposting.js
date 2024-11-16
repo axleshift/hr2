@@ -23,6 +23,7 @@ import {
   CCollapse,
   CTooltip,
   CInputGroup,
+  CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -581,7 +582,9 @@ const Jobposting = () => {
         </CRow>
         <CRow>
           {isLoading ? (
-            <div>Loading</div>
+            <div className="pt-3 text-center">
+              <CSpinner color="primary" variant="grow" />
+            </div>
           ) : (
             <div>
               {displayMode === 'grid' ? (

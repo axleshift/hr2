@@ -140,7 +140,9 @@ const Tags = () => {
       console.log(data)
       const res = isEdit ? await put(`/tags/${data.id}`, data) : await post('/tags', data)
       if (res.status === 200 || res.status === 201) {
-        addToast('Success', 'Tag has been added successfully', 'success')
+        isEdit
+          ? addToast('Success', 'Tag is successfully updated', 'success')
+          : addToast('Success', 'Tag is successfully added', 'success')
         tagsFormReset({
           id: '',
           name: '',
