@@ -17,6 +17,7 @@ exports.config = {
     server: {
         host: process.env.SERVER_HOST,
         port: process.env.SERVER_PORT,
+        trustProxy: process.env.SERVER_TRUST_PROXY,
         jwt: {
             secret: process.env.JWT_SECRET,
             expiry: process.env.JWT_EXPIRES_IN,
