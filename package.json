@@ -8,7 +8,10 @@
     "client": "cd client && npm start",
     "setup": "concurrently \"npm run server:install\" \"npm run client:install\"",
     "server:install": "cd server && npm install",
-    "client:install": "cd client && npm install"
+    "client:install": "cd client && npm install",
+    "lint:fix": "concurrently \"npm run server:lint:fix\" \"npm run client:lint:fix\"",
+    "server:lint:fix": "cd server && npm run lint:fix",
+    "client:lint:fix": "cd client && npm run lint:fix"
   },
   "version": "1.0.0"
 }

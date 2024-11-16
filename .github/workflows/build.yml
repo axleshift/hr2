@@ -21,7 +21,7 @@ jobs:
         run: |
           cd client
           npm i
-          npm run lint
+          npm run lint:fix
 
       - name: Setup Environment Variables
         run: |
@@ -64,7 +64,7 @@ jobs:
         run: |
           cd server
           npm i
-          npm run lint
+          npm run lint:fix
 
       - name: Setup Environment Variables
         run: |
