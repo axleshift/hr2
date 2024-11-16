@@ -12,8 +12,7 @@ import verifySession from "./middlewares/verifySession";
 import startJobs from "./jobs/index";
 import { config } from "./config";
 import sanitize from "./middlewares/sanitize";
-import promClient from "prom-client";
-import { prometheusMetrics, metricsHandler } from "./middlewares/prometheusMetrics";
+import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 
