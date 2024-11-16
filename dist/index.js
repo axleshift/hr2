@@ -40,7 +40,7 @@ const verifySession_1 = __importDefault(require("./middlewares/verifySession"));
 const index_1 = __importDefault(require("./jobs/index"));
 const config_1 = require("./config");
 const sanitize_1 = __importDefault(require("./middlewares/sanitize"));
-// import { errorHandler } from "./middlewares/errorHandler";
+const prometheusMetrics_1 = require("./middlewares/prometheusMetrics");
 const connectDB_1 = require("./database/connectDB");
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const app = (0, express_1.default)();
@@ -60,21 +60,24 @@ app.use((0, cors_1.default)({
     origin: config_1.config.server.origins,
     credentials: true, // Enable credentials
 }));
-app.use((0, morgan_1.default)("dev"));
-app.use(express_1.default.json());
+// HTTPs logging and metrics
+app.use((0, morgan_1.default)("combined"));
+app.use(prometheusMetrics_1.prometheusMetrics);
+const mongoStore = connect_mongo_1.default.create({
+    mongoUrl: config_1.config.mongoDB.uri,
+    ttl: config_1.config.mongoDB.ttl,
+});
 app.use((0, express_session_1.default)({
     secret: config_1.config.server.session.secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false, // Change to true in production
-        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        secure: config_1.config.env === "production",
+        maxAge: config_1.config.server.session.expiry,
     },
-    store: connect_mongo_1.default.create({
-        mongoUrl: config_1.config.mongoDB.uri,
-        ttl: 24 * 60 * 60, // 24 hours
-    }),
+    store: mongoStore,
 }));
+app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, pino_http_1.default)({ logger: logger_1.default }));
 const limiter = (0, express_rate_limit_1.default)({
@@ -89,17 +92,13 @@ const limiter = (0, express_rate_limit_1.default)({
 app.use(limiter);
 app.use(sanitize_1.default);
 // app.use(errorHandler);
-process.on("unhandledRejection", (reason, promise) => {
-    logger_1.default.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
-    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${reason}\n`, {
-        flag: "a",
-    });
+process.on("unhandledRejection", (reason) => {
+    logger_1.default.error(`Unhandled Rejection: ${reason}`);
+    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `prometheus-${date}.log`), `Unhandled Rejection: ${reason}\n`, { flag: "a" });
 });
 process.on("uncaughtException", (error) => {
     logger_1.default.error(`Uncaught Exception: ${error}`);
-    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
-        flag: "a",
-    });
+    fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `prometheus-${date}.log`), `Uncaught Exception: ${error}\n`, { flag: "a" });
 });
 (0, connectDB_1.connectDB)().then(async () => {
     try {

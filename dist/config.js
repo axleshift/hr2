@@ -8,6 +8,8 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.config = {
+    version: "1.0.0",
+    name: "Node.js Express API",
     fileServer: {
         dir: path_1.default.join(__dirname, "public"),
         applicants: path_1.default.join(__dirname, "public/applicants"),
@@ -31,6 +33,7 @@ exports.config = {
         cluster: process.env.MONGODB_CLUSTER,
         options: process.env.MONGODB_OPTIONS,
         uri: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}`,
+        ttl: 24 * 60 * 60, // 1 day
     },
     twitterApi: {
         key: process.env.TWITTER_API_KEY,
@@ -40,6 +43,16 @@ exports.config = {
     },
     logging: {
         dir: path_1.default.join(__dirname, "logs/express"),
+        metrics: path_1.default.join(__dirname, "logs/metrics"),
+    },
+    prom: {
+        metrics: {
+            prefix: "nodejs_",
+            timeout: 5000,
+        },
+        activeSessions: {
+            timeout: 10000,
+        }
     },
     route: {
         dir: path_1.default.join(__dirname, "routes"),
