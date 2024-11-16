@@ -74,7 +74,7 @@ app.use(limiter);
 app.use(sanitize);
 // app.use(errorHandler);
 
-process.on("unhandledRejection", (reason, promise) => {
+process.on("unhandledRejection", (reason) => {
     logger.error(`Unhandled Rejection: ${reason}`);
     fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Unhandled Rejection: ${reason}\n`, { flag: "a" });
 });
