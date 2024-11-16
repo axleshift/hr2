@@ -12,7 +12,8 @@ import verifySession from "./middlewares/verifySession";
 import startJobs from "./jobs/index";
 import { config } from "./config";
 import sanitize from "./middlewares/sanitize";
-// import { errorHandler } from "./middlewares/errorHandler";
+import promClient from "prom-client";
+import { prometheusMetrics, metricsHandler } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 
@@ -37,23 +38,28 @@ app.use(
         credentials: true, // Enable credentials
     })
 );
-app.use(morgan("dev"));
-app.use(express.json());
+
+// HTTPs logging and metrics
+app.use(morgan("combined"));
+app.use(prometheusMetrics);
+
+const mongoStore = MongoStore.create({
+    mongoUrl: config.mongoDB.uri,
+    ttl: config.mongoDB.ttl,
+})
 app.use(
     session({
         secret: config.server.session.secret as string,
         resave: false,
         saveUninitialized: true,
         cookie: {
-            secure: false, // Change to true in production
-            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            secure: config.env === "production",
+            maxAge: config.server.session.expiry,
         },
-        store: MongoStore.create({
-            mongoUrl: config.mongoDB.uri,
-            ttl: 24 * 60 * 60, // 24 hours
-        }),
+        store: mongoStore,
     })
 );
+app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
 const limiter = rateLimit({
@@ -70,17 +76,13 @@ app.use(sanitize);
 // app.use(errorHandler);
 
 process.on("unhandledRejection", (reason, promise) => {
-    logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
-    fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${reason}\n`, {
-        flag: "a",
-    });
+    logger.error(`Unhandled Rejection: ${reason}`);
+    fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Unhandled Rejection: ${reason}\n`, { flag: "a" });
 });
 
 process.on("uncaughtException", (error) => {
     logger.error(`Uncaught Exception: ${error}`);
-    fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
-        flag: "a",
-    });
+    fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Uncaught Exception: ${error}\n`, { flag: "a" });
 });
 
 connectDB().then(async () => {

@@ -2,6 +2,10 @@ import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 export const config = {
+
+    version: "1.0.0",
+    name: "Node.js Express API",
+
     fileServer: {
         dir: path.join(__dirname, "public"),
         applicants: path.join(__dirname, "public/applicants"),
@@ -28,6 +32,7 @@ export const config = {
         cluster: process.env.MONGODB_CLUSTER,
         options: process.env.MONGODB_OPTIONS,
         uri: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}`,
+        ttl: 24 * 60 * 60, // 1 day
     },
 
     twitterApi: {
@@ -39,6 +44,17 @@ export const config = {
 
     logging: {
         dir: path.join(__dirname, "logs/express"),
+        metrics: path.join(__dirname, "logs/metrics"),
+    },
+
+    prom: {
+        metrics: {
+            prefix: "nodejs_",
+            timeout: 5000,
+        },
+        activeSessions: {
+            timeout: 10000,
+        }
     },
 
     route: {

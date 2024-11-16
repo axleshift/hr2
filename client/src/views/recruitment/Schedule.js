@@ -17,6 +17,7 @@ import {
   CFormLabel,
   CButtonGroup,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
 import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -245,7 +246,9 @@ const Schedule = () => {
               </CButtonGroup>
             </div>
             {isLoading ? (
-              <p>Loading...</p>
+              <div className="pt-3 text-center">
+                <CSpinner color="primary" variant="grow" />
+              </div>
             ) : (
               <div>
                 {allData && allData.length > 0 ? (

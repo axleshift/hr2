@@ -4,7 +4,6 @@ import {
   CRow,
   CCol,
   CCard,
-  CCardHeader,
   CCardBody,
   CButton,
   CTable,
@@ -17,18 +16,16 @@ import {
   CForm,
   CFormInput,
   CInputGroup,
-  CInputGroupText,
   CTooltip,
   CFormFeedback,
+  CSpinner,
 } from '@coreui/react'
 import propTypes from 'prop-types'
 import {
   faCalendarAlt,
   faUser,
   faSearch,
-  faPlus,
   faXmark,
-  faCheck,
   faRefresh,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -71,8 +68,8 @@ const Applicants = ({ theme }) => {
       const res = !isSearchMode
         ? await get('/applicant/all')
         : await get(
-          `/applicant/search?query=${term}&page=${page}&limit=${limit}&tags=${tagsParams}`,
-        )
+            `/applicant/search?query=${term}&page=${page}&limit=${limit}&tags=${tagsParams}`,
+          )
 
       if (res.status === 200) {
         console.log(res.data.data)
@@ -163,8 +160,7 @@ const Applicants = ({ theme }) => {
       getAllData(currentPage, itemsPerPage, searchTerm)
     }, 300)
     return () => clearTimeout(delayDebounceFn)
-
-  }, [currentPage, itemsPerPage, isSearchMode, searchTerm]);
+  }, [currentPage, itemsPerPage, isSearchMode, searchTerm])
 
   return (
     <>
@@ -179,18 +175,12 @@ const Applicants = ({ theme }) => {
                   {...register('searchTerm')}
                   invalid={!!errors.searchTerm}
                 />
-                <CTooltip
-                  placement="top"
-                  content="Search"
-                >
+                <CTooltip placement="top" content="Search">
                   <CButton type="submit" color="primary">
                     <FontAwesomeIcon icon={faSearch} />
                   </CButton>
                 </CTooltip>
-                <CTooltip
-                  placement="top"
-                  content="Refresh"
-                >
+                <CTooltip placement="top" content="Refresh">
                   <CButton color="primary" onClick={() => handleReset()}>
                     <FontAwesomeIcon icon={faRefresh} />
                   </CButton>
@@ -235,57 +225,62 @@ const Applicants = ({ theme }) => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {
-                      applicantsData.length > 0 ? (
-                        applicantsData.map((applicant) => (
-                          <CTableRow key={applicant._id}>
-                            <CTableDataCell>
-                              <div>
-                                {applicant.lastname}, {applicant.firstname}
-                              </div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div>{applicant.email}</div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div>{applicant.phone}</div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="d-flex gap-2">
-                                {applicant.tags.map((tag, index) => {
-                                  return (
-                                    <CBadge key={index} color="primary">
-                                      {/* // get tag name from formtags */}
-                                      {formTags.find((item) => item._id === tag) &&
-                                        formTags.find((item) => item._id === tag).name}
-                                    </CBadge>
-                                  )
-                                })}
-                              </div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <CTooltip
-                                placement='top'
-                                content='Schedule Interview for this applicant'
+                    {isLoading ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan={5}>
+                          <div className="pt-3 text-center">
+                            <CSpinner color="primary" variant="grow" />
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : applicantsData.length > 0 ? (
+                      applicantsData.map((applicant) => (
+                        <CTableRow key={applicant._id}>
+                          <CTableDataCell>
+                            <div>
+                              {applicant.lastname}, {applicant.firstname}
+                            </div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div>{applicant.email}</div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div>{applicant.phone}</div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex gap-2">
+                              {applicant.tags.map((tag, index) => {
+                                return (
+                                  <CBadge key={index} color="primary">
+                                    {/* // get tag name from formtags */}
+                                    {formTags.find((item) => item._id === tag) &&
+                                      formTags.find((item) => item._id === tag).name}
+                                  </CBadge>
+                                )
+                              })}
+                            </div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CTooltip
+                              placement="top"
+                              content="Schedule Interview for this applicant"
+                            >
+                              <CButton
+                                onClick={() => getApplicant(applicant._id)}
+                                className="btn btn-primary"
+                                size="sm"
                               >
-                                <CButton
-                                  onClick={() => getApplicant(applicant._id)}
-                                  className="btn btn-primary"
-                                  size="sm"
-                                >
-                                  <FontAwesomeIcon icon={faCalendarAlt} />
-                                </CButton>
-                              </CTooltip>
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))
-                      )
-                        : (
-                          <CTableRow>
-                            <CTableDataCell colSpan={5}>No data available</CTableDataCell>
-                          </CTableRow>
-                        )
-                    }
+                                <FontAwesomeIcon icon={faCalendarAlt} />
+                              </CButton>
+                            </CTooltip>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))
+                    ) : (
+                      <CTableRow>
+                        <CTableDataCell colSpan={5}>No data available</CTableDataCell>
+                      </CTableRow>
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>

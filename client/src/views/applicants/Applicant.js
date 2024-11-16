@@ -1094,7 +1094,9 @@ const Applicant = () => {
                   {isLoading ? (
                     <CTableRow>
                       <CTableDataCell colSpan="5">
-                        <CSpinner color="primary" />
+                        <div className="pt-3 text-center">
+                          <CSpinner color="primary" variant="grow" />
+                        </div>
                       </CTableDataCell>
                     </CTableRow>
                   ) : (
