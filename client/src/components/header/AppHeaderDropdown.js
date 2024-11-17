@@ -11,7 +11,7 @@ import {
   CSpinner,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
-import { faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faSignOut, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuthContext } from '../../context/authContext'
 import { AppContext } from '../../context/appContext'
@@ -36,16 +36,24 @@ const AppHeaderDropdown = () => {
   }
   return (
     <CDropdown variant="nav-item">
+      {isLoading && (
+        <div className="loading-overlay">
+          <CSpinner color="primary" variant="grow" />
+        </div>
+      )}
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
         <CAvatar src={defaultAvatar} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
-        <CDropdownItem href="#">{userInformation.username}</CDropdownItem>
+        <CDropdownItem href="#">
+          <FontAwesomeIcon icon={faUser} className="me-2" />
+          {userInformation.username}
+        </CDropdownItem>
         <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Settings</CDropdownHeader>
         <CDropdownItem onClick={() => handleLogout()}>
           <FontAwesomeIcon icon={faSignOut} className="me-2" />
-          {isLoading ? <CSpinner size="sm" /> : 'Logout'}
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

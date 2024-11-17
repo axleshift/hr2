@@ -15,6 +15,7 @@ import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
+import promClient from "prom-client";
 
 const app: Application = express();
 const host = config.server.host;
@@ -84,6 +85,12 @@ process.on("uncaughtException", (error) => {
     logger.error(`Uncaught Exception: ${error}`);
     fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Uncaught Exception: ${error}\n`, { flag: "a" });
 });
+
+process.on("SIGINT", async () => {
+    logger.info("SIGINT received. Exiting...");
+    process.exit(0);
+})
+
 
 connectDB().then(async () => {
     try {

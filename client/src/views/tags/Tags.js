@@ -52,6 +52,7 @@ const Tags = () => {
   const { addToast } = useContext(AppContext)
   // Tags
   const [allTagData, setAllTagData] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const [tagData, setTagData] = useState({})
   const [isEdit, setIsEdit] = useState(false)
   const [isTagsExpanded, setIsTagsExpanded] = useState(true)
@@ -75,6 +76,7 @@ const Tags = () => {
 
   const getAllTagData = async () => {
     try {
+      setIsLoading(true)
       const res = isSearchMode
         ? await get(`/tags/search?query=${searchInput}&page=${currentPage}&limit=${itemsPerPage}`)
         : await get(`/tags/all?page=${currentPage}&limit=${itemsPerPage}`)
@@ -82,11 +84,17 @@ const Tags = () => {
         setAllTagData(res.data.data)
         setTotalPages(res.data.totalPages)
         setCurrentPage(res.data.currentPage)
+        setIsLoading(false)
+        addToast('Success', 'Tags are successfully retrieved', 'success')
       } else {
         console.log(res)
+        setIsLoading(false)
+        addToast('Error', 'An error occurred while fetching the tags', 'danger')
       }
     } catch (error) {
       console.log(error)
+      setIsLoading(false)
+      addToast('Error', 'An error occurred while fetching the tags', 'danger')
     }
   }
 
@@ -429,7 +437,7 @@ const Tags = () => {
       <CRow>
         <div className="d-flex justify-content-between">
           <div className="d-flex justify-content-between align-items-center">
-            <strong>All Tags</strong>
+            <h1>All Tags</h1>
           </div>
           <div>
             <CForm onSubmit={searchHandleSubmit(submitSearch)}>
@@ -456,48 +464,54 @@ const Tags = () => {
         </div>
       </CRow>
       <CRow>
-        {allTagData.map((tag, index) => (
-          <CCol key={index} md={4} className="mb-3">
-            <CCard className="h-100">
-              <CCardBody>
-                <CRow>
-                  <CCol>
-                    <h5>{firstLetterUppercase(tag.name)}</h5>
-                    <p>{tag.category}</p>
-                  </CCol>
-                </CRow>
-                <CRow>
-                  <CCol>Protected: {tag.isProtected ? 'Yes' : 'No'}</CCol>
-                </CRow>
-                <CRow>
-                  <CCol>System Tag: {tag.isSystem ? 'Yes' : 'No'}</CCol>
-                </CRow>
-              </CCardBody>
-              <CCardFooter>
-                <CRow>
-                  <CCol>
-                    <CButtonGroup>
-                      <CTooltip content="Edit tag" placement="top">
-                        <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
-                          <FontAwesomeIcon icon={faPencil} />
-                        </CButton>
-                      </CTooltip>
-                      <CTooltip content="Delete tag" placement="top">
-                        <CButton
-                          color="danger"
-                          onClick={() => handlePreDeleteTag(tag._id)}
-                          disabled={tag.isProtected}
-                        >
-                          <FontAwesomeIcon icon={tag.isProtected ? faLock : faTrash} />
-                        </CButton>
-                      </CTooltip>
-                    </CButtonGroup>
-                  </CCol>
-                </CRow>
-              </CCardFooter>
-            </CCard>
-          </CCol>
-        ))}
+        {isLoading ? (
+          <div className="pt-3 text-center">
+            <CSpinner color="primary" variant="grow" />
+          </div>
+        ) : (
+          allTagData.map((tag, index) => (
+            <CCol key={index} md={4} className="mb-3">
+              <CCard className="h-100">
+                <CCardBody>
+                  <CRow>
+                    <CCol>
+                      <h5>{firstLetterUppercase(tag.name)}</h5>
+                      <p>{tag.category}</p>
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>Protected: {tag.isProtected ? 'Yes' : 'No'}</CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>System Tag: {tag.isSystem ? 'Yes' : 'No'}</CCol>
+                  </CRow>
+                </CCardBody>
+                <CCardFooter>
+                  <CRow>
+                    <CCol>
+                      <CButtonGroup>
+                        <CTooltip content="Edit tag" placement="top">
+                          <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
+                            <FontAwesomeIcon icon={faPencil} />
+                          </CButton>
+                        </CTooltip>
+                        <CTooltip content="Delete tag" placement="top">
+                          <CButton
+                            color="danger"
+                            onClick={() => handlePreDeleteTag(tag._id)}
+                            disabled={tag.isProtected}
+                          >
+                            <FontAwesomeIcon icon={tag.isProtected ? faLock : faTrash} />
+                          </CButton>
+                        </CTooltip>
+                      </CButtonGroup>
+                    </CCol>
+                  </CRow>
+                </CCardFooter>
+              </CCard>
+            </CCol>
+          ))
+        )}
       </CRow>
       <CRow>
         <CCol>
