@@ -129,9 +129,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
           </CRow>
           <CRow>
             <CCol>
-              <strong>
-                Time Slots
-              </strong>
+              <strong>Time Slots</strong>
             </CCol>
           </CRow>
         </CContainer>

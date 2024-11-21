@@ -21,25 +21,14 @@ import {
 
 import AppPagination from '../../components/AppPagination'
 
-import {
-  faPlus,
-  faBars,
-  faPencil,
-  faSearch,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faBars, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { Calendar } from 'react-calendar'
 import ScheduleForm from './modals/ScheduleForm'
 import React, { useEffect, useState, useCallback, useContext } from 'react'
 import propTypes from 'prop-types'
-import {
-  convertTimeStringTo12Hour,
-  formattedDateMMM,
-  trimString,
-  UTCDate,
-} from '../../utils'
+import { convertTimeStringTo12Hour, formattedDateMMM, trimString, UTCDate } from '../../utils'
 import { get, del } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
 
@@ -207,63 +196,56 @@ const Schedules = ({ theme }) => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {
-                      isDateLoading ? (
-                        <CTableRow>
-                          <CTableDataCell colSpan="6" className="text-center">
-                            <CSpinner
-                              color="primary"
-                              variant="grow"
-                            />
+                    {isDateLoading ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="6" className="text-center">
+                          <CSpinner color="primary" variant="grow" />
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : interviewDatas.length === 0 ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="6" className="text-center">
+                          No data available
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : (
+                      interviewDatas.map((data, index) => (
+                        <CTableRow key={index}>
+                          <CTableDataCell>{data.title}</CTableDataCell>
+                          <CTableDataCell>{formattedDateMMM(data.date)}</CTableDataCell>
+                          <CTableDataCell>
+                            {convertTimeStringTo12Hour(data.timeslot.start)} -{' '}
+                            {convertTimeStringTo12Hour(data.timeslot.end)}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {data.location ? trimString(data.location, 20) : 'N/A'}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {data.capacity ? trimString(data.capacity, 20) : 'N/A'}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CButtonGroup>
+                              <CButton
+                                onClick={() => {
+                                  console.log('Interview Data:', data)
+                                  setInterviewData(data)
+                                  setFormModal(true)
+                                }}
+                                className="btn btn-primary"
+                              >
+                                <FontAwesomeIcon icon={faPencil} />
+                              </CButton>
+                              <CButton
+                                onClick={() => handleDelete(data._id)}
+                                className="btn btn-danger"
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                              </CButton>
+                            </CButtonGroup>
                           </CTableDataCell>
                         </CTableRow>
-                      ) : (
-                        interviewDatas.length === 0 ? (
-                          <CTableRow>
-                            <CTableDataCell colSpan="6" className="text-center">
-                              No data available
-                            </CTableDataCell>
-                          </CTableRow>
-                        ) : (
-                          interviewDatas.map((data, index) => (
-                            <CTableRow key={index}>
-                              <CTableDataCell>{data.title}</CTableDataCell>
-                              <CTableDataCell>{formattedDateMMM(data.date)}</CTableDataCell>
-                              <CTableDataCell>
-                                {convertTimeStringTo12Hour(data.timeslot.start)} -{' '}
-                                {convertTimeStringTo12Hour(data.timeslot.end)}
-                              </CTableDataCell>
-                              <CTableDataCell>
-                                {data.location ? trimString(data.location, 20) : 'N/A'}
-                              </CTableDataCell>
-                              <CTableDataCell>
-                                {data.capacity ? trimString(data.capacity, 20) : 'N/A'}
-                              </CTableDataCell>
-                              <CTableDataCell>
-                                <CButtonGroup>
-                                  <CButton
-                                    onClick={() => {
-                                      console.log('Interview Data:', data)
-                                      setInterviewData(data)
-                                      setFormModal(true)
-                                    }}
-                                    className="btn btn-primary"
-                                  >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                  </CButton>
-                                  <CButton
-                                    onClick={() => handleDelete(data._id)}
-                                    className="btn btn-danger"
-                                  >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </CButton>
-                                </CButtonGroup>
-                              </CTableDataCell>
-                            </CTableRow>
-                          ))
-                        )
-                      )
-                    }
+                      ))
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>

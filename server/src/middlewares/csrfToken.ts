@@ -21,7 +21,7 @@ const generateCsrfToken = async (req: Request, res: Response, next: NextFunction
             return res.status(500).json({
                 statusCode: 500,
                 success: false,
-                message: "Error generating CSRF token.",
+                message: error,
             });
         }
     }

@@ -15,7 +15,6 @@ import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
-import promClient from "prom-client";
 import generateCsrfToken from "./middlewares/csrfToken";
 
 const app: Application = express();
