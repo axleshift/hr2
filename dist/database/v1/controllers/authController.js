@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,
@@ -86,14 +86,12 @@ const login = async (req, res) => {
         req.session.user = data;
         req.session.save((err) => {
             if (err) {
-                console.log("Session save error:", err);
                 return res.status(500).json({
                     statusCode: 500,
                     success: false,
                     message: "Error saving session",
                 });
             }
-            console.log("Session data after saving:", req.session.user);
             res.status(200).json({
                 statusCode: 200,
                 success: true,
@@ -103,7 +101,7 @@ const login = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,
@@ -115,7 +113,6 @@ const login = async (req, res) => {
 exports.login = login;
 const verify = async (req, res) => {
     try {
-        console.log("Session data", req.session.user);
         const user = req.session.user;
         if (user) {
             res.status(200).json({
@@ -134,7 +131,7 @@ const verify = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,

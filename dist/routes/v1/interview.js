@@ -17,6 +17,7 @@ router.post("/slots", timeslotController_1.createSlotForADate);
 router.post("/schedule/", interviewController_1.createInterviewForADate);
 router.put("/schedule/:id", interviewController_1.updateInterview);
 router.delete("/slot/:id", timeslotController_1.deleteSlotById);
+router.delete("/schedule/:id", interviewController_1.deleteInterviewById);
 exports.default = {
     metadata: {
         path: "/interview",

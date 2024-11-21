@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSlotById = exports.createSlotForADate = exports.getAllSlotsForADate = exports.getSlotById = void 0;
+const UTCDate_1 = __importDefault(require("../../../utils/UTCDate"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
 const getSlotById = async (req, res) => {
@@ -100,13 +101,16 @@ const createSlotForADate = async (req, res) => {
         logger_1.default.info(req.body);
         const { date, timeslot } = req.body;
         // Ensure the date is valid, clean it up and set the time to 00:00:00
-        const startDate = new Date(date).setHours(0, 0, 0, 0);
-        // Check if the timeslot already exists
+        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const startDate = (0, UTCDate_1.default)(parsedDate);
+        console.log("createSlotForADate -> startDate", startDate);
+        const inputSlot = timeslot;
+        console.log("createSlotForADate -> inputSlot", inputSlot);
+        // Check if the timeslot already exists        
         const existingSlot = await interviewTimeSlotModel_1.default.findOne({
-            data: {
-                $gte: startDate,
-                $lt: new Date(startDate).setDate(new Date(startDate).getDate() + 1),
-            },
+            date: startDate,
+            start: timeslot.start,
+            end: timeslot.end,
         });
         if (existingSlot) {
             return res.status(409).json({
@@ -142,6 +146,7 @@ const createSlotForADate = async (req, res) => {
 exports.createSlotForADate = createSlotForADate;
 const deleteSlotById = async (req, res) => {
     const { id } = req.params;
+    console.log("deleteSlotById -> id", id);
     try {
         const slot = await interviewTimeSlotModel_1.default.findByIdAndDelete(id);
         if (!slot || slot === null) {
@@ -151,7 +156,6 @@ const deleteSlotById = async (req, res) => {
                 message: "Slot not found",
             });
         }
-        logger_1.default.info(slot);
         res.status(200).json({
             statusCode: 200,
             success: true,

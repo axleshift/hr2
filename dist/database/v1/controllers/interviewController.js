@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteInterview = exports.updateInterview = exports.createInterviewForADate = exports.getInterviewById = exports.getInterviewForAMonth = exports.getInterviewForADay = void 0;
+exports.deleteInterviewById = exports.updateInterview = exports.createInterviewForADate = exports.getInterviewById = exports.getInterviewForAMonth = exports.getInterviewForADay = void 0;
+const UTCDate_1 = __importDefault(require("../../../utils/UTCDate"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const interviewSchedModel_1 = __importDefault(require("../models/interviewSchedModel"));
 const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
@@ -144,7 +145,7 @@ const createInterviewForADate = async (req, res) => {
         // const location = req.body.location;
         // const capacity = req.body.capacity;
         const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
-        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const parsedDate = (0, UTCDate_1.default)(date);
         if (!timeslotRef_id || !title) {
             return res.status(400).json({
                 statusCode: 400,
@@ -259,7 +260,7 @@ const updateInterview = async (req, res) => {
     }
 };
 exports.updateInterview = updateInterview;
-const deleteInterview = async (req, res) => {
+const deleteInterviewById = async (req, res) => {
     try {
         const id = req.params.id;
         const interview = await interviewSchedModel_1.default.findById(id);
@@ -298,4 +299,4 @@ const deleteInterview = async (req, res) => {
         });
     }
 };
-exports.deleteInterview = deleteInterview;
+exports.deleteInterviewById = deleteInterviewById;

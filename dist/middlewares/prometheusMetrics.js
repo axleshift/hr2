@@ -7,6 +7,12 @@ exports.metricsHandler = exports.prometheusMetrics = void 0;
 const prom_client_1 = __importDefault(require("prom-client"));
 const config_1 = require("../config");
 const os_1 = __importDefault(require("os"));
+const appInfoGauge = new prom_client_1.default.Gauge({
+    name: "app_info",
+    help: "Application information",
+    labelNames: ["version", "name", "hostname"],
+});
+appInfoGauge.set({ version: config_1.config.version, name: config_1.config.name, hostname: os_1.default.hostname() }, 1);
 const httpRequestCounter = new prom_client_1.default.Counter({
     name: "http_requests_total",
     help: "Total number of HTTP requests",
@@ -17,13 +23,29 @@ const httpRequestDurationHistogram = new prom_client_1.default.Histogram({
     help: "Histogram of HTTP request durations",
     labelNames: ["method", "route", "status_code"],
 });
-const appInfoGauge = new prom_client_1.default.Gauge({
-    name: "app_info",
-    help: "Application information",
-    labelNames: ["version", "name", "hostname"],
+const memoryUsageGauge = new prom_client_1.default.Gauge({
+    name: "process_memory_usage",
+    help: "Process memory usage",
+    labelNames: ["type"],
 });
+setInterval(() => {
+    const memoryUsage = process.memoryUsage();
+    memoryUsageGauge.set({ type: "rss" }, memoryUsage.rss);
+    memoryUsageGauge.set({ type: "heapTotal" }, memoryUsage.heapTotal);
+    memoryUsageGauge.set({ type: "heapUsed" }, memoryUsage.heapUsed);
+    memoryUsageGauge.set({ type: "external" }, memoryUsage.external);
+}, 10000);
+const cpuUsageGauge = new prom_client_1.default.Gauge({
+    name: "cpu_usage_percentage",
+    help: "CPU usage percentage",
+});
+setInterval(() => {
+    const cpuUsage = process.cpuUsage();
+    const userCPU = (cpuUsage.user / 1000000) / os_1.default.cpus().length;
+    const systemCPU = (cpuUsage.system / 1000000) / os_1.default.cpus().length;
+    cpuUsageGauge.set(userCPU + systemCPU);
+}, 10000);
 prom_client_1.default.collectDefaultMetrics(config_1.config.prom.metrics);
-appInfoGauge.set({ version: config_1.config.version, name: config_1.config.name, hostname: os_1.default.hostname() }, 1);
 /**
  * Middleware to collect Prometheus metrics for HTTP requests.
  *
