@@ -39,7 +39,7 @@ export const createUser = async (req: req, res: res) => {
             user,
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,
@@ -87,14 +87,12 @@ export const login = async (req: req, res: res) => {
         req.session.user = data;
         req.session.save((err) => {
             if (err) {
-                console.log("Session save error:", err);
                 return res.status(500).json({
                     statusCode: 500,
                     success: false,
                     message: "Error saving session",
                 });
             }
-            console.log("Session data after saving:", req.session.user);
             res.status(200).json({
                 statusCode: 200,
                 success: true,
@@ -103,7 +101,7 @@ export const login = async (req: req, res: res) => {
             });
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,
@@ -115,14 +113,13 @@ export const login = async (req: req, res: res) => {
 
 export const verify = async (req: req, res: res) => {
     try {
-        console.log("Session data", req.session.user);
         const user = req.session.user;
         if (user) {
             res.status(200).json({
                 statusCode: 200,
                 success: true,
                 message: "User verified successfully",
-                data: user,
+                data: user, 
             });
         } else {
             res.status(404).json({
@@ -132,7 +129,7 @@ export const verify = async (req: req, res: res) => {
             });
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({
             statusCode: 500,
             success: false,

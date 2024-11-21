@@ -16,6 +16,7 @@ import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 import promClient from "prom-client";
+import generateCsrfToken from "./middlewares/csrfToken";
 
 const app: Application = express();
 const host = config.server.host;
@@ -47,7 +48,7 @@ app.use(prometheusMetrics);
 const mongoStore = MongoStore.create({
     mongoUrl: config.mongoDB.uri,
     ttl: config.mongoDB.ttl,
-})
+});
 app.use(
     session({
         secret: config.server.session.secret as string,
@@ -56,10 +57,12 @@ app.use(
         cookie: {
             secure: config.env === "production",
             maxAge: config.server.session.expiry,
+            sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
         },
         store: mongoStore,
     })
 );
+app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
@@ -89,8 +92,7 @@ process.on("uncaughtException", (error) => {
 process.on("SIGINT", async () => {
     logger.info("SIGINT received. Exiting...");
     process.exit(0);
-})
-
+});
 
 connectDB().then(async () => {
     try {
