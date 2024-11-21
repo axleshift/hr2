@@ -239,7 +239,7 @@ const Applicant = () => {
         : await post(`/applicant`, formData)
 
       if (res.status === 200 || res.status === 201) {
-        alert(res.data.message)
+        addToast('Success', res.data.message, 'success')
         getAllData()
         handleReset()
         handlePreviewClose()
@@ -534,70 +534,6 @@ const Applicant = () => {
 
   return (
     <CContainer className="d-flex flex-column gap-2 mb-3">
-      {/* <CRow className="d-flex justify-content-center ">
-        {stats.applications.map((stat, index) => {
-          return (
-            <CCol key={index} sm={6} xl={4} xxl={3}>
-              <CWidgetStatsA
-                className="mb-4"
-                color={stat.color}
-                value={
-                  <>
-                    <div className="fs-2 ">{stat.value}</div>
-                  </>
-                }
-                title={stat.name}
-                chart={
-                  <CChart
-                    className="mt-3"
-                    style={{ height: '70px' }}
-                    type="line"
-                    data={{
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [
-                        {
-                          label: 'My First dataset',
-                          backgroundColor: 'rgba(255,255,255,.2)',
-                          borderColor: 'rgba(255,255,255,.55)',
-                          data: stat.data,
-                          fill: true,
-                        },
-                      ],
-                    }}
-                    options={{
-                      plugins: {
-                        legend: {
-                          display: false,
-                        },
-                      },
-                      maintainAspectRatio: false,
-                      scales: {
-                        x: {
-                          display: false,
-                        },
-                        y: {
-                          display: false,
-                        },
-                      },
-                      elements: {
-                        line: {
-                          borderWidth: 2,
-                          tension: 0.4,
-                        },
-                        point: {
-                          radius: 0,
-                          hitRadius: 10,
-                          hoverRadius: 4,
-                        },
-                      },
-                    }}
-                  />
-                }
-              />
-            </CCol>
-          )
-        })}
-      </CRow> */}
       <CRow>
         <CCol>
           <CCard>

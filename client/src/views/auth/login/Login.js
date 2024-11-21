@@ -29,6 +29,7 @@ import { faUser, faLock, faX, faEye, faEyeSlash } from '@fortawesome/free-solid-
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const Login = () => {
+  const env = config.env
   const navigate = useNavigate()
   const recaptchaRef = useRef()
   const { login, isAuthenticated, userInformation } = useContext(AuthContext)
@@ -59,12 +60,12 @@ const Login = () => {
   const onSubmit = (data) => {
     setIsLoading(true)
     const token = recaptchaRef.current.getValue()
-    console.log('Login.js: onSubmit: token: ', token)
     setCaptchaValue(token)
     login(data.username, data.password, (success) => {
       if (success) {
         setIsLoading(false)
         const username = userInformation.username
+        console.log('Login.js: onSubmit: userInformation: ', JSON.stringify(userInformation))
         console.log('Login.js: onSubmit: username: ', username)
         addToast(
           'Login successful',
@@ -150,13 +151,9 @@ const Login = () => {
                         content={isPasswordVisible ? 'Hide password' : 'Show password'}
                         placement="top"
                       >
-                      <span
-                        onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                      >
-                        <FontAwesomeIcon
-                          icon={isPasswordVisible ? faEyeSlash : faEye}
-                        />
-                      </span>
+                        <span onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+                          <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
+                        </span>
                       </CTooltip>
                     </CInputGroupText>
                     {loginErrors.password && (
@@ -223,6 +220,13 @@ const Login = () => {
             </CCard>
           </CCol>
         </CRow>
+        {config.env === 'development' && (
+          <CRow>
+            <CCol>
+              <div className="text-center mt-3">Developer Build</div>
+            </CCol>
+          </CRow>
+        )}
       </CContainer>
     </div>
   )
