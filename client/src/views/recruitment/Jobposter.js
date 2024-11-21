@@ -44,6 +44,8 @@ import {
   faCalendar,
   faCheck,
   faX,
+  faClipboard,
+  faClipboardQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -564,7 +566,7 @@ const Jobposter = () => {
                                         color="info"
                                         onClick={() => editSummary(item, item.platform)}
                                       >
-                                        <FontAwesomeIcon icon={faPencil} />
+                                        <FontAwesomeIcon icon={faClipboardQuestion} />
                                       </CButton>
                                     </CTooltip>
                                   </CButtonGroup>

@@ -127,3 +127,7 @@ export const formatTimeString = (timeString) => {
   const [hours, minutes, seconds] = timeString.split(':').map(Number)
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 }
+
+export const UTCDate = (date) => {
+  return new Date(date).toUTCString()
+}
