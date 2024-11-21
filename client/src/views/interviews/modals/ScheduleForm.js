@@ -140,7 +140,6 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
 
   const getAllSlotsForDate = async (date) => {
     try {
-      console.info('getAllSlotsForDate -> date', date)
       const res = await get(`/interview/slots?date=${date}`)
       if (res.status === 200) {
         const data = res.data
@@ -243,7 +242,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   }
 
   useEffect(() => {
-    getAllSlotsForDate(new Date(defaultDate))
+    getAllSlotsForDate(UTCDate(defaultDate))
   }, [defaultDate])
 
   useEffect(() => {
