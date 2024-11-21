@@ -185,6 +185,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
     try {
       const res = await del(`/interview/slot/${timeId}`)
       console.log('handleDeleteTimeslot -> Result', res)
+
       if (res.status === 200) {
         addToast('Success', 'Time slot deleted successfully', 'success')
         getAllSlotsForDate(defaultDate)
