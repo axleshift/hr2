@@ -3,6 +3,14 @@ import promClient from "prom-client";
 import { config } from "../config";
 import os from "os";
 
+const appInfoGauge = new promClient.Gauge({
+    name: "app_info",
+    help: "Application information",
+    labelNames: ["version", "name", "hostname"],
+});
+
+appInfoGauge.set({ version: config.version, name: config.name, hostname: os.hostname() }, 1);
+
 const httpRequestCounter = new promClient.Counter({
     name: "http_requests_total",
     help: "Total number of HTTP requests",
@@ -15,15 +23,33 @@ const httpRequestDurationHistogram = new promClient.Histogram({
     labelNames: ["method", "route", "status_code"],
 });
 
-const appInfoGauge = new promClient.Gauge({
-    name: "app_info",
-    help: "Application information",
-    labelNames: ["version", "name", "hostname"],
+const memoryUsageGauge = new promClient.Gauge({
+    name: "process_memory_usage",
+    help: "Process memory usage",
+    labelNames: ["type"],
 });
 
-promClient.collectDefaultMetrics(config.prom.metrics);
+setInterval(() => {
+    const memoryUsage = process.memoryUsage();
+    memoryUsageGauge.set({ type: "rss" }, memoryUsage.rss);
+    memoryUsageGauge.set({ type: "heapTotal" }, memoryUsage.heapTotal);
+    memoryUsageGauge.set({ type: "heapUsed" }, memoryUsage.heapUsed);
+    memoryUsageGauge.set({ type: "external" }, memoryUsage.external);
+}, 10000);
 
-appInfoGauge.set({ version: config.version, name: config.name, hostname: os.hostname() }, 1);
+const cpuUsageGauge = new promClient.Gauge({
+    name: "cpu_usage_percentage",
+    help: "CPU usage percentage",
+});
+
+setInterval(() => {
+    const cpuUsage = process.cpuUsage();
+    const userCPU = (cpuUsage.user / 1000000) / os.cpus().length;
+    const systemCPU = (cpuUsage.system / 1000000) / os.cpus().length;
+    cpuUsageGauge.set(userCPU + systemCPU);
+}, 10000); 
+
+promClient.collectDefaultMetrics(config.prom.metrics);
 
 /**
  * Middleware to collect Prometheus metrics for HTTP requests.

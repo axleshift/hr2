@@ -12,7 +12,6 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardGroup,
   CCol,
   CContainer,
   CForm,
@@ -22,17 +21,22 @@ import {
   CRow,
   CSpinner,
   CButtonGroup,
+  CAlert,
+  CTooltip,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faLock, faX, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const Login = () => {
+  const env = config.env
   const navigate = useNavigate()
   const recaptchaRef = useRef()
   const { login, isAuthenticated, userInformation } = useContext(AuthContext)
-  const [captchaValue, setCaptchaValue] = useState('')
   const { addToast } = useContext(AppContext)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [captchaValue, setCaptchaValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const loginSchema = z.object({
     username: z
@@ -56,12 +60,12 @@ const Login = () => {
   const onSubmit = (data) => {
     setIsLoading(true)
     const token = recaptchaRef.current.getValue()
-    console.log('Login.js: onSubmit: token: ', token)
     setCaptchaValue(token)
     login(data.username, data.password, (success) => {
       if (success) {
         setIsLoading(false)
         const username = userInformation.username
+        console.log('Login.js: onSubmit: userInformation: ', JSON.stringify(userInformation))
         console.log('Login.js: onSubmit: username: ', username)
         addToast(
           'Login successful',
@@ -72,7 +76,7 @@ const Login = () => {
         )
         navigate('/dashboard')
       } else {
-        addToast('Login failed', 'Invalid username or password', 'danger')
+        setErrorMessage('Invalid username or password')
         setIsLoading(false)
       }
     })
@@ -98,6 +102,16 @@ const Login = () => {
           <CCol md={8} lg={6} xl={5} className="my-2">
             <CCard className="p-1 p-sm-4 shadow">
               <CCardBody>
+                {errorMessage && (
+                  <CAlert color="danger" className="d-flex align-items-center">
+                    <div className="me-2">
+                      <FontAwesomeIcon icon={faX} />
+                    </div>
+                    <div>
+                      <span>{errorMessage}</span>
+                    </div>
+                  </CAlert>
+                )}
                 <CForm onSubmit={loginHandleSubmit(onSubmit)}>
                   <h1>Login</h1>
                   <p className="text-body-secondary">Sign In to your account</p>
@@ -126,12 +140,22 @@ const Login = () => {
                       <FontAwesomeIcon icon={faLock} />
                     </CInputGroupText>
                     <CFormInput
-                      type="password"
+                      type={isPasswordVisible ? 'text' : 'password'}
                       placeholder="Password"
                       autoComplete="current-password"
                       {...loginRegister('password')}
                       invalid={!!loginErrors.password}
                     />
+                    <CInputGroupText>
+                      <CTooltip
+                        content={isPasswordVisible ? 'Hide password' : 'Show password'}
+                        placement="top"
+                      >
+                        <span onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+                          <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
+                        </span>
+                      </CTooltip>
+                    </CInputGroupText>
                     {loginErrors.password && (
                       <div className="invalid-feedback">{loginErrors.password.message}</div>
                     )}
@@ -196,6 +220,13 @@ const Login = () => {
             </CCard>
           </CCol>
         </CRow>
+        {config.env === 'development' && (
+          <CRow>
+            <CCol>
+              <div className="text-center mt-3">Developer Build</div>
+            </CCol>
+          </CRow>
+        )}
       </CContainer>
     </div>
   )

@@ -39,16 +39,18 @@ import {
 
 import { del, get, post, put } from '../../../api/axios'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import propTypes, { object } from 'prop-types'
 import { date, set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { convertTimeStringTo12Hour, formattedDate, formattedDateMMM } from '../../../utils'
+import { convertTimeStringTo12Hour, formattedDate, formattedDateMMM, UTCDate } from '../../../utils'
+import { AppContext } from '../../../context/appContext'
 
 const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-  const [defaultDate, setDefaultDate] = useState(new Date())
+  const { addToast } = useContext(AppContext)
+  const [defaultDate, setDefaultDate] = useState(UTCDate(new Date()))
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [dateData, setDateData] = useState({})
@@ -106,47 +108,6 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
     })
     .refine(
       async (data) => {
-        // This is time comparator/checker logic, sucked but it works
-        const [startHours, startMinutes] = data.start.split(':').map(Number)
-        const [endHours, endMinutes] = data.end.split(':').map(Number)
-
-        // Convert the input start and end times to minutes
-        const startTime = startHours * 60 + startMinutes
-        const endTime = endHours * 60 + endMinutes
-
-        // Convert all existing slots to minutes for comparison
-        const allSlotsInMinutes = allSlots.map((slot) => {
-          const [slotStartHours, slotStartMinutes] = slot.start.split(':').map(Number)
-          const [slotEndHours, slotEndMinutes] = slot.end.split(':').map(Number)
-          return {
-            start: slotStartHours * 60 + slotStartMinutes,
-            end: slotEndHours * 60 + slotEndMinutes,
-          }
-        })
-
-        // Check if the new slot overlaps with any existing slots
-        const isSlotAvailable = allSlotsInMinutes.every((slot) => {
-          const { start, end } = slot
-          return !((startTime >= start && startTime < end) || (endTime > start && endTime <= end))
-        })
-
-        // suggest an available time slot
-        // if (!isSlotAvailable) {
-        //   const availableTime = allSlotsInMinutes.find((slot) => {
-        //     const { start, end } = slot
-        //     return startTime < start && endTime > end
-        //   })
-        // }
-        // Return true if the slot is available, otherwise return false
-        return isSlotAvailable
-      },
-      {
-        message: 'Time is not available',
-        path: ['start'],
-      },
-    )
-    .refine(
-      async (data) => {
         const [statHours, startMinutes] = data.start.split(':').map(Number)
         const [endHours, endMinutes] = data.end.split(':').map(Number)
 
@@ -179,16 +140,14 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
 
   const getAllSlotsForDate = async (date) => {
     try {
-      console.log(date)
       const res = await get(`/interview/slots?date=${date}`)
-
       if (res.status === 200) {
         const data = res.data
         setAllSlots(data.data)
         const available = data.data.filter((slot) => slot.isAvailable)
         setAvailableSlots(available)
       } else {
-        alert(res.data.message)
+        addToast('Error', 'Failed to fetch time slots', 'danger')
       }
     } catch (error) {
       console.error(error)
@@ -212,24 +171,25 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
       const res = await post(`/interview/slots/`, data)
       console.log('res', res)
       if (res.status === 200 || res.status === 201) {
-        alert('Time slot added successfully')
+        addToast('Success', 'Time slot added successfully', 'success')
         getAllSlotsForDate(defaultDate)
       } else {
-        alert(res.data.message)
+        addToast('Error', res.message.message, 'danger')
       }
     } catch (error) {
       console.error(error)
     }
   }
 
-  const handleDeleteTimeslot = async (id) => {
+  const handleDeleteTimeslot = async (timeId) => {
     try {
-      const res = await del(`/interview/slots/${id}`)
+      const res = await del(`/interview/slot/${timeId}`)
+      console.log("handleDeleteTimeslot -> Result", res)
       if (res.status === 200) {
-        alert('Time slot deleted successfully')
+        addToast('Success', 'Time slot deleted successfully', 'success')
         getAllSlotsForDate(defaultDate)
       } else {
-        alert(res.data.message)
+        addToast('Error', 'Something went wrong. Unable to delete time slot.', 'danger')
       }
     } catch (error) {
       console.error(error)
@@ -251,11 +211,13 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         ? post(`/interview/schedule`, formdata)
         : put(`/interview/schedule/${interviewData._id}`, formdata)
       if (res.status === 200) {
-        console.log(res.data)
-        alert('Interview scheduled successfully')
+        addToast('Success', 'Interview scheduled successfully', 'success')
         handleOnClose()
+      } else {
+        addToast('Error', 'Failed to schedule interview', 'danger')
       }
     } catch (error) {
+      addToast('Error', 'Failed to schedule interview', 'danger')
       console.error(error)
     }
   }
@@ -280,7 +242,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   }
 
   useEffect(() => {
-    getAllSlotsForDate(new Date(defaultDate))
+    getAllSlotsForDate(UTCDate(defaultDate))
   }, [defaultDate])
 
   useEffect(() => {
@@ -356,9 +318,11 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
                           >
                             <FontAwesomeIcon icon={time.isAvailable ? faCheck : faXmark} />
                           </CTooltip>
-                          <CButton onClick={() => handleDeleteTimeslot(item._id)} className="btn">
-                            <FontAwesomeIcon icon={faTrash} />
-                          </CButton>
+                          <CTooltip content="Delete Time Slot" placement="top">
+                            <CButton onClick={() => handleDeleteTimeslot(time._id)} className="btn">
+                              <FontAwesomeIcon icon={faTrash} />
+                            </CButton>
+                          </CTooltip>
                         </CBadge>
                       </div>
                     ))}

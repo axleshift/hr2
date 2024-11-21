@@ -44,12 +44,12 @@ import propTypes, { bool, object } from 'prop-types'
 import { date, set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formattedDateMMM } from '../../../utils'
+import { formattedDateMMM, UTCDate } from '../../../utils'
 const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
   const [formData, setFormData] = useState({})
   const [isDateLoading, setIsDateLoading] = useState(false)
-  const [defaultDate, setDefaultDate] = useState(new Date())
-  const [interviewDatas, setInterviewDatas] = useState(new Date())
+  const [defaultDate, setDefaultDate] = useState(UTCDate(new Date()))
+  const [interviewDatas, setInterviewDatas] = useState([])
   const [allSlots, setAllSlots] = useState([])
 
   // pagination
@@ -93,13 +93,20 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
   return (
     <CModal visible={isVisible} onClose={onClose} size="lg">
       <CModalHeader>
-        <CModalTitle>Applicant Schedule Create</CModalTitle>
+        <CModalTitle>
+          <div>
+            Schedule Interview for{' '}
+            <span className="fw-bold">
+              {applicantData?.lastname}, {applicantData?.firstname}
+            </span>
+          </div>
+        </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CContainer>
-          <CRow>
+          <CRow className="mb-3">
             <CCol>
-              <div className="mb-3">
+              <div>
                 <Calendar
                   onChange={handleDateChange} // Fix here
                   defaultValue={defaultDate}
@@ -108,7 +115,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
               </div>
             </CCol>
           </CRow>
-          <CRow>
+          <CRow className="mb-3">
             <CCol>
               <CFormInput
                 type="text"
@@ -118,6 +125,13 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                 value={formattedDateMMM(defaultDate)}
                 readOnly
               />
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol>
+              <strong>
+                Time Slots
+              </strong>
             </CCol>
           </CRow>
         </CContainer>

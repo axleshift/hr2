@@ -15,6 +15,8 @@ import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
+import promClient from "prom-client";
+import generateCsrfToken from "./middlewares/csrfToken";
 
 const app: Application = express();
 const host = config.server.host;
@@ -30,7 +32,7 @@ const initializeFolders = () => {
 initializeFolders();
 
 // Middlewares
-app.set("trust proxy", config.server.trustProxy);
+// app.set("trust proxy", config.server.trustProxy as String);
 app.use(
     cors({
         // multiple origins can be added
@@ -46,7 +48,7 @@ app.use(prometheusMetrics);
 const mongoStore = MongoStore.create({
     mongoUrl: config.mongoDB.uri,
     ttl: config.mongoDB.ttl,
-})
+});
 app.use(
     session({
         secret: config.server.session.secret as string,
@@ -55,10 +57,12 @@ app.use(
         cookie: {
             secure: config.env === "production",
             maxAge: config.server.session.expiry,
+            sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
         },
         store: mongoStore,
     })
 );
+app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
@@ -83,6 +87,11 @@ process.on("unhandledRejection", (reason) => {
 process.on("uncaughtException", (error) => {
     logger.error(`Uncaught Exception: ${error}`);
     fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Uncaught Exception: ${error}\n`, { flag: "a" });
+});
+
+process.on("SIGINT", async () => {
+    logger.info("SIGINT received. Exiting...");
+    process.exit(0);
 });
 
 connectDB().then(async () => {

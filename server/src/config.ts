@@ -50,7 +50,7 @@ export const config = {
 
     prom: {
         metrics: {
-            prefix: "nodejs_",
+            prefix: process.env.PROMETHEUS_METRICS_PREFIX,
             timeout: 5000,
         },
         activeSessions: {

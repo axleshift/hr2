@@ -1,4 +1,5 @@
 export const config = {
+  env: import.meta.env.VITE_NODE_ENV,
   server: {
     url: import.meta.env.VITE_REACT_SERVER_URL,
   },

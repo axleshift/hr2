@@ -27,6 +27,7 @@ import {
   faSearch,
   faXmark,
   faRefresh,
+  faUserClock,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect, useContext } from 'react'
@@ -259,7 +260,7 @@ const Applicants = ({ theme }) => {
                                 )
                               })}
                             </div>
-                          </CTableDataCell>
+                          </CTableDataCell> 
                           <CTableDataCell>
                             <CTooltip
                               placement="top"
@@ -270,7 +271,7 @@ const Applicants = ({ theme }) => {
                                 className="btn btn-primary"
                                 size="sm"
                               >
-                                <FontAwesomeIcon icon={faCalendarAlt} />
+                                <FontAwesomeIcon icon={faUserClock} />
                               </CButton>
                             </CTooltip>
                           </CTableDataCell>

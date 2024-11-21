@@ -1,3 +1,4 @@
+import UTCDate from "../../../utils/UTCDate";
 import logger from "../../../middlewares/logger";
 import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
 import { Request as req, Response as res } from "express";
@@ -101,14 +102,17 @@ export const createSlotForADate = async (req: req, res: res) => {
         const { date, timeslot } = req.body;
 
         // Ensure the date is valid, clean it up and set the time to 00:00:00
-        const startDate = new Date(date).setHours(0, 0, 0, 0);
+        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const startDate = UTCDate(parsedDate);
+        console.log("createSlotForADate -> startDate", startDate);
+        const inputSlot = timeslot;
+        console.log("createSlotForADate -> inputSlot", inputSlot);
 
-        // Check if the timeslot already exists
+        // Check if the timeslot already exists        
         const existingSlot = await interviewTimeSlotModel.findOne({
-            data: {
-                $gte: startDate,
-                $lt: new Date(startDate).setDate(new Date(startDate).getDate() + 1),
-            },
+            date: startDate,
+            start: timeslot.start,
+            end: timeslot.end,
         });
 
         if (existingSlot) {
@@ -146,6 +150,7 @@ export const createSlotForADate = async (req: req, res: res) => {
 
 export const deleteSlotById = async (req: req, res: res) => {
     const { id } = req.params;
+    console.log("deleteSlotById -> id", id);
     try {
         const slot = await interviewTimeSlotModel.findByIdAndDelete(id);
 
@@ -156,8 +161,7 @@ export const deleteSlotById = async (req: req, res: res) => {
                 message: "Slot not found",
             });
         }
-
-        logger.info(slot);
+        
         res.status(200).json({
             statusCode: 200,
             success: true,

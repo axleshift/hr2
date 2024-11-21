@@ -1,3 +1,4 @@
+import UTCDate from "../../../utils/UTCDate";
 import logger from "../../../middlewares/logger";
 import interviewSchedSchema from "../models/interviewSchedModel";
 import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
@@ -149,7 +150,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
 
         const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
 
-        const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
+        const parsedDate = UTCDate(date);
 
         if (!timeslotRef_id || !title) {
             return res.status(400).json({
@@ -290,7 +291,7 @@ export const updateInterview = async (req: req, res: res) => {
     }
 };
 
-export const deleteInterview = async (req: req, res: res) => {
+export const deleteInterviewById = async (req: req, res: res) => {
     try {
         const id = req.params.id;
         const interview = await interviewSchedSchema.findById(id);
