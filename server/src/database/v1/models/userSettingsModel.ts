@@ -23,6 +23,15 @@ const userSettingsSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
+        developer: {
+            status: {
+                type: Boolean,
+                default: false,
+            }, 
+            api_key: {
+                type: String,
+            },
+        }
     },
     {
         timestamps: true,
