@@ -50,6 +50,7 @@ import {
   faPencil,
   faSearch,
   faUser,
+  faPrint,
 } from '@fortawesome/free-solid-svg-icons'
 import { firstLetterUppercase } from '../../utils'
 
@@ -555,6 +556,17 @@ const Applicant = () => {
                   <CTooltip content="Reset" placement="top">
                     <CButton className="btn btn-danger" onClick={() => handleReset()}>
                       <FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>
+                    </CButton>
+                  </CTooltip>
+                )}
+                {isEdit && (
+                  <CTooltip content="Print (unavailable)" placement="top">
+                    <CButton
+                      type="button"
+                      // onClick={() => handlePrint()}
+                      className="btn btn-info w-30"
+                    >
+                      <FontAwesomeIcon icon={faPrint} />
                     </CButton>
                   </CTooltip>
                 )}
