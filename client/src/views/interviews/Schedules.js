@@ -19,7 +19,7 @@ import {
   CSpinner,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
-import { faPlus, faBars, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faBars, faPencil, faSearch, faTrash, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Calendar } from 'react-calendar'
 import ScheduleForm from './modals/ScheduleForm'
@@ -70,20 +70,22 @@ const Schedules = ({ theme }) => {
     try {
       const res = await get(`/interview/all?date=${date}&page=${currentPage}&limit=${itemsPerPage}`)
       if (res.status === 200) {
-        const txt = `Successfully fetched interview schedules for ${formattedDateMMM(date)}`
-        addToast('Success', txt, 'success')
+        // const txt = `Successfully fetched interview schedules for ${formattedDateMMM(date)}`
+        // addToast('Success', txt, 'success')
         setInterviewDatas(res.data.data)
         setDateTimeSlotData(res.data.slots)
         setTotalPages(res.data.totalPages)
         setIsDateLoading(false)
       } else {
-        const txt = `Failed to fetch interview schedules for ${formattedDateMMM(date)}`
-        addToast('Error', txt, 'error')
+        // const txt = `Failed to fetch interview schedules for ${formattedDateMMM(date)}`
+        // addToast('Warning', txt, 'warning')
         setIsDateLoading(false)
         setInterviewDatas([])
         setDateTimeSlotData([])
       }
     } catch (error) {
+      const txt = `Failed to fetch interview schedules for ${formattedDateMMM(date)}`
+      addToast('Error', txt, 'error')
       console.error(error)
       setIsDateLoading(false)
     }
@@ -182,14 +184,14 @@ const Schedules = ({ theme }) => {
                 <CTable align="middle" hover responsive striped>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">
                         <FontAwesomeIcon icon={faBars} />
                       </CTableHeaderCell>
-                      <CTableHeaderCell>Date</CTableHeaderCell>
-                      <CTableHeaderCell>Time</CTableHeaderCell>
-                      <CTableHeaderCell>Location</CTableHeaderCell>
-                      <CTableHeaderCell>Capacity</CTableHeaderCell>
-                      <CTableHeaderCell>Action</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Date</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Time</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Location</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Capacity</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
@@ -199,22 +201,31 @@ const Schedules = ({ theme }) => {
                           <CSpinner color="primary" variant="grow" />
                         </CTableDataCell>
                       </CTableRow>
+                    ) : interviewDatas.length === 0 ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="6" className="text-center">
+                          No data available for{' '}
+                          <span className="text-info">{formattedDateMMM(defaultDate)}</span>
+                        </CTableDataCell>
+                      </CTableRow>
                     ) : (
                       interviewDatas.map((data, index) => (
                         <CTableRow key={index}>
-                          <CTableDataCell>{data.title}</CTableDataCell>
-                          <CTableDataCell>{formattedDateMMM(data.date)}</CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">{data.title}</CTableDataCell>
+                          <CTableDataCell className="text-center">
+                            {formattedDateMMM(data.date)}
+                          </CTableDataCell>
+                          <CTableDataCell className="text-center">
                             {convertTimeStringTo12Hour(data.timeslot.start)} -{' '}
                             {convertTimeStringTo12Hour(data.timeslot.end)}
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             {data.location ? trimString(data.location, 20) : 'N/A'}
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             {data.capacity ? trimString(data.capacity, 20) : 'N/A'}
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <CButtonGroup>
                               <CButton
                                 onClick={() => {
@@ -224,13 +235,22 @@ const Schedules = ({ theme }) => {
                                 }}
                                 className="btn btn-primary"
                               >
-                                <FontAwesomeIcon icon={faPencil} />
+                                <CTooltip content="Edit" placement="top">
+                                  <FontAwesomeIcon icon={faPencil} />
+                                </CTooltip>{' '}
                               </CButton>
                               <CButton
                                 onClick={() => handleDelete(data._id)}
                                 className="btn btn-danger"
                               >
-                                <FontAwesomeIcon icon={faTrash} />
+                                <CTooltip content="Delete" placement="top">
+                                  <FontAwesomeIcon icon={faTrash} />
+                                </CTooltip>{' '}
+                              </CButton>
+                              <CButton className="btn btn-warning">
+                                <CTooltip content="Cancel" placement="top">
+                                  <FontAwesomeIcon icon={faX} />
+                                </CTooltip>
                               </CButton>
                             </CButtonGroup>
                           </CTableDataCell>

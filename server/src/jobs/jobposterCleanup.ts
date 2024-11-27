@@ -29,7 +29,8 @@ const postApprovedJobposter = async () => {
     for (const jobposter of jobposters) {
         try {
             const tweet = (await createTweet(jobposter.content)) as TweetType;
-            await Jobposter.updateOne({ _id: jobposter._id }, { post_id: (tweet as TweetType).id_str, isPosted: true });
+            console.log("JobspoterCleanUp.ts: postApprovedJobposter: ", tweet);
+            await Jobposter.updateOne({ _id: jobposter._id }, { post_id: (tweet as TweetType).id, isPosted: true });
             const jobposting = (await Jobposting.findById(jobposter.ref_id)) as JobpostingType;
             await Jobposting.updateOne({ _id: jobposting._id }, { status: "active" });
         } catch (error) {

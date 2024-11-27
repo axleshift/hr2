@@ -6,6 +6,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const ApplicationTracking = React.lazy(() => import('./views/recruitment/ats'))
 const Jobposting = React.lazy(() => import('./views/recruitment/Jobposting'))
 const Jobposter = React.lazy(() => import('./views/recruitment/Jobposter'))
+const Jobposts = React.lazy(() => import('./views/recruitment/Jobposts'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
 const Applicant = React.lazy(() => import('./views/applicants/Applicant'))
 
@@ -19,6 +20,9 @@ const Interviews = React.lazy(() => import('./views/interviews/Schedules'))
 // Configuration | HR2
 const TestPage = React.lazy(() => import('./views/settings/TestPage'))
 
+// Developer
+const API = React.lazy(() => import('./views/developer/api'))
+
 // Errors
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 
@@ -31,6 +35,7 @@ const routes = [
   { path: '/recruitment/ats', name: 'Application Tracking', element: ApplicationTracking },
   { path: '/recruitment/jobposting', name: 'Jobposting', element: Jobposting },
   { path: '/recruitment/jobposter/:id', name: 'Jobposter', element: Jobposter },
+  { path: '/recruitment/jobposts', name: 'Jobposts', element: Jobposts },
   { path: '/recruitment/schedules', name: 'Schedules', element: Schedules },
   { path: '/applicant/create', name: 'Resume Create', element: Applicant },
 
@@ -48,6 +53,9 @@ const routes = [
 
   // Configuration | HR2
   { path: '/settings/TestPage', name: 'Test Page', element: TestPage },
+
+  // Developer
+  { path: '/developer/api', name: 'API', element: API },
 ]
 
 export default routes

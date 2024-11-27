@@ -4,9 +4,10 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import { createJobposter, getJobposterByRefId, removeJobposter } from "../../database/v1/controllers/jobposterController";
+import { createJobposter, getJobposterByRefId, getAllJobposters, removeJobposter } from "../../database/v1/controllers/jobposterController";
 
 router.post("/:id/post", createJobposter);
+router.get("/all", getAllJobposters);
 router.get("/:id", getJobposterByRefId);
 router.delete("/:id", removeJobposter);
 

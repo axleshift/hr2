@@ -52,7 +52,7 @@ const AppProvider = ({ children }) => {
   // State for managing the timeouts associated with each toast
   const [timeouts, setTimeouts] = useState({})
 
-  const [milliseconds, setMilliseconds] = useState(10000)
+  const [milliseconds, setMilliseconds] = useState(5000)
 
   /**
    * Function to add a new toast with the given parameters.
