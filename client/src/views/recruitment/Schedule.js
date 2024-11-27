@@ -178,9 +178,7 @@ const Schedule = () => {
       <CContainer>
         <CRow>
           <CContainer>
-            <div className="d-flex justify-content-between align-items-center">
-              <strong>Scheduled Job Postings</strong>
-            </div>
+            <h1>Scheduled Job Postings</h1>
 
             <small className="text-muted">
               You can view all scheduled job postings here. The system will not post the job posting

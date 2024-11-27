@@ -35,6 +35,7 @@ import {
   faPencil,
   faCalendar,
   faSearch,
+  faPrint,
 } from '@fortawesome/free-solid-svg-icons'
 import AppPagination from '../../components/AppPagination'
 import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
@@ -252,7 +253,7 @@ const Jobposting = () => {
     //   return result
     // },
   })
-  const searchSubmit = async (data) => {
+  const handleSearchSubmit = async (data) => {
     try {
       setIsSearchMode(true)
       setIsLoading(true)
@@ -282,6 +283,15 @@ const Jobposting = () => {
     <>
       <CContainer className="d-flex flex-column gap-3 mb-3">
         <CRow>
+          <CCol>
+            <h1>Job Postings</h1>
+            <small className="text-muted">
+              In this page, you can view all the job posting data, create new job postings, and edit
+              existing job postings.
+            </small>
+          </CCol>
+        </CRow>
+        <CRow>
           <CContainer>
             <CCard>
               <CCardHeader>
@@ -310,6 +320,19 @@ const Jobposting = () => {
                         </CButton>
                       </CTooltip>
                     )}
+
+                    {isEdit && (
+                      <CTooltip content="Print (unavailable)" placement="top">
+                        <CButton
+                          type="button"
+                          // onClick={() => handleEditReset()}
+                          className="btn btn-info w-30"
+                        >
+                          <FontAwesomeIcon icon={faPrint} />
+                        </CButton>
+                      </CTooltip>
+                    )}
+
                     <CTooltip content={isFormExpanded ? 'Collapse' : 'Expand'} placement="top">
                       <CButton
                         type="button"
@@ -554,7 +577,7 @@ const Jobposting = () => {
         <CRow className="d-flex gap-2 justify-content-between align-items-center">
           <CContainer>
             <CForm
-              onSubmit={searchHandleSubmit(searchSubmit)}
+              onSubmit={searchHandleSubmit(handleSearchSubmit)}
               className="d-flex flex-row gap-2 justify-content-end align-items-center"
             >
               <CInputGroup>
@@ -672,22 +695,22 @@ const Jobposting = () => {
                           </span>
                           <p className="fw-bold text-uppercase text-primary">{data.title}</p>
                         </div>
-                        <div className="d-flex flex-row gap-2 justify-content-start">
-                          <FontAwesomeIcon icon={faLocationPin} />
-                          <div>{data.location}</div>
+                        <div>
+                          <FontAwesomeIcon icon={faLocationPin} className="me-2" />
+                          <span>{data.location}</span>
                         </div>
-                        <div className="d-flex flex-row gap-2 justify-content-start">
-                          <FontAwesomeIcon icon={faCalendar} />
-                          <p>
+                        <div>
+                          <FontAwesomeIcon icon={faCalendar} className="me-2" />
+                          <span>
                             {formattedDateMMM(data.schedule_start)} -{' '}
                             {formattedDateMMM(data.schedule_end)}
-                          </p>
+                          </span>
                         </div>
-                        <div className="d-flex flex-row gap-2 justify-content-start">
-                          <FontAwesomeIcon icon={faMoneyBill} />
-                          <p>
+                        <div>
+                          <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
+                          <span>
                             {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
-                          </p>
+                          </span>
                         </div>
                         <div>
                           <p className="fw-bold text-uppercase">Description</p>

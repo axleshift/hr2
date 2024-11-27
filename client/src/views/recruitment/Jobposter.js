@@ -458,8 +458,8 @@ const Jobposter = () => {
                 <hr />
                 <h2>Tracker</h2>
                 <small>
-                  This is a tracker for the job posting. It will show the status of the job posting
-                  for this job.
+                  This is a tracker for the job posting. It will show the status of the job postings
+                  on various platforms.
                 </small>
                 <CCard>
                   <CCardBody>
@@ -503,12 +503,7 @@ const Jobposter = () => {
                             return (
                               <CTableRow key={item._id}>
                                 <CTableDataCell>
-                                  <CTooltip
-                                    content={item._id}
-                                    placement="top"
-                                    interactive
-                                    offset={[-10, 0]}
-                                  >
+                                  <CTooltip content={item._id} placement="top">
                                     <div className="text-capitalize text-center">
                                       {trimString(item._id, 2)}
                                     </div>
@@ -542,12 +537,7 @@ const Jobposter = () => {
                                   </span>
                                 </CTableDataCell>
                                 <CTableDataCell>
-                                  <CTooltip
-                                    content={item.content}
-                                    placement="top"
-                                    interactive
-                                    offset={[-10, 0]}
-                                  >
+                                  <CTooltip content={item.content} placement="top">
                                     <small>{trimString(item.content, 50)}</small>
                                   </CTooltip>
                                 </CTableDataCell>
