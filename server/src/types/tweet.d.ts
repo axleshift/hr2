@@ -1,5 +1,5 @@
 export interface TweetType {
-    id_str: string;
+    id: string;
 }
 
 export interface ITweet {
