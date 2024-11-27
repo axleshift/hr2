@@ -39,14 +39,24 @@ import {
 import { icon } from '@fortawesome/fontawesome-svg-core'
 
 const _nav = [
+  // {
+  //   component: CNavItem,
+  //   name: 'Overview',
+  //   to: '/dashboard',
+  //   icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
+  //   badge: {
+  //     color: 'danger',
+  //     text: 'unfinished',
+  //   },
+  // },
   {
     component: CNavItem,
     name: 'Overview',
-    to: '/dashboard',
+    to: '/dashboard/overview',
     icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
     badge: {
-      color: 'info',
-      text: 'NEW',
+      color: 'danger',
+      text: 'unfinished',
     },
   },
   {
@@ -68,7 +78,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Postings',
-    to: '/recruitment/postings',
+    to: '/recruitment/jobposts',
     icon: <FontAwesomeIcon icon={faAt} className="nav-icon" />,
   },
   {
@@ -134,7 +144,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'API',
-    to: '/settings/api',
+    to: '/developer/api',
     icon: <FontAwesomeIcon icon={faCode} size="lg" className="nav-icon" />,
   },
   {
