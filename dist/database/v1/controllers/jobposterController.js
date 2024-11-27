@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeJobposter = exports.getJobposterByRefId = exports.createJobposter = void 0;
+exports.removeJobposter = exports.getAllJobposters = exports.getJobposterByRefId = exports.createJobposter = void 0;
 const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
 const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
 const twitter_1 = require("../../../utils/twitter");
@@ -39,28 +39,10 @@ const createJobposter = async (req, res) => {
             isApproved: true,
             status: "active",
         });
-        // will not be posting to twitter
-        // const tweet = async (content: any) => {
-        //   try {
-        //     const tweet = content;
-        //     const res: any = await createTweet(tweet);
-        //     if (res.errors) {
-        //       throw new Error(res.errors);
-        //     }
-        //     await JobPosting.findByIdAndUpdate(ref_id, {
-        //       status: "active",
-        //     });
-        //     return res.data;
-        //   } catch (error) {
-        //     logger.error("Error posting tweet:", error);
-        //     throw error;
-        //   }
-        // };
         let jobposterTW;
         try {
-            // const tweetResponse = await tweet(contentTW);
-            // logger.info("Tweet response:");
-            // logger.info(tweetResponse);
+            // const tweetResponse = await createTweet(contentTW);
+            // console.log("Create Tweet Response: ", tweetResponse);
             jobposterTW = new jobposterModel_1.default({
                 ref_id: ref_id,
                 platform: "twitter",
@@ -139,6 +121,54 @@ const getJobposterByRefId = async (req, res) => {
     }
 };
 exports.getJobposterByRefId = getJobposterByRefId;
+const getAllJobposters = async (req, res) => {
+    try {
+        const searchQuery = req.query.query;
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const sortOrder = req.query.sort === "desc" ? -1 : 1;
+        console.log("getAllJobspoters: query: ", req.query);
+        let searchFilter = {};
+        if (searchQuery) {
+            searchFilter = {
+                $or: [{ content: { $regex: searchQuery, $options: "i" } }, { platform: { $regex: searchQuery, $options: "i" } }],
+            };
+        }
+        const total = await jobposterModel_1.default.countDocuments(searchFilter);
+        console.log("getAllJobspoters: total: ", total);
+        console.log("getAllJobspoters: limit: ", limit);
+        const totalPages = Math.ceil(total / limit);
+        const data = await jobposterModel_1.default.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+        if (data.length === 0) {
+            const txt = searchQuery ? `No jobposter found for query: ${searchQuery}` : "No jobposter found";
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: txt,
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Jobposters found",
+            data,
+            total,
+            totalPages,
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error getting jobposters",
+            error,
+        });
+    }
+};
+exports.getAllJobposters = getAllJobposters;
 const removeJobposter = async (req, res) => {
     const { id } = req.params;
     try {

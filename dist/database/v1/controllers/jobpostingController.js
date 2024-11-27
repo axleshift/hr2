@@ -219,14 +219,14 @@ const getAllScheduledJobpostings = async (req, res) => {
         const totalJobPostings = await jobpostingModel_1.default.countDocuments({
             ...statusFilter,
             ...searchFilter,
-            schedule_start: { $gte: startDate },
-            schedule_end: { $lte: endDate },
+            schedule_start: { $gte: startDate, $lte: endDate },
+            // schedule_start: { $gte: startDate },
+            // schedule_end: { $lte: endDate },
         });
         const data = await jobpostingModel_1.default.find({
             ...statusFilter,
             ...searchFilter,
-            schedule_start: { $gte: startDate },
-            schedule_end: { $lte: endDate },
+            schedule_start: { $gte: startDate, $lte: endDate },
         })
             .sort({ schedule_start: sortOrder })
             .skip(skip)

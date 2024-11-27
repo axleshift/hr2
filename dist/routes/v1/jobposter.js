@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const jobposterController_1 = require("../../database/v1/controllers/jobposterController");
 router.post("/:id/post", jobposterController_1.createJobposter);
+router.get("/all", jobposterController_1.getAllJobposters);
 router.get("/:id", jobposterController_1.getJobposterByRefId);
 router.delete("/:id", jobposterController_1.removeJobposter);
 exports.default = {
