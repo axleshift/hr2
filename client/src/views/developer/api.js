@@ -67,7 +67,7 @@ const API = () => {
                 {apiKey && (
                   <CButton color="success" onClick={handleCopyAPIKey}>
                     Copy
-                    <FontAwesomeIcon icon={faClipboard} className='mx-2'/> 
+                    <FontAwesomeIcon icon={faClipboard} className="mx-2" />
                   </CButton>
                 )}
               </CInputGroup>
