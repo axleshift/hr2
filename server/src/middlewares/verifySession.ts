@@ -22,22 +22,22 @@ const verifySession = (requiredRoles: string[] = []) => {
             });
         }
 
-        const clientToken = req.headers["x-csrf-token"] as string || csrfToken as string;
-        if (!clientToken) {
-            return res.status(403).json({
-                statusCode: 403,
-                success: false,
-                message: "Forbidden: CSRF token missing",
-            });
-        }
+        // const clientToken = req.headers["x-csrf-token"] as string || csrfToken as string;
+        // if (!clientToken) {
+        //     return res.status(403).json({
+        //         statusCode: 403,
+        //         success: false,
+        //         message: "Forbidden: CSRF token missing",
+        //     });
+        // }
     
-        if (clientToken !== csrfToken) {
-            return res.status(403).json({
-                statusCode: 403,
-                success: false,
-                message: "Forbidden: Invalid CSRF token",
-            });
-        }
+        // if (clientToken !== csrfToken) {
+        //     return res.status(403).json({
+        //         statusCode: 403,
+        //         success: false,
+        //         message: "Forbidden: Invalid CSRF token",
+        //     });
+        // }
 
         // console.info("Session CSRF TOKEN  -> csrfToken", csrfToken);
 
