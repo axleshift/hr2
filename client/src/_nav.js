@@ -151,19 +151,19 @@ const _nav = [
     component: CNavItem,
     name: 'Sent',
     to: '/mail/sent',
-    icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />
+    icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Draft',
     to: '/mail/drafts',
-    icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />
+    icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Template',
     to: '/mail/templates',
-    icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />
+    icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />,
   },
   {
     component: CNavTitle,

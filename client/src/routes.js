@@ -79,7 +79,6 @@ const routes = [
   { path: '/developer/api', name: 'API', element: API },
 
   { path: '*', name: 'Page404', element: Page404 },
-
 ]
 
 export default routes

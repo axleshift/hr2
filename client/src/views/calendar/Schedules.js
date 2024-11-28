@@ -136,7 +136,8 @@ const Schedules = ({ theme }) => {
           <CCol>
             <h2>Schedules</h2>
             <small>
-              In this page, you can create and edit schedules for interviews, task, or any other events.
+              In this page, you can create and edit schedules for interviews, task, or any other
+              events.
             </small>
           </CCol>
         </CRow>

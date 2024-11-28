@@ -9,8 +9,8 @@ const Screening = () => {
           <CCol>
             <h2>Screening</h2>
             <small>
-              In this page, you can view and edit the list of applicants which needs screening for the job,
-              and is waiting for the HR to review their application.
+              In this page, you can view and edit the list of applicants which needs screening for
+              the job, and is waiting for the HR to review their application.
             </small>
           </CCol>
         </CRow>

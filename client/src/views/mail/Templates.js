@@ -9,7 +9,9 @@ const Templates = () => {
           <CCol>
             <h2>Templates</h2>
             <small>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minima laboriosam quae beatae, tenetur tempore dignissimos voluptatum. Ea nam doloribus soluta rem. Quasi alias temporibus, error facere ad minima optio.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minima laboriosam quae
+              beatae, tenetur tempore dignissimos voluptatum. Ea nam doloribus soluta rem. Quasi
+              alias temporibus, error facere ad minima optio.
             </small>
           </CCol>
         </CRow>

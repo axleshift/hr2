@@ -9,7 +9,8 @@ const Shortlisted = () => {
           <CCol>
             <h2>Shorlisted</h2>
             <small>
-              In this page, you can view and edit the list of applicants which are shortlisted or qualified for the job.
+              In this page, you can view and edit the list of applicants which are shortlisted or
+              qualified for the job.
             </small>
           </CCol>
         </CRow>

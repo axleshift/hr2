@@ -51,12 +51,7 @@ import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../context/appContext'
 
-import {
-  firstLetterUppercase,
-  formatCurency,
-  formatDate,
-  trimString,
-} from '../../utils'
+import { firstLetterUppercase, formatCurency, formatDate, trimString } from '../../utils'
 
 const Jobposter = () => {
   const sectionRefs = {}
@@ -549,9 +544,7 @@ const Jobposter = () => {
                                   )}
                                 </CTableDataCell>
                                 <CTableDataCell className="text-center">
-                                  <span className="text-info">
-                                    {formatDate(item.expiresAt)}
-                                  </span>
+                                  <span className="text-info">{formatDate(item.expiresAt)}</span>
                                 </CTableDataCell>
                                 <CTableDataCell>
                                   <CTooltip content={item.content} placement="top">

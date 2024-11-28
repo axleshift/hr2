@@ -205,7 +205,7 @@ const Jobposts = () => {
                     {isLoading ? (
                       <CTableRow>
                         <CTableDataCell colSpan="8" className="text-center">
-                          <CSpinner color="primary" variant="grow"/>
+                          <CSpinner color="primary" variant="grow" />
                         </CTableDataCell>
                       </CTableRow>
                     ) : allData.length === 0 ? (
