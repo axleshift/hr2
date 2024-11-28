@@ -60,7 +60,7 @@ app.use(
         store: mongoStore,
     })
 );
-app.use(generateCsrfToken);
+// app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
