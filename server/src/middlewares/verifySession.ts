@@ -12,7 +12,7 @@ const verifySession = (requiredRoles: string[] = []) => {
 
         // If requiredRoles is specified, check if the user's role matches
         const userRole = req.session.user.role;
-        const csrfToken = req.session.csrfToken;
+        // const csrfToken = req.session.csrfToken;
 
         if (requiredRoles.length > 0 && !requiredRoles.includes(userRole)) {
             return res.status(403).json({
