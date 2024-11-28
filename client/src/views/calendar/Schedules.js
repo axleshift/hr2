@@ -25,7 +25,7 @@ import { Calendar } from 'react-calendar'
 import ScheduleForm from './modals/ScheduleForm'
 import React, { useEffect, useState, useCallback, useContext } from 'react'
 import propTypes from 'prop-types'
-import { convertTimeStringTo12Hour, formattedDateMMM, trimString, UTCDate } from '../../utils'
+import { convertTimeStringTo12Hour, formatDate, trimString, UTCDate } from '../../utils'
 import { get, del } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
 
@@ -84,7 +84,7 @@ const Schedules = ({ theme }) => {
         setDateTimeSlotData([])
       }
     } catch (error) {
-      const txt = `Failed to fetch interview schedules for ${formattedDateMMM(date)}`
+      const txt = `Failed to fetch interview schedules for ${formatDate(date)}`
       addToast('Error', txt, 'error')
       console.error(error)
       setIsDateLoading(false)
@@ -133,6 +133,15 @@ const Schedules = ({ theme }) => {
     <>
       <CContainer className="d-flex flex-column gap-3">
         <CRow>
+          <CCol>
+            <h2>Schedules</h2>
+            <small>
+              In this page, you can create and edit schedules for interviews, task, or any other
+              events.
+            </small>
+          </CCol>
+        </CRow>
+        <CRow>
           <CContainer>
             <CCard>
               <CCardBody>
@@ -154,7 +163,7 @@ const Schedules = ({ theme }) => {
                     <CFormInput
                       type="text"
                       placeholder="start"
-                      value={formattedDateMMM(defaultDate)}
+                      value={formatDate(defaultDate)}
                       readOnly
                     />
                     <CTooltip content="Create interview" placement="top">
@@ -205,7 +214,7 @@ const Schedules = ({ theme }) => {
                       <CTableRow>
                         <CTableDataCell colSpan="6" className="text-center">
                           No data available for{' '}
-                          <span className="text-info">{formattedDateMMM(defaultDate)}</span>
+                          <span className="text-info">{formatDate(defaultDate)}</span>
                         </CTableDataCell>
                       </CTableRow>
                     ) : (
@@ -213,7 +222,7 @@ const Schedules = ({ theme }) => {
                         <CTableRow key={index}>
                           <CTableDataCell className="text-center">{data.title}</CTableDataCell>
                           <CTableDataCell className="text-center">
-                            {formattedDateMMM(data.date)}
+                            {formatDate(data.date)}
                           </CTableDataCell>
                           <CTableDataCell className="text-center">
                             {convertTimeStringTo12Hour(data.timeslot.start)} -{' '}

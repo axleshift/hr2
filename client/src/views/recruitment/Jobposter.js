@@ -51,15 +51,10 @@ import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../context/appContext'
 
-import {
-  firstLetterUppercase,
-  formatCurency,
-  formattedDate,
-  formattedDateMMM,
-  trimString,
-} from '../../utils'
+import { firstLetterUppercase, formatCurency, formatDate, trimString } from '../../utils'
 
 const Jobposter = () => {
+  const sectionRefs = {}
   const { addToast } = useContext(AppContext)
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
@@ -189,6 +184,10 @@ const Jobposter = () => {
         }
         setEdit((prevEdit) => ({ ...prevEdit, twitter: true }))
         twitterReset(content)
+        addToast('Success', 'Post Fetched', 'success')
+
+        // Scroll to twitter form
+        sectionRefs.twitterForm.scrollIntoView({ behavior: 'smooth' })
       }
     } catch (error) {
       console.log(error)
@@ -208,164 +207,171 @@ const Jobposter = () => {
         <CContainer className="d-flex flex-column gap-2 mb-3">
           <CRow>
             <CCol>
-              <CCard>
-                <CCardHeader className="d-flex flex-row justify-content-between align-items-center">
-                  <strong>Job Posting Details</strong>
+              <h2>Job Posting Details</h2>
+              <small>
+                This is the job posting details. It will show the details of the job posting.
+              </small>
+            </CCol>
+            <CCol className="d-flex justify-content-end">
+              <div>
+                <CTooltip
+                  content={
+                    isExpanded.jobposting ? 'Hide Job Posting Details' : 'Show Job Posting Details'
+                  }
+                  placement="top"
+                >
                   <CButton color="primary" onClick={() => handleExpand('jobposting')}>
                     <FontAwesomeIcon icon={isExpanded.jobposting ? faChevronUp : faChevronDown} />
                   </CButton>
-                </CCardHeader>
-                <CCollapse visible={isExpanded.jobposting}>
-                  <CCardBody>
-                    <CContainer className="d-flex flex-column gap-2">
-                      <CRow>
-                        <CCol>
-                          <CTooltip
-                            content={
-                              data.status?.toLowerCase() === 'active'
-                                ? 'This is an active job posting. This means that the job is currently open and accepting applications and have posted on social media.'
-                                : 'This is an inactive job posting. This means that the job posting is currently closed and not accepting applications.'
-                            }
-                            placement="top"
-                          >
-                            <CBadge
-                              color={data.status?.toLowerCase() === 'active' ? 'success' : 'danger'}
-                            >
-                              {firstLetterUppercase(data.status)}
-                            </CBadge>
-                          </CTooltip>
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <CFormInput
-                            id="title"
-                            name="title"
-                            label="Title"
-                            value={firstLetterUppercase(data.title)}
-                            readOnly
-                          />
-                        </CCol>
-                        <CCol>
-                          <CFormInput
-                            id="type"
-                            name="type"
-                            label="Type"
-                            value={firstLetterUppercase(data.type)}
-                            readOnly
-                          />
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Location</label>
-                          <CInputGroup className="mt-2">
-                            <CInputGroupText>
-                              <FontAwesomeIcon icon={faLocationPin} />
-                            </CInputGroupText>
-                            <CFormInput
-                              id="location"
-                              name="location"
-                              value={firstLetterUppercase(data.location)}
-                              readOnly
-                            />
-                          </CInputGroup>
-                        </CCol>
-                        <CCol>
-                          <label htmlFor="">Salary</label>
-                          <CInputGroup className="mt-2">
-                            <CInputGroupText>
-                              <FontAwesomeIcon icon={faMoneyBill} />
-                            </CInputGroupText>
-                            <CFormInput
-                              id="salarymin"
-                              name="salarymin"
-                              value={formatCurency(data.salary_min)}
-                              readOnly
-                            />
-                            <CFormInput
-                              id="salarymax"
-                              name="salarymax"
-                              value={formatCurency(data.salary_max)}
-                              readOnly
-                            ></CFormInput>
-                          </CInputGroup>
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Description</label>
-                          <CFormTextarea
-                            id="description"
-                            name="description"
-                            value={data.description}
-                            readOnly
-                          />
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Responsibilities</label>
-                          <CFormTextarea
-                            id="responsibilities"
-                            name="responsibilities"
-                            value={data.responsibilities}
-                            readOnly
-                          />
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Requirements</label>
-                          <CFormTextarea
-                            id="requirements"
-                            name="requirements"
-                            value={data.requirements}
-                            readOnly
-                          />
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Benefits</label>
-                          <CFormTextarea
-                            id="benefits"
-                            name="benefits"
-                            value={data.benefits}
-                            readOnly
-                          />
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <label htmlFor="">Schedule</label>
-                          <CInputGroup className="mt-2">
-                            <CInputGroupText>
-                              <FontAwesomeIcon icon={faCalendar} />
-                            </CInputGroupText>
-                            <CInputGroupText>Start</CInputGroupText>
-                            <CFormInput
-                              type="date"
-                              id="scheduleStart"
-                              name="scheduleStart"
-                              value={formattedDate(data.schedule_start)}
-                              readOnly
-                            />
-                            <CInputGroupText>End</CInputGroupText>
-                            <CFormInput
-                              type="date"
-                              id="scheduleEnd"
-                              name="scheduleEnd"
-                              value={formattedDate(data.schedule_end)}
-                              readOnly
-                            />
-                          </CInputGroup>
-                        </CCol>
-                      </CRow>
-                    </CContainer>
-                  </CCardBody>
-                </CCollapse>
-              </CCard>
+                </CTooltip>
+              </div>
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol>
+              <CCollapse visible={isExpanded.jobposting}>
+                <CContainer className="d-flex flex-column gap-2">
+                  <CRow>
+                    <CCol>
+                      <CTooltip
+                        content={
+                          data.status?.toLowerCase() === 'active'
+                            ? 'This is an active job posting. This means that the job is currently open and accepting applications and have posted on social media.'
+                            : 'This is an inactive job posting. This means that the job posting is currently closed and not accepting applications.'
+                        }
+                        placement="top"
+                      >
+                        <CBadge
+                          color={data.status?.toLowerCase() === 'active' ? 'success' : 'danger'}
+                        >
+                          {firstLetterUppercase(data.status)}
+                        </CBadge>
+                      </CTooltip>
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <CFormInput
+                        id="title"
+                        name="title"
+                        label="Title"
+                        value={firstLetterUppercase(data.title)}
+                        readOnly
+                      />
+                    </CCol>
+                    <CCol>
+                      <CFormInput
+                        id="type"
+                        name="type"
+                        label="Type"
+                        value={firstLetterUppercase(data.type)}
+                        readOnly
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Location</label>
+                      <CInputGroup className="mt-2">
+                        <CInputGroupText>
+                          <FontAwesomeIcon icon={faLocationPin} />
+                        </CInputGroupText>
+                        <CFormInput
+                          id="location"
+                          name="location"
+                          value={firstLetterUppercase(data.location)}
+                          readOnly
+                        />
+                      </CInputGroup>
+                    </CCol>
+                    <CCol>
+                      <label htmlFor="">Salary</label>
+                      <CInputGroup className="mt-2">
+                        <CInputGroupText>
+                          <FontAwesomeIcon icon={faMoneyBill} />
+                        </CInputGroupText>
+                        <CFormInput
+                          id="salarymin"
+                          name="salarymin"
+                          value={formatCurency(data.salary_min)}
+                          readOnly
+                        />
+                        <CFormInput
+                          id="salarymax"
+                          name="salarymax"
+                          value={formatCurency(data.salary_max)}
+                          readOnly
+                        ></CFormInput>
+                      </CInputGroup>
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Description</label>
+                      <CFormTextarea
+                        id="description"
+                        name="description"
+                        value={data.description}
+                        readOnly
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Responsibilities</label>
+                      <CFormTextarea
+                        id="responsibilities"
+                        name="responsibilities"
+                        value={data.responsibilities}
+                        readOnly
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Requirements</label>
+                      <CFormTextarea
+                        id="requirements"
+                        name="requirements"
+                        value={data.requirements}
+                        readOnly
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Benefits</label>
+                      <CFormTextarea id="benefits" name="benefits" value={data.benefits} readOnly />
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <label htmlFor="">Schedule</label>
+                      <CInputGroup className="mt-2">
+                        <CInputGroupText>
+                          <FontAwesomeIcon icon={faCalendar} />
+                        </CInputGroupText>
+                        <CInputGroupText>Start</CInputGroupText>
+                        <CFormInput
+                          type="date"
+                          id="scheduleStart"
+                          name="scheduleStart"
+                          value={formatDate(data.schedule_start)}
+                          readOnly
+                        />
+                        <CInputGroupText>End</CInputGroupText>
+                        <CFormInput
+                          type="date"
+                          id="scheduleEnd"
+                          name="scheduleEnd"
+                          value={formatDate(data.schedule_end)}
+                          readOnly
+                        />
+                      </CInputGroup>
+                    </CCol>
+                  </CRow>
+                </CContainer>
+              </CCollapse>
             </CCol>
           </CRow>
           <CRow>
@@ -376,6 +382,8 @@ const Jobposter = () => {
                 <CForm
                   onSubmit={twitterHandleSubmit(submitSummary)}
                   className="d-flex flex-column gap-2"
+                  classID="twitterForm"
+                  ref={(el) => (sectionRefs.twitterForm = el)}
                 >
                   <h2>Create Post</h2>
                   <div>
@@ -390,6 +398,7 @@ const Jobposter = () => {
                       defaultValue={`NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurency(data.salary_min)} - ${formatCurency(data.salary_max)}\n=====\nPM me for more details!`}
                       {...twitterRegister('twitterText')}
                       invalid={!!twitterErrors.twitterText}
+                      className="scalableCFormTextArea-200"
                     />
                     <small className="text-muted">
                       If left blank, the default text will be used.
@@ -455,12 +464,15 @@ const Jobposter = () => {
           <CRow>
             <CCol>
               <CContainer>
-                <hr />
-                <h2>Tracker</h2>
-                <small>
-                  This is a tracker for the job posting. It will show the status of the job postings
-                  on various platforms.
-                </small>
+                <div>
+                  <hr />
+
+                  <h2>Tracker</h2>
+                  <small>
+                    This is a tracker for the job posting. It will show the status of the job
+                    postings on various platforms.
+                  </small>
+                </div>
                 <CCard>
                   <CCardBody>
                     <CTable align="middle" hover responsive striped>
@@ -474,9 +486,9 @@ const Jobposter = () => {
                           <CTableHeaderCell>
                             <div className="text-center">Platform</div>
                           </CTableHeaderCell>
-                          <CTableHeaderCell>
+                          {/* <CTableHeaderCell>
                             <div className="text-center">Status</div>
-                          </CTableHeaderCell>
+                          </CTableHeaderCell> */}
                           <CTableHeaderCell>
                             <div className="text-center">Posted</div>
                           </CTableHeaderCell>
@@ -512,11 +524,11 @@ const Jobposter = () => {
                                 <CTableDataCell>
                                   <div className="text-capitalize text-center">{item.platform}</div>
                                 </CTableDataCell>
-                                <CTableDataCell className="text-center">
+                                {/* <CTableDataCell className="text-center">
                                   <CBadge color={item.status === 'active' ? 'success' : 'danger'}>
                                     {item.status === 'active' ? 'Active' : 'Inactive'}
                                   </CBadge>
-                                </CTableDataCell>
+                                </CTableDataCell> */}
                                 <CTableDataCell className="text-center">
                                   {item.isPosted ? (
                                     <CBadge color="success">YES</CBadge>
@@ -532,9 +544,7 @@ const Jobposter = () => {
                                   )}
                                 </CTableDataCell>
                                 <CTableDataCell className="text-center">
-                                  <span className="text-info">
-                                    {formattedDateMMM(item.expiresAt)}
-                                  </span>
+                                  <span className="text-info">{formatDate(item.expiresAt)}</span>
                                 </CTableDataCell>
                                 <CTableDataCell>
                                   <CTooltip content={item.content} placement="top">
@@ -603,7 +613,7 @@ const Jobposter = () => {
                               <p>
                                 Expires at{' '}
                                 <span className="text-info">
-                                  {formattedDateMMM(item.expiresAt)}
+                                  {formatDate(item.expiresAt)}
                                 </span>
                               </p>
                             </div>

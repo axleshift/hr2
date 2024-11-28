@@ -44,7 +44,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { get } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
 import { classNames } from 'classnames'
-import { formattedDateMMM, trimString } from '../../utils'
+import { daysLeft, formatDate, trimString } from '../../utils'
 import AppPagination from '../../components/AppPagination'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -119,14 +119,6 @@ const Jobposts = () => {
 
   const handleView = (item) => {
     navigate(`/recruitment/jobposter/${item.ref_id}`)
-  }
-
-  const daysLeft = (date) => {
-    const today = new Date()
-    const nDate = new Date(date)
-    const diff = today - nDate
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    return days
   }
 
   React.useEffect(() => {
@@ -212,8 +204,8 @@ const Jobposts = () => {
                   <CTableBody>
                     {isLoading ? (
                       <CTableRow>
-                        <CTableDataCell colSpan="8">
-                          <CSpinner variant="grow" />
+                        <CTableDataCell colSpan="8" className="text-center">
+                          <CSpinner color="primary" variant="grow" />
                         </CTableDataCell>
                       </CTableRow>
                     ) : allData.length === 0 ? (
@@ -227,12 +219,7 @@ const Jobposts = () => {
                         return (
                           <CTableRow key={item._id}>
                             <CTableDataCell>
-                              <CTooltip
-                                content={item._id}
-                                placement="top"
-                                interactive
-                                offset={[-10, 0]}
-                              >
+                              <CTooltip content={item._id} placement="top">
                                 <div className="text-capitalize text-center">
                                   {trimString(item._id, 2)}
                                 </div>
@@ -272,8 +259,12 @@ const Jobposts = () => {
                                 content={daysLeft(item.expiresAt) + ' days left'}
                                 placement="top"
                               >
-                                <span className="text-info">
-                                  {formattedDateMMM(item.expiresAt)}
+                                <span
+                                  className={
+                                    daysLeft(item.expiresAt) > 0 ? 'text-info' : 'text-danger'
+                                  }
+                                >
+                                  {formatDate(item.expiresAt)}
                                 </span>
                               </CTooltip>
                             </CTableDataCell>
@@ -284,14 +275,14 @@ const Jobposts = () => {
                             </CTableDataCell>
                             <CTableDataCell className="text-center">
                               <CButtonGroup>
-                                <CTooltip content="Edit" placement="top">
+                                {/* <CTooltip content="Edit" placement="top">
                                   <CButton
                                     color="primary"
                                     // onClick={() => deleteTrackerData(item._id)}
                                   >
                                     <FontAwesomeIcon icon={faPencil} />
                                   </CButton>
-                                </CTooltip>
+                                </CTooltip> */}
                                 <CTooltip content="View" placement="top">
                                   <CButton color="info" onClick={() => handleView(item)}>
                                     <FontAwesomeIcon icon={faClipboardQuestion} />

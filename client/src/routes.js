@@ -8,14 +8,26 @@ const Jobposting = React.lazy(() => import('./views/recruitment/Jobposting'))
 const Jobposter = React.lazy(() => import('./views/recruitment/Jobposter'))
 const Jobposts = React.lazy(() => import('./views/recruitment/Jobposts'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
+
+// Applicants
 const Applicant = React.lazy(() => import('./views/applicants/Applicant'))
+const Screening = React.lazy(() => import('./views/applicants/Screening'))
+const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
+const Training = React.lazy(() => import('./views/applicants/Training'))
+const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
+
+// Mail | HR2
+const Drafts = React.lazy(() => import('./views/mail/Drafts'))
+const Inbox = React.lazy(() => import('./views/mail/Inbox'))
+const Sent = React.lazy(() => import('./views/mail/Sent'))
+const MailTemplates = React.lazy(() => import('./views/mail/Templates'))
 
 // Tags & Categories | HR2
 const Tags = React.lazy(() => import('./views/tags/Tags'))
 
 // Interviews | HR2
-const CreateInterview = React.lazy(() => import('./views/interviews/Applicants'))
-const Interviews = React.lazy(() => import('./views/interviews/Schedules'))
+const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
+const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 
 // Configuration | HR2
 const TestPage = React.lazy(() => import('./views/settings/TestPage'))
@@ -37,17 +49,26 @@ const routes = [
   { path: '/recruitment/jobposter/:id', name: 'Jobposter', element: Jobposter },
   { path: '/recruitment/jobposts', name: 'Jobposts', element: Jobposts },
   { path: '/recruitment/schedules', name: 'Schedules', element: Schedules },
-  { path: '/applicant/create', name: 'Resume Create', element: Applicant },
 
   // Tags & Categories | HR2
   { path: '/tags/tags', name: 'Tags', element: Tags },
 
-  // Errors | HR2
-  { path: '*', name: 'Page404', element: Page404 },
+  // Applicants
+  { path: '/applicant/list', name: 'Resume Create', element: Applicant },
+  { path: '/applicant/screening', name: 'Screening', element: Screening },
+  { path: '/applicant/training', name: 'Screening', element: Training },
+  { path: '/applicant/shortlisted', name: 'Screening', element: Shortlisted },
+  { path: '/applicant/rejected', name: 'Screening', element: Rejected },
 
-  // Interviews | HR2
-  { path: '/interviews/applicants', name: 'Create Interview', element: CreateInterview },
-  { path: '/interviews/schedules', name: 'Interviews', element: Interviews },
+  // Calendar | HR2
+  { path: '/calendar/applicants', name: 'Create Interview', element: CreateInterview },
+  { path: '/calendar/schedules', name: 'Interviews', element: Interviews },
+
+  // Mail | HR2
+  { path: '/mail/drafts', name: 'Drafts', element: Drafts },
+  { path: '/mail/inbox', name: 'Inbox', element: Inbox },
+  { path: '/mail/sent', name: 'Sent', element: Sent },
+  { path: '/mail/templates', name: 'Mail Templates', element: MailTemplates },
 
   { path: '/widgets', name: 'Widgets', element: Widgets },
 
@@ -56,6 +77,8 @@ const routes = [
 
   // Developer
   { path: '/developer/api', name: 'API', element: API },
+
+  { path: '*', name: 'Page404', element: Page404 },
 ]
 
 export default routes

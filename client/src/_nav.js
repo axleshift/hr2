@@ -22,21 +22,27 @@ import {
   faBriefcase,
   faCalendar,
   faCalendarPlus,
+  faClipboardList,
   faClockFour,
   faCode,
   faCog,
   faCogs,
+  faCompassDrafting,
   faDashboard,
+  faDraftingCompass,
+  faEnvelope,
+  faEnvelopeCircleCheck,
   faFile,
   faFileAlt,
   faFileArchive,
   faFileCircleCheck,
   faFileCirclePlus,
   faFileCircleQuestion,
+  faInbox,
+  faPaperPlane,
   faStar,
   faUserClock,
 } from '@fortawesome/free-solid-svg-icons'
-import { icon } from '@fortawesome/fontawesome-svg-core'
 
 const _nav = [
   // {
@@ -88,7 +94,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Applications',
-    to: '/applicant/create',
+    to: '/applicant/list',
     icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
   },
   {
@@ -122,14 +128,42 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Schedules',
-    to: '/interviews/schedules',
+    to: '/calendar/schedules',
     icon: <FontAwesomeIcon icon={faCalendarPlus} className="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Applicants',
-    to: '/interviews/applicants',
+    to: '/calendar/applicants',
     icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: 'Mail',
+  },
+  {
+    component: CNavItem,
+    name: 'Inbox',
+    to: '/mail/inbox',
+    icon: <FontAwesomeIcon icon={faInbox} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Sent',
+    to: '/mail/sent',
+    icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Draft',
+    to: '/mail/drafts',
+    icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Template',
+    to: '/mail/templates',
+    icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />,
   },
   {
     component: CNavTitle,

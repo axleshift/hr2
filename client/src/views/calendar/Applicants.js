@@ -167,6 +167,15 @@ const Applicants = ({ theme }) => {
     <>
       <CContainer className="d-flex flex-column gap-3">
         <CRow>
+          <CCol>
+            <h2>Applicants</h2>
+            <small>
+              In this page, you can view and edit the list of applicants which are waiting for the
+              HR to schedule an interview or any event they need to attend.
+            </small>
+          </CCol>
+        </CRow>
+        <CRow>
           <CContainer className="d-flex flex-column gap-3">
             <CForm onSubmit={handleSubmit(handleSearch)}>
               <CInputGroup>
@@ -260,7 +269,7 @@ const Applicants = ({ theme }) => {
                                 )
                               })}
                             </div>
-                          </CTableDataCell> 
+                          </CTableDataCell>
                           <CTableDataCell>
                             <CTooltip
                               placement="top"
