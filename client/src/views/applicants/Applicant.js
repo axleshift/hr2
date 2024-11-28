@@ -53,7 +53,6 @@ import {
   faPrint,
 } from '@fortawesome/free-solid-svg-icons'
 import { firstLetterUppercase } from '../../utils'
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const Applicant = () => {
@@ -75,7 +74,7 @@ const Applicant = () => {
     ],
   })
 
-  const [isFormExpanded, setIsFormExpanded] = useState(false)
+  const [isFormModalVisible, setIsFormModalVisible] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
@@ -190,7 +189,7 @@ const Applicant = () => {
         ...data,
         file: data.file[0],
       }
-      setIsFormExpanded(false)
+      setIsFormModalVisible(false)
       setIsPreview(true)
       setData(x)
     } catch (error) {
@@ -327,7 +326,7 @@ const Applicant = () => {
           }
         })
         setIsEdit(true)
-        setIsFormExpanded(true)
+        setIsFormModalVisible(true)
         addToast(
           'Success',
           `You are now editing ${res.data.data.firstname} ${res.data.data.lastname}`,
@@ -379,7 +378,7 @@ const Applicant = () => {
     setSelectedTags([])
     setCertifications([''])
     setIsEdit(false)
-    setIsFormExpanded(false)
+    setIsFormModalVisible(false)
   }
 
   // Forms Manipulation Functions+
@@ -537,8 +536,25 @@ const Applicant = () => {
     <CContainer className="d-flex flex-column gap-2 mb-3">
       <CRow>
         <CCol>
-          <CCard>
-            <CCardHeader className="d-flex justify-content-between align-items-center">
+          <h2>Applicants </h2>
+          <small>In this page, you can view, create, edit, delete and search for applicants.</small>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          <div className="d-flex justify-content-end">
+            <CButton
+              className="btn btn-primary"
+              onClick={() => setIsFormModalVisible(!isFormModalVisible)}
+            >
+              Create
+            </CButton>
+          </div>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          {/* <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex gap-2 justify-content-between align-items-center">
                 <strong>Resume Form</strong>
                 <span
@@ -570,427 +586,435 @@ const Applicant = () => {
                     </CButton>
                   </CTooltip>
                 )}
-                <CTooltip content="Expand" placement="top">
+                <CTooltip content="Create" placement="top">
                   <CButton
                     className="btn btn-primary"
-                    onClick={() => setIsFormExpanded(!isFormExpanded)}
+                    onClick={() => setIsFormModalVisible(!isFormModalVisible)}
                   >
-                    <FontAwesomeIcon
-                      icon={isFormExpanded ? faChevronUp : faChevronDown}
-                    ></FontAwesomeIcon>
+                    Create
                   </CButton>
                 </CTooltip>
               </div>
-            </CCardHeader>
-            <CCollapse visible={isFormExpanded}>
-              <CCardBody>
-                <CForm onSubmit={handleSubmit(handlePreview)}>
-                  <CContainer>
-                    <CRow>
-                      <div className="visually-hidden">
+            </CCardHeader> */}
+          <CModal
+            visible={isFormModalVisible}
+            size="lg"
+            onClose={() => {
+              setIsFormModalVisible(false)
+              handleReset()
+            }}
+          >
+            <CModalHeader>
+              <CModalTitle>
+                Resume Form{' '}
+                <span className={isEdit ? 'text-danger' : 'text-success'}>
+                  <small>{isEdit ? 'Edit Mode' : 'Create Mode'}</small>
+                </span>
+              </CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <CForm onSubmit={handleSubmit(handlePreview)}>
+                <CContainer>
+                  <CRow>
+                    <div className="visually-hidden">
+                      <CFormInput
+                        type="text"
+                        id="id"
+                        placeholder="..."
+                        label="ID"
+                        {...register('id')}
+                        invalid={!!errors.id}
+                      />
+                      {errors.id && (
+                        <CFormFeedback className="text-danger">{errors.id.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <CCol md={5}>
+                      <div>
                         <CFormInput
                           type="text"
-                          id="id"
+                          id="firstname"
+                          placeholder="John Sr."
+                          label="First Name"
+                          {...register('firstname')}
+                          invalid={!!errors.firstname}
+                        />
+                        {errors.firstname && (
+                          <CFormFeedback className="text-danger">
+                            {errors.firstname.message}
+                          </CFormFeedback>
+                        )}
+                      </div>
+                    </CCol>
+                    <CCol md={5}>
+                      <div>
+                        <CFormInput
+                          type="text"
+                          id="lastname"
+                          placeholder="Doe"
+                          label="Last Name"
+                          {...register('lastname')}
+                          invalid={!!errors.lastname}
+                        />
+                        {errors.lastname && (
+                          <CFormFeedback className="text-danger">
+                            {errors.lastname.message}
+                          </CFormFeedback>
+                        )}
+                      </div>
+                    </CCol>
+                    <CCol md={2}>
+                      <div>
+                        <CFormInput
+                          type="text"
+                          id="middlename"
                           placeholder="..."
-                          label="ID"
-                          {...register('id')}
-                          invalid={!!errors.id}
+                          label="Middle Name"
+                          {...register('middlename')}
+                          invalid={!!errors.middlename}
                         />
-                        {errors.id && (
-                          <CFormFeedback className="text-danger">{errors.id.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <CCol md={5}>
-                        <div>
-                          <CFormInput
-                            type="text"
-                            id="firstname"
-                            placeholder="John Sr."
-                            label="First Name"
-                            {...register('firstname')}
-                            invalid={!!errors.firstname}
-                          />
-                          {errors.firstname && (
-                            <CFormFeedback className="text-danger">
-                              {errors.firstname.message}
-                            </CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                      <CCol md={5}>
-                        <div>
-                          <CFormInput
-                            type="text"
-                            id="lastname"
-                            placeholder="Doe"
-                            label="Last Name"
-                            {...register('lastname')}
-                            invalid={!!errors.lastname}
-                          />
-                          {errors.lastname && (
-                            <CFormFeedback className="text-danger">
-                              {errors.lastname.message}
-                            </CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                      <CCol md={2}>
-                        <div>
-                          <CFormInput
-                            type="text"
-                            id="middlename"
-                            placeholder="..."
-                            label="Middle Name"
-                            {...register('middlename')}
-                            invalid={!!errors.middlename}
-                          />
-                          {errors.middlename && (
-                            <CFormFeedback className="text-danger">
-                              {errors.middlename.message}
-                            </CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormInput
-                          type="email"
-                          id="email"
-                          placeholder="user@mail.com"
-                          label="Email"
-                          {...register('email')}
-                          invalid={!!errors.email}
-                        />
-                        {errors.email && (
+                        {errors.middlename && (
                           <CFormFeedback className="text-danger">
-                            {errors.email.message}
+                            {errors.middlename.message}
                           </CFormFeedback>
                         )}
                       </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormInput
-                          type="text"
-                          id="phone"
-                          placeholder="1234567890"
-                          label="Phone"
-                          {...register('phone')}
-                          invalid={!!errors.phone}
-                        />
-                        {errors.phone && (
-                          <CFormFeedback className="text-danger">
-                            {errors.phone.message}
-                          </CFormFeedback>
-                        )}
+                    </CCol>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormInput
+                        type="email"
+                        id="email"
+                        placeholder="user@mail.com"
+                        label="Email"
+                        {...register('email')}
+                        invalid={!!errors.email}
+                      />
+                      {errors.email && (
+                        <CFormFeedback className="text-danger">
+                          {errors.email.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormInput
+                        type="text"
+                        id="phone"
+                        placeholder="1234567890"
+                        label="Phone"
+                        {...register('phone')}
+                        invalid={!!errors.phone}
+                      />
+                      {errors.phone && (
+                        <CFormFeedback className="text-danger">
+                          {errors.phone.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormTextarea
+                        id="address"
+                        placeholder="City, Country"
+                        label="Address"
+                        {...register('address')}
+                        invalid={!!errors.address}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.address && (
+                        <CFormFeedback className="text-danger">
+                          {errors.address.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormInput
+                        type="text"
+                        id="portfolioUrl"
+                        placeholder="https://www.github.com/example"
+                        label="Porfolio (URL)"
+                        {...register('portfolioUrl')}
+                        invalid={!!errors.portfolioUrl}
+                      />
+                      {errors.portfolioUrl && (
+                        <CFormFeedback className="text-danger">
+                          {errors.portfolioUrl.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormTextarea
+                        type="text"
+                        id="profSummary"
+                        placeholder="..."
+                        label="Professional Summary"
+                        {...register('profSummary')}
+                        invalid={!!errors.profSummary}
+                      />
+                      {errors.profSummary && (
+                        <CFormFeedback className="text-danger">
+                          {errors.profSummary.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormTextarea
+                        type="text"
+                        id="skills"
+                        placeholder="..."
+                        label="Skills"
+                        {...register('skills')}
+                        invalid={!!errors.skills}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.skills && (
+                        <CFormFeedback className="text-danger">
+                          {errors.skills.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormTextarea
+                        type="text"
+                        id="workExperience"
+                        placeholder={'Company Name\n' + 'Position\n' + 'Duration\n' + 'Description'}
+                        label="Work Experience"
+                        {...register('workExperience')}
+                        invalid={!!errors.workExperience}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.workExperience && (
+                        <CFormFeedback className="text-danger">
+                          {errors.workExperience.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormTextarea
+                        type="text"
+                        id="education"
+                        placeholder={'School Name\n' + 'Degree\n' + 'Graduation Year\n'}
+                        label="Education"
+                        {...register('education')}
+                        invalid={!!errors.education}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.education && (
+                        <CFormFeedback className="text-danger">
+                          {errors.education.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormLabel htmlFor="certification">
+                        {
+                          <>
+                            {'Certification '}
+                            <span className="text-danger  text-muted">(Optional)</span>
+                          </>
+                        }
+                      </CFormLabel>
+                      {certifications.map((cert, index) => {
+                        return (
+                          <CRow key={index} className="d-flex flex-column gap-3 mb-3">
+                            <CCol className="d-flex flex-column gap-2">
+                              <div>
+                                <CFormInput
+                                  type="text"
+                                  id={`name[${index}]`}
+                                  placeholder="Certification Name"
+                                  value={cert.name}
+                                  readOnly
+                                  {...certRegister(`certifications[${index}].name`)}
+                                  invalid={
+                                    !!certErrors.certifications &&
+                                    !!certErrors.certifications[index]
+                                  }
+                                />
+                                {certErrors.certifications && certErrors.certifications[index] && (
+                                  <CFormFeedback className="text-danger">
+                                    {certErrors.certifications[index].message}
+                                  </CFormFeedback>
+                                )}
+                              </div>
+                              <div>
+                                <CFormInput
+                                  type="text"
+                                  id={`authority[${index}]`}
+                                  placeholder="Certification Authority"
+                                  value={cert.authority}
+                                  readOnly
+                                  {...certRegister(`certifications[${index}].authority`)}
+                                  invalid={
+                                    !!certErrors.certifications &&
+                                    !!certErrors.certifications[index]
+                                  }
+                                />
+                                {certErrors.certifications && certErrors.certifications[index] && (
+                                  <CFormFeedback className="text-danger">
+                                    {certErrors.certifications[index].message}
+                                  </CFormFeedback>
+                                )}
+                              </div>
+                              <div>
+                                <CFormInput
+                                  type="text"
+                                  id={`year[${index}]`}
+                                  placeholder="Certification Year"
+                                  value={cert.year}
+                                  readOnly
+                                  {...certRegister(`certifications[${index}].year`)}
+                                  invalid={
+                                    !!certErrors.certifications &&
+                                    !!certErrors.certifications[index]
+                                  }
+                                />
+                                {certErrors.certifications && certErrors.certifications[index] && (
+                                  <CFormFeedback className="text-danger">
+                                    {certErrors.certifications[index].message}
+                                  </CFormFeedback>
+                                )}
+                              </div>
+                            </CCol>
+                            <CCol className="d-flex justify-content-end">
+                              <CTooltip content="Remove Field" placement="top">
+                                <CButton
+                                  onClick={() => handleRemoveCertField(cert.name)}
+                                  className="btn btn-outline-danger"
+                                >
+                                  <FontAwesomeIcon icon={faMinus}></FontAwesomeIcon>
+                                </CButton>
+                              </CTooltip>
+                            </CCol>
+                          </CRow>
+                        )
+                      })}
+                      <div className="d-flex justify-content-end">
+                        <CTooltip content="Add Certification" placement="top">
+                          <CButton
+                            className="btn btn-outline-success "
+                            onClick={() => setCertificationModalVisible(true)}
+                          >
+                            <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
+                          </CButton>
+                        </CTooltip>
                       </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormTextarea
-                          id="address"
-                          placeholder="City, Country"
-                          label="Address"
-                          {...register('address')}
-                          invalid={!!errors.address}
-                        />
-                        {errors.address && (
-                          <CFormFeedback className="text-danger">
-                            {errors.address.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormInput
-                          type="text"
-                          id="portfolioUrl"
-                          placeholder="https://www.github.com/example"
-                          label="Porfolio (URL)"
-                          {...register('portfolioUrl')}
-                          invalid={!!errors.portfolioUrl}
-                        />
-                        {errors.portfolioUrl && (
-                          <CFormFeedback className="text-danger">
-                            {errors.portfolioUrl.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormTextarea
-                          type="text"
-                          id="profSummary"
-                          placeholder="..."
-                          label="Professional Summary"
-                          {...register('profSummary')}
-                          invalid={!!errors.profSummary}
-                        />
-                        {errors.profSummary && (
-                          <CFormFeedback className="text-danger">
-                            {errors.profSummary.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormTextarea
-                          type="text"
-                          id="skills"
-                          placeholder="..."
-                          label="Skills"
-                          {...register('skills')}
-                          invalid={!!errors.skills}
-                        />
-                        {errors.skills && (
-                          <CFormFeedback className="text-danger">
-                            {errors.skills.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormTextarea
-                          type="text"
-                          id="workExperience"
-                          placeholder={
-                            'Company Name\n' + 'Position\n' + 'Duration\n' + 'Description'
-                          }
-                          label="Work Experience"
-                          {...register('workExperience')}
-                          invalid={!!errors.workExperience}
-                        />
-                        {errors.workExperience && (
-                          <CFormFeedback className="text-danger">
-                            {errors.workExperience.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormTextarea
-                          type="text"
-                          id="education"
-                          placeholder={'School Name\n' + 'Degree\n' + 'Graduation Year\n'}
-                          label="Education"
-                          {...register('education')}
-                          invalid={!!errors.education}
-                        />
-                        {errors.education && (
-                          <CFormFeedback className="text-danger">
-                            {errors.education.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormLabel htmlFor="certification">
-                          {
-                            <>
-                              {'Certification '}
-                              <span className="text-danger  text-muted">(Optional)</span>
-                            </>
-                          }
-                        </CFormLabel>
-                        {certifications.map((cert, index) => {
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormLabel htmlFor="tag">Tags</CFormLabel>
+                      <CRow className="d-flex flex-row gap-2 justify-content-start">
+                        {formTags.map((tag, index) => {
                           return (
-                            <CRow key={index} className="d-flex flex-column gap-3 mb-3">
-                              <CCol className="d-flex flex-column gap-2">
-                                <div>
-                                  <CFormInput
-                                    type="text"
-                                    id={`name[${index}]`}
-                                    placeholder="Certification Name"
-                                    value={cert.name}
-                                    readOnly
-                                    {...certRegister(`certifications[${index}].name`)}
-                                    invalid={
-                                      !!certErrors.certifications &&
-                                      !!certErrors.certifications[index]
-                                    }
-                                  />
-                                  {certErrors.certifications &&
-                                    certErrors.certifications[index] && (
-                                      <CFormFeedback className="text-danger">
-                                        {certErrors.certifications[index].message}
-                                      </CFormFeedback>
-                                    )}
-                                </div>
-                                <div>
-                                  <CFormInput
-                                    type="text"
-                                    id={`authority[${index}]`}
-                                    placeholder="Certification Authority"
-                                    value={cert.authority}
-                                    readOnly
-                                    {...certRegister(`certifications[${index}].authority`)}
-                                    invalid={
-                                      !!certErrors.certifications &&
-                                      !!certErrors.certifications[index]
-                                    }
-                                  />
-                                  {certErrors.certifications &&
-                                    certErrors.certifications[index] && (
-                                      <CFormFeedback className="text-danger">
-                                        {certErrors.certifications[index].message}
-                                      </CFormFeedback>
-                                    )}
-                                </div>
-                                <div>
-                                  <CFormInput
-                                    type="text"
-                                    id={`year[${index}]`}
-                                    placeholder="Certification Year"
-                                    value={cert.year}
-                                    readOnly
-                                    {...certRegister(`certifications[${index}].year`)}
-                                    invalid={
-                                      !!certErrors.certifications &&
-                                      !!certErrors.certifications[index]
-                                    }
-                                  />
-                                  {certErrors.certifications &&
-                                    certErrors.certifications[index] && (
-                                      <CFormFeedback className="text-danger">
-                                        {certErrors.certifications[index].message}
-                                      </CFormFeedback>
-                                    )}
-                                </div>
-                              </CCol>
-                              <CCol className="d-flex justify-content-end">
-                                <CTooltip content="Remove Field" placement="top">
-                                  <CButton
-                                    onClick={() => handleRemoveCertField(cert.name)}
-                                    className="btn btn-outline-danger"
-                                  >
-                                    <FontAwesomeIcon icon={faMinus}></FontAwesomeIcon>
-                                  </CButton>
-                                </CTooltip>
-                              </CCol>
-                            </CRow>
+                            <CCol key={tag._id}>
+                              <CInputGroup>
+                                <CButton
+                                  onClick={() => handleTagChange(tag._id)}
+                                  {...register(`tags[${index}]`)}
+                                  className={
+                                    selectedTags.some(
+                                      (item) => item === tag._id || item._id === tag._id,
+                                    )
+                                      ? 'btn btn-primary'
+                                      : 'btn btn-outline-primary'
+                                  }
+                                  style={{
+                                    width: '100%',
+                                  }}
+                                >
+                                  {firstLetterUppercase(tag.name)}
+                                </CButton>
+                              </CInputGroup>
+                            </CCol>
                           )
                         })}
-                        <div className="d-flex justify-content-end">
-                          <CTooltip content="Add Certification" placement="top">
+                        <CCol>
+                          <CTooltip content="Add tag">
                             <CButton
-                              className="btn btn-outline-success "
-                              onClick={() => setCertificationModalVisible(true)}
+                              className="btn btn-success mx-2"
+                              onClick={() => setTagModalVisible(true)}
                             >
                               <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
                             </CButton>
                           </CTooltip>
-                        </div>
-                      </div>
-                    </CRow>
-                    <CRow className="mt-3">
-                      <div>
-                        <CFormLabel htmlFor="tag">Tags</CFormLabel>
-                        <CRow className="d-flex flex-row gap-2 justify-content-start">
-                          {formTags.map((tag, index) => {
-                            return (
-                              <CCol key={tag._id}>
-                                <CInputGroup>
-                                  <CButton
-                                    onClick={() => handleTagChange(tag._id)}
-                                    {...register(`tags[${index}]`)}
-                                    className={
-                                      selectedTags.some(
-                                        (item) => item === tag._id || item._id === tag._id,
-                                      )
-                                        ? 'btn btn-primary'
-                                        : 'btn btn-outline-primary'
-                                    }
-                                    style={{
-                                      width: '100%',
-                                    }}
-                                  >
-                                    {firstLetterUppercase(tag.name)}
-                                  </CButton>
-                                </CInputGroup>
-                              </CCol>
-                            )
-                          })}
-                          <CCol>
-                            <CTooltip content="Add tag">
-                              <CButton
-                                className="btn btn-success mx-2"
-                                onClick={() => setTagModalVisible(true)}
-                              >
-                                <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
-                              </CButton>
-                            </CTooltip>
-                          </CCol>
-                        </CRow>
-
-                        {errors.tags && (
-                          <CFormFeedback className="text-danger">
-                            {errors.tags.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    <CRow>
-                      <div>
-                        <CFormTextarea
-                          id="remarks"
-                          placeholder="..."
-                          label="Remarks"
-                          {...register('remarks')}
-                          invalid={!!errors.remarks}
-                        />
-                        {errors.remarks && (
-                          <CFormFeedback className="text-danger">
-                            {errors.remarks.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-                    {/* if file exists, preview file */}
-                    {pdfFile && (
-                      <CRow className="mt-3">
-                        <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
-                          <Page pageNumber={pageNumber} />
-                        </Document>
+                        </CCol>
                       </CRow>
-                    )}
+
+                      {errors.tags && (
+                        <CFormFeedback className="text-danger">{errors.tags.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow>
+                    <div>
+                      <CFormTextarea
+                        id="remarks"
+                        placeholder="..."
+                        label="Remarks"
+                        {...register('remarks')}
+                        invalid={!!errors.remarks}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.remarks && (
+                        <CFormFeedback className="text-danger">
+                          {errors.remarks.message}
+                        </CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  {/* if file exists, preview file */}
+                  {pdfFile && (
                     <CRow className="mt-3">
-                      <div>
-                        <CFormInput
-                          type="file"
-                          id="file"
-                          placeholder="Enter Title"
-                          label="Resume"
-                          {...register('file', { value: [] })}
-                          invalid={!!errors.file}
-                        />
-                        {errors.file && (
-                          <CFormFeedback className="text-danger">
-                            {errors.file.message}
-                          </CFormFeedback>
-                        )}
-                      </div>
+                      <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
+                        <Page pageNumber={pageNumber} />
+                      </Document>
                     </CRow>
-                    <CRow className="mt-3">
-                      <div className="d-flex justify-content-end mt-2">
-                        <CButton type="submit" color="primary">
-                          {isEdit ? 'Update' : 'Submit'}
-                        </CButton>
-                      </div>
-                    </CRow>
-                  </CContainer>
-                </CForm>
-              </CCardBody>
-            </CCollapse>
-          </CCard>
+                  )}
+                  <CRow className="mt-3">
+                    <div>
+                      <CFormInput
+                        type="file"
+                        id="file"
+                        placeholder="Enter Title"
+                        label="Resume"
+                        {...register('file', { value: [] })}
+                        invalid={!!errors.file}
+                      />
+                      {errors.file && (
+                        <CFormFeedback className="text-danger">{errors.file.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+                  <CRow className="mt-3">
+                    <div className="d-flex justify-content-end mt-2">
+                      <CButton type="submit" color="primary">
+                        {isEdit ? 'Update' : 'Submit'}
+                      </CButton>
+                    </div>
+                  </CRow>
+                </CContainer>
+              </CForm>
+            </CModalBody>
+          </CModal>
         </CCol>
       </CRow>
       <CRow>
@@ -1018,6 +1042,14 @@ const Applicant = () => {
                   <FontAwesomeIcon icon={faRefresh} />
                 </CButton>
               </CTooltip>
+              {/* <CTooltip content="Add" placement="top">
+                <CButton
+                  className="btn btn-primary"
+                  onClick={() => setIsFormModalVisible(!isFormModalVisible)}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </CButton>
+              </CTooltip> */}
             </CInputGroup>
           </CForm>
         </div>
@@ -1177,6 +1209,7 @@ const Applicant = () => {
                       label="Phone"
                       readOnly
                       value={data.phone}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>
@@ -1188,6 +1221,7 @@ const Applicant = () => {
                       label="Address"
                       readOnly
                       value={data.address}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>
@@ -1212,6 +1246,7 @@ const Applicant = () => {
                       label="Professional Summary"
                       readOnly
                       value={data.profSummary}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>
@@ -1224,6 +1259,7 @@ const Applicant = () => {
                       label="Skills"
                       readOnly
                       value={data.skills}
+                      className="scalableCFormTextArea-100"
                     />
                   </CCol>
                 </CRow>
@@ -1236,6 +1272,7 @@ const Applicant = () => {
                       label="Work Experience"
                       readOnly
                       value={data.workExperience}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>
@@ -1248,6 +1285,7 @@ const Applicant = () => {
                       label="Education"
                       readOnly
                       value={data.education}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>
@@ -1324,6 +1362,7 @@ const Applicant = () => {
                       readOnly
                       {...register('remarks')}
                       invalid={!!errors.remarks}
+                      className="scalableCFormTextArea-200"
                     />
                   </CCol>
                 </CRow>

@@ -5,21 +5,12 @@ const minutes = Math.floor(Math.random() * 60)
 const seconds = Math.floor(Math.random() * 60)
 
 /**
- *
- * @param {date} date
- * @returns formatted date string in 'YYYY-MM-DD' format
- */
-export const formattedDate = (date) => {
-  return dayjs(date).format('YYYY-MM-DD')
-}
-
-/**
  *  Format date to MMM DD, YYYY
  * @param {date} date
  * @returns formatted date string in 'MMM DD, YYYY' format
  */
-export const formattedDateMMM = (date) => {
-  return dayjs(date).format('MMM DD, YYYY')
+export const formatDate = (date, format = 'YYYY-MM-DD') => {
+  return dayjs(date).format(format)
 }
 
 /**
@@ -130,4 +121,21 @@ export const formatTimeString = (timeString) => {
 
 export const UTCDate = (date) => {
   return new Date(date).toUTCString()
+}
+
+export const daysLeft = (date) => {
+  const today = new Date()
+  const eventDate = new Date(date)
+
+  // Ensure valid date
+  if (isNaN(eventDate)) {
+    throw new Error('Invalid date format')
+  }
+
+  // Calculate difference in days
+  const diffTime = eventDate - today
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+  // Return 0 if the event date is today or in the past
+  return diffDays > 0 ? diffDays : 0
 }

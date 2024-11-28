@@ -24,6 +24,10 @@ import {
   CTooltip,
   CInputGroup,
   CSpinner,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -38,11 +42,12 @@ import {
   faPrint,
 } from '@fortawesome/free-solid-svg-icons'
 import AppPagination from '../../components/AppPagination'
-import { formattedDate, formattedDateMMM, formatCurency, trimString } from '../../utils'
+import { formatDate, formatCurency, trimString } from '../../utils'
+import { icon } from '@fortawesome/fontawesome-svg-core'
 const Jobposting = () => {
   const { addToast } = useContext(AppContext)
 
-  const [isFormExpanded, setIsFormExpanded] = useState(false)
+  const [isJobFormVisible, setIsJobFormVisible] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isStatus, setStatus] = useState('active')
@@ -161,7 +166,7 @@ const Jobposting = () => {
       if (res.status === 200) {
         addToast('Jobposting', `Jobposting for ${id} retrieved`, 'success')
         setIsEdit(true)
-        setIsFormExpanded(true)
+        setIsJobFormVisible(true)
         // console.log('Edit: ', res.data)
         const formattedData = {
           jpf_id: res.data.data._id,
@@ -174,8 +179,8 @@ const Jobposting = () => {
           jpfBnft: res.data.data.benefits,
           jpfReq: res.data.data.requirements,
           // jpfResp: res.data.data.responsibilities,
-          jpfSchedStart: formattedDate(res.data.data.schedule_start),
-          jpfSchedEnd: formattedDate(res.data.data.schedule_end),
+          jpfSchedStart: formatDate(res.data.data.schedule_start),
+          jpfSchedEnd: formatDate(res.data.data.schedule_end),
           jpfStatus: res.data.status,
         }
         formReset(formattedData)
@@ -191,7 +196,7 @@ const Jobposting = () => {
 
   const handleEditReset = () => {
     setIsEdit(false)
-    setIsFormExpanded(false)
+    setIsJobFormVisible(false)
     const emptyFormData = {
       jpf_id: '',
       jpfTitle: '',
@@ -281,7 +286,7 @@ const Jobposting = () => {
 
   return (
     <>
-      <CContainer className="d-flex flex-column gap-3 mb-3">
+      <CContainer>
         <CRow>
           <CCol>
             <h1>Job Postings</h1>
@@ -292,289 +297,277 @@ const Jobposting = () => {
           </CCol>
         </CRow>
         <CRow>
-          <CContainer>
-            <CCard>
-              <CCardHeader>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex gap-2 justify-content-between align-items-center">
-                    <strong>Jobposting Form</strong>
+          <CCol className="d-flex justify-content-end">
+            <div>
+              <CButton
+                type="button"
+                onClick={() => setIsJobFormVisible(!isJobFormVisible)}
+                className="btn btn-primary w-30"
+              >
+                Create
+              </CButton>
+            </div>
+          </CCol>
+        </CRow>
+        <CRow className="mb-3">
+          <CCol>
+            <CModal
+              visible={isJobFormVisible}
+              size="lg"
+              onClose={() => {
+                setIsJobFormVisible(false)
+                handleEditReset()
+              }}
+            >
+              <CModalHeader>
+                <CModalTitle>
+                  <div>
+                    {isEdit ? 'Edit Job Posting' : 'Create Job Posting'}
                     <span
                       className={
-                        isEdit
-                          ? 'badge rounded-pill text text-danger'
-                          : 'badge rounded-pill text text-success'
+                        isStatus === 'active'
+                          ? 'badge rounded-pill text text-success'
+                          : 'badge rounded-pill text text-danger'
                       }
                     >
-                      {isEdit ? 'Edit Mode' : 'Create Mode'}
+                      {isStatus === 'active' ? 'Active' : 'Inactive'}
                     </span>
                   </div>
-                  <div className="d-flex gap-2 justify-content-between align-items-center">
-                    {isEdit && (
-                      <CTooltip content="Reset Fields" placement="top">
-                        <CButton
-                          type="button"
-                          onClick={() => handleEditReset()}
-                          className="btn btn-danger w-30"
-                        >
-                          <FontAwesomeIcon icon={faRefresh} />
-                        </CButton>
-                      </CTooltip>
-                    )}
+                </CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CForm onSubmit={formHandleSubmit(onSubmit)}>
+                  <CRow className="visually-hidden">
+                    <div>
+                      <CFormInput type="text" id="jpf_id" {...formRegister('jpf_id')} />
+                    </div>
+                  </CRow>
+                  {/* Job Title Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfTitle">Job Title</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="jpfTitle"
+                        placeholder="e.g. Software Engineer"
+                        {...formRegister('jpfTitle')}
+                        invalid={!!errors.jpfTitle}
+                      />
+                      {errors.jpfTitle && (
+                        <CFormFeedback invalid>{errors.jpfTitle.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
 
-                    {isEdit && (
-                      <CTooltip content="Print (unavailable)" placement="top">
-                        <CButton
-                          type="button"
-                          // onClick={() => handleEditReset()}
-                          className="btn btn-info w-30"
-                        >
-                          <FontAwesomeIcon icon={faPrint} />
-                        </CButton>
-                      </CTooltip>
-                    )}
+                  {/* Job Type Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfType">Job Type</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="jpfType"
+                        placeholder="e.g. Full-time"
+                        {...formRegister('jpfType')}
+                        invalid={!!errors.jpfType}
+                      />
+                      {errors.jpfType && (
+                        <CFormFeedback invalid>{errors.jpfType.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
 
-                    <CTooltip content={isFormExpanded ? 'Collapse' : 'Expand'} placement="top">
-                      <CButton
-                        type="button"
-                        onClick={() => setIsFormExpanded(!isFormExpanded)}
-                        className="btn btn-primary w-30"
-                      >
-                        {isFormExpanded ? (
-                          <FontAwesomeIcon icon={faChevronUp} />
-                        ) : (
-                          <FontAwesomeIcon icon={faChevronDown} />
+                  {/* Salary Inputs */}
+                  <CRow>
+                    <strong>Salary</strong>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <div className="mb-3">
+                        <CFormLabel htmlFor="jpfSalaryMin">Minimum</CFormLabel>
+                        <CFormInput
+                          type="number"
+                          id="jpfSalaryMin"
+                          placeholder="0"
+                          {...formRegister('jpfSalaryMin', {
+                            valueAsNumber: true,
+                          })}
+                          invalid={!!errors.jpfSalaryMin}
+                        />
+                        {errors.jpfSalaryMin && (
+                          <CFormFeedback invalid>{errors.jpfSalaryMin.message}</CFormFeedback>
                         )}
-                      </CButton>
-                    </CTooltip>
-                  </div>
-                </div>
-              </CCardHeader>
-              <CCollapse visible={isFormExpanded}>
-                <CCardBody>
-                  <CForm onSubmit={formHandleSubmit(onSubmit)}>
-                    <CRow className="visually-hidden">
+                      </div>
+                    </CCol>
+                    <CCol>
+                      <div className="mb-3">
+                        <CFormLabel htmlFor="jpfSalaryMax">Maximum</CFormLabel>
+                        <CFormInput
+                          type="number"
+                          id="jpfSalaryMax"
+                          placeholder="1"
+                          {...formRegister('jpfSalaryMax', {
+                            valueAsNumber: true,
+                          })}
+                          invalid={!!errors.jpfSalaryMax}
+                        />
+                        {errors.jpfSalaryMax && (
+                          <CFormFeedback invalid>{errors.jpfSalaryMax.message}</CFormFeedback>
+                        )}
+                      </div>
+                    </CCol>
+                  </CRow>
+
+                  {/* Location Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfLoc">Location</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="jpfLoc"
+                        placeholder="e.g. Manila"
+                        {...formRegister('jpfLoc')}
+                        invalid={!!errors.jpfLoc}
+                      />
+                      {errors.jpfLoc && (
+                        <CFormFeedback invalid>{errors.jpfLoc.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+
+                  {/* Description Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfDesc">Description</CFormLabel>
+                      <CFormTextarea
+                        id="jpfDesc"
+                        placeholder="e.g. Job description details..."
+                        {...formRegister('jpfDesc')}
+                        invalid={!!errors.jpfDesc}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.jpfDesc && (
+                        <CFormFeedback invalid>{errors.jpfDesc.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+
+                  {/* Benefits Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfBnft">Benefits</CFormLabel>
+                      <CFormTextarea
+                        id="jpfBnft"
+                        placeholder="e.g. Dental Care"
+                        {...formRegister('jpfBnft')}
+                        invalid={!!errors.jpfBnft}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.jpfBnft && (
+                        <CFormFeedback invalid>{errors.jpfBnft.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+
+                  {/* Requirements Input */}
+                  <CRow>
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="jpfReq">Requirements</CFormLabel>
+                      <CFormTextarea
+                        id="jpfReq"
+                        placeholder="e.g. Identification Documents"
+                        {...formRegister('jpfReq')}
+                        invalid={!!errors.jpfReq}
+                        className="scalableCFormTextArea-200"
+                      />
+                      {errors.jpfReq && (
+                        <CFormFeedback invalid>{errors.jpfReq.message}</CFormFeedback>
+                      )}
+                    </div>
+                  </CRow>
+
+                  {/* Deployment Schedule */}
+                  <CRow>
+                    <strong>Deployment Schedule</strong>
+                    <p className="text-muted small">
+                      These parameters determine the duration of the job posting.
+                    </p>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <div className="mb-3">
+                        <CFormLabel htmlFor="jpfSchedStart">Start</CFormLabel>
+                        <CFormInput
+                          type="date"
+                          id="jpfSchedStart"
+                          defaultValue={formatDate(tommorrow)}
+                          {...formRegister('jpfSchedStart')}
+                          invalid={!!errors.jpfSchedStart}
+                        />
+                        {errors.jpfSchedStart && (
+                          <CFormFeedback invalid>{errors.jpfSchedStart.message}</CFormFeedback>
+                        )}
+                      </div>
+                    </CCol>
+                    <CCol>
+                      <div className="mb-3">
+                        <CFormLabel htmlFor="jpfSchedEnd">Expire</CFormLabel>
+                        <CFormInput
+                          type="date"
+                          id="jpfSchedEnd"
+                          defaultValue={formatDate(tommorrow)}
+                          {...formRegister('jpfSchedEnd')}
+                          invalid={!!errors.jpfSchedEnd}
+                        />
+                        {errors.jpfSchedEnd && (
+                          <CFormFeedback invalid>{errors.jpfSchedEnd.message}</CFormFeedback>
+                        )}
+                      </div>
+                    </CCol>
+                  </CRow>
+                  <hr />
+                  {/* Confirmation Check */}
+                  <CRow>
+                    <div className="ml-5 mb-3 d-flex justify-content-end">
+                      <CFormCheck
+                        type="checkbox"
+                        id="invalidCheck"
+                        label="I've reviewed the job posting and checked that all is correct. "
+                        checked={isChecked}
+                        onChange={handleCheck}
+                      />
+                      <CFormFeedback invalid>You must agree before submitting.</CFormFeedback>
+                    </div>
+                  </CRow>
+
+                  {/* Submit Button */}
+                  <CRow>
+                    <CCol className="d-flex flex-row gap-2 justify-content-end">
                       <div>
-                        <CFormInput type="text" id="jpf_id" {...formRegister('jpf_id')} />
-                      </div>
-                    </CRow>
-                    {/* Job Title Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfTitle">Job Title</CFormLabel>
-                        <CFormInput
-                          type="text"
-                          id="jpfTitle"
-                          placeholder="e.g. Software Engineer"
-                          {...formRegister('jpfTitle')}
-                          invalid={!!errors.jpfTitle}
-                        />
-                        {errors.jpfTitle && (
-                          <CFormFeedback invalid>{errors.jpfTitle.message}</CFormFeedback>
+                        {isEdit && (
+                          <CTooltip content="Print (unavailable)" placement="top">
+                            <CButton
+                              type="button"
+                              // onClick={() => handleEditReset()}
+                              className="btn btn-info w-30"
+                            >
+                              <FontAwesomeIcon icon={faPrint} />
+                            </CButton>
+                          </CTooltip>
                         )}
                       </div>
-                    </CRow>
-
-                    {/* Job Type Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfType">Job Type</CFormLabel>
-                        <CFormInput
-                          type="text"
-                          id="jpfType"
-                          placeholder="e.g. Full-time"
-                          {...formRegister('jpfType')}
-                          invalid={!!errors.jpfType}
-                        />
-                        {errors.jpfType && (
-                          <CFormFeedback invalid>{errors.jpfType.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-
-                    {/* Salary Inputs */}
-                    <CRow>
-                      <strong>Salary</strong>
-                    </CRow>
-                    <CRow>
-                      <CCol>
-                        <div className="mb-3">
-                          <CFormLabel htmlFor="jpfSalaryMin">Minimum</CFormLabel>
-                          <CFormInput
-                            type="number"
-                            id="jpfSalaryMin"
-                            placeholder="0"
-                            {...formRegister('jpfSalaryMin', {
-                              valueAsNumber: true,
-                            })}
-                            invalid={!!errors.jpfSalaryMin}
-                          />
-                          {errors.jpfSalaryMin && (
-                            <CFormFeedback invalid>{errors.jpfSalaryMin.message}</CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                      <CCol>
-                        <div className="mb-3">
-                          <CFormLabel htmlFor="jpfSalaryMax">Maximum</CFormLabel>
-                          <CFormInput
-                            type="number"
-                            id="jpfSalaryMax"
-                            placeholder="1"
-                            {...formRegister('jpfSalaryMax', {
-                              valueAsNumber: true,
-                            })}
-                            invalid={!!errors.jpfSalaryMax}
-                          />
-                          {errors.jpfSalaryMax && (
-                            <CFormFeedback invalid>{errors.jpfSalaryMax.message}</CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                    </CRow>
-
-                    {/* Location Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfLoc">Location</CFormLabel>
-                        <CFormInput
-                          type="text"
-                          id="jpfLoc"
-                          placeholder="e.g. Manila"
-                          {...formRegister('jpfLoc')}
-                          invalid={!!errors.jpfLoc}
-                        />
-                        {errors.jpfLoc && (
-                          <CFormFeedback invalid>{errors.jpfLoc.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-
-                    {/* Description Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfDesc">Description</CFormLabel>
-                        <CFormTextarea
-                          id="jpfDesc"
-                          placeholder="e.g. Job description details..."
-                          {...formRegister('jpfDesc')}
-                          invalid={!!errors.jpfDesc}
-                        />
-                        {errors.jpfDesc && (
-                          <CFormFeedback invalid>{errors.jpfDesc.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-
-                    {/* Benefits Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfBnft">Benefits</CFormLabel>
-                        <CFormTextarea
-                          id="jpfBnft"
-                          placeholder="e.g. Dental Care"
-                          {...formRegister('jpfBnft')}
-                          invalid={!!errors.jpfBnft}
-                        />
-                        {errors.jpfBnft && (
-                          <CFormFeedback invalid>{errors.jpfBnft.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-
-                    {/* Requirements Input */}
-                    <CRow>
-                      <div className="mb-3">
-                        <CFormLabel htmlFor="jpfReq">Requirements</CFormLabel>
-                        <CFormTextarea
-                          id="jpfReq"
-                          placeholder="e.g. Identification Documents"
-                          {...formRegister('jpfReq')}
-                          invalid={!!errors.jpfReq}
-                        />
-                        {errors.jpfReq && (
-                          <CFormFeedback invalid>{errors.jpfReq.message}</CFormFeedback>
-                        )}
-                      </div>
-                    </CRow>
-
-                    {/* Deployment Schedule */}
-                    <CRow>
-                      <strong>Deployment Schedule</strong>
-                      <p className="text-muted small">
-                        These parameters determine the duration of the job posting.
-                      </p>
-                    </CRow>
-                    <CRow>
-                      <CCol>
-                        <div className="mb-3">
-                          <CFormLabel htmlFor="jpfSchedStart">Start</CFormLabel>
-                          <CFormInput
-                            type="date"
-                            id="jpfSchedStart"
-                            defaultValue={formattedDate(today)}
-                            {...formRegister('jpfSchedStart', {
-                              valueAsDate: true,
-                            })}
-                            invalid={!!errors.jpfSchedStart}
-                          />
-                          {errors.jpfSchedStart && (
-                            <CFormFeedback invalid>{errors.jpfSchedStart.message}</CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                      <CCol>
-                        <div className="mb-3">
-                          <CFormLabel htmlFor="jpfSchedEnd">Expire</CFormLabel>
-                          <CFormInput
-                            type="date"
-                            id="jpfSchedEnd"
-                            defaultValue={formattedDate(tommorrow)}
-                            {...formRegister('jpfSchedEnd', {
-                              valueAsDate: true,
-                            })}
-                            invalid={!!errors.jpfSchedEnd}
-                          />
-                          {errors.jpfSchedEnd && (
-                            <CFormFeedback invalid>{errors.jpfSchedEnd.message}</CFormFeedback>
-                          )}
-                        </div>
-                      </CCol>
-                    </CRow>
-                    <hr />
-                    {/* Confirmation Check */}
-                    <CRow>
-                      <div className="ml-5 mb-3 d-flex justify-content-end">
-                        <CFormCheck
-                          type="checkbox"
-                          id="invalidCheck"
-                          label="I've reviewed the job posting and checked that all is correct. "
-                          checked={isChecked}
-                          onChange={handleCheck}
-                        />
-                        <CFormFeedback invalid>You must agree before submitting.</CFormFeedback>
-                      </div>
-                    </CRow>
-
-                    {/* Submit Button */}
-                    <CRow>
-                      <div className="d-flex justify-content-end">
-                        <CButton
-                          color="primary"
-                          type="submit"
-                          disabled={!isChecked}
-                          className="mb-3 w-25"
-                        >
+                      <div>
+                        <CButton color="primary" type="submit" disabled={!isChecked}>
                           {isEdit ? 'Update' : 'Add'}
                         </CButton>
                       </div>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCollapse>
-            </CCard>
-          </CContainer>
+                    </CCol>
+                  </CRow>
+                </CForm>
+              </CModalBody>
+            </CModal>
+          </CCol>
         </CRow>
-        <CRow className="d-flex gap-2 justify-content-between align-items-center">
+        <CRow className="d-flex mb-3 ustify-content-between align-items-center">
           <CContainer>
             <CForm
               onSubmit={searchHandleSubmit(handleSearchSubmit)}
@@ -642,8 +635,8 @@ const Jobposting = () => {
                               <div className="d-flex flex-row gap-2 justify-content-start">
                                 <FontAwesomeIcon icon={faCalendar} />
                                 <p>
-                                  {formattedDateMMM(data.schedule_start)} -{' '}
-                                  {formattedDateMMM(data.schedule_end)}
+                                  {formatDate(data.schedule_start)} -{' '}
+                                  {formatDate(data.schedule_end)}
                                 </p>
                               </div>
                               <div className="d-flex flex-row gap-2 justify-content-start">
@@ -702,8 +695,7 @@ const Jobposting = () => {
                         <div>
                           <FontAwesomeIcon icon={faCalendar} className="me-2" />
                           <span>
-                            {formattedDateMMM(data.schedule_start)} -{' '}
-                            {formattedDateMMM(data.schedule_end)}
+                            {formatDate(data.schedule_start)} - {formatDate(data.schedule_end)}
                           </span>
                         </div>
                         <div>

@@ -1,0 +1,16 @@
+// Mixin to create the scalable textarea with a given height
+@mixin scalable-textarea($height) {
+  height: $height;
+  resize: vertical;
+}
+
+// Generate classes for different height values
+.scalableCFormTextArea {
+  @include scalable-textarea(100px);  // default height
+}
+
+@for $i from 1 through 5 {
+  .scalableCFormTextArea-#{$i * 100} {
+    @include scalable-textarea(#{$i * 100}px);
+  }
+}

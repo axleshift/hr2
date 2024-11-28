@@ -44,7 +44,7 @@ import propTypes, { object } from 'prop-types'
 import { date, set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { convertTimeStringTo12Hour, formattedDate, formattedDateMMM, UTCDate } from '../../../utils'
+import { convertTimeStringTo12Hour, formatDate, UTCDate } from '../../../utils'
 import { AppContext } from '../../../context/appContext'
 
 const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
@@ -351,14 +351,14 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
                     type="text"
                     {...register('date')}
                     invalid={!!errors.date}
-                    value={formattedDate(defaultDate)}
+                    value={formatDate(defaultDate)}
                     readOnly
                     className="visually-hidden"
                   />
                   <CFormInput
                     type="text"
                     invalid={!!errors.date}
-                    value={formattedDateMMM(defaultDate)}
+                    value={formatDate(defaultDate)}
                     readOnly
                   />
                   {errors.date && <CFormFeedback invalid>{errors.date.message}</CFormFeedback>}

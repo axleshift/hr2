@@ -44,7 +44,7 @@ import propTypes, { bool, object } from 'prop-types'
 import { date, set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formattedDateMMM, UTCDate } from '../../../utils'
+import { formatDate, UTCDate } from '../../../utils'
 const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
   const [formData, setFormData] = useState({})
   const [isDateLoading, setIsDateLoading] = useState(false)
@@ -122,7 +122,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                 id="date"
                 name="date"
                 placeholder="Date"
-                value={formattedDateMMM(defaultDate)}
+                value={formatDate(defaultDate)}
                 readOnly
               />
             </CCol>
