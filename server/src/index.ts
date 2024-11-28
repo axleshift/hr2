@@ -15,7 +15,7 @@ import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
-// import generateCsrfToken from "./middlewares/csrfToken";
+import generateCsrfToken from "./middlewares/csrfToken";
 
 const app: Application = express();
 const host = config.server.host;
@@ -48,7 +48,7 @@ const mongoStore = MongoStore.create({
     ttl: config.mongoDB.ttl,
 });
 
-app.set("trust proxy", true);
+app.set("trust proxy", config.server.trustProxy);
 app.use(
     session({
         secret: config.server.session.secret as string,
@@ -62,7 +62,7 @@ app.use(
         store: mongoStore,
     })
 );
-// app.use(generateCsrfToken);
+app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
