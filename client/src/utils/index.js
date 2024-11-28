@@ -107,6 +107,14 @@ export const timeComparator = async (time1, time2) => {
   return diff
 }
 
+/**
+ *
+ * @param {string} time
+ * @param {string} clock
+ * @returns formatted time string
+ *
+ * formatTime('2021-09-01T12:00:00', '12')
+ */
 export const formatTime = (time, clock) => {
   if (clock === '12') {
     return dayjs(time).format('hh:mm A') // 12-hour format with AM/PM
@@ -114,7 +122,20 @@ export const formatTime = (time, clock) => {
   return dayjs(time).format('HH:mm:ss') // 24-hour format
 }
 
+/**
+ * Format time string to HH:mm:ss
+ * @param {string} timeString
+ * @returns formatted time string in 'HH:mm:ss' format
+ *
+ * formatTimeString('12:00:00')
+ */
+
 export const formatTimeString = (timeString) => {
+  // validate time string
+  if (!timeString.match(/\d{2}:\d{2}:\d{2}/)) {
+    throw new Error('Invalid time format')
+  }
+
   const [hours, minutes, seconds] = timeString.split(':').map(Number)
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 }
