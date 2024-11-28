@@ -30,14 +30,28 @@
 
   // Tile (date cells) styling
   .react-calendar__tile {
-    // background-color: var(--react-calendar-background-color);
     background-color: transparent;
     color: var(--react-calendar-text-color);
     border-radius: $border-radius-sm;
     border: none;
+
     &:hover {
       border-radius: $border-radius-sm;
       background-color: var(--cui-secondary-bg);
+    }
+
+    // Not-available styling
+    &.not-available {
+      // color: var(--cui-danger)
+      background-color: var(--cui-danger); // Example: red background for unavailable dates
+      color: var(--cui-white); // Adjust text color for contrast
+      // cursor: not-allowed; // Optional: show a "not allowed" cursor
+    }
+
+    &.has-events {
+      // color: var(--cui-warning)
+      background-color: var(--cui-warning); // Example: blue background for dates with events
+      color: var(--cui-white); // Adjust text color for contrast
     }
   }
 
@@ -68,6 +82,10 @@
     color: var(--cui-white);
   }
 
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: var(--cui-gray-600); // Muted color for neighboring month dates
+  }
+
   // Dark Mode Styles
   @include color-mode(dark) {
     --react-calendar-text-color: var(--cui-body-color-inverse);
@@ -83,6 +101,18 @@
       &:hover {
         background-color: var(--cui-hover-bg-dark);
       }
+
+      &.not-available {
+        // color: var(--cui-danger);
+        background-color: var(--cui-danger);
+        color: var(--cui-white);
+      }
+
+      &.has-events {
+        // color: var(--cui-warning);
+        background-color: var(--cui-warning);
+        color: var(--cui-white);
+      }
     }
 
     .react-calendar__navigation button {
@@ -97,6 +127,10 @@
     .react-calendar__tile--active {
       background-color: var(--cui-primary);
       color: var(--cui-white);
+    }
+
+    .react-calendar__month-view__days__day--neighboringMonth {
+      color: var(--cui-gray-700); // Adjust for dark mode
     }
   }
 

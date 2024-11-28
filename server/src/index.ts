@@ -31,7 +31,6 @@ const initializeFolders = () => {
 initializeFolders();
 
 // Middlewares
-// app.set("trust proxy", config.server.trustProxy as String);
 app.use(
     cors({
         // multiple origins can be added
