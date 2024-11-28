@@ -68,6 +68,7 @@ const mongoStore = connect_mongo_1.default.create({
     mongoUrl: config_1.config.mongoDB.uri,
     ttl: config_1.config.mongoDB.ttl,
 });
+app.set("trust proxy", true);
 app.use((0, express_session_1.default)({
     secret: config_1.config.server.session.secret,
     resave: false,
