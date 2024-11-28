@@ -43,7 +43,7 @@ const sanitize_1 = __importDefault(require("./middlewares/sanitize"));
 const prometheusMetrics_1 = require("./middlewares/prometheusMetrics");
 const connectDB_1 = require("./database/connectDB");
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
-const csrfToken_1 = __importDefault(require("./middlewares/csrfToken"));
+// import generateCsrfToken from "./middlewares/csrfToken";
 const app = (0, express_1.default)();
 const host = config_1.config.server.host;
 const port = config_1.config.server.port;
@@ -79,7 +79,7 @@ app.use((0, express_session_1.default)({
     },
     store: mongoStore,
 }));
-app.use(csrfToken_1.default);
+// app.use(generateCsrfToken);
 app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, pino_http_1.default)({ logger: logger_1.default }));
