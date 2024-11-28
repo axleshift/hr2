@@ -23,9 +23,9 @@ const AuthProvider = ({ children }) => {
         console.log('AuthContext.js: login: res: ', res)
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
-        console.log('AuthContext.js: login: userInformation: ', res.data.data)
-        Cookies.set('isAuthenticated', true)
-        Cookies.set('userInformation', res.data.data)
+        // console.log('AuthContext.js: login: userInformation: ', res.data.data)
+        // Cookies.set('isAuthenticated', true)
+        // Cookies.set('userInformation', res.data.data)
         callback(true)
       } else {
         callback(false)
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
   const logout = async (callback) => {
     try {
       const res = await get('/auth/logout')
-      console.log('AuthContext.js: logout: res: ', res)
+      // console.log('AuthContext.js: logout: res: ', res)
       if (res.status === 200) {
         setIsAuthenticated(false)
         setUserInformation({
