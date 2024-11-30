@@ -31,8 +31,6 @@ const Tags = React.lazy(() => import('./views/tags/Tags'))
 // Interviews | HR2
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
 const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
-const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
-const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 
 // Configuration | HR2
 const TestPage = React.lazy(() => import('./views/settings/TestPage'))

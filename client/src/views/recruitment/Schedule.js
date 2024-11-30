@@ -23,7 +23,6 @@ import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { formatDate } from '../../utils'
-import { formatDate } from '../../utils'
 import { useNavigate } from 'react-router-dom'
 
 const Schedule = () => {
@@ -44,12 +43,6 @@ const Schedule = () => {
     active: false,
     inactive: false,
     all: true,
-  })
-
-  const [filterStats, setFilterStats] = useState({
-    active: 0,
-    inactive: 0,
-    all: 0,
   })
 
   const [filterStats, setFilterStats] = useState({
@@ -227,7 +220,6 @@ const Schedule = () => {
                     id="jpfSchedStart"
                     name="jpfSchedStart"
                     value={formatDate(params.today)}
-                    value={formatDate(params.today)}
                     onChange={(e) => setParams({ ...params, today: e.target.value })}
                   />
                 </CCol>
@@ -237,7 +229,6 @@ const Schedule = () => {
                     type="date"
                     id="jpfSchedEnd"
                     name="jpfSchedEnd"
-                    value={formatDate(params.nextWeek)}
                     value={formatDate(params.nextWeek)}
                     onChange={(e) =>
                       setParams({
@@ -265,15 +256,15 @@ const Schedule = () => {
                 <small className="text-muted">Filters:</small>
                 {legends.map((legend, index) => (
                   <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
-                  <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
-                    <CButton
-                      onClick={() => handleLegendOnLick(legend.text)}
-                      className={
-                        legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
-                      }
-                    />
-                    <small className="text-capitalize text-muted">{legend.text}</small>
-                  </span>
+                    <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
+                      <CButton
+                        onClick={() => handleLegendOnLick(legend.text)}
+                        className={
+                          legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
+                        }
+                      />
+                      <small className="text-capitalize text-muted">{legend.text}</small>
+                    </span>
                   </span>
                 ))}
               </CButtonGroup>
@@ -369,7 +360,6 @@ const Schedule = () => {
                                 width: '15px',
                                 height: '15px',
                               }}
-                              className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                               className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                             />
                             <div>
