@@ -86,6 +86,8 @@ const API = () => {
                 )} */}
               </CInputGroup>
             </CCol>
+          </CRow>
+          <CRow>
             <CCol>
               <small className="text-muted">
                 Click the generate button to generate a new API key. Click the copy button to copy
