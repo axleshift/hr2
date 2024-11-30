@@ -17,9 +17,18 @@ import {
   CTableRow,
   CButtonGroup,
   CSpinner,
+  CBadge,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
-import { faPlus, faBars, faPencil, faSearch, faTrash, faX } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPlus,
+  faBars,
+  faPencil,
+  faSearch,
+  faTrash,
+  faX,
+  faBan,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Calendar } from 'react-calendar'
 import ScheduleForm from './modals/ScheduleForm'
@@ -40,6 +49,14 @@ const Schedules = ({ theme }) => {
   const [dateData, setDateData] = useState(new Date())
   const [dateTimeSlotData, setDateTimeSlotData] = useState([])
   const [isDateLoading, setIsDateLoading] = useState(false)
+  const [notAvailableDates, setNotAvailableDates] = useState([
+    new Date(2024, 10, 15), // Example: Nov 15, 2024
+    new Date(2024, 10, 20), // Example: Nov 20, 2024
+  ])
+  const [hasEvents, setHasEvents] = useState([
+    new Date(2024, 10, 1), // Example: Nov 15, 2024
+    new Date(2024, 10, 5), // Example: Nov 20, 2024
+  ])
 
   // Modal Forms
   const [formModal, setFormModal] = useState(false)
@@ -51,6 +68,12 @@ const Schedules = ({ theme }) => {
 
   const [interviewDatas, setInterviewDatas] = useState([])
   const [interviewData, setInterviewData] = useState(null)
+
+  const [legends, setLegends] = useState([
+    { color: 'danger', text: 'Not Available' },
+    { color: 'warning', text: 'Has Events' },
+    { color: 'primary', text: 'Selected Date' },
+  ])
 
   const onChange = (newValue) => {
     if (newValue.length > 1) {
@@ -65,11 +88,11 @@ const Schedules = ({ theme }) => {
     setDefaultDate(new Date())
   }
 
-  const getAllData = useCallback(async (date) => {
+  const getAllData = async (date) => {
     setIsDateLoading(true)
     try {
       const res = await get(`/interview/all?date=${date}&page=${currentPage}&limit=${itemsPerPage}`)
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         // const txt = `Successfully fetched interview schedules for ${formattedDateMMM(date)}`
         // addToast('Success', txt, 'success')
         setInterviewDatas(res.data.data)
@@ -89,7 +112,7 @@ const Schedules = ({ theme }) => {
       console.error(error)
       setIsDateLoading(false)
     }
-  })
+  }
 
   const getTimeData = async (id) => {
     try {
@@ -146,10 +169,25 @@ const Schedules = ({ theme }) => {
             <CCard>
               <CCardBody>
                 <div>
+                  {legends.map((legend, index) => (
+                    <CBadge key={index} color={legend.color} className="me-2">
+                      {legend.text}
+                    </CBadge>
+                  ))}
+                </div>
+                <div>
                   <Calendar
                     onChange={onChange}
                     selectRange={isDateRange}
                     className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
+                    tileClassName={({ date, view }) =>
+                      view === 'month' &&
+                      notAvailableDates.find((x) => x.getDate() === date.getDate())
+                        ? 'not-available'
+                        : hasEvents.find((x) => x.getDate() === date.getDate())
+                          ? 'has-events'
+                          : ''
+                    }
                     defaultValue={
                       isDateRange
                         ? [new Date(dateRange[0]), new Date(dateRange[1])]
@@ -178,18 +216,21 @@ const Schedules = ({ theme }) => {
           </CContainer>
         </CRow>
         <CRow>
-          <CContainer>
+          <CCol>
+            <CForm>
+              <CInputGroup>
+                <CFormInput type="text" placeholder="Search" />
+                <CButton color="primary">
+                  <FontAwesomeIcon icon={faSearch} />
+                </CButton>
+              </CInputGroup>
+            </CForm>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
             <CCard>
               <CCardBody>
-                <CForm>
-                  <CInputGroup>
-                    <CFormInput type="text" placeholder="Search" />
-                    <CButton color="primary">
-                      <FontAwesomeIcon icon={faSearch} />
-                    </CButton>
-                  </CInputGroup>
-                </CForm>
-
                 <CTable align="middle" hover responsive striped>
                   <CTableHead>
                     <CTableRow>
@@ -214,7 +255,9 @@ const Schedules = ({ theme }) => {
                       <CTableRow>
                         <CTableDataCell colSpan="6" className="text-center">
                           No data available for{' '}
-                          <span className="text-info">{formatDate(defaultDate)}</span>
+                          <span className="text-info">
+                            {formatDate(defaultDate, 'MMM d, YYYY')}
+                          </span>
                         </CTableDataCell>
                       </CTableRow>
                     ) : (
@@ -270,7 +313,7 @@ const Schedules = ({ theme }) => {
                 </CTable>
               </CCardBody>
             </CCard>
-          </CContainer>
+          </CCol>
         </CRow>
         <CRow>
           <CCol>
