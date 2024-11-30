@@ -264,7 +264,7 @@ const Jobposts = () => {
                                     daysLeft(item.expiresAt) > 0 ? 'text-info' : 'text-danger'
                                   }
                                 >
-                                  {formatDate(item.expiresAt)}
+                                  {formatDate(item.expiresAt, 'MMM d, YYYY')}
                                 </span>
                               </CTooltip>
                             </CTableDataCell>

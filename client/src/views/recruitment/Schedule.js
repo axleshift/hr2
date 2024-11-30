@@ -263,14 +263,24 @@ const Schedule = () => {
                 {allData && allData.length > 0 ? (
                   <small className="text-capitalize text-muted mt-3">
                     Fetched total of {totalItems} job postings for
-                    <span className="text-info mx-2">{formatDate(params.today)}</span>-
-                    <span className="text-info mx-2">{formatDate(params.nextWeek)}</span>
+                    <span className="text-info mx-2">
+                      {formatDate(params.today, 'MMM d, YYYY')}
+                    </span>
+                    -
+                    <span className="text-info mx-2">
+                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                    </span>
                   </small>
                 ) : (
                   <small className="text-capitalize text-muted mt-3">
                     No scheduled jobpostings found for
-                    <span className="text-info mx-2">{formatDate(params.today)}</span>-
-                    <span className="text-info mx-2">{formatDate(params.nextWeek)}</span>
+                    <span className="text-info mx-2">
+                      {formatDate(params.today, 'MMM d, YYYY')}
+                    </span>
+                    -
+                    <span className="text-info mx-2">
+                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                    </span>
                   </small>
                 )}
                 <ul className="list-group">
@@ -334,7 +344,8 @@ const Schedule = () => {
                               className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                             />
                             <div>
-                              {formatDate(data.schedule_start)} - {formatDate(data.schedule_end)}
+                              {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
+                              {formatDate(data.schedule_end, 'MMM d, YYYY')}
                             </div>
                           </div>
                         </div>
