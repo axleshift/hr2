@@ -198,7 +198,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
               <CTabs activeItemKey="events">
                 <CTabList variant="underline-border">
                   <CTab itemKey="events">Events</CTab>
-                  <CTab itemKey="applicant">Applicant's Events</CTab>
+                  <CTab itemKey="applicant">Applicant&lsquo;s Events</CTab>
                 </CTabList>
                 <CTabContent>
                   <CTabPanel itemKey="events">
@@ -241,7 +241,6 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                           </CTableRow>
                         ) : (
                           interviewDatas.map((data, index) =>
-                            // if user is already in the participants list, do not show the event
                             data.participants.includes(applicantData._id) ? null : (
                               <React.Fragment key={data._id}>
                                 <CTableRow>

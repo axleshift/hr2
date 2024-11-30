@@ -36,7 +36,7 @@ const Shortlisted = () => {
         <CRow className="mb-3">
           <CCol>
             <CForm>
-            <CInputGroup>
+              <CInputGroup>
                 <CFormInput type="search" placeholder="Search..." aria-label="Search" />
                 <CButton type="button" color="primary">
                   <FontAwesomeIcon icon={faSearch} />

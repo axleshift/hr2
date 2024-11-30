@@ -30,8 +30,8 @@ const Compose = () => {
           <CCol>
             <h2>Compose</h2>
             <small>
-              In this page, you can compose a new email and send it to the recipients. You can also add
-              multiple recipients by clicking the plus button.
+              In this page, you can compose a new email and send it to the recipients. You can also
+              add multiple recipients by clicking the plus button.
             </small>
           </CCol>
         </CRow>
