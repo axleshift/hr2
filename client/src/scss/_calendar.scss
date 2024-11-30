@@ -35,6 +35,7 @@
     border-radius: $border-radius-sm;
     border: none;
 
+
     &:hover {
       border-radius: $border-radius-sm;
       background-color: var(--cui-secondary-bg);
@@ -88,6 +89,10 @@
     color: var(--cui-gray-600); // Muted color for neighboring month dates
   }
 
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: var(--cui-gray-600); // Muted color for neighboring month dates
+  }
+
   // Dark Mode Styles
   @include color-mode(dark) {
     --react-calendar-text-color: var(--cui-body-color-inverse);
@@ -131,6 +136,10 @@
     .react-calendar__tile--active {
       background-color: var(--cui-primary);
       color: var(--cui-white);
+    }
+
+    .react-calendar__month-view__days__day--neighboringMonth {
+      color: var(--cui-gray-700); // Adjust for dark mode
     }
 
     .react-calendar__month-view__days__day--neighboringMonth {

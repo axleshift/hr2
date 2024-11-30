@@ -45,6 +45,7 @@ import { get } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
 import { classNames } from 'classnames'
 import { daysLeft, formatDate, trimString } from '../../utils'
+import { daysLeft, formatDate, trimString } from '../../utils'
 import AppPagination from '../../components/AppPagination'
 import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -206,6 +207,8 @@ const Jobposts = () => {
                       <CTableRow>
                         <CTableDataCell colSpan="8" className="text-center">
                           <CSpinner color="primary" variant="grow" />
+                        <CTableDataCell colSpan="8" className="text-center">
+                          <CSpinner color="primary" variant="grow" />
                         </CTableDataCell>
                       </CTableRow>
                     ) : allData.length === 0 ? (
@@ -219,6 +222,7 @@ const Jobposts = () => {
                         return (
                           <CTableRow key={item._id}>
                             <CTableDataCell>
+                              <CTooltip content={item._id} placement="top">
                               <CTooltip content={item._id} placement="top">
                                 <div className="text-capitalize text-center">
                                   {trimString(item._id, 2)}
@@ -276,12 +280,14 @@ const Jobposts = () => {
                             <CTableDataCell className="text-center">
                               <CButtonGroup>
                                 {/* <CTooltip content="Edit" placement="top">
+                                {/* <CTooltip content="Edit" placement="top">
                                   <CButton
                                     color="primary"
                                     // onClick={() => deleteTrackerData(item._id)}
                                   >
                                     <FontAwesomeIcon icon={faPencil} />
                                   </CButton>
+                                </CTooltip> */}
                                 </CTooltip> */}
                                 <CTooltip content="View" placement="top">
                                   <CButton color="info" onClick={() => handleView(item)}>

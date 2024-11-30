@@ -15,7 +15,7 @@ import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
-import generateCsrfToken from "./middlewares/csrfToken";
+// import generateCsrfToken from "./middlewares/csrfToken";
 
 const app: Application = express();
 const host = config.server.host;
@@ -62,7 +62,7 @@ app.use(
         store: mongoStore,
     })
 );
-app.use(generateCsrfToken);
+// app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));

@@ -10,6 +10,8 @@ const Jobposts = React.lazy(() => import('./views/recruitment/Jobposts'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
 
 // Applicants
+
+// Applicants
 const Applicant = React.lazy(() => import('./views/applicants/Applicant'))
 const Screening = React.lazy(() => import('./views/applicants/Screening'))
 const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
@@ -27,6 +29,8 @@ const MailTemplates = React.lazy(() => import('./views/mail/Templates'))
 const Tags = React.lazy(() => import('./views/tags/Tags'))
 
 // Interviews | HR2
+const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
+const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
 const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 
@@ -79,6 +83,8 @@ const routes = [
 
   // Developer
   { path: '/developer/api', name: 'API', element: API },
+
+  { path: '*', name: 'Page404', element: Page404 },
 
   { path: '*', name: 'Page404', element: Page404 },
 ]
