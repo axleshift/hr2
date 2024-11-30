@@ -246,7 +246,6 @@ const Jobposts = () => {
                                   }
                                 >
                                   {formatDate(item.expiresAt, 'MMM d, YYYY')}
-                                  {formatDate(item.expiresAt, 'MMM d, YYYY')}
                                 </span>
                               </CTooltip>
                             </CTableDataCell>
