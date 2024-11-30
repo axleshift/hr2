@@ -23,7 +23,6 @@ import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { formatDate } from '../../utils'
-import { formatDate } from '../../utils'
 import { useNavigate } from 'react-router-dom'
 
 const Schedule = () => {
@@ -44,12 +43,6 @@ const Schedule = () => {
     active: false,
     inactive: false,
     all: true,
-  })
-
-  const [filterStats, setFilterStats] = useState({
-    active: 0,
-    inactive: 0,
-    all: 0,
   })
 
   const [filterStats, setFilterStats] = useState({
@@ -115,6 +108,16 @@ const Schedule = () => {
       const res = await get(
         `/jobposting/scheduled?start=${params.today}&end=${params.nextWeek}&page=${page}&limit=${limit}&sort=${sort}&filter=${filterer}`,
       )
+      if (res.status === 200) {
+        setAllData(res.data.data)
+        setCurrentPage(res.data.currentPage)
+        setTotalPages(res.data.totalPages)
+        setTotalItems(res.data.total)
+        setIsLoading(false)
+      } else {
+        addToast('Error', 'Failed to fetch scheduled job postings', 'error')
+        setIsLoading(false)
+      }
       if (res.status === 200) {
         setAllData(res.data.data)
         setCurrentPage(res.data.currentPage)
@@ -214,6 +217,8 @@ const Schedule = () => {
               <span className="text-danger fw-bold">next week.</span>
               postings from <span className="text-info fw-bold">today</span> to{' '}
               <span className="text-danger fw-bold">next week.</span>
+              postings from <span className="text-info fw-bold">today</span> to{' '}
+              <span className="text-danger fw-bold">next week.</span>
             </small>
             {/* <p className='text-muted text-small'>
                   Displaying all scheduled job postings from today to next week as default
@@ -227,7 +232,6 @@ const Schedule = () => {
                     id="jpfSchedStart"
                     name="jpfSchedStart"
                     value={formatDate(params.today)}
-                    value={formatDate(params.today)}
                     onChange={(e) => setParams({ ...params, today: e.target.value })}
                   />
                 </CCol>
@@ -237,7 +241,6 @@ const Schedule = () => {
                     type="date"
                     id="jpfSchedEnd"
                     name="jpfSchedEnd"
-                    value={formatDate(params.nextWeek)}
                     value={formatDate(params.nextWeek)}
                     onChange={(e) =>
                       setParams({
@@ -265,15 +268,15 @@ const Schedule = () => {
                 <small className="text-muted">Filters:</small>
                 {legends.map((legend, index) => (
                   <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
-                  <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
-                    <CButton
-                      onClick={() => handleLegendOnLick(legend.text)}
-                      className={
-                        legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
-                      }
-                    />
-                    <small className="text-capitalize text-muted">{legend.text}</small>
-                  </span>
+                    <span key={index} className={`d-flex flex-row gap-2 d-flex align-items-center`}>
+                      <CButton
+                        onClick={() => handleLegendOnLick(legend.text)}
+                        className={
+                          legend.isChecked ? `btn btn-${legend.color}` : 'btn btn-outline-secondary'
+                        }
+                      />
+                      <small className="text-capitalize text-muted">{legend.text}</small>
+                    </span>
                   </span>
                 ))}
               </CButtonGroup>
@@ -294,10 +297,24 @@ const Schedule = () => {
                     <span className="text-info mx-2">
                       {formatDate(params.nextWeek, 'MMM d, YYYY')}
                     </span>
+                    <span className="text-info mx-2">
+                      {formatDate(params.today, 'MMM d, YYYY')}
+                    </span>
+                    -
+                    <span className="text-info mx-2">
+                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                    </span>
                   </small>
                 ) : (
                   <small className="text-capitalize text-muted mt-3">
                     No scheduled jobpostings found for
+                    <span className="text-info mx-2">
+                      {formatDate(params.today, 'MMM d, YYYY')}
+                    </span>
+                    -
+                    <span className="text-info mx-2">
+                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                    </span>
                     <span className="text-info mx-2">
                       {formatDate(params.today, 'MMM d, YYYY')}
                     </span>
@@ -311,6 +328,8 @@ const Schedule = () => {
                   {/* {allData.length === 0 ? (
                     <small className="text-capitalize text-muted mt-3">
                       No scheduled jobpostings found for
+                      <span className="text-info mx-2">{formatDate(params.today)}</span>-
+                      <span className="text-info mx-2">{formatDate(params.nextWeek)}</span>
                       <span className="text-info mx-2">{formatDate(params.today)}</span>-
                       <span className="text-info mx-2">{formatDate(params.nextWeek)}</span>
                       <span className="text-info mx-2">{formatDate(params.today)}</span>-
@@ -335,6 +354,8 @@ const Schedule = () => {
                                                 ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                               />
                               <div>
+                                {formatDate(data.schedule_start)} -{' '}
+                                {formatDate(data.schedule_end)}
                                 {formatDate(data.schedule_start)} -{' '}
                                 {formatDate(data.schedule_end)}
                                 {formatDate(data.schedule_start)} -{' '}
@@ -370,9 +391,10 @@ const Schedule = () => {
                                 height: '15px',
                               }}
                               className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
-                              className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                             />
                             <div>
+                              {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
+                              {formatDate(data.schedule_end, 'MMM d, YYYY')}
                               {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
                               {formatDate(data.schedule_end, 'MMM d, YYYY')}
                             </div>

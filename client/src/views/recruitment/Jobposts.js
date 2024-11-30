@@ -4,7 +4,6 @@ import {
   CRow,
   CCol,
   CCard,
-  CCardHeader,
   CCardBody,
   CTable,
   CTableRow,
@@ -15,7 +14,6 @@ import {
   CForm,
   CInputGroup,
   CButtonGroup,
-  CInputGroupText,
   CFormInput,
   CButton,
   CTooltip,
@@ -23,31 +21,14 @@ import {
   CBadge,
   CFormFeedback,
 } from '@coreui/react'
-import {
-  faChevronDown,
-  faChevronUp,
-  faLocationPin,
-  faMoneyBill,
-  faTrash,
-  faPencil,
-  faCalendar,
-  faCheck,
-  faX,
-  faClipboard,
-  faClipboardQuestion,
-  faSearch,
-  faEdit,
-  faRefresh,
-} from '@fortawesome/free-solid-svg-icons'
-import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
+import { faClipboardQuestion, faSearch, faRefresh } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { get } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
-import { classNames } from 'classnames'
 import { daysLeft, formatDate, trimString } from '../../utils'
 import { daysLeft, formatDate, trimString } from '../../utils'
 import AppPagination from '../../components/AppPagination'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
@@ -207,8 +188,6 @@ const Jobposts = () => {
                       <CTableRow>
                         <CTableDataCell colSpan="8" className="text-center">
                           <CSpinner color="primary" variant="grow" />
-                        <CTableDataCell colSpan="8" className="text-center">
-                          <CSpinner color="primary" variant="grow" />
                         </CTableDataCell>
                       </CTableRow>
                     ) : allData.length === 0 ? (
@@ -222,7 +201,6 @@ const Jobposts = () => {
                         return (
                           <CTableRow key={item._id}>
                             <CTableDataCell>
-                              <CTooltip content={item._id} placement="top">
                               <CTooltip content={item._id} placement="top">
                                 <div className="text-capitalize text-center">
                                   {trimString(item._id, 2)}
@@ -269,6 +247,7 @@ const Jobposts = () => {
                                   }
                                 >
                                   {formatDate(item.expiresAt, 'MMM d, YYYY')}
+                                  {formatDate(item.expiresAt, 'MMM d, YYYY')}
                                 </span>
                               </CTooltip>
                             </CTableDataCell>
@@ -279,16 +258,6 @@ const Jobposts = () => {
                             </CTableDataCell>
                             <CTableDataCell className="text-center">
                               <CButtonGroup>
-                                {/* <CTooltip content="Edit" placement="top">
-                                {/* <CTooltip content="Edit" placement="top">
-                                  <CButton
-                                    color="primary"
-                                    // onClick={() => deleteTrackerData(item._id)}
-                                  >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                  </CButton>
-                                </CTooltip> */}
-                                </CTooltip> */}
                                 <CTooltip content="View" placement="top">
                                   <CButton color="info" onClick={() => handleView(item)}>
                                     <FontAwesomeIcon icon={faClipboardQuestion} />

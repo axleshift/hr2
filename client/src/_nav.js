@@ -1,43 +1,15 @@
 import React from 'react'
-import CIcon from '@coreui/icons-react'
-import {
-  cilBell,
-  cilBriefcase,
-  cilCalculator,
-  cilCalendar,
-  cilChartPie,
-  cilCursor,
-  cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilSpeedometer,
-  cilStar,
-} from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAt,
-  faBriefcase,
-  faCalendar,
   faCalendarPlus,
-  faClipboardList,
   faClipboardList,
   faClockFour,
   faCode,
-  faCog,
   faCogs,
-  faCompassDrafting,
-  faCompassDrafting,
   faDashboard,
   faDraftingCompass,
-  faEnvelope,
-  faEnvelopeCircleCheck,
-  faDraftingCompass,
-  faEnvelope,
-  faEnvelopeCircleCheck,
-  faFile,
   faFileAlt,
   faFileArchive,
   faFileCircleCheck,
@@ -101,7 +73,6 @@ const _nav = [
     component: CNavItem,
     name: 'Applications',
     to: '/applicant/list',
-    to: '/applicant/list',
     icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
   },
   {
@@ -136,18 +107,23 @@ const _nav = [
     component: CNavItem,
     name: 'Schedules',
     to: '/calendar/schedules',
-    to: '/calendar/schedules',
     icon: <FontAwesomeIcon icon={faCalendarPlus} className="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Applicants',
     to: '/calendar/applicants',
-    to: '/calendar/applicants',
     icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
   },
   {
     component: CNavTitle,
+    name: 'Mail ',
+  },
+  {
+    component: CNavItem,
+    name: 'Compose',
+    to: '/mail/compose',
+    icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
     name: 'Mail ',
   },
   {
