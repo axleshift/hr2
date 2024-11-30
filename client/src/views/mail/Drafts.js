@@ -4,7 +4,7 @@ import { formatDate, trimString, UTCDate } from '../../utils'
 import { get } from '../../api/axios'
 import AppPagination from '../../components/AppPagination'
 
-import MailForm from './modals/mailForm'
+import MailForm from './modals/MailForm'
 
 const Drafts = () => {
   const [defaultDate, setDefaultDate] = React.useState(UTCDate(new Date()))
