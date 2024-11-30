@@ -26,6 +26,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { get } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
 import { daysLeft, formatDate, trimString } from '../../utils'
+import { daysLeft, formatDate, trimString } from '../../utils'
 import AppPagination from '../../components/AppPagination'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -245,6 +246,7 @@ const Jobposts = () => {
                                     daysLeft(item.expiresAt) > 0 ? 'text-info' : 'text-danger'
                                   }
                                 >
+                                  {formatDate(item.expiresAt, 'MMM d, YYYY')}
                                   {formatDate(item.expiresAt, 'MMM d, YYYY')}
                                 </span>
                               </CTooltip>

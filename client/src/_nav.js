@@ -124,6 +124,13 @@ const _nav = [
     name: 'Compose',
     to: '/mail/compose',
     icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
+    name: 'Mail ',
+  },
+  {
+    component: CNavItem,
+    name: 'Compose',
+    to: '/mail/compose',
+    icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
   },
   {
     component: CNavItem,
