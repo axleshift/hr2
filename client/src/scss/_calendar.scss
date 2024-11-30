@@ -43,6 +43,7 @@
     // Not-available styling
     &.not-available {
       // color: var(--cui-danger)
+      // border-color: --var(cui-danger);
       background-color: var(--cui-danger); // Example: red background for unavailable dates
       color: var(--cui-white); // Adjust text color for contrast
       // cursor: not-allowed; // Optional: show a "not allowed" cursor
@@ -50,6 +51,7 @@
 
     &.has-events {
       // color: var(--cui-warning)
+      // border-color: --var(cui-warning);
       background-color: var(--cui-warning); // Example: blue background for dates with events
       color: var(--cui-white); // Adjust text color for contrast
     }
@@ -104,12 +106,14 @@
 
       &.not-available {
         // color: var(--cui-danger);
+        // border-color: var(--cui-danger);
         background-color: var(--cui-danger);
         color: var(--cui-white);
       }
 
       &.has-events {
         // color: var(--cui-warning);
+        // border-color: var(--cui-warning);
         background-color: var(--cui-warning);
         color: var(--cui-white);
       }
