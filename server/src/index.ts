@@ -48,7 +48,7 @@ const mongoStore = MongoStore.create({
     ttl: config.mongoDB.ttl,
 });
 
-app.set("trust proxy", true);
+app.set("trust proxy", config.server.trustProxy);
 app.use(
     session({
         secret: config.server.session.secret as string,

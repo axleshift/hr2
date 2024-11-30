@@ -10,6 +10,8 @@ const Jobposts = React.lazy(() => import('./views/recruitment/Jobposts'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
 
 // Applicants
+
+// Applicants
 const Applicant = React.lazy(() => import('./views/applicants/Applicant'))
 const Screening = React.lazy(() => import('./views/applicants/Screening'))
 const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
@@ -17,6 +19,7 @@ const Training = React.lazy(() => import('./views/applicants/Training'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
 
 // Mail | HR2
+const Compose = React.lazy(() => import('./views/mail/Compose'))
 const Drafts = React.lazy(() => import('./views/mail/Drafts'))
 const Inbox = React.lazy(() => import('./views/mail/Inbox'))
 const Sent = React.lazy(() => import('./views/mail/Sent'))
@@ -26,6 +29,8 @@ const MailTemplates = React.lazy(() => import('./views/mail/Templates'))
 const Tags = React.lazy(() => import('./views/tags/Tags'))
 
 // Interviews | HR2
+const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
+const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
 const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
 
@@ -65,6 +70,7 @@ const routes = [
   { path: '/calendar/schedules', name: 'Interviews', element: Interviews },
 
   // Mail | HR2
+  { path: '/mail/compose', name: 'Compose', element: Compose },
   { path: '/mail/drafts', name: 'Drafts', element: Drafts },
   { path: '/mail/inbox', name: 'Inbox', element: Inbox },
   { path: '/mail/sent', name: 'Sent', element: Sent },
@@ -77,6 +83,8 @@ const routes = [
 
   // Developer
   { path: '/developer/api', name: 'API', element: API },
+
+  { path: '*', name: 'Page404', element: Page404 },
 
   { path: '*', name: 'Page404', element: Page404 },
 ]
