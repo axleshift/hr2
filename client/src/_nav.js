@@ -40,6 +40,7 @@ import {
   faFileCircleQuestion,
   faInbox,
   faPaperPlane,
+  faPlus,
   faStar,
   faUserClock,
 } from '@fortawesome/free-solid-svg-icons'
@@ -123,7 +124,7 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Calender',
+    name: 'Calendar',
   },
   {
     component: CNavItem,
@@ -139,7 +140,13 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Mail',
+    name: 'Mail ',
+  },
+  {
+    component: CNavItem,
+    name: 'Compose',
+    to: '/mail/compose',
+    icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
   },
   {
     component: CNavItem,

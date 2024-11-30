@@ -17,6 +17,7 @@ const Training = React.lazy(() => import('./views/applicants/Training'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
 
 // Mail | HR2
+const Compose = React.lazy(() => import('./views/mail/Compose'))
 const Drafts = React.lazy(() => import('./views/mail/Drafts'))
 const Inbox = React.lazy(() => import('./views/mail/Inbox'))
 const Sent = React.lazy(() => import('./views/mail/Sent'))
@@ -65,6 +66,7 @@ const routes = [
   { path: '/calendar/schedules', name: 'Interviews', element: Interviews },
 
   // Mail | HR2
+  { path: '/mail/compose', name: 'Compose', element: Compose },
   { path: '/mail/drafts', name: 'Drafts', element: Drafts },
   { path: '/mail/inbox', name: 'Inbox', element: Inbox },
   { path: '/mail/sent', name: 'Sent', element: Sent },
