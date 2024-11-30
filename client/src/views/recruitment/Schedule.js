@@ -215,10 +215,6 @@ const Schedule = () => {
               until its given approval. by Default, the system will display all scheduled job
               postings from <span className="text-info fw-bold">today</span> to{' '}
               <span className="text-danger fw-bold">next week.</span>
-              postings from <span className="text-info fw-bold">today</span> to{' '}
-              <span className="text-danger fw-bold">next week.</span>
-              postings from <span className="text-info fw-bold">today</span> to{' '}
-              <span className="text-danger fw-bold">next week.</span>
             </small>
             {/* <p className='text-muted text-small'>
                   Displaying all scheduled job postings from today to next week as default
