@@ -22,6 +22,10 @@ import {
   CDropdownToggle,
   CFormLabel,
   CBadge,
+  CTabs,
+  CTabList,
+  CTabContent,
+  CTabPanel,
 } from '@coreui/react'
 import Calendar from 'react-calendar'
 import TimeModal from './TimeForm'
@@ -35,6 +39,10 @@ import {
   faXmark,
   faTrash,
   faListNumeric,
+  faLocationPinLock,
+  faLocation,
+  faLocationDot,
+  faLocationPin,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { del, get, post, put } from '../../../api/axios'
@@ -62,6 +70,15 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
 
   const [timeModalVisible, setTimeModalVisible] = useState(false)
   const [selectedTime, setSelectedTime] = useState(null)
+
+  const [notAvailableDates, setNotAvailableDates] = useState([
+    new Date(2024, 10, 15), // Example: Nov 15, 2024
+    new Date(2024, 10, 20), // Example: Nov 20, 2024
+  ])
+  const [hasEvents, setHasEvents] = useState([
+    new Date(2024, 10, 1), // Example: Nov 15, 2024
+    new Date(2024, 10, 5), // Example: Nov 20, 2024
+  ])
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -197,7 +214,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
     }
   }
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = async (data) => {
     try {
       const formdata = {
         date: defaultDate,
@@ -209,9 +226,10 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
       }
       console.log(formdata)
       const res = !isEdit
-        ? post(`/interview/schedule`, formdata)
-        : put(`/interview/schedule/${interviewData._id}`, formdata)
-      if (res.status === 200) {
+        ? await post(`/interview/schedule`, formdata)
+        : await put(`/interview/schedule/${interviewData._id}`, formdata)
+      console.log('handleFormSubmit -> res', res)
+      if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Interview scheduled successfully', 'success')
         handleOnClose()
       } else {
@@ -274,6 +292,13 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
               onChange={handleDateChange} // Fix here
               defaultValue={defaultDate}
               className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
+              tileClassName={({ date, view }) =>
+                view === 'month' && notAvailableDates.find((x) => x.getDate() === date.getDate())
+                  ? 'not-available'
+                  : hasEvents.find((x) => x.getDate() === date.getDate())
+                    ? 'has-events'
+                    : ''
+              }
             />
           </div>
           <CForm onSubmit={handleSubmit(handleFormSubmit)}>
@@ -417,7 +442,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
               <CCol>
                 <CInputGroup className="mb-3">
                   <CInputGroupText>
-                    <FontAwesomeIcon icon={faUser} />
+                    <FontAwesomeIcon icon={faLocationPin} />
                   </CInputGroupText>
                   <CFormInput
                     type="text"
