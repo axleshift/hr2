@@ -137,6 +137,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
       setFormData(applicantData)
     }
   }, [applicantData])
+
   return (
     <CModal
       visible={isVisible}

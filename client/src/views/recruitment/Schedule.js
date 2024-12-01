@@ -293,13 +293,6 @@ const Schedule = () => {
                     <span className="text-info mx-2">
                       {formatDate(params.nextWeek, 'MMM d, YYYY')}
                     </span>
-                    <span className="text-info mx-2">
-                      {formatDate(params.today, 'MMM d, YYYY')}
-                    </span>
-                    -
-                    <span className="text-info mx-2">
-                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
-                    </span>
                   </small>
                 ) : (
                   <small className="text-capitalize text-muted mt-3">
@@ -389,8 +382,6 @@ const Schedule = () => {
                               className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                             />
                             <div>
-                              {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
-                              {formatDate(data.schedule_end, 'MMM d, YYYY')}
                               {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
                               {formatDate(data.schedule_end, 'MMM d, YYYY')}
                             </div>

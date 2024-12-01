@@ -230,6 +230,7 @@ const Jobposting = () => {
         setAllData(res.data.data)
         setCurrentPage(res.data.currentPage)
         setTotalPages(res.data.totalPages)
+        setIsJobFormVisible(false)
         setIsLoading(false)
       } else {
         addToast('Jobposting', 'Error getting jobposting', 'danger')
@@ -557,7 +558,7 @@ const Jobposting = () => {
                       </div>
                       <div>
                         <CButton color="primary" type="submit" disabled={!isChecked}>
-                          {isEdit ? 'Update' : 'Add'}
+                          {isLoading ? <CSpinner color="primary" /> : isEdit ? 'Update' : 'Add'}
                         </CButton>
                       </div>
                     </CCol>
