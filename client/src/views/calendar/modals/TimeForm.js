@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import propTypes from 'prop-types'
 import {
   CModal,
@@ -14,16 +14,24 @@ import {
   CFormFeedback,
   CRow,
   CCol,
+  CSpinner,
 } from '@coreui/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { set, z } from 'zod'
 
-const TimeModal = ({ isVisible, onClose, handleTimeSubmit }) => {
+const TimeModal = ({ isVisible, onClose, handleTimeSubmit, isLoading }) => {
+  const [isModalVisible, setIsModalVisible] = React.useState(false)
+  const [isTimeLoading, setIsTimeLoading] = React.useState(false)
   const timeSchema = z.object({
     start: z.string().min(1, { message: 'Start time is required' }),
     end: z.string().min(1, { message: 'End time is required' }),
   })
+
+  const handleOnClose = () => {
+    onClose()
+    setIsModalVisible(false)
+  }
 
   const {
     register,
@@ -33,10 +41,15 @@ const TimeModal = ({ isVisible, onClose, handleTimeSubmit }) => {
     resolver: zodResolver(timeSchema),
   })
 
+  useEffect(() => {
+    setIsModalVisible(isVisible)
+    setIsTimeLoading(isLoading)
+  }, [isVisible, isLoading])
+
   return (
-    <CModal visible={isVisible} onClose={onClose} size="sm">
+    <CModal visible={isVisible} onClose={handleOnClose} size="sm">
       <CModalHeader>
-        <CModalTitle>Add Time Range</CModalTitle>
+        <CModalTitle>Add Timeslot</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm onSubmit={handleSubmit(handleTimeSubmit)}>
@@ -60,7 +73,7 @@ const TimeModal = ({ isVisible, onClose, handleTimeSubmit }) => {
           </CRow>
           <CModalFooter>
             <CButton type="submit" className="btn btn-primary">
-              Add
+              {isTimeLoading ? <CSpinner color="primary"/> : 'Add Time'}
             </CButton>
             <CButton color="secondary" onClick={onClose}>
               Cancel

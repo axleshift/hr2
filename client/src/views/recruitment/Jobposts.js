@@ -170,9 +170,9 @@ const Jobposts = () => {
                       <CTableHeaderCell>
                         <div className="text-center">Posted</div>
                       </CTableHeaderCell>
-                      <CTableHeaderCell>
+                      {/* <CTableHeaderCell>
                         <div className="text-center">Deleted</div>
-                      </CTableHeaderCell>
+                      </CTableHeaderCell> */}
                       <CTableHeaderCell>
                         <div className="text-center">Expires At</div>
                       </CTableHeaderCell>
@@ -228,13 +228,13 @@ const Jobposts = () => {
                                 <CBadge color="danger">NO</CBadge>
                               )}
                             </CTableDataCell>
-                            <CTableDataCell className="text-center">
+                            {/* <CTableDataCell className="text-center">
                               {item.isDeleted ? (
                                 <CBadge color="danger">YES</CBadge>
                               ) : (
                                 <CBadge color="info">NO</CBadge>
                               )}
-                            </CTableDataCell>
+                            </CTableDataCell> */}
                             <CTableDataCell className="text-center">
                               <CTooltip
                                 content={daysLeft(item.expiresAt) + ' days left'}

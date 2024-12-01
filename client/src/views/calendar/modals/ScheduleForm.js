@@ -70,6 +70,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
 
   const [timeModalVisible, setTimeModalVisible] = useState(false)
   const [selectedTime, setSelectedTime] = useState(null)
+  const [isTimeLoading, setIsTimeLoading] = useState(false)
 
   const [notAvailableDates, setNotAvailableDates] = useState([
     new Date(2024, 10, 15), // Example: Nov 15, 2024
@@ -175,6 +176,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
   }
 
   const handleTimeSubmit = async (timeslot) => {
+    setIsTimeLoading(true)
     try {
       const date = defaultDate
       console.log(date, timeslot)
@@ -190,11 +192,14 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Time slot added successfully', 'success')
         getAllSlotsForDate(defaultDate)
+        setIsTimeLoading(false)
       } else {
         addToast('Error', res.message.message, 'danger')
+        setIsTimeLoading(false)
       }
     } catch (error) {
       console.error(error)
+      setIsTimeLoading(false)
     }
   }
 
@@ -397,7 +402,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
                   </CInputGroupText>
                   <CFormInput
                     type="text"
-                    placeholder="Time"
+                    placeholder="Start Time"
                     readOnly
                     {...register('start')}
                     invalid={!!errors.start}
@@ -405,7 +410,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
                   {errors.start && <CFormFeedback invalid>{errors.start.message}</CFormFeedback>}
                   <CFormInput
                     type="text"
-                    placeholder="Time"
+                    placeholder="End Time"
                     readOnly
                     {...register('end')}
                     invalid={!!errors.end}
@@ -442,7 +447,10 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
               <CCol>
                 <CInputGroup className="mb-3">
                   <CInputGroupText>
-                    <FontAwesomeIcon icon={faLocationPin} />
+                    {/* <CTooltip content="Location of the interview" placement="top">
+                      <FontAwesomeIcon icon={faLocationPin} />
+                    </CTooltip> */}
+                    Location
                   </CInputGroupText>
                   <CFormInput
                     type="text"
@@ -460,11 +468,12 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
               <CCol>
                 <CInputGroup className="mb-3">
                   <CInputGroupText>
-                    <FontAwesomeIcon icon={faListNumeric} />
+                    {/* <FontAwesomeIcon icon={faListNumeric} /> */}
+                    Capacity
                   </CInputGroupText>
                   <CFormInput
                     type="number"
-                    placeholder="capacity"
+                    placeholder="capacity "
                     {...register('capacity')}
                     invalid={!!errors.capacity}
                     defaultValue={1}
@@ -521,6 +530,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         isVisible={timeModalVisible}
         onClose={handleTimeModalClose}
         handleTimeSubmit={handleTimeSubmit}
+        isLoading={isTimeLoading}
       />
     </>
   )
