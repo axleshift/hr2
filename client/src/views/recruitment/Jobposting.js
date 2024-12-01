@@ -558,13 +558,7 @@ const Jobposting = () => {
                       </div>
                       <div>
                         <CButton color="primary" type="submit" disabled={!isChecked}>
-                          {isLoading ? (
-                            <CSpinner color="primary"/>
-                          ) : isEdit ? (
-                            'Update'
-                          ) : (
-                            'Add'
-                          )}
+                          {isLoading ? <CSpinner color="primary" /> : isEdit ? 'Update' : 'Add'}
                         </CButton>
                       </div>
                     </CCol>

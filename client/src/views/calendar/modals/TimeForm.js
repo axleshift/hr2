@@ -73,7 +73,7 @@ const TimeModal = ({ isVisible, onClose, handleTimeSubmit, isLoading }) => {
           </CRow>
           <CModalFooter>
             <CButton type="submit" className="btn btn-primary">
-              {isTimeLoading ? <CSpinner color="primary"/> : 'Add Time'}
+              {isTimeLoading ? <CSpinner color="primary" /> : 'Add Time'}
             </CButton>
             <CButton color="secondary" onClick={onClose}>
               Cancel
@@ -89,6 +89,7 @@ TimeModal.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   handleTimeSubmit: propTypes.func.isRequired,
+  isLoading: propTypes.bool.isRequired,
 }
 
 export default TimeModal
