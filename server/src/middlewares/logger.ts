@@ -1,3 +1,8 @@
+/**
+ * @file /middlewares/logger.ts
+ * @description Middleware to log HTTP requests 
+ */
+
 import pino from "pino";
 import { config } from "../config";
 

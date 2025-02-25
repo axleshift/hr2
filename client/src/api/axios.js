@@ -2,13 +2,15 @@ import axios from 'axios'
 import { config } from '../config'
 
 const baseUrl = config.server.url
+const apiKey = config.server.apiKey
 
 const instance = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
-  // headers: {
-  //   // Authorization: `Bearer ${localStorage.getItem("token")}`,
-  // }
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-KEY': apiKey,
+  },
 })
 
 const handleError = (error) => {

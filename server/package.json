@@ -14,7 +14,8 @@
         "lint": "eslint src",
         "lint:fix": "eslint src --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "seed:run": "ts-node-dev --transpile-only src/database/v1/seeds/index.ts"
+        "seed:run": "ts-node-dev --transpile-only src/database/v1/seeds/index.ts",
+        "createApikey": "ts-node-dev --transpile-only src/utils/genereateApiKey.ts"
     },
     "keywords": [],
     "author": "",

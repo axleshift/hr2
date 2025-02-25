@@ -58,7 +58,7 @@ const Jobposts = () => {
         setIsSearchMode(false)
         return
       } else {
-        addToast('Info', `No data found for \'${query}\'`, 'info')
+        addToast('Jobposts', res.message.message, 'danger')
         setIsLoading(false)
         setIsSearchMode(false)
       }

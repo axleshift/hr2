@@ -194,7 +194,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         getAllSlotsForDate(defaultDate)
         setIsTimeLoading(false)
       } else {
-        addToast('Error', res.message.message, 'danger')
+        addToast('Calendar | Timeslots', res.message.message, 'danger')
         setIsTimeLoading(false)
       }
     } catch (error) {
@@ -238,7 +238,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         addToast('Success', 'Interview scheduled successfully', 'success')
         handleOnClose()
       } else {
-        addToast('Error', 'Failed to schedule interview', 'danger')
+        addToast('Calendar | Schedule Form', res.message.message, 'danger')
       }
     } catch (error) {
       addToast('Error', 'Failed to schedule interview', 'danger')

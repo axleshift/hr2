@@ -6,6 +6,8 @@ export interface SessionUser {
     email: string;
     status: string;
     token: string;
+    emailVerifiedAt: Date | null;
+    // permissions: string[];
 }
 
 // Extend the express-session SessionData interface

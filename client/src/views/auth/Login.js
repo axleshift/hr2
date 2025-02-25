@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useContext } from 'react'
-import { AuthContext } from '../../../context/authContext'
-import { AppContext } from '../../../context/appContext'
+import { AuthContext } from '../../context/authContext'
+import { AppContext } from '../../context/appContext'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { config } from '../../../config'
+import { config } from '../../config'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
   CButton,
@@ -29,7 +29,7 @@ import { faUser, faLock, faX, faEye, faEyeSlash } from '@fortawesome/free-solid-
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const Login = () => {
-  const env = config.env
+  const appVersion = config.appVersion
   const navigate = useNavigate()
   const recaptchaRef = useRef()
   const { login, isAuthenticated, userInformation } = useContext(AuthContext)
@@ -67,14 +67,14 @@ const Login = () => {
         const username = userInformation.username
         console.log('Login.js: onSubmit: userInformation: ', JSON.stringify(userInformation))
         console.log('Login.js: onSubmit: username: ', username)
-        addToast(
-          'Login successful',
-          `
-          Welcome back, ${data.username}! You have successfully logged in.
-          `,
-          'success',
-        )
-        navigate('/dashboard')
+        // addToast(
+        //   'Login successful',
+        //   `
+        //   Welcome back, ${data.username}! You have successfully logged in.
+        //   `,
+        //   'success',
+        // )
+        navigate('/dashboard/overview')
       } else {
         setErrorMessage('Invalid username or password')
         setIsLoading(false)
@@ -83,6 +83,10 @@ const Login = () => {
   }
 
   const handleGoogleLogin = () => {}
+
+  const handleSignUp = () => {
+    navigate('/register')
+  }
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -186,7 +190,11 @@ const Login = () => {
                       <CButton type="submit" color="primary" className="me-2 rounded">
                         Login
                       </CButton>
-                      <CButton disabled color="outline-primary" className="me-2 rounded">
+                      <CButton
+                        color="outline-primary"
+                        className="me-2 rounded"
+                        onClick={handleSignUp}
+                      >
                         Signup
                       </CButton>
                     </CButtonGroup>
@@ -227,6 +235,15 @@ const Login = () => {
             </CCol>
           </CRow>
         )}
+        <CRow>
+          <CCol>
+            <div className="text-center mt-3">
+              <small>
+                <span className="text-muted">Version: {appVersion}</span>
+              </small>
+            </div>
+          </CCol>
+        </CRow>
       </CContainer>
     </div>
   )

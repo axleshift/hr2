@@ -1,3 +1,8 @@
+/**
+ * @file twitter.ts
+ * @description Twitter API utility functions
+ */
+
 import { TwitterApi } from "twitter-api-v2";
 
 import dotenv from "dotenv";

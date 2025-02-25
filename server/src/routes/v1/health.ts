@@ -4,16 +4,26 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-router.get("/", (req, res) => {
+import verifySession from "../../middlewares/verifySession";
+
+router.get(
+  "/",
+  verifySession(
+    {
+      permissions: ["all"],
+    },
+    true,
+    true
+  ),
+  (req, res) => {
     res.send("OK");
-});
+  }
+);
 
 export default {
-    metadata: {
-        path: "/health",
-        method: ["GET"],
-        description: "Health route",
-        permissions: ["admin", "user", "guest"],
-    },
-    router,
+  metadata: {
+    path: "/health",
+    description: "Health route",
+  },
+  router,
 };

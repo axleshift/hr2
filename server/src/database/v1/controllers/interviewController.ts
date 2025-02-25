@@ -1,7 +1,7 @@
 import UTCDate from "../../../utils/UTCDate";
 import logger from "../../../middlewares/logger";
-import interviewSchedSchema from "../models/interviewSchedModel";
-import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
+import interviewSched from "../models/InterviewSchedule";
+import interviewTimeslot from "../models/timeslot";
 import { Request as req, Response as res } from "express";
 
 export const getInterviewForADay = async (req: req, res: res) => {
@@ -12,7 +12,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const total = await interviewSchedSchema.countDocuments();
+        const total = await interviewSched.countDocuments();
 
         if (total === 0) {
             return res.status(404).json({
@@ -25,7 +25,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
         const startDate = new Date(date).setHours(0, 0, 0, 0);
         const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
 
-        const interviews = await interviewSchedSchema
+        const interviews = await interviewSched
             .find({
                 date: {
                     $gte: startDate,
@@ -36,7 +36,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
             .limit(limit)
             .sort({ date: 1 });
 
-        const allSlots = await interviewTimeSlotModel.find({
+        const allSlots = await interviewTimeslot.find({
             date: {
                 $gte: startDate,
                 $lt: endDate,
@@ -45,7 +45,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
 
         // parse slots to replace timeslotRef_id with timeslot data
         const parsedInterviews = interviews.map(async (interview) => {
-            const timeslot = await interviewTimeSlotModel.findById(interview.timeslotRef_id);
+            const timeslot = await interviewTimeslot.findById(interview.timeslotRef_id);
             return {
                 ...interview.toObject(),
                 timeslot: timeslot,
@@ -84,7 +84,7 @@ export const getInterviewForADay = async (req: req, res: res) => {
 export const getInterviewForAMonth = async (req: req, res: res) => {
     const { year, month } = req.params;
     try {
-        const interviews = await interviewSchedSchema.find({
+        const interviews = await interviewSched.find({
             $expr: {
                 $and: [{ $eq: [{ $year: "$date" }, parseInt(year)] }, { $eq: [{ $month: "$date" }, parseInt(month)] }],
             },
@@ -112,7 +112,7 @@ export const getInterviewForAMonth = async (req: req, res: res) => {
 export const getInterviewById = async (req: req, res: res) => {
     const { id } = req.params;
     try {
-        const interview = await interviewSchedSchema.findById(id);
+        const interview = await interviewSched.findById(id);
 
         if (!interview || interview === null) {
             return res.status(404).json({
@@ -161,7 +161,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
         }
 
         // Create the interview
-        const interview = new interviewSchedSchema({
+        const interview = new interviewSched({
             date: parsedDate,
             title,
             timeslotRef_id,
@@ -173,7 +173,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
         });
 
         // Update the timeslot to be unavailable
-        const timeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+        const timeslot = await interviewTimeslot.findByIdAndUpdate(
             timeslotRef_id,
             {
                 isAvailable: false,
@@ -211,7 +211,7 @@ export const createInterviewForADate = async (req: req, res: res) => {
 export const updateInterview = async (req: req, res: res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedSchema.findById(id);
+        const interview = await interviewSched.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
@@ -223,7 +223,7 @@ export const updateInterview = async (req: req, res: res) => {
         const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
         const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
 
-        const formerTimeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+        const formerTimeslot = await interviewTimeslot.findByIdAndUpdate(
             interview.timeslotRef_id,
             {
                 isAvailable: true,
@@ -240,7 +240,7 @@ export const updateInterview = async (req: req, res: res) => {
         }
 
         // Update the interview
-        const updatedInterview = await interviewSchedSchema.findByIdAndUpdate(
+        const updatedInterview = await interviewSched.findByIdAndUpdate(
             id,
             {
                 date: parsedDate,
@@ -262,7 +262,7 @@ export const updateInterview = async (req: req, res: res) => {
         }
 
         // Update the timeslot to be unavailable
-        const timeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+        const timeslot = await interviewTimeslot.findByIdAndUpdate(
             timeslotRef_id,
             {
                 isAvailable: false,
@@ -294,7 +294,7 @@ export const updateInterview = async (req: req, res: res) => {
 export const deleteInterviewById = async (req: req, res: res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedSchema.findById(id);
+        const interview = await interviewSched.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
@@ -303,7 +303,7 @@ export const deleteInterviewById = async (req: req, res: res) => {
             });
         }
 
-        const timeslot = await interviewTimeSlotModel.findByIdAndUpdate(
+        const timeslot = await interviewTimeslot.findByIdAndUpdate(
             interview.timeslotRef_id,
             {
                 isAvailable: true,

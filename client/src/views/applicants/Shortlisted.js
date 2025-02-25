@@ -14,13 +14,84 @@ import {
   CFormInput,
   CInputGroup,
   CButton,
+  CBadge,
+  CTooltip,
 } from '@coreui/react'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faRefresh, faSearch } from '@fortawesome/free-solid-svg-icons'
+import {
+  faClock,
+  faRefresh,
+  faSearch,
+  faTrash,
+  faUndo,
+  faUser,
+  faUserClock,
+} from '@fortawesome/free-solid-svg-icons'
+import { AppContext } from '../../context/appContext'
+import { get } from '../../api/axios'
+import ApplicantForm from './../calendar/modals/ApplicantForm';
 
 const Shortlisted = () => {
+  const { addToast } = useContext(AppContext)
+
+  // data states
+  const [applicants, setApplicants] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedApplicantData, setSelectedApplicantData] = useState({})
+
+  // search state
+  const [searchInput, setSearchInput] = useState('')
+  const [isSearchMode, setIsSearchMode] = useState(false)
+
+  // tags
+  const [formtags, setFormtags] = useState([])
+  const [selectedTags, setSelectedTags] = useState([])
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalItems, setTotalItems] = useState(0)
+
+  // Modal form states
+  const [isAppFormVisible, setIsAppFormVisible] = useState(false)
+
+  const getAllData = async () => {
+    try {
+      setIsLoading(true)
+      const res = await get('/applicant/category/shortlisted')
+      console.log(res.data)
+      setApplicants(res.data.data)
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      addToast('Error', 'An error occurred', 'danger')
+    }
+  }
+
+  const getAllTags = async () => {
+    try {
+      const category = 'applicant'
+      const res = await get(`/tags/category/${category}`)
+
+      if (res.status === 200) {
+        console.log(res.data)
+        setFormtags(res.data.data)
+      } else {
+        addToast('Error', 'An error occurred', 'danger')
+      }
+    } catch (error) {
+      addToast('Error', 'An error occurred', 'danger')
+    }
+  }
+
+  useEffect(() => {
+    getAllData()
+    getAllTags()
+  }, [])
+
   return (
     <>
       <CContainer>
@@ -28,8 +99,7 @@ const Shortlisted = () => {
           <CCol>
             <h2>Shortlisted</h2>
             <small>
-              In this page, you can view and edit the list of applicants which are shortlisted or
-              qualified for the job.
+              In this page, you can view and remove applicants from being qualified for the job.
             </small>
           </CCol>
         </CRow>
@@ -52,20 +122,94 @@ const Shortlisted = () => {
           <CCol>
             <CCard>
               <CCardBody>
-                <CTable>
+                <CTable align="middle" hover responsive striped>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>Applicant ID</CTableHeaderCell>
-                      <CTableHeaderCell>Applicant Name</CTableHeaderCell>
-                      <CTableHeaderCell>Job Title</CTableHeaderCell>
-                      <CTableHeaderCell>Application Date</CTableHeaderCell>
+                      <CTableHeaderCell>
+                        <strong>#</strong>
+                      </CTableHeaderCell>
+                      <CTableHeaderCell>
+                        <FontAwesomeIcon icon={faUser} />
+                      </CTableHeaderCell>
+                      <CTableHeaderCell>Email</CTableHeaderCell>
+                      <CTableHeaderCell>Phone</CTableHeaderCell>
+                      <CTableHeaderCell>Tags</CTableHeaderCell>
                       <CTableHeaderCell>Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
-                  <CTableBody></CTableBody>
+                  <CTableBody>
+                    {isLoading ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="6">Loading...</CTableDataCell>
+                      </CTableRow>
+                    ) : (
+                      applicants.map((item, index) => (
+                        <CTableRow key={index}>
+                          <CTableDataCell>{item._id}</CTableDataCell>
+                          <CTableDataCell>
+                            {item.lastname}, {item.firstname}
+                          </CTableDataCell>
+                          <CTableDataCell>{item.email}</CTableDataCell>
+                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex flex-wrap">
+                              {item.tags.map((tag, index) => {
+                                const tagName = formtags.find(
+                                  (formTag) => formTag._id === tag,
+                                )?.name
+                                return (
+                                  <CBadge
+                                    key={index}
+                                    shape="rounded-pill"
+                                    color="primary"
+                                    className="me-1 mb-1"
+                                  >
+                                    {tagName}
+                                  </CBadge>
+                                )
+                              })}
+                            </div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex gap-2">
+                              <CTooltip content="Remove from list" placement="top">
+                                <CButton
+                                  // onClick={() => handleDelete(item._id)}
+                                  className="btn btn-outline-danger"
+                                >
+                                  <FontAwesomeIcon icon={faUndo} />
+                                </CButton>
+                              </CTooltip>
+                              <CTooltip content="Schedule an initial interview" placement="top">
+                                <CButton
+                                  onClick={() => {
+                                    setIsAppFormVisible(true)
+                                    setSelectedApplicantData(item)
+                                  }}
+                                  className="btn btn-outline-success"
+                                >
+                                  <FontAwesomeIcon icon={faUserClock} />
+                                </CButton>
+                              </CTooltip>
+                            </div>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))
+                    )}
+                  </CTableBody>
                 </CTable>
               </CCardBody>
             </CCard>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <ApplicantForm
+              isVisible={isAppFormVisible}
+              onClose={() => setIsAppFormVisible(false)}
+              isDarkMode={true}
+              applicantData={selectedApplicantData}
+            />
           </CCol>
         </CRow>
       </CContainer>

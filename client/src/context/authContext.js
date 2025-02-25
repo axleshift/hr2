@@ -7,25 +7,24 @@ import { post, get } from '../api/axios'
 export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false) //|| Cookies.get('isAuthenticated')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userInformation, setUserInformation] = useState({
-    username: '',
+    _id: '',
+    firstname: '',
+    lastname: '',
     email: '',
+    username: '',
     status: '',
     role: '',
     token: '',
-  }) // || Cookies.get('userInformation')
+  }) 
 
   const login = async (username, password, callback) => {
     try {
       const res = await post('/auth/login', { username, password })
       if (res.status === 200) {
-        console.log('AuthContext.js: login: res: ', res)
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
-        // console.log('AuthContext.js: login: userInformation: ', res.data.data)
-        // Cookies.set('isAuthenticated', true)
-        // Cookies.set('userInformation', res.data.data)
         callback(true)
       } else {
         callback(false)
@@ -39,19 +38,19 @@ const AuthProvider = ({ children }) => {
   const logout = async (callback) => {
     try {
       const res = await get('/auth/logout')
-      // console.log('AuthContext.js: logout: res: ', res)
       if (res.status === 200) {
         setIsAuthenticated(false)
         setUserInformation({
-          username: '',
+          _id: '',
+          firstname: '',
+          lastname: '',
           email: '',
+          username: '',
           status: '',
           role: '',
           token: '',
         })
         callback(true)
-        // Cookies.remove('isAuthenticated')
-        // Cookies.remove('userInformation')
       }
     } catch (error) {
       callback(false)
@@ -65,8 +64,6 @@ const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
-        // Cookies.set('isAuthenticated', true)
-        // Cookies.set('userInformation', res.data.data)
       }
     } catch (error) {
       console.error(error)

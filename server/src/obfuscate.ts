@@ -1,3 +1,9 @@
+/**
+ * @file obfuscate.ts
+ * @description Obfuscate all JavaScript files in the dist directory
+ */
+
+
 import js from "javascript-obfuscator";
 import { TInputOptions } from "javascript-obfuscator/typings/src/types/options/TInputOptions";
 import fs from "fs";

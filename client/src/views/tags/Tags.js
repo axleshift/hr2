@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { post, put, get, del } from '../../api/axios'
@@ -122,8 +122,9 @@ const Tags = () => {
   const {
     register: tagsFormRegister,
     reset: tagsFormReset,
+    watch: tagsFormWatch,
     handleSubmit: tagsFormHandleSubmit,
-    formState: { errors: tagsFormErrors },
+    formState: { errors: tagsFormErrors, defaultValues: tagsFormDefaultValues },
   } = useForm({
     resolver: zodResolver(tagsFormSchema),
     // resolver: async (data, context, options) => {
@@ -132,6 +133,9 @@ const Tags = () => {
     //   return result
     // },
   })
+
+  const isProtectedValue = tagsFormWatch('isProtected')
+  const isSystemValue = tagsFormWatch('isSystem')
 
   const submitTag = async (data) => {
     try {
@@ -388,13 +392,14 @@ const Tags = () => {
                     <CRow>
                       <CCol>
                         <CFormLabel>System Tag ?</CFormLabel>
+
                         <CInputGroup>
                           <CFormInput
                             type="text"
                             id="system"
                             placeholder="..."
                             readOnly
-                            defaultValue={false}
+                            defaultValue={isSystemValue}
                             {...tagsFormRegister('isSystem')}
                             invalid={!!tagsFormErrors.isSystem}
                           />
@@ -403,15 +408,15 @@ const Tags = () => {
                               onClick={() => tagsFormReset({ isSystem: true })}
                               className={'btn btn-primary'}
                             >
-                              <FontAwesomeIcon icon={faGear} />
+                              <FontAwesomeIcon icon={faLock} />
                             </CButton>
                           </CTooltip>
                           <CTooltip content="Unprotect" placement="top">
                             <CButton
                               onClick={() => tagsFormReset({ isSystem: false })}
-                              className={'btn btn-warning'}
+                              className={'btn btn-secondary'}
                             >
-                              <FontAwesomeIcon icon={faUserGear} />
+                              <FontAwesomeIcon icon={faUnlock} />
                             </CButton>
                           </CTooltip>
                         </CInputGroup>
@@ -473,22 +478,23 @@ const Tags = () => {
             <CCol key={index} md={4} className="mb-3">
               <CCard className="h-100">
                 <CCardBody>
-                  <CRow>
+                  <CRow className="mb-3">
                     <CCol>
                       <h5>{firstLetterUppercase(tag.name)}</h5>
-                      <p>{tag.category}</p>
+                      <small className="text-muted">{tag.category}</small>
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CCol>Protected: {tag.isProtected ? 'Yes' : 'No'}</CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>System Tag: {tag.isSystem ? 'Yes' : 'No'}</CCol>
-                  </CRow>
-                </CCardBody>
-                <CCardFooter>
-                  <CRow>
                     <CCol>
+                      <small>Protected:</small> {" "}
+                      <small>{tag.isProtected ? 'Yes' : 'No'}</small>
+                      <br />
+                      <small>System:</small> {" "}
+                      <small>{tag.isSystem ? 'Yes' : 'No'}</small>
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol className="d-flex justify-content-end">
                       <CButtonGroup>
                         <CTooltip content="Edit tag" placement="top">
                           <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
@@ -507,7 +513,7 @@ const Tags = () => {
                       </CButtonGroup>
                     </CCol>
                   </CRow>
-                </CCardFooter>
+                </CCardBody>
               </CCard>
             </CCol>
           ))

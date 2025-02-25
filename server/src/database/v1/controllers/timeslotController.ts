@@ -1,6 +1,6 @@
 import UTCDate from "../../../utils/UTCDate";
 import logger from "../../../middlewares/logger";
-import interviewTimeSlotModel from "../models/interviewTimeSlotModel";
+import interviewTimeSlotModel from "../models/timeslot";
 import { Request as req, Response as res } from "express";
 
 export const getSlotById = async (req: req, res: res) => {

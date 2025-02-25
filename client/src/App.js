@@ -11,8 +11,10 @@ import './scss/style.scss'
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
-const Login = React.lazy(() => import('./views/auth/login/Login'))
-const Register = React.lazy(() => import('./views/auth/register/Register'))
+const Login = React.lazy(() => import('./views/auth/Login'))
+const Register = React.lazy(() => import('./views/auth/Register'))
+const VerifyEmail = React.lazy(() => import('./views/auth/VerifyEmail'))
+
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 const Page500 = React.lazy(() => import('./views/errors/Page500'))
 

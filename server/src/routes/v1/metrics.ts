@@ -1,19 +1,24 @@
 import { Router } from "express";
 const router = Router();
+import verifySession from "../../middlewares/verifySession";
 
 import { metricsHandler } from "../../middlewares/prometheusMetrics";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-router.get("/", metricsHandler);
+router.get(
+  "/",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  metricsHandler
+);
 
 export default {
-    metadata: {
-        path: "/metrics",
-        method: ["GET"],
-        description: "Metrics route",
-        permissions: ["admin", "user", "guest"],
-    },
-    router,
+  metadata: {
+    path: "/metrics",
+    description: "Metrics route",
+  },
+  router,
 };

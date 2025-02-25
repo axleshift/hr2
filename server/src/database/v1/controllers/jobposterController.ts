@@ -1,5 +1,5 @@
-import Jobposter from "../models/jobposterModel";
-import JobPosting from "../models/jobpostingModel";
+import Jobposter from "../models/jobposter";
+import JobPosting from "../models/jobposting";
 import { removeTweet } from "../../../utils/twitter";
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";

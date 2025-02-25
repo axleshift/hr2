@@ -105,11 +105,11 @@ const Applicants = ({ theme }) => {
         setFormTags(res.data.data)
         setTagLoading(false)
       } else {
-        addToast('Error', 'Failed to fetch data', 'danger')
+        addToast('Calendar | Applicants', res.message.message, 'danger')
         setTagLoading(false)
       }
     } catch (error) {
-      addToast('Error', 'Failed to fetch data', 'danger')
+      addToast('Calendar | Applicants', 'Failed to fetch data', 'danger')
     }
   }
 

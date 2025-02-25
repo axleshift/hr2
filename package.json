@@ -17,7 +17,9 @@
 
     "lint:fix": "concurrently \"npm run server:lint:fix\" \"npm run client:lint:fix\"",
     "server:lint:fix": "cd server && npm run lint:fix",
-    "client:lint:fix": "cd client && npm run lint:fix"
+    "client:lint:fix": "cd client && npm run lint:fix",
+
+    "create:Apikey": "cd server && npm run createApikey"
   },  
   "version": "1.0.0"
 }
