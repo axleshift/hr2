@@ -74,13 +74,19 @@ app.use(
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
+const env = config.env;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => {
-    return req.session.user?.role === "admin";
+  // skip if env is development
+  skip: () => {
+    return env === "development";
+  },
+  // end
+  handler: (req, res) => {
+    res.status(429).send("Too many requests. Please try again later.");
   },
 });
 app.use(limiter);

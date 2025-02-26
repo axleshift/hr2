@@ -6,6 +6,7 @@ dotenv.config();
 import verifySession from "../../middlewares/verifySession";
 
 import { createJobposting, searchJobpostings, getAllJobpostings, getAllScheduledJobpostings, getJobpostingById, updateJobposting, deleteJobposting } from "../../database/v1/controllers/jobpostingController";
+import verifyApiKey from "../../middlewares/verifyApiKey";
 
 router.post(
   "/",
@@ -14,6 +15,7 @@ router.post(
   }),
   createJobposting
 );
+
 router.get(
   "/search",
   verifySession({
