@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from "express";
 
 import apiKey from "../database/v1/models/apikey";
 import { config } from "../config";
+import logger from "./logger";
 
 // sendError helper function
 const sendError = (res: Response, statusCode: number, message: string) => {
@@ -47,6 +48,7 @@ const verifyApiKey = async (req: CustomRequest, res: Response, next: NextFunctio
     req.permissions = apiKeyData.permissions;
     next();
   } catch (error) {
+    logger.error(`Error verifying API key: ${error}`);
     return sendError(res, 500, "Internal server error");
   }
 };

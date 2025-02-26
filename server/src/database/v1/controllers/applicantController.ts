@@ -6,7 +6,6 @@
 import fs from "fs/promises";
 import path from "path";
 import { Request, Response } from "express";
-import { ObjectId } from "mongodb";
 import logger from "../../../middlewares/logger";
 import { upload } from "../../../utils/fileUploadHandler";
 
@@ -24,38 +23,7 @@ export const handleFileUpload = (req: Request, res: Response) => {
   });
 };
 
-interface ApplicantData {
-  firstname: string;
-  lastname: string;
-  middlename: string;
-  suffix: string;
-  email: string;
-  phone: string;
-  address: string;
-  preferredWorkLocation: string;
-  linkedInProfile: string;
-  portfolioLink: string;
-  // resumeFileLoc: string;
-  yearsOfExperience: string;
-  currentMostRecentJob: string;
-  highestQualification: string;
-  majorFieldOfStudy: string;
-  institution: string;
-  graduationYear: string;
-  keySkills: string;
-  softwareProficiency: string;
-  certifications: string;
-  coverLetter: string;
-  salaryExpectation: string;
-  availability: string;
-  jobAppliedFor: string;
-  whyInterestedInRole: string;
-  tags: string[];
-}
 
-interface ApplicantDocument extends ApplicantData {
-  _id: ObjectId;
-}
 
 export const addNewResume = async (req: Request, res: Response) => {
   try {
@@ -348,6 +316,8 @@ export const getApplicantByDocumentCategory = async (req: Request, res: Response
     }
 
     // Query applicants with the given status category completed as true
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let applicants: any[];
     switch (category) {
       case "screening":

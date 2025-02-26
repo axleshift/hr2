@@ -486,11 +486,9 @@ const Tags = () => {
                   </CRow>
                   <CRow>
                     <CCol>
-                      <small>Protected:</small> {" "}
-                      <small>{tag.isProtected ? 'Yes' : 'No'}</small>
+                      <small>Protected:</small> <small>{tag.isProtected ? 'Yes' : 'No'}</small>
                       <br />
-                      <small>System:</small> {" "}
-                      <small>{tag.isSystem ? 'Yes' : 'No'}</small>
+                      <small>System:</small> <small>{tag.isSystem ? 'Yes' : 'No'}</small>
                     </CCol>
                   </CRow>
                   <CRow>

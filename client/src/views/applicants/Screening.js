@@ -576,7 +576,7 @@ const Screening = () => {
         <CCol>
           <h2>Screening </h2>
           <small>
-            In this page, you can view, edit, delete, and you can view applicant resume's for
+            In this page, you can view, edit, delete, and you can view applicant resume&apos;s for
             screening then <span className="text-info">shorlist</span> them. You can also create new
             applicants <s>and download their resumes</s>.
           </small>

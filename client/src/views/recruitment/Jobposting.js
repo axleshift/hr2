@@ -230,8 +230,8 @@ const Jobposting = () => {
         setIsJobFormVisible(false)
         setIsLoading(false)
       } else {
-        addToast('Jobposting' + " " + res.status, res.message.message, 'danger')
-        setIsLoading(false) 
+        addToast('Jobposting' + ' ' + res.status, res.message.message, 'danger')
+        setIsLoading(false)
         setIsSearchMode(false)
       }
     } catch (error) {
@@ -243,10 +243,7 @@ const Jobposting = () => {
   const searchSchema = z.object({
     jpSearchInput: z.string().min(1, { message: 'Search query is required' }),
   })
-  const {
-    register: searchRegister,
-    handleSubmit: searchHandleSubmit,
-  } = useForm({
+  const { register: searchRegister, handleSubmit: searchHandleSubmit } = useForm({
     resolver: zodResolver(searchSchema),
     // resolver: async (data, context, options) => {
     //   const result = await zodResolver(searchSchema)(data, context, options)

@@ -3,15 +3,11 @@
  * @description defines the applicant screening controller
  */
 
-import fs from "fs/promises";
-import path from "path";
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import logger from "../../../middlewares/logger";
-import { upload } from "../../../utils/fileUploadHandler";
 
 import Applicant from "../models/applicant";
-import { config } from "../../../config";
 import Document from "../models/document";
 import User from "../models/user";
 
@@ -222,7 +218,7 @@ export const getDocumentByCategory = async (req: Request, res: Response) => {
     if (!applicant) {
       return res.status(404).json({ message: "Applicant not found" });
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let documents: any;
     switch (category) {
       case "screening":

@@ -90,7 +90,6 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
         setIsDateLoading(false)
         addToast('Calendar | Scheduling Form', res.message.message, 'danger')
       }
-
     } catch (error) {
       console.error(error)
       setIsDateLoading(false)

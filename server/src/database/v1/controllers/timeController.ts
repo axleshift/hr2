@@ -1,6 +1,5 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import Facility from "../models/facilities";
 import FacilityDates from "../models/facilityDates";
 import Time from "../models/time";
 

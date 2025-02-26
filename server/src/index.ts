@@ -14,7 +14,6 @@ import fs from "fs";
 import path from "path";
 import pinoHttp from "pino-http";
 import logger from "./middlewares/logger";
-import verifySession from "./middlewares/verifySession";
 import startJobs from "./jobs/index";
 import { config } from "./config";
 import sanitize from "./middlewares/sanitize";
@@ -119,7 +118,7 @@ app.get("/api/", (req, res) => {
 
 connectDB().then(async () => {
   try {
-    const loadRoutes = async (version: string, useSession: boolean) => {
+    const loadRoutes = async (version: string) => {
       const routesPath = path.join(__dirname, "routes", version);
       const router = express.Router();
 
@@ -131,19 +130,7 @@ connectDB().then(async () => {
         if (file.endsWith(".ts") || file.endsWith(".js")) {
           const route = await import(path.join(routesPath, file));
           const { metadata, router: routeRouter } = route.default;
-          // const routeName = file.split(".")[0];
-          // const sessionExceptions = config.route.sessionExceptions;
-
-          // if (sessionExceptions.includes(routeName)) {
-          //   router.use(metadata.path, verifyApiKey, routeRouter);
-          // } else if (useSession) {
-          //   router.use(metadata.path, routeRouter);
-          // } else {
-          //   router.use(metadata.path, routeRouter);
-          // }
-
           router.use(metadata.path, verifyApiKey, routeRouter);
-
           logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
         }
       }
@@ -151,8 +138,8 @@ connectDB().then(async () => {
     };
 
     const initRoutes = async () => {
-      const v1Routes = await loadRoutes("v1", true);
-      const v2Routes = await loadRoutes("v2", true);
+      const v1Routes = await loadRoutes("v1");
+      const v2Routes = await loadRoutes("v2");
 
       app.use("/api/v1", v1Routes);
       app.use("/api/v2", v2Routes);

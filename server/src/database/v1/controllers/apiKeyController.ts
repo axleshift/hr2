@@ -1,6 +1,7 @@
 import { Request as res, Response as req } from "express";
 
 import apiKey from "../models/apikey";
+import logger from "../../../middlewares/logger";
 
 interface CustomRequest extends res {
   permissions?: string[];
@@ -24,6 +25,7 @@ export const generateApikey = async (req: CustomRequest, res: req) => {
       data: apiKeyData,
     });
   } catch (error) {
+    logger.error(error);
     return res.status(500).json({
       statusCode: 500,
       success: false,
@@ -58,6 +60,7 @@ export const updateApikey = async (req: CustomRequest, res: req) => {
       message: "API key updated successfully",
     });
   } catch (error) {
+    logger.error(error);
     return res.status(500).json({
       statusCode: 500,
       success: false,
@@ -85,6 +88,7 @@ export const createApikey = async (req: CustomRequest, res: req) => {
       data: apiKeyData,
     });
   } catch (error) {
+    logger.error(error);
     return res.status(500).json({
       statusCode: 500,
       success: false,

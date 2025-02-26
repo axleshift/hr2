@@ -50,6 +50,7 @@ const seedTag = async () => {
     await tagModel.insertMany(tags);
     return true;
   } catch (error) {
+    logger.error(error);
     return false;
   }
 };

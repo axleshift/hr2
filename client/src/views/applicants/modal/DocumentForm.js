@@ -411,11 +411,7 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
                   {docCategory === 'screening' && isFormChecked && (
                     <CRow>
                       <CCol>
-                        <CAlert
-                          color="info"
-                          variant="outline"
-                          dismissible
-                        >
+                        <CAlert color="info" variant="outline" dismissible>
                           <p>
                             Note that if you <strong>confirm</strong> the applicant, the applicant
                             will be moved to the next stage of the recruitment process. Which is{' '}
@@ -425,8 +421,8 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
                           <hr />
                           <p>
                             <small>
-                              If applicant is already shortlisted this action will just create a
-                              new screening document, which can be viewed in the history tab.
+                              If applicant is already shortlisted this action will just create a new
+                              screening document, which can be viewed in the history tab.
                             </small>
                           </p>
                         </CAlert>

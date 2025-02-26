@@ -3,7 +3,6 @@ const router = Router();
 
 import dotenv from "dotenv";
 dotenv.config();
-import verifySession from "../../middlewares/verifySession";
 
 import verifyApiKey from "../../middlewares/verifyApiKey";
 import { createJobpostingRequest, updateJobpostingRequest, searchJobpostingRequests, getJobpostingRequestById } from "../..//database/v1/controllers/requestController";

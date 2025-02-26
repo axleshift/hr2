@@ -31,7 +31,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
-import ApplicantForm from './../calendar/modals/ApplicantForm';
+import ApplicantForm from './../calendar/modals/ApplicantForm'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)

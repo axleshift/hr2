@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import JobpostingRequest from "../models/jobpostingRequest";
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
@@ -63,7 +62,7 @@ export const updateJobpostingRequest = async (req: req, res: res) => {
 export const searchJobpostingRequests = async (req: req, res: res) => {
     try {
         const { title, location, jobType, salaryRange, status } = req.query;
-        const query: any = {};
+        const query: Record<string, unknown> = {};
         if (title) query.title = title;
         if (location) query.location = location;
         if (jobType) query.jobType = jobType;

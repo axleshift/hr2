@@ -26,3 +26,5 @@ const calendarSchema = new mongoose.Schema(
     updateAt: true,
   }
 );
+
+export default mongoose.model("calendar", calendarSchema);

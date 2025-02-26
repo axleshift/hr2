@@ -16,7 +16,7 @@ const sendError = (res: Response, statusCode: number, message: string) => {
 };
 
 // validate csrf token helper function
-const validateCSRFToken = (req: Request, res: Response) => {
+const validateCSRFToken = (req: Request) => {
   const csrfToken = req.session.csrfToken;
   const clientToken = (req.headers["x-csrf-token"] as string) || (csrfToken as string);
   return csrfToken === clientToken;
@@ -64,7 +64,7 @@ const verifySession = (metadata: Metadata, validateCsrf = true, allowGuest = fal
       return sendError(res, 403, "Forbidden: Insufficient permissions");
     }
 
-    if (validateCsrf && config.server.csrfProtection && !validateCSRFToken(req, res)) {
+    if (validateCsrf && config.server.csrfProtection && !validateCSRFToken(req)) {
       return sendError(res, 403, "Forbidden: Invalid CSRF token");
     }
 

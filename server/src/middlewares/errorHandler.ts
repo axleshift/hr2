@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import logger from "./logger";
 
 interface CustomError extends Error {
   status?: number;
 }
 
-const errorHandler = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: CustomError, req: Request, res: Response) => {
   const status = err.status || 500;
   const message = err.message || "Internal Server Error";
 

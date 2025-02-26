@@ -11,26 +11,26 @@ const verificationSchema = new mongoose.Schema({
   },
 });
 
-const developerSchema = new mongoose.Schema(
-  {
-    apKey: {
-      type: String,
-      required: true,
-    },
-    permissions: {
-      type: [String],
-      required: true,
-    },
-    expiresAt: {
-      type: Date,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-    updateAt: true,
-  }
-);
+// const developerSchema = new mongoose.Schema(
+//   {
+//     apKey: {
+//       type: String,
+//       required: true,
+//     },
+//     permissions: {
+//       type: [String],
+//       required: true,
+//     },
+//     expiresAt: {
+//       type: Date,
+//       required: true,
+//     },
+//   },
+//   {
+//     timestamps: true,
+//     updateAt: true,
+//   }
+// );
 
 const userSchema = new mongoose.Schema(
   {

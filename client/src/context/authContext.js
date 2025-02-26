@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
     status: '',
     role: '',
     token: '',
-  }) 
+  })
 
   const login = async (username, password, callback) => {
     try {

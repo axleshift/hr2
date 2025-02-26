@@ -1,6 +1,7 @@
 import Applicant from "../models/applicant";
 import { Request as req, Response as res } from "express";
 import { config } from "../../../config";
+import logger from "../../../middlewares/logger";
 
 export const formSubmit = async (req: req, res: res) => {
   try {
@@ -67,6 +68,7 @@ export const formSubmit = async (req: req, res: res) => {
 
     res.status(201).json({ statusCode: 201, success: true, message: "Application submitted successfully", data: newApplicant });
   } catch (error) {
+    logger.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

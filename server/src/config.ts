@@ -47,7 +47,7 @@ export const config = {
     cluster: process.env.MONGODB_CLUSTER,
     options: process.env.MONGODB_OPTIONS,
     // if NODE_ENV is production, use the MONGODB_URI, otherwise use the connection string
-    uri: process.env.NODE_ENV === "development" ? process.env.MONGODB_URI : `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}` || process.env.MONGODB_URI,
+    uri: process.env.NODE_ENV === "development" ? process.env.MONGODB_URI : (process.env.MONGODB_URI || `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}`),
     ttl: 24 * 60 * 60, // 1 day
   },
 
