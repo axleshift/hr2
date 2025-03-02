@@ -5,8 +5,15 @@
 
 import mongoose from "mongoose";
 
-const facilityDatesSchema = new mongoose.Schema(
+const facilityEventsSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
     date: {
       type: Date,
       required: true,
@@ -18,7 +25,7 @@ const facilityDatesSchema = new mongoose.Schema(
     participants: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "applicants",
-    }, 
+    },
     timeslots: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "time",
@@ -30,4 +37,4 @@ const facilityDatesSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.model("facilityDates", facilityDatesSchema);
+export default mongoose.model("facilityEvents", facilityEventsSchema);

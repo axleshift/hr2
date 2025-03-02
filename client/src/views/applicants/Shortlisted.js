@@ -32,6 +32,7 @@ import {
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
 import ApplicantForm from './../calendar/modals/ApplicantForm'
+import ScheduleForm from './modal/scheduleForm'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)
@@ -48,6 +49,8 @@ const Shortlisted = () => {
   // tags
   const [formtags, setFormtags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
+
+  const [isScheduleFormVisible, setIsScheduleFormVisible] = useState(false)
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -183,7 +186,8 @@ const Shortlisted = () => {
                               <CTooltip content="Schedule an initial interview" placement="top">
                                 <CButton
                                   onClick={() => {
-                                    setIsAppFormVisible(true)
+                                    // setIsAppFormVisible(true)
+                                    setIsScheduleFormVisible(true)
                                     setSelectedApplicantData(item)
                                   }}
                                   className="btn btn-outline-success"
@@ -207,6 +211,16 @@ const Shortlisted = () => {
             <ApplicantForm
               isVisible={isAppFormVisible}
               onClose={() => setIsAppFormVisible(false)}
+              isDarkMode={true}
+              applicantData={selectedApplicantData}
+            />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <ScheduleForm
+              isVisible={isScheduleFormVisible}
+              onClose={() => setIsScheduleFormVisible(false)}
               isDarkMode={true}
               applicantData={selectedApplicantData}
             />

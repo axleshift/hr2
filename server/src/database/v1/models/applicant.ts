@@ -140,7 +140,11 @@ const applicantSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isInInterview: {
+    isInitialInterview: {
+      type: Boolean,
+      default: false,
+    },
+    isFinalInterview: {
       type: Boolean,
       default: false,
     },
@@ -154,40 +158,24 @@ const applicantSchema = new mongoose.Schema(
     },
     documentations: {
       screening: {
-        completed: {
-          type: Boolean,
-          default: false,
-        },
         remarks: {
           type: [mongoose.Schema.Types.ObjectId],
           ref: "Document",
         },
       },
       interview: {
-        completed: {
-          type: Boolean,
-          default: false,
-        },
         remarks: {
           type: [mongoose.Schema.Types.ObjectId],
           ref: "Document",
         },
       },
       training: {
-        completed: {
-          type: Boolean,
-          default: false,
-        },
         remarks: {
           type: [mongoose.Schema.Types.ObjectId],
           ref: "Document",
         },
       },
       others: {
-        completed: {
-          type: Boolean,
-          default: false,
-        },
         remarks: {
           type: [mongoose.Schema.Types.ObjectId],
           ref: "Document",

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const Dashboard = React.lazy(() => import('./views/dashboard/Overview'))
 
 // Recruitment | HR2
 const ApplicationTracking = React.lazy(() => import('./views/recruitment/ats'))
@@ -8,6 +8,7 @@ const Jobposting = React.lazy(() => import('./views/recruitment/Jobposting'))
 const Jobposter = React.lazy(() => import('./views/recruitment/Jobposter'))
 const Jobposts = React.lazy(() => import('./views/recruitment/Jobposts'))
 const Schedules = React.lazy(() => import('./views/recruitment/Schedule'))
+const JobpostingReq = React.lazy(() => import('./views/recruitment/JobpostingRequest'))
 
 // Applicants
 
@@ -19,10 +20,12 @@ const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
 const Training = React.lazy(() => import('./views/applicants/Training'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
 
+// Facilities | HR2
+const Facilities = React.lazy(() => import('./views/facility/Facilities'))
+
 // Interviews | HR2
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
 const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
-const Facilities = React.lazy(() => import('./views/calendar/facilities'))
 
 // Mail | HR2
 const Compose = React.lazy(() => import('./views/mail/Compose'))
@@ -47,7 +50,7 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   {
-    path: '/dashboard',
+    path: '/dashboard/overview',
     name: 'Dashboard',
     element: Dashboard,
     permissions: ['superadmin', 'admin', 'user'],
@@ -81,6 +84,12 @@ const routes = [
     path: '/recruitment/schedules',
     name: 'Schedules',
     element: Schedules,
+    permissions: ['superadmin', 'admin', 'user'],
+  },
+  {
+    path: '/recruitment/jobposting/request',
+    name: 'Jobposting Request',
+    element: JobpostingReq,
     permissions: ['superadmin', 'admin', 'user'],
   },
 

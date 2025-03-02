@@ -70,6 +70,12 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faAt} className="nav-icon" />,
   },
   {
+    component: CNavItem,
+    name: 'Request',
+    to: '/recruitment/jobposting/request',
+    icon: <FontAwesomeIcon icon={faFileAlt} className="nav-icon" />,
+  },
+  {
     component: CNavTitle,
     name: 'Documentations',
   },

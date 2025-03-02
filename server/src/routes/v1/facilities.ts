@@ -4,7 +4,16 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 import verifySession from "../../middlewares/verifySession";
-import { createFacility, updateFacility, getAllFacilities, getFacilityById, removeFacility } from "../../database/v1/controllers/facilityController";
+import {
+  createFacility,
+  updateFacility,
+  getAllFacilities,
+  getFacilityById,
+  removeFacility,
+  createFacilityEvent,
+  updateFacilityEvent,
+  getFacilityEventsByIdAndDate
+} from "../../database/v1/controllers/facilityController";
 
 router.post(
   "/create",
@@ -45,6 +54,33 @@ router.delete(
   }),
   removeFacility
 );
+
+// Facilitiy events
+
+router.post(
+  "/event/:id",
+  verifySession({
+    permissions: ["webhook", "admin", "instructor"],
+  }),
+  createFacilityEvent
+)
+
+router.put(
+  "/event/:id",
+  verifySession({
+    permissions: ["webhook", "admin", "instructor"],
+  }),
+  updateFacilityEvent
+)
+
+router.get(
+  "/events/:id/date/:date",
+  verifySession({
+    permissions: ["webhook", "admin", "instructor"],
+  }),
+  getFacilityEventsByIdAndDate
+);
+
 
 export default {
   metadata: {

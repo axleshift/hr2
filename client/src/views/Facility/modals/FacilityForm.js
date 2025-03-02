@@ -40,6 +40,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
 
   const formSchema = z.object({
     name: z.string().nonempty('Name is required'),
+    type: z.string().nonempty('Type is required'),
     description: z.string().nonempty('Description is required'),
     location: z.string().nonempty('Location is required'),
   })
@@ -74,6 +75,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
   const handleMockData = () => {
     formReset({
       name: 'Facility Name',
+      type: 'Facility Type',
       description: 'Facility Description',
       location: 'Facility Location',
     })
@@ -87,6 +89,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
     if (isEdit) {
       formReset({
         name: facilityData?.name,
+        type: facilityData?.type,
         description: facilityData?.description,
         location: facilityData?.location,
       })
@@ -121,6 +124,19 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 invalid={!!errors?.name}
               />
               {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+            </CCol>
+          </CRow>
+          <CRow className="mb-3">
+            <CCol>
+              <CFormInput
+                type="text"
+                label="Type"
+                placeholder="Type"
+                {...register('type')}
+                defaultValue={facilityData?.type}
+                invalid={!!errors?.type}
+              />
+              {errors.type && <div className="invalid-feedback">{errors.type.message}</div>}
             </CCol>
           </CRow>
           <CRow className="mb-3">

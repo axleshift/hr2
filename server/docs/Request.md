@@ -297,5 +297,3 @@ The request body should be a JSON object containing the following fields:
 - `404 Not Found`: The job posting request was not found.
 - `500 Internal Server Error`: An error occurred on the server.
 
-## Overview
-The Jobposting API allows you to create, search, retrieve, and update job posting requests. This document provides details on the available endpoints and their usage.

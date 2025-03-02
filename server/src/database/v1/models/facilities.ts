@@ -10,6 +10,10 @@ const facilitiesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
     },
@@ -17,9 +21,13 @@ const facilitiesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
     dates: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "FacilityDates",
+      ref: "facilityEvents",
     },
   },
   {
