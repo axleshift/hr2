@@ -1,6 +1,6 @@
 {
   "name": "@freight-capstone/main",
-  "version": "v2025.03.04",
+  "version": "v2025.03.06",
   "description": "",
   "homepage": ".",
   "bugs": {
@@ -53,7 +53,8 @@
     "react-router-dom": "^6.23.1",
     "react-time-picker": "^7.0.0",
     "redux": "5.0.1",
-    "simplebar-react": "^3.2.5"
+    "simplebar-react": "^3.2.5",
+    "terser": "^5.39.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.26.9",
