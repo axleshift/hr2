@@ -85,10 +85,7 @@ const Jobposting = () => {
       //   (val) => new Date(val),
       //   z.date().min(yesterday, { message: 'Start Date must be today or later' }),
       // ),
-      jpfSchedStart: z.preprocess(
-        (val) => new Date(val),
-        z.date(),
-      ),
+      jpfSchedStart: z.preprocess((val) => new Date(val), z.date()),
       jpfSchedEnd: z.preprocess(
         (val) => new Date(val),
         z.date().min(new Date(), { message: 'End Date must be in the future' }),

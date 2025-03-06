@@ -57,13 +57,12 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
   const handleFormSubmit = async (data) => {
     console.log('Form data:', data)
     try {
-
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('type', data.type)
       formData.append('description', data.description)
       formData.append('location', data.location)
-      
+
       const res = isEdit
         ? await put(`/facilities/update/${facilityData._id}`, formData)
         : await post('/facilities/create', data)

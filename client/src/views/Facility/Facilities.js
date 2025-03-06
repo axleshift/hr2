@@ -171,11 +171,15 @@ const Facilities = () => {
                             >
                               Edit
                             </CButton>
-                            <CButton color="danger" size="sm" className="ms-2"
+                            <CButton
+                              color="danger"
+                              size="sm"
+                              className="ms-2"
                               onClick={() => {
                                 setSelectedFacility(item)
                                 setDeleteModal(true)
-                              }}>
+                              }}
+                            >
                               Delete
                             </CButton>
                             <CButton
@@ -201,15 +205,16 @@ const Facilities = () => {
         </CRow>
         <CRow>
           <CCol>
-            <CModal visible={deleteModal} onClose={() => {
-              setDeleteModal(false)
-              setSelectedFacility({})
-              setIsConfirmDelete(false)
-            }}>
+            <CModal
+              visible={deleteModal}
+              onClose={() => {
+                setDeleteModal(false)
+                setSelectedFacility({})
+                setIsConfirmDelete(false)
+              }}
+            >
               <CModalHeader>
-                <CModalTitle>
-                  Confirm Deletion
-                </CModalTitle>
+                <CModalTitle>Confirm Deletion</CModalTitle>
               </CModalHeader>
               <CModalBody>
                 <p>Are you sure you want to delete this facility?</p>
@@ -224,8 +229,10 @@ const Facilities = () => {
                   <p>
                     <strong>Warning: </strong>
                     <small>
-                      Be aware that this action is irreversible. Once you delete this facility, you will not be able to recover it.
-                      This actions will also delete all the associated information with this facility such as events, timeslots, reservations, etc.
+                      Be aware that this action is irreversible. Once you delete this facility, you
+                      will not be able to recover it. This actions will also delete all the
+                      associated information with this facility such as events, timeslots,
+                      reservations, etc.
                     </small>
                   </p>
                 </CAlert>
@@ -243,11 +250,14 @@ const Facilities = () => {
                     defaultChecked={isConfirmDelete}
                   />
                 </CForm>
-                <CButton color="danger" onClick={() => {
-                  handleDelete(selectedFacility._id)
-                  setDeleteModal(false)
-                }}
-                  disabled={!isConfirmDelete}>
+                <CButton
+                  color="danger"
+                  onClick={() => {
+                    handleDelete(selectedFacility._id)
+                    setDeleteModal(false)
+                  }}
+                  disabled={!isConfirmDelete}
+                >
                   Delete
                 </CButton>
               </CModalFooter>

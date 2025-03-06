@@ -1,6 +1,5 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import { Types } from "mongoose";
 import Facility from "../models/facilities";
 import Events from "../models/facilityEvents";
 import Time from "../models/time";
