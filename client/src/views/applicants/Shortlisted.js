@@ -19,20 +19,11 @@ import {
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { icon } from '@fortawesome/fontawesome-svg-core'
-import {
-  faClock,
-  faRefresh,
-  faSearch,
-  faTrash,
-  faUndo,
-  faUser,
-  faUserClock,
-} from '@fortawesome/free-solid-svg-icons'
+import { faRefresh, faSearch, faUndo, faUser, faUserClock } from '@fortawesome/free-solid-svg-icons'
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
 import ApplicantForm from './../calendar/modals/ApplicantForm'
-import ScheduleForm from './modal/scheduleForm'
+import ScheduleForm from './modal/ScheduleForm'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)
