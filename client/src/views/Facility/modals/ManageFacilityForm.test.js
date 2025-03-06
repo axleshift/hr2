@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import ManageFacilityForm from './ManageFacilityForm'
+import ManageFacilityForm from '../modals/ManageFacilityForm'
 import { AppContext } from '../../../context/appContext'
 
 // filepath: /d:/hr2/client/src/views/Facility/modals/ManageFacilityForm.test.js
