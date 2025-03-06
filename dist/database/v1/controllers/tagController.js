@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTag = exports.updateTag = exports.getTagByCategory = exports.getTagById = exports.searchTags = exports.getAllTags = exports.createTag = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const tagModel_1 = __importDefault(require("../models/tagModel"));
-const applicantModel_1 = __importDefault(require("../models/applicantModel"));
+const tag_1 = __importDefault(require("../models/tag"));
+const applicant_1 = __importDefault(require("../models/applicant"));
 const createTag = async (req, res) => {
     const { name, category, description } = req.body;
     try {
-        const tag = await tagModel_1.default.create({
+        const tag = await tag_1.default.create({
             name,
             category: category || "General",
             description: description || "No description provided",
@@ -38,8 +38,8 @@ const getAllTags = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
         const skip = (page - 1) * limit;
-        const totalTags = await tagModel_1.default.find().countDocuments();
-        const data = await tagModel_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalTags = await tag_1.default.find().countDocuments();
+        const data = await tag_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
         res.status(200).json({
             statusCode: 200,
             success: true,
@@ -75,10 +75,10 @@ const searchTags = async (req, res) => {
                 message: "Search query is required",
             });
         }
-        const totalTags = await tagModel_1.default.countDocuments({
+        const totalTags = await tag_1.default.countDocuments({
             name: { $regex: searchQuery, $options: "i" },
         });
-        const data = await tagModel_1.default.find({
+        const data = await tag_1.default.find({
             name: { $regex: searchQuery, $options: "i" },
         })
             .sort({ createdAt: -1 })
@@ -115,7 +115,7 @@ exports.searchTags = searchTags;
 const getTagById = async (req, res) => {
     const { id } = req.params;
     try {
-        const tag = await tagModel_1.default.findById(id);
+        const tag = await tag_1.default.findById(id);
         if (tag) {
             res.status(200).json({
                 statusCode: 200,
@@ -146,7 +146,7 @@ exports.getTagById = getTagById;
 const getTagByCategory = async (req, res) => {
     const { category } = req.params;
     try {
-        const tags = await tagModel_1.default.find({ category });
+        const tags = await tag_1.default.find({ category });
         if (tags.length > 0) {
             res.status(200).json({
                 statusCode: 200,
@@ -178,7 +178,7 @@ const updateTag = async (req, res) => {
     const { id } = req.params;
     const { name, category, description, isProtected, isSystem } = req.body;
     try {
-        const tag = await tagModel_1.default.findById(id);
+        const tag = await tag_1.default.findById(id);
         if (tag) {
             tag.name = name;
             tag.category = category;
@@ -215,7 +215,7 @@ exports.updateTag = updateTag;
 const deleteTag = async (req, res) => {
     const { id } = req.params;
     try {
-        const tag = await tagModel_1.default.findById(id);
+        const tag = await tag_1.default.findById(id);
         if (!tag) {
             return res.status(404).json({
                 statusCode: 404,
@@ -238,7 +238,7 @@ const deleteTag = async (req, res) => {
             });
         }
         await tag.deleteOne();
-        await applicantModel_1.default.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } });
+        await applicant_1.default.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } });
         res.status(200).json({
             statusCode: 200,
             success: true,

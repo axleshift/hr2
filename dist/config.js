@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file config.ts
+ * @description Configuration file for the Node.js Express API
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -17,7 +21,7 @@ exports.config = {
     server: {
         host: process.env.SERVER_HOST,
         port: process.env.SERVER_PORT,
-        csrf: process.env.SERVER_CSRF === "true" || false,
+        csrfProtection: process.env.SERVER_CSRF === "true" || false,
         trustProxy: process.env.SERVER_TRUST_PROXY === "true" || false,
         jwt: {
             secret: process.env.JWT_SECRET,
@@ -29,12 +33,19 @@ exports.config = {
         },
         origins: process.env.CORS_ORIGINS?.split(",") || [],
     },
+    api: {
+        masterKey: process.env.API_MASTER_KEY,
+    },
+    google: {
+        formsKey: process.env.GOOGLE_FORMS_KEY,
+    },
     mongoDB: {
         username: process.env.MONGODB_USERNAME,
         password: process.env.MONGODB_PASSWORD,
         cluster: process.env.MONGODB_CLUSTER,
         options: process.env.MONGODB_OPTIONS,
-        uri: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}`,
+        // if NODE_ENV is production, use the MONGODB_URI, otherwise use the connection string
+        uri: process.env.NODE_ENV === "development" ? process.env.MONGODB_URI : (process.env.MONGODB_URI || `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?${process.env.MONGODB_OPTIONS}`),
         ttl: 24 * 60 * 60, // 1 day
     },
     twitterApi: {
@@ -54,7 +65,7 @@ exports.config = {
         },
         activeSessions: {
             timeout: 10000,
-        }
+        },
     },
     route: {
         dir: path_1.default.join(__dirname, "routes"),

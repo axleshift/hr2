@@ -8,15 +8,14 @@ const router = (0, express_1.Router)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
-router.get("/", (0, verifySession_1.default)({
-    permissions: ["all"],
-}, true, true), (req, res) => {
-    res.send("OK");
-});
+const googleFormController_1 = require("../../database/v1/controllers/googleFormController");
+router.post("/submit", (0, verifySession_1.default)({
+    permissions: ["webhook", "admin"],
+}), googleFormController_1.formSubmit);
 exports.default = {
     metadata: {
-        path: "/health",
-        description: "Health route",
+        path: "/googleform",
+        description: "Google Form",
     },
     router,
 };

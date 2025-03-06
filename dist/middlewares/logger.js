@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file /middlewares/logger.ts
+ * @description Middleware to log HTTP requests
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

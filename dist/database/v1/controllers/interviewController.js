@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteInterviewById = exports.updateInterview = exports.createInterviewForADate = exports.getInterviewById = exports.getInterviewForAMonth = exports.getInterviewForADay = void 0;
 const UTCDate_1 = __importDefault(require("../../../utils/UTCDate"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const interviewSchedModel_1 = __importDefault(require("../models/interviewSchedModel"));
-const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
+const InterviewSchedule_1 = __importDefault(require("../models/InterviewSchedule"));
+const timeslot_1 = __importDefault(require("../models/timeslot"));
 const getInterviewForADay = async (req, res) => {
     try {
         logger_1.default.info("Getting all interviews for a day");
@@ -16,7 +16,7 @@ const getInterviewForADay = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const total = await interviewSchedModel_1.default.countDocuments();
+        const total = await InterviewSchedule_1.default.countDocuments();
         if (total === 0) {
             return res.status(404).json({
                 statusCode: 404,
@@ -26,7 +26,7 @@ const getInterviewForADay = async (req, res) => {
         }
         const startDate = new Date(date).setHours(0, 0, 0, 0);
         const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
-        const interviews = await interviewSchedModel_1.default
+        const interviews = await InterviewSchedule_1.default
             .find({
             date: {
                 $gte: startDate,
@@ -36,7 +36,7 @@ const getInterviewForADay = async (req, res) => {
             .skip(skip)
             .limit(limit)
             .sort({ date: 1 });
-        const allSlots = await interviewTimeSlotModel_1.default.find({
+        const allSlots = await timeslot_1.default.find({
             date: {
                 $gte: startDate,
                 $lt: endDate,
@@ -44,7 +44,7 @@ const getInterviewForADay = async (req, res) => {
         });
         // parse slots to replace timeslotRef_id with timeslot data
         const parsedInterviews = interviews.map(async (interview) => {
-            const timeslot = await interviewTimeSlotModel_1.default.findById(interview.timeslotRef_id);
+            const timeslot = await timeslot_1.default.findById(interview.timeslotRef_id);
             return {
                 ...interview.toObject(),
                 timeslot: timeslot,
@@ -83,7 +83,7 @@ exports.getInterviewForADay = getInterviewForADay;
 const getInterviewForAMonth = async (req, res) => {
     const { year, month } = req.params;
     try {
-        const interviews = await interviewSchedModel_1.default.find({
+        const interviews = await InterviewSchedule_1.default.find({
             $expr: {
                 $and: [{ $eq: [{ $year: "$date" }, parseInt(year)] }, { $eq: [{ $month: "$date" }, parseInt(month)] }],
             },
@@ -110,7 +110,7 @@ exports.getInterviewForAMonth = getInterviewForAMonth;
 const getInterviewById = async (req, res) => {
     const { id } = req.params;
     try {
-        const interview = await interviewSchedModel_1.default.findById(id);
+        const interview = await InterviewSchedule_1.default.findById(id);
         if (!interview || interview === null) {
             return res.status(404).json({
                 statusCode: 404,
@@ -154,7 +154,7 @@ const createInterviewForADate = async (req, res) => {
             });
         }
         // Create the interview
-        const interview = new interviewSchedModel_1.default({
+        const interview = new InterviewSchedule_1.default({
             date: parsedDate,
             title,
             timeslotRef_id,
@@ -165,7 +165,7 @@ const createInterviewForADate = async (req, res) => {
             isExpired: false,
         });
         // Update the timeslot to be unavailable
-        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(timeslotRef_id, {
+        const timeslot = await timeslot_1.default.findByIdAndUpdate(timeslotRef_id, {
             isAvailable: false,
         }, { new: true });
         if (!timeslot) {
@@ -198,7 +198,7 @@ exports.createInterviewForADate = createInterviewForADate;
 const updateInterview = async (req, res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedModel_1.default.findById(id);
+        const interview = await InterviewSchedule_1.default.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
@@ -208,7 +208,7 @@ const updateInterview = async (req, res) => {
         }
         const { date, title, timeslotRef_id, additionalInfo, location, capacity } = req.body;
         const parsedDate = new Date(date).setUTCHours(0, 0, 0, 0);
-        const formerTimeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
+        const formerTimeslot = await timeslot_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
             isAvailable: true,
         }, { new: true });
         if (!formerTimeslot) {
@@ -219,7 +219,7 @@ const updateInterview = async (req, res) => {
             });
         }
         // Update the interview
-        const updatedInterview = await interviewSchedModel_1.default.findByIdAndUpdate(id, {
+        const updatedInterview = await InterviewSchedule_1.default.findByIdAndUpdate(id, {
             date: parsedDate,
             title,
             timeslotRef_id,
@@ -235,7 +235,7 @@ const updateInterview = async (req, res) => {
             });
         }
         // Update the timeslot to be unavailable
-        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(timeslotRef_id, {
+        const timeslot = await timeslot_1.default.findByIdAndUpdate(timeslotRef_id, {
             isAvailable: false,
         }, { new: true });
         if (!timeslot) {
@@ -263,7 +263,7 @@ exports.updateInterview = updateInterview;
 const deleteInterviewById = async (req, res) => {
     try {
         const id = req.params.id;
-        const interview = await interviewSchedModel_1.default.findById(id);
+        const interview = await InterviewSchedule_1.default.findById(id);
         if (!interview) {
             return res.status(404).json({
                 statusCode: 404,
@@ -271,7 +271,7 @@ const deleteInterviewById = async (req, res) => {
                 message: "Interview not found",
             });
         }
-        const timeslot = await interviewTimeSlotModel_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
+        const timeslot = await timeslot_1.default.findByIdAndUpdate(interview.timeslotRef_id, {
             isAvailable: true,
         }, { new: true });
         if (!timeslot) {

@@ -4,20 +4,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const testSchema = new mongoose_1.default.Schema({
-    title: {
+const apiKeySchema = new mongoose_1.default.Schema({
+    key: {
         type: String,
         required: true,
     },
-    content: {
-        type: String,
+    owner: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        required: false,
+    },
+    permissions: {
+        type: Array,
         required: true,
     },
-    repetition: {
-        type: Number,
+    expiresAt: {
+        type: Date,
+        required: true,
     },
 }, {
     timestamps: true,
     updateAt: true,
 });
-exports.default = mongoose_1.default.model("Test", testSchema);
+exports.default = mongoose_1.default.model("Test", apiKeySchema);

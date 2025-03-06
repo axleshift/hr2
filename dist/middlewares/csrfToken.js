@@ -3,6 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @file /middlewares/csrfToken.ts
+ * @description Middleware to generate CSRF token
+ * @description This middleware generates a CSRF token from the sessionID and stores it in the session
+ */
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generateCsrfToken = async (req, res, next) => {
     // Ensure that the session exists
@@ -28,6 +33,6 @@ const generateCsrfToken = async (req, res, next) => {
             });
         }
     }
-    next(); // Proceed to the next middleware
+    next();
 };
 exports.default = generateCsrfToken;

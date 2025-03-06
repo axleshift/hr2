@@ -7,15 +7,15 @@ const express_1 = require("express");
 const router = (0, express_1.Router)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const testController_1 = require("../../database/v1/controllers/testController");
-router.post("/", testController_1.createTest);
-router.get("/", testController_1.getAllTests);
+router.get("/", (req, res) => {
+    res.json({
+        message: "Hello, World!",
+    });
+});
 exports.default = {
     metadata: {
         path: "/test",
-        method: ["POST", "GET"],
         description: "Test route",
-        permissions: ["admin"],
     },
     router,
 };

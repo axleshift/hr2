@@ -4,6 +4,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const verificationSchema = new mongoose_1.default.Schema({
+    code: {
+        type: String,
+        required: true,
+    },
+    expiresAt: {
+        type: Date,
+        required: true,
+    },
+});
+// const developerSchema = new mongoose.Schema(
+//   {
+//     apKey: {
+//       type: String,
+//       required: true,
+//     },
+//     permissions: {
+//       type: [String],
+//       required: true,
+//     },
+//     expiresAt: {
+//       type: Date,
+//       required: true,
+//     },
+//   },
+//   {
+//     timestamps: true,
+//     updateAt: true,
+//   }
+// );
 const userSchema = new mongoose_1.default.Schema({
     firstname: {
         type: String,
@@ -31,13 +61,17 @@ const userSchema = new mongoose_1.default.Schema({
         type: Date,
         required: false,
     },
+    verification: {
+        type: verificationSchema,
+        required: false,
+    },
     role: {
         type: String,
-        required: true,
+        default: "user",
     },
     status: {
         type: String,
-        required: true,
+        default: "inactive",
     },
     rememberToken: {
         type: String,

@@ -8,15 +8,14 @@ const router = (0, express_1.Router)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
-router.get("/", (0, verifySession_1.default)({
-    permissions: ["all"],
-}, true, true), (req, res) => {
-    res.send("OK");
-});
+const apiKeyController_1 = require("../../database/v1/controllers/apiKeyController");
+router.get("/update/:id", (0, verifySession_1.default)({
+    permissions: ["admin", "superadmin"],
+}), apiKeyController_1.updateApikey);
 exports.default = {
     metadata: {
-        path: "/health",
-        description: "Health route",
+        path: "/api",
+        description: "This route is used to add, update, delete, get all, get by id and search test data",
     },
     router,
 };

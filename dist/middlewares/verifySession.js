@@ -1,44 +1,58 @@
 "use strict";
+/**
+ * @file /middlewares/verifySession.ts
+ * @description Middleware to verify user session
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../config");
-const verifySession = (requiredRoles = []) => {
+// sendError helper function
+const sendError = (res, statusCode, message) => {
+    return res.status(statusCode).json({
+        statusCode,
+        success: false,
+        message,
+    });
+};
+// validate csrf token helper function
+const validateCSRFToken = (req) => {
+    const csrfToken = req.session.csrfToken;
+    const clientToken = req.headers["x-csrf-token"] || csrfToken;
+    return csrfToken === clientToken;
+};
+/**
+ * verifySession middleware
+ * @param metadata - Metadata object containing permissions
+ * @param validateCsrf - Boolean to enable/disable CSRF token validation (default: true)
+ * @param allowGuest - Boolean to allow guest access without session (default: false)
+ * @returns Express middleware
+ *
+ * @description This middleware verifies the user session and permissions based on the metadata object provided
+ * It also validates the CSRF token if enabled
+ * It allows guest access if enabled
+ */
+const verifySession = (metadata, validateCsrf = true, allowGuest = false) => {
     return (req, res, next) => {
-        if (!req.session.user) {
-            return res.status(401).json({
-                statusCode: 401,
-                success: false,
-                message: "Unauthorized",
-            });
+        if (!req.session) {
+            return sendError(res, 401, "Unauthorized: Session not initialized");
         }
-        // If requiredRoles is specified, check if the user's role matches
-        const userRole = req.session.user.role;
-        if (requiredRoles.length > 0 && !requiredRoles.includes(userRole)) {
-            return res.status(403).json({
-                statusCode: 403,
-                success: false,
-                message: "Forbidden: You do not have the required permissions",
-            });
-        }
-        if (config_1.config.server.csrf) {
-            const csrfToken = req.session.csrfToken;
-            const clientToken = req.headers["x-csrf-token"] || csrfToken;
-            if (!clientToken) {
-                return res.status(403).json({
-                    statusCode: 403,
-                    success: false,
-                    message: "Forbidden: CSRF token missing",
-                });
+        const user = req.session.user;
+        // Guard clause extravaganza.. let's gooo
+        if (!user) {
+            if (allowGuest) {
+                return next(); // Allow access if guest access is enabled
             }
-            if (clientToken !== csrfToken) {
-                return res.status(403).json({
-                    statusCode: 403,
-                    success: false,
-                    message: "Forbidden: Invalid CSRF token",
-                });
-            }
+            return sendError(res, 401, "Unauthorized: Invalid or missing user session");
         }
-        // console.info("Session CSRF TOKEN  -> csrfToken", csrfToken);
-        // User is authenticated and authorized
+        if (!user.role || typeof user.role !== "string") {
+            return sendError(res, 401, "Unauthorized: User role is invalid");
+        }
+        const permissions = metadata.permissions;
+        if (permissions.length > 0 && !permissions.includes(user.role)) {
+            return sendError(res, 403, "Forbidden: Insufficient permissions");
+        }
+        if (validateCsrf && config_1.config.server.csrfProtection && !validateCSRFToken(req)) {
+            return sendError(res, 403, "Forbidden: Invalid CSRF token");
+        }
         next();
     };
 };

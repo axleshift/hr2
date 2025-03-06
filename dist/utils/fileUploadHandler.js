@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file fileUploadHandler.ts
+ * @description File upload handler for the Node.js Express API. Handles file uploads using Multer.
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

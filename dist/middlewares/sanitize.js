@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file /middlewares/sanitize.ts
+ * @description Middleware to sanitize user input
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

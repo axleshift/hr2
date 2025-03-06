@@ -9,7 +9,8 @@ const config_1 = require("../config");
 const logger_1 = __importDefault(require("../middlewares/logger"));
 const dbConnection = async () => {
     try {
-        await mongoose_1.default.connect(config_1.config.mongoDB.uri);
+        const uri = config_1.config.mongoDB.uri;
+        await mongoose_1.default.connect(uri);
         return true;
     }
     catch (error) {
@@ -26,6 +27,9 @@ const connectDB = async () => {
     }
     if (connected) {
         logger_1.default.info("🌿 Connected to MongoDB");
+    }
+    else {
+        logger_1.default.error("🚫 WARNING! Could not connect to MongoDB");
     }
 };
 exports.connectDB = connectDB;

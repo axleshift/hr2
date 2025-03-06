@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const apikey_1 = __importDefault(require("./apikey"));
 const userSettingsSchema = new mongoose_1.default.Schema({
     user_id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
@@ -32,10 +33,8 @@ const userSettingsSchema = new mongoose_1.default.Schema({
             type: Boolean,
             default: false,
         },
-        api_key: {
-            type: String,
-        },
-    }
+        apiKeys: [apikey_1.default],
+    },
 }, {
     timestamps: true,
     updateAt: true,

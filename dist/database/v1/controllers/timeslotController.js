@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSlotById = exports.createSlotForADate = exports.getAllSlotsForADate = exports.getSlotById = void 0;
 const UTCDate_1 = __importDefault(require("../../../utils/UTCDate"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const interviewTimeSlotModel_1 = __importDefault(require("../models/interviewTimeSlotModel"));
+const timeslot_1 = __importDefault(require("../models/timeslot"));
 const getSlotById = async (req, res) => {
     const { id } = req.params;
     try {
-        const slot = await interviewTimeSlotModel_1.default.findById(id);
+        const slot = await timeslot_1.default.findById(id);
         if (!slot || slot === null) {
             return res.status(404).json({
                 statusCode: 404,
@@ -43,7 +43,7 @@ const getAllSlotsForADate = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const total = await interviewTimeSlotModel_1.default.countDocuments();
+        const total = await timeslot_1.default.countDocuments();
         logger_1.default.info("Getting all slots for a date");
         logger_1.default.info(date);
         // Validate date input
@@ -56,7 +56,7 @@ const getAllSlotsForADate = async (req, res) => {
         }
         const startDate = new Date(date).setHours(0, 0, 0, 0);
         const endDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
-        const slots = await interviewTimeSlotModel_1.default
+        const slots = await timeslot_1.default
             .find({
             date: {
                 $gte: startDate,
@@ -107,7 +107,7 @@ const createSlotForADate = async (req, res) => {
         const inputSlot = timeslot;
         console.log("createSlotForADate -> inputSlot", inputSlot);
         // Check if the timeslot already exists        
-        const existingSlot = await interviewTimeSlotModel_1.default.findOne({
+        const existingSlot = await timeslot_1.default.findOne({
             date: startDate,
             start: timeslot.start,
             end: timeslot.end,
@@ -119,7 +119,7 @@ const createSlotForADate = async (req, res) => {
                 message: "Timeslot already exists for the specified date",
             });
         }
-        const newSlot = new interviewTimeSlotModel_1.default({
+        const newSlot = new timeslot_1.default({
             date: startDate,
             start: timeslot.start,
             end: timeslot.end,
@@ -148,7 +148,7 @@ const deleteSlotById = async (req, res) => {
     const { id } = req.params;
     console.log("deleteSlotById -> id", id);
     try {
-        const slot = await interviewTimeSlotModel_1.default.findByIdAndDelete(id);
+        const slot = await timeslot_1.default.findByIdAndDelete(id);
         if (!slot || slot === null) {
             return res.status(404).json({
                 statusCode: 404,

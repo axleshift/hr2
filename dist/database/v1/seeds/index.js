@@ -44,12 +44,13 @@ const runSeeds = async () => {
     try {
         const modules = await Promise.all(seedModules);
         for (const module of modules) {
-            if (typeof module.default === "function") {
-                logger_1.default.info(`Running seed: ${module.default.name}`);
-                await module.default();
+            if (module.default?.metadata && typeof module.default.run === "function") {
+                logger_1.default.info(`Running seed: ${module.default.metadata.name}`);
+                logger_1.default.info(`Description: ${module.default.metadata.description}`);
+                await module.default.run();
             }
             else {
-                logger_1.default.warn(`No default function found in ${module.default}`);
+                logger_1.default.warn(`Invalid seed file: ${module.default}`);
             }
         }
         logger_1.default.info("All seeds ran successfully");
