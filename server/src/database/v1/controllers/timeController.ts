@@ -86,7 +86,6 @@ export const updateTimeslot = async (req: req, res: res) => {
     timeslot.date = date;
     timeslot.start = start;
     timeslot.end = end;
-    timeslot.capacity = capacity;
     timeslot.participants = participants;
     timeslot.isAvailable = isAvailable;
 
