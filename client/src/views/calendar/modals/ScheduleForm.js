@@ -195,7 +195,6 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, interviewData }) => {
         setIsTimeLoading(false)
       } else {
         addToast('Calendar | Timeslots', res.message.message, 'danger')
-        setIsTimeLoading(false)
       }
     } catch (error) {
       console.error(error)
