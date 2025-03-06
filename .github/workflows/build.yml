@@ -72,20 +72,25 @@ jobs:
             echo "NODE_ENV=${{ secrets.SERVER_NODE_ENV}}" > .env
             echo "SERVER_PORT=${{ secrets.SERVER_PORT}}" >> .env
             echo "SERVER_HOST=${{ secrets.SERVER_HOST}}" >> .env
+            echo "SERVER_TRUST_PROXY=${{ secrets.SERVER_TRUST_PROXY}}" >> .env
+            echo "SERVER_CSRF=${{ secrets.SERVER_CSRF}}" >> .env
             echo "CORS_ORIGINS=${{ secrets.SERVER_CORS_ORIGINS}}" >> .env
             echo "JWT_SECRET=${{ secrets.SERVER_JWT_SECRET}}" >> .env
             echo "JWT_EXPIRES_IN=${{ secrets.SERVER_JWT_EXPIRES_IN}}" >> .env
             echo "SESSION_SECRET=${{ secrets.SERVER_SESSION_SECRET}}" >> .env
             echo "SESSION_EXPIRES_IN=${{ secrets.SERVER_SESSION_EXPIRES_IN}}" >> .env
             echo "SESSION_EXCEPTIONS=${{ secrets.SERVER_SESSION_EXCEPTIONS}}" >> .env
+            echo "GOOGLE_FORMS_KEY=${{ secrets.SERVER_GOOGLE_FORMS_KEY}}" >> .env
             echo "MONGODB_USERNAME=${{ secrets.SERVER_MONGODB_USERNAME}}" >> .env
             echo "MONGODB_PASSWORD=${{ secrets.SERVER_MONGODB_PASSWORD}}" >> .env
             echo "MONGODB_CLUSTER=${{ secrets.SERVER_MONGODB_CLUSTER}}" >> .env
             echo "MONGODB_OPTIONS=${{ secrets.SERVER_MONGODB_OPTIONS}}" >> .env
+            echo "API_MASTER_KEY=${{ secrets.SERVER_API_MASTER_KEY}}" >> .env
             echo "TWITTER_API_KEY=${{ secrets.SERVER_TWITTER_API_KEY}}" >> .env
             echo "TWITTER_API_SECRET=${{ secrets.SERVER_TWITTER_API_SECRET}}" >> .env
             echo "TWITTER_ACCESS_TOKEN=${{ secrets.SERVER_TWITTER_ACCESS_TOKEN}}" >> .env
             echo "TWITTER_ACCESS_TOKEN_SECRET=${{ secrets.SERVER_TWITTER_ACCESS_TOKEN_SECRET}}" >> .env
+            echo "PROMETHEUS_METRICS_PREFIX=${{ secrets.SERVER_PROMETHEUS_METRICS_PREFIX}}" >> .env
 
       - name: Build Server
         run: |
