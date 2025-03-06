@@ -203,7 +203,7 @@ const Facilities = () => {
           <CCol>
             <CModal visible={deleteModal} onClose={() => {
               setDeleteModal(false)
-              setSelectedFacility('')
+              setSelectedFacility({})
               setIsConfirmDelete(false)
             }}>
               <CModalHeader>
@@ -260,7 +260,7 @@ const Facilities = () => {
               isVisible={isFormVisible}
               onClose={() => {
                 setIsFormVisible(false)
-                setFacilityData('')
+                setFacilityData({})
                 getAllFacilitiesData()
               }}
               isEdit={isEdit}
