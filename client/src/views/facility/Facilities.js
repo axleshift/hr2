@@ -30,7 +30,7 @@ import { del, get } from '../../api/axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 
-import FacilityForm from '../facility/modals/FacilityForm'
+import FacilityForm from './modals/FacilityForm'
 import ManageFacilityForm from './modals/ManageFacilityForm'
 
 const Facilities = () => {
