@@ -31,6 +31,11 @@ jobs:
           echo "VITE_REACT_GOOGLE_RECAPTCHA_SITE_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SITE_KEY}}" >> .env
           echo "VITE_REACT_GOOGLE_RECAPTCHA_SECRET_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SECRET_KEY}}" >> .env
 
+      - name: Prebuild client
+        run: |
+          cd client
+          npm run prebuild
+
       - name: Build Client
         run: |
           cd client
