@@ -79,9 +79,12 @@ const Jobposter = () => {
     try {
       setIsLoading(true)
       const res = await get(`/jobposting/${id}`)
-      // console.log(res.data.data)
-      setData(res.data.data)
-      setIsLoading(false)
+      if (res.status === 200 || res.status === 201) {
+        setData(res.data.data)
+        setIsLoading(false)
+      } else {
+        setIsLoading(false)
+      }
     } catch (error) {
       console.log(error)
     }

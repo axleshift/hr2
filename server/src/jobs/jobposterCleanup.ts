@@ -1,6 +1,6 @@
 import cron from "node-cron";
-import Jobposter from "../database/v1/models/jobposterModel";
-import Jobposting from "../database/v1/models/jobpostingModel";
+import Jobposter from "../database/v1/models/jobposter";
+import Jobposting from "../database/v1/models/jobposting";
 import { removeTweet, createTweet } from "../utils/twitter";
 import logger from "../middlewares/logger";
 import { TweetType } from "../types/tweet";

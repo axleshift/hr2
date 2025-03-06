@@ -78,18 +78,18 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
     setIsDateLoading(true)
     try {
       const res = await get(`/interview/all?date=${date}&page=${currentPage}&limit=${itemsPerPage}`)
-      if (res.status === 404) {
-        setInterviewDatas([])
+      if (res.status === 200) {
+        const sortedData = sortByDateThenByTime(res.data.data)
+        setInterviewDatas(sortedData)
+        setCollapseState(new Array(res.data.data.length).fill(false))
+        // setDateTimeSlotData(res.data.slots)
+        setCurrentPage(res.data.currentPage)
+        setTotalPages(res.data.totalPages)
         setIsDateLoading(false)
-        return
+      } else {
+        setIsDateLoading(false)
+        addToast('Calendar | Scheduling Form', res.message.message, 'danger')
       }
-      const sortedData = sortByDateThenByTime(res.data.data)
-      setInterviewDatas(sortedData)
-      setCollapseState(new Array(res.data.data.length).fill(false))
-      // setDateTimeSlotData(res.data.slots)
-      setCurrentPage(res.data.currentPage)
-      setTotalPages(res.data.totalPages)
-      setIsDateLoading(false)
     } catch (error) {
       console.error(error)
       setIsDateLoading(false)

@@ -3,23 +3,64 @@ const router = Router();
 
 import dotenv from "dotenv";
 dotenv.config();
+import verifySession from "../../middlewares/verifySession";
 
 import { createTag, getAllTags, updateTag, getTagById, getTagByCategory, deleteTag, searchTags } from "../../database/v1/controllers/tagController";
 
-router.post("/", createTag);
-router.get("/all", getAllTags);
-router.get("/search", searchTags);
-router.get("/category/:category", getTagByCategory);
-router.get("/:id", getTagById);
-router.put("/:id", updateTag);
-router.delete("/:id", deleteTag);
+router.post(
+  "/",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  createTag
+);
+router.get(
+  "/all",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  getAllTags
+);
+router.get(
+  "/search",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  searchTags
+);
+router.get(
+  "/category/:category",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  getTagByCategory
+);
+router.get(
+  "/:id",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  getTagById
+);
+router.put(
+  "/:id",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  updateTag
+);
+router.delete(
+  "/:id",
+  verifySession({
+    permissions: ["admin", "superadmin"],
+  }),
+  deleteTag
+);
 
 export default {
-    metadata: {
-        path: "/tags",
-        method: ["POST", "GET", "PUT", "DELETE"],
-        description: "This route is used to add, update, delete, get all, get by id and search tag data",
-        permissions: ["admin", "user"],
-    },
-    router,
+  metadata: {
+    path: "/tags",
+    description: "This route is used to add, update, delete, get all, get by id and search tag data",
+  },
+  router,
 };

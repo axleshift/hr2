@@ -1,8 +1,10 @@
 import React from 'react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import {
   faAt,
+  faBuilding,
   faCalendarPlus,
   faClipboardList,
   faClockFour,
@@ -13,6 +15,7 @@ import {
   faFileAlt,
   faFileArchive,
   faFileCircleCheck,
+  faFileCircleExclamation,
   faFileCirclePlus,
   faFileCircleQuestion,
   faInbox,
@@ -20,6 +23,7 @@ import {
   faPlus,
   faStar,
   faUserClock,
+  faUsersViewfinder,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -66,15 +70,21 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faAt} className="nav-icon" />,
   },
   {
-    component: CNavTitle,
-    name: 'Applicants',
+    component: CNavItem,
+    name: 'Request',
+    to: '/recruitment/jobposting/request',
+    icon: <FontAwesomeIcon icon={faFileAlt} className="nav-icon" />,
   },
   {
-    component: CNavItem,
-    name: 'Applications',
-    to: '/applicant/list',
-    icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
+    component: CNavTitle,
+    name: 'Documentations',
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Applications',
+  //   to: '/applicant/list',
+  //   icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: 'Screening',
@@ -83,15 +93,21 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Training',
-    to: '/applicant/training',
-    icon: <FontAwesomeIcon icon={faFileAlt} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: 'Shortlisted',
     to: '/applicant/shortlisted',
     icon: <FontAwesomeIcon icon={faFileCircleCheck} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Interviews',
+    to: '/applicant/interviews',
+    icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Training',
+    to: '/applicant/training',
+    icon: <FontAwesomeIcon icon={faFileCircleExclamation} className="nav-icon" />,
   },
   {
     component: CNavItem,
@@ -116,14 +132,14 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
   },
   {
-    component: CNavTitle,
-    name: 'Mail ',
+    component: CNavItem,
+    name: 'Facilities',
+    to: '/calendar/facilities',
+    icon: <FontAwesomeIcon icon={faBuilding} className="nav-icon" />,
   },
   {
-    component: CNavItem,
-    name: 'Compose',
-    to: '/mail/compose',
-    icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
+    component: CNavTitle,
+    name: 'Mail ',
   },
   {
     component: CNavItem,
@@ -151,6 +167,16 @@ const _nav = [
   },
   {
     component: CNavTitle,
+    name: 'Accounts',
+  },
+  {
+    component: CNavItem,
+    name: 'Users',
+    to: '/accounts/users',
+    icon: <FontAwesomeIcon icon={faUsersViewfinder} className="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
     name: 'Settings',
   },
   {
@@ -164,6 +190,7 @@ const _nav = [
     name: 'API',
     to: '/developer/api',
     icon: <FontAwesomeIcon icon={faCode} size="lg" className="nav-icon" />,
+    permissions: ['superadmin', 'admin'],
   },
   {
     component: CNavGroup,

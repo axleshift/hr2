@@ -9,8 +9,6 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CCol,
@@ -20,7 +18,6 @@ import {
   CFormTextarea,
   CFormCheck,
   CFormFeedback,
-  CCollapse,
   CTooltip,
   CInputGroup,
   CSpinner,
@@ -28,22 +25,23 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
+  CListGroup,
+  CListGroupItem,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faChevronDown,
-  faChevronUp,
-  faLocationPin,
   faMoneyBill,
   faRefresh,
   faPencil,
   faCalendar,
   faSearch,
   faPrint,
+  faCheckCircle,
+  faGlobe,
+  faCoins,
 } from '@fortawesome/free-solid-svg-icons'
 import AppPagination from '../../components/AppPagination'
 import { formatDate, formatCurency, trimString } from '../../utils'
-import { icon } from '@fortawesome/fontawesome-svg-core'
 const Jobposting = () => {
   const { addToast } = useContext(AppContext)
 
@@ -69,7 +67,6 @@ const Jobposting = () => {
   // Display mode
   const [displayMode, setDisplayMode] = useState('grid')
 
-  const today = new Date()
   const tommorrow = new Date(new Date().setDate(new Date().getDate() + 1))
   const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
 
@@ -84,10 +81,11 @@ const Jobposting = () => {
       jpfLoc: z.string().min(1, { message: 'Location is required' }),
       jpfBnft: z.string().min(1, { message: 'Benefit is required' }),
       jpfReq: z.string().min(1, { message: 'Requirement is required' }),
-      jpfSchedStart: z.preprocess(
-        (val) => new Date(val),
-        z.date().min(yesterday, { message: 'Start Date must be today or later' }),
-      ),
+      // jpfSchedStart: z.preprocess(
+      //   (val) => new Date(val),
+      //   z.date().min(yesterday, { message: 'Start Date must be today or later' }),
+      // ),
+      jpfSchedStart: z.preprocess((val) => new Date(val), z.date()),
       jpfSchedEnd: z.preprocess(
         (val) => new Date(val),
         z.date().min(new Date(), { message: 'End Date must be in the future' }),
@@ -179,8 +177,8 @@ const Jobposting = () => {
           jpfBnft: res.data.data.benefits,
           jpfReq: res.data.data.requirements,
           // jpfResp: res.data.data.responsibilities,
-          jpfSchedStart: formatDate(res.data.data.schedule_start),
-          jpfSchedEnd: formatDate(res.data.data.schedule_end),
+          jpfSchedStart: new Date(res.data.data.schedule_start).toISOString().split('T')[0],
+          jpfSchedEnd: new Date(res.data.data.schedule_end).toISOString().split('T')[0],
           jpfStatus: res.data.status,
         }
         formReset(formattedData)
@@ -207,8 +205,8 @@ const Jobposting = () => {
       jpfLoc: '',
       jpfBnft: '',
       jpfReq: '',
-      jpfSchedStart: new Date(),
-      jpfSchedEnd: new Date(),
+      jpfSchedStart: new Date().toISOString().split('T')[0],
+      jpfSchedEnd: new Date().toISOString().split('T')[0],
       jpfStatus: 'active',
     }
     formReset(emptyFormData)
@@ -233,8 +231,7 @@ const Jobposting = () => {
         setIsJobFormVisible(false)
         setIsLoading(false)
       } else {
-        addToast('Jobposting', 'Error getting jobposting', 'danger')
-        console.log('Error: ', res.data)
+        addToast('Jobposting' + ' ' + res.status, res.message.message, 'danger')
         setIsLoading(false)
         setIsSearchMode(false)
       }
@@ -247,11 +244,7 @@ const Jobposting = () => {
   const searchSchema = z.object({
     jpSearchInput: z.string().min(1, { message: 'Search query is required' }),
   })
-  const {
-    register: searchRegister,
-    handleSubmit: searchHandleSubmit,
-    formState: { searchError },
-  } = useForm({
+  const { register: searchRegister, handleSubmit: searchHandleSubmit } = useForm({
     resolver: zodResolver(searchSchema),
     // resolver: async (data, context, options) => {
     //   const result = await zodResolver(searchSchema)(data, context, options)
@@ -288,7 +281,7 @@ const Jobposting = () => {
   return (
     <>
       <CContainer>
-        <CRow>
+        <CRow className="mb-3">
           <CCol>
             <h1>Job Postings</h1>
             <small className="text-muted">
@@ -315,6 +308,7 @@ const Jobposting = () => {
             <CModal
               visible={isJobFormVisible}
               size="lg"
+              backdrop="static"
               onClose={() => {
                 setIsJobFormVisible(false)
                 handleEditReset()
@@ -500,7 +494,6 @@ const Jobposting = () => {
                         <CFormInput
                           type="date"
                           id="jpfSchedStart"
-                          defaultValue={formatDate(tommorrow)}
                           {...formRegister('jpfSchedStart')}
                           invalid={!!errors.jpfSchedStart}
                         />
@@ -515,7 +508,6 @@ const Jobposting = () => {
                         <CFormInput
                           type="date"
                           id="jpfSchedEnd"
-                          defaultValue={formatDate(tommorrow)}
                           {...formRegister('jpfSchedEnd')}
                           invalid={!!errors.jpfSchedEnd}
                         />
@@ -594,6 +586,12 @@ const Jobposting = () => {
                   </CButton>
                 </CTooltip>
               </CInputGroup>
+              {/* <CButton
+                onClick={() => setDisplayMode(displayMode === 'grid' ? 'list' : 'grid')}
+                className="btn btn-primary"
+              >
+                <FontAwesomeIcon icon={displayMode === 'grid' ? faGripHorizontal : faList} />
+              </CButton> */}
             </CForm>
           </CContainer>
         </CRow>
@@ -612,125 +610,150 @@ const Jobposting = () => {
                     }
                     return (
                       <CCol key={data._id}>
-                        <CCard className="mb-3 h-100">
-                          <CCardHeader className="fw-bold text-uppercase text-primary">
-                            <div>
-                              <span
-                                className={
-                                  data.status === 'active'
-                                    ? 'badge rounded-pill text text-success'
-                                    : 'badge rounded-pill text text-danger'
-                                }
-                              >
-                                {data.status === 'active' ? 'Active' : 'Inactive'}
-                              </span>
-                              <p className="fw-bold text-uppercase text-primary">{data.title}</p>
-                            </div>
-                          </CCardHeader>
+                        <CCard className="position-relative h-100">
                           <CCardBody>
-                            <div className="d-flex flex-column justify-content-between">
-                              <div className="d-flex flex-row gap-2 justify-content-start">
-                                <FontAwesomeIcon icon={faLocationPin} />
-                                <p>{data.location}</p>
-                              </div>
-                              <div className="d-flex flex-row gap-2 justify-content-start">
-                                <FontAwesomeIcon icon={faCalendar} />
-                                <p>
-                                  {formatDate(data.schedule_start)} -{' '}
-                                  {formatDate(data.schedule_end)}
-                                </p>
-                              </div>
-                              <div className="d-flex flex-row gap-2 justify-content-start">
-                                <FontAwesomeIcon icon={faMoneyBill} />
-                                <p>
-                                  {formatCurency(data.salary_min)} -{' '}
-                                  {formatCurency(data.salary_max)}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="fw-bold text-uppercase">Description</p>
-                                <p>{trimString(data.description, 150)}</p>
-                              </div>
+                            <h4 className="fw-bold text-capitalize">{data.title}</h4>
+                            <div>
+                              <FontAwesomeIcon icon={faGlobe} className="me-2" />
+                              <small className="text-muted text-capitalize">{data.location}</small>
                             </div>
-                          </CCardBody>
-                          <CCardFooter>
+                            <div>
+                              {/* <strong>Status</strong> */}
+                              {/* <br /> */}
+                              <FontAwesomeIcon icon={faCheckCircle} className="me-2" />
+                              {data.status === 'active' ? (
+                                <small className="text-success">Active</small>
+                              ) : (
+                                <small className="text-danger">Inactive</small>
+                              )}
+                            </div>
+                            <div>
+                              {/* <strong>Deployment</strong>
+                              <br /> */}
+                              <FontAwesomeIcon icon={faCalendar} className="me-2" />
+                              <small className="text-muted">
+                                {formatDate(data.schedule_start, 'MMM D, YYYY')} -{' '}
+                                {formatDate(data.schedule_end, 'MMM D, YYYY')}
+                              </small>
+                            </div>
+                            <div>
+                              {/* <strong>Salary</strong>
+                              <br /> */}
+                              <FontAwesomeIcon icon={faCoins} className="me-2" />
+                              <small className="text-muted">
+                                {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                              </small>
+                            </div>
+                            <br />
+                            <div>
+                              <strong>Description</strong>
+                              <br />
+                              <small className="text-muted">
+                                {trimString(data.description, 150)}
+                              </small>
+                            </div>
+                            <br />
                             <div className="d-flex justify-content-end">
                               <CButton
                                 onClick={() => handleEdit(data._id)}
-                                className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
+                                className="btn btn-primary"
                               >
-                                <FontAwesomeIcon icon={faPencil} />
+                                <FontAwesomeIcon icon={faPencil} className="me-2" />
                                 Edit
                               </CButton>
                             </div>
-                          </CCardFooter>
+                          </CCardBody>
                         </CCard>
                       </CCol>
                     )
                   })}
                 </CRow>
               ) : (
-                <ul className="list-group list-group-flush">
+                <CListGroup>
                   {allData.map((data) => {
                     if (!data) {
                       return null
                     }
                     return (
-                      <li key={data._id} className="list-group-item">
-                        <div>
-                          <span
-                            className={
-                              data.status === 'active'
-                                ? 'badge rounded-pill text text-bg-success'
-                                : 'badge rounded-pill text text-danger'
-                            }
-                          >
-                            {data.status === 'active' ? 'Active' : 'Inactive'}
-                          </span>
-                          <p className="fw-bold text-uppercase text-primary">{data.title}</p>
-                        </div>
-                        <div>
-                          <FontAwesomeIcon icon={faLocationPin} className="me-2" />
-                          <span>{data.location}</span>
-                        </div>
-                        <div>
-                          <FontAwesomeIcon icon={faCalendar} className="me-2" />
-                          <span>
-                            {formatDate(data.schedule_start)} - {formatDate(data.schedule_end)}
-                          </span>
-                        </div>
-                        <div>
-                          <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
-                          <span>
-                            {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="fw-bold text-uppercase">Description</p>
-                          <p>{trimString(data.description, 150)}</p>
-                        </div>
-                        <div className="d-flex justify-content-end">
-                          <div className="d-flex justify-content-end">
-                            <CButton
-                              onClick={() => handleEdit(data._id)}
-                              className="btn btn-outline-primary d-flex flex-row gap-2 justify-content-center align-items-center"
-                            >
-                              <FontAwesomeIcon icon={faPencil} />
-                              Edit
-                            </CButton>
-                          </div>
-                        </div>
-                      </li>
+                      <CListGroupItem key={data._id}>
+                        <CContainer>
+                          <CRow>
+                            <CCol>
+                              <h4 className="fw-bold text-capitalize">{data.title}</h4>
+                            </CCol>
+                          </CRow>
+                          <CRow>
+                            <CCol>
+                              <div>
+                                <FontAwesomeIcon icon={faGlobe} className="me-2" />
+                                <small className="text-muted text-capitalize">
+                                  {data.location}
+                                </small>
+                              </div>
+                              <div>
+                                {/* <strong>Status</strong> */}
+                                {/* <br /> */}
+                                <FontAwesomeIcon icon={faCheckCircle} className="me-2" />
+                                {data.status === 'active' ? (
+                                  <small className="text-success">Active</small>
+                                ) : (
+                                  <small className="text-danger">Inactive</small>
+                                )}
+                              </div>
+                              <div>
+                                {/* <strong>Deployment</strong>
+                              <br /> */}
+                                <FontAwesomeIcon icon={faCalendar} className="me-2" />
+                                <small className="text-muted">
+                                  {formatDate(data.schedule_start, 'MMM D, YYYY')} -{' '}
+                                  {formatDate(data.schedule_end, 'MMM D, YYYY')}
+                                </small>
+                              </div>
+                              <div>
+                                {/* <strong>Salary</strong>
+                              <br /> */}
+                                <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
+                                <small className="text-muted">
+                                  {formatCurency(data.salary_min)} -{' '}
+                                  {formatCurency(data.salary_max)}
+                                </small>
+                              </div>
+                              <br />
+                            </CCol>
+                            <CCol>
+                              <div>
+                                <div>
+                                  <strong>Description</strong>
+                                  <br />
+                                  <small className="text-muted">
+                                    {trimString(data.description, 150)}
+                                  </small>
+                                </div>
+                                <br />
+                                <div className="d-flex justify-content-end">
+                                  <CButton
+                                    onClick={() => handleEdit(data._id)}
+                                    className="btn btn-primary"
+                                  >
+                                    <FontAwesomeIcon icon={faPencil} className="me-2" />
+                                    Edit
+                                  </CButton>
+                                </div>
+                              </div>
+                            </CCol>
+                          </CRow>
+                        </CContainer>
+                      </CListGroupItem>
                     )
                   })}
-                </ul>
+                </CListGroup>
               )}
             </div>
           )}
           <div className="mt-3 d-flex flex-row gap-2 justify-content-center align-items-center">
             <AppPagination
               currentPage={currentPage}
-              totalPages={totalPages}
+              totalPages={totalPages || 1}
               onPageChange={setCurrentPage}
             />
           </div>

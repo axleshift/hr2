@@ -9,7 +9,7 @@ const seconds = Math.floor(Math.random() * 60)
  * @param {date} date
  * @returns formatted date string in 'MMM DD, YYYY' format
  */
-export const formatDate = (date, format = 'YYYY-MM-DD') => {
+export const formatDate = (date, format = 'MMM DD, YYYY') => {
   return dayjs(date).format(format)
 }
 

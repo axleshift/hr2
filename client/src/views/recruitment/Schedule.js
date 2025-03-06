@@ -115,27 +115,7 @@ const Schedule = () => {
         setTotalItems(res.data.total)
         setIsLoading(false)
       } else {
-        addToast('Error', 'Failed to fetch scheduled job postings', 'error')
-        setIsLoading(false)
-      }
-      if (res.status === 200) {
-        setAllData(res.data.data)
-        setCurrentPage(res.data.currentPage)
-        setTotalPages(res.data.totalPages)
-        setTotalItems(res.data.total)
-        setIsLoading(false)
-      } else {
-        addToast('Error', 'Failed to fetch scheduled job postings', 'error')
-        setIsLoading(false)
-      }
-      if (res.status === 200) {
-        setAllData(res.data.data)
-        setCurrentPage(res.data.currentPage)
-        setTotalPages(res.data.totalPages)
-        setTotalItems(res.data.total)
-        setIsLoading(false)
-      } else {
-        addToast('Error', 'Failed to fetch scheduled job postings', 'error')
+        addToast('Schedules', res.message.message, 'danger')
         setIsLoading(false)
       }
     } catch (error) {
@@ -287,29 +267,22 @@ const Schedule = () => {
                   <small className="text-capitalize text-muted mt-3">
                     Fetched total of {totalItems} job postings for
                     <span className="text-info mx-2">
-                      {formatDate(params.today, 'MMM d, YYYY')}
+                      {formatDate(params.today, 'MMM D, YYYY')}
                     </span>
                     -
                     <span className="text-info mx-2">
-                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                      {formatDate(params.nextWeek, 'MMM D, YYYY')}
                     </span>
                   </small>
                 ) : (
                   <small className="text-capitalize text-muted mt-3">
                     No scheduled jobpostings found for
                     <span className="text-info mx-2">
-                      {formatDate(params.today, 'MMM d, YYYY')}
+                      {formatDate(params.today, 'MMM D, YYYY')}
                     </span>
                     -
                     <span className="text-info mx-2">
-                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
-                    </span>
-                    <span className="text-info mx-2">
-                      {formatDate(params.today, 'MMM d, YYYY')}
-                    </span>
-                    -
-                    <span className="text-info mx-2">
-                      {formatDate(params.nextWeek, 'MMM d, YYYY')}
+                      {formatDate(params.nextWeek, 'MMM D, YYYY')}
                     </span>
                   </small>
                 )}
@@ -382,8 +355,8 @@ const Schedule = () => {
                               className={`rounded ${data.status === 'active' ? 'bg-success' : 'bg-danger'}`}
                             />
                             <div>
-                              {formatDate(data.schedule_start, 'MMM d, YYYY')} -{' '}
-                              {formatDate(data.schedule_end, 'MMM d, YYYY')}
+                              {formatDate(data.schedule_start, 'MMM D, YYYY')} -{' '}
+                              {formatDate(data.schedule_end, 'MMM D, YYYY')}
                             </div>
                           </div>
                         </div>

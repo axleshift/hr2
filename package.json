@@ -6,12 +6,20 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
+
+    "start:dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run start:dev",
+    "client:dev": "cd client && npm start",
+    
     "setup": "concurrently \"npm run server:install\" \"npm run client:install\"",
     "server:install": "cd server && npm install",
     "client:install": "cd client && npm install",
+
     "lint:fix": "concurrently \"npm run server:lint:fix\" \"npm run client:lint:fix\"",
     "server:lint:fix": "cd server && npm run lint:fix",
-    "client:lint:fix": "cd client && npm run lint:fix"
-  },
+    "client:lint:fix": "cd client && npm run lint:fix",
+
+    "create:Apikey": "cd server && npm run createApikey"
+  },  
   "version": "1.0.0"
 }

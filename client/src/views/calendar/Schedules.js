@@ -105,6 +105,7 @@ const Schedules = ({ theme }) => {
         setIsDateLoading(false)
         setInterviewDatas([])
         setDateTimeSlotData([])
+        addToast('Calendar | Schedules', res.message.message, 'danger')
       }
     } catch (error) {
       const txt = `Failed to fetch interview schedules for ${formatDate(date)}`

@@ -4,7 +4,8 @@ import logger from "../middlewares/logger";
 
 const dbConnection = async () => {
     try {
-        await mongoose.connect(config.mongoDB.uri);
+        const uri = config.mongoDB.uri as string;
+        await mongoose.connect(uri);
         return true;
     } catch (error) {
         logger.error(error);
@@ -21,5 +22,7 @@ export const connectDB = async () => {
     }
     if (connected) {
         logger.info("🌿 Connected to MongoDB");
+    } else {
+        logger.error("🚫 WARNING! Could not connect to MongoDB");
     }
 };

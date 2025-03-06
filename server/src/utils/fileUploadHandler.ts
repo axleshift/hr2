@@ -1,3 +1,8 @@
+/**
+ * @file fileUploadHandler.ts
+ * @description File upload handler for the Node.js Express API. Handles file uploads using Multer.
+ */
+
 import fs from "fs";
 import path from "path";
 import multer from "multer";

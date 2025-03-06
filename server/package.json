@@ -6,14 +6,16 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/index.ts",
-        "start": "node dist/index.js",
+        "start": "env-cmd -f .env node dist/index.js",
+        "start:dev": "env-cmd -f .env.development ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/index.ts",
         "build": "tsc",
         "build:alias": "tsc-alias -p tsconfig.json",
         "build:obfuscate": "ts-node --transpile-only ./src/obfuscate.ts",
         "lint": "eslint src",
         "lint:fix": "eslint src --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "seed:run": "ts-node-dev --transpile-only src/database/seeds/index.ts"
+        "seed:run": "ts-node-dev --transpile-only src/database/v1/seeds/index.ts",
+        "createApikey": "ts-node-dev --transpile-only src/utils/genereateApiKey.ts"
     },
     "keywords": [],
     "author": "",
@@ -25,6 +27,7 @@
         "connect-mongo": "^5.1.0",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
+        "env-cmd": "^10.1.0",
         "express": "^4.19.2",
         "express-mongo-sanitize": "^2.2.0",
         "express-rate-limit": "^7.4.0",

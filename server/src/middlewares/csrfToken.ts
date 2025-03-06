@@ -1,3 +1,8 @@
+/**
+ * @file /middlewares/csrfToken.ts
+ * @description Middleware to generate CSRF token
+ * @description This middleware generates a CSRF token from the sessionID and stores it in the session
+ */
 import bcrypt from "bcryptjs";
 import { Request, Response, NextFunction } from "express";
 
@@ -26,7 +31,7 @@ const generateCsrfToken = async (req: Request, res: Response, next: NextFunction
         }
     }
 
-    next(); // Proceed to the next middleware
+    next();
 };
 
 export default generateCsrfToken;

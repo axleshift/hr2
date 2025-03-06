@@ -1,3 +1,8 @@
+/**
+ * @file /middlewares/sanitize.ts
+ * @description Middleware to sanitize user input
+ */
+
 import ems from "express-mongo-sanitize";
 import { Request, Response, NextFunction } from "express";
 

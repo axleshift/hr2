@@ -1,3 +1,9 @@
+/**
+ * @file index.ts
+ * @description Entry point for the server
+ * @access public
+ */
+
 import express, { Application } from "express";
 import session from "express-session";
 import cors from "cors";
@@ -8,14 +14,14 @@ import fs from "fs";
 import path from "path";
 import pinoHttp from "pino-http";
 import logger from "./middlewares/logger";
-import verifySession from "./middlewares/verifySession";
 import startJobs from "./jobs/index";
 import { config } from "./config";
 import sanitize from "./middlewares/sanitize";
 import { prometheusMetrics } from "./middlewares/prometheusMetrics";
 import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
-// import generateCsrfToken from "./middlewares/csrfToken";
+import errorHandler from "./middlewares/errorHandler";
+import verifyApiKey from "./middlewares/verifyApiKey";
 
 const app: Application = express();
 const host = config.server.host;
@@ -23,20 +29,22 @@ const port = config.server.port;
 const date = new Date().toISOString().split("T")[0];
 
 const initializeFolders = () => {
-    const lodDir = config.logging.dir;
-    if (!fs.existsSync(lodDir)) {
-        fs.mkdirSync(lodDir, { recursive: true });
-    }
+  const lodDir = config.logging.dir;
+  if (!fs.existsSync(lodDir)) {
+    fs.mkdirSync(lodDir, { recursive: true });
+  }
 };
 initializeFolders();
 
 // Middlewares
 app.use(
-    cors({
-        // multiple origins can be added
-        origin: config.server.origins,
-        credentials: true, // Enable credentials
-    })
+  cors({
+    // multiple origins can be added
+    origin: config.server.origins,
+    credentials: true, // Enable credentials
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed request methods
+    allowedHeaders: ["Content-Type", "Authorization", "x-api-key"], // Allowed request headers
+  })
 );
 
 // HTTPs logging and metrics
@@ -44,109 +52,114 @@ app.use(morgan("combined"));
 app.use(prometheusMetrics);
 
 const mongoStore = MongoStore.create({
-    mongoUrl: config.mongoDB.uri,
-    ttl: config.mongoDB.ttl,
+  mongoUrl: config.mongoDB.uri,
+  ttl: config.mongoDB.ttl,
 });
 
 app.set("trust proxy", config.server.trustProxy);
 app.use(
-    session({
-        secret: config.server.session.secret as string,
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            secure: config.env === "production",
-            maxAge: config.server.session.expiry,
-            sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
-        },
-        store: mongoStore,
-    })
+  session({
+    secret: config.server.session.secret as string,
+    resave: false,
+    saveUninitialized: true, // Save new sessions
+    cookie: {
+      secure: config.env === "production",
+      maxAge: config.server.session.expiry,
+      sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
+    },
+    store: mongoStore,
+  })
 );
-// app.use(generateCsrfToken);
 app.use(express.json());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
+const env = config.env;
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 300,
-    standardHeaders: true,
-    legacyHeaders: false,
-    skip: (req) => {
-        return req.session.user?.role === "admin";
-    },
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  // skip if env is development
+  skip: () => {
+    return env === "development";
+  },
+  // end
+  handler: (req, res) => {
+    res.status(429).send("Too many requests. Please try again later.");
+  },
 });
 app.use(limiter);
 app.use(sanitize);
-// app.use(errorHandler);
-
+const timestamp = new Date().toISOString();
 process.on("unhandledRejection", (reason) => {
-    logger.error(`Unhandled Rejection: ${reason}`);
-    fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Unhandled Rejection: ${reason}\n`, { flag: "a" });
+  logger.error(`Unhandled Rejection: ${reason}`);
+  fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `${timestamp} Unhandled Rejection: ${reason}\n`, { flag: "a" });
 });
 
 process.on("uncaughtException", (error) => {
-    logger.error(`Uncaught Exception: ${error}`);
-    fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `Uncaught Exception: ${error}\n`, { flag: "a" });
+  logger.error(`Uncaught Exception: ${error}`);
+  fs.writeFileSync(path.join(config.logging.dir, `prometheus-${date}.log`), `${timestamp} Uncaught Exception: ${error}\n`, { flag: "a" });
 });
 
 process.on("SIGINT", async () => {
-    logger.info("SIGINT received. Exiting...");
+  logger.info("SIGINT received. Exiting...");
+  try {
+    await mongoStore.close();
     process.exit(0);
+  } catch (error) {
+    logger.error(`Error closing MongoDB connection: ${error}`);
+    process.exit(1);
+  }
+});
+
+app.get("/api/", (req, res) => {
+  res.send("Hello, World!");
 });
 
 connectDB().then(async () => {
-    try {
-        const loadRoutes = async (version: string, useSession: boolean) => {
-            const routesPath = path.join(__dirname, "routes", version);
-            const router = express.Router();
+  try {
+    const loadRoutes = async (version: string) => {
+      const routesPath = path.join(__dirname, "routes", version);
+      const router = express.Router();
 
-            // Read the directory to get route files
-            const files = fs.readdirSync(routesPath);
+      // Read the directory to get route files
+      const files = fs.readdirSync(routesPath);
 
-            // Import each route file dynamically
-            for (const file of files) {
-                if (file.endsWith(".ts") || file.endsWith(".js")) {
-                    const route = await import(path.join(routesPath, file));
-                    const { metadata, router: routeRouter } = route.default;
-                    const routeName = file.split(".")[0];
-                    const sessionExceptions = config.route.sessionExceptions;
+      // Import each route file dynamically
+      for (const file of files) {
+        if (file.endsWith(".ts") || file.endsWith(".js")) {
+          const route = await import(path.join(routesPath, file));
+          const { metadata, router: routeRouter } = route.default;
+          router.use(metadata.path, verifyApiKey, routeRouter);
+          logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
+        }
+      }
+      return router;
+    };
 
-                    if (sessionExceptions.includes(routeName)) {
-                        router.use(metadata.path, routeRouter);
-                    } else if (useSession) {
-                        router.use(metadata.path, verifySession(metadata.permissions), routeRouter);
-                    } else {
-                        router.use(metadata.path, routeRouter);
-                    }
+    const initRoutes = async () => {
+      const v1Routes = await loadRoutes("v1");
+      const v2Routes = await loadRoutes("v2");
 
-                    logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
-                }
-            }
-            return router;
-        };
+      app.use("/api/v1", v1Routes);
+      app.use("/api/v2", v2Routes);
+      app.use(errorHandler);
+    };
 
-        const initRoutes = async () => {
-            const v1Routes = await loadRoutes("v1", true);
-            const v2Routes = await loadRoutes("v2", true);
-
-            app.use("/api/v1", v1Routes);
-            app.use("/api/v2", v2Routes);
-        };
-
-        initRoutes()
-            .then(() => {
-                app.listen(port, () => {
-                    logger.info(`🟢 Server is running at http://${host}:${port}`);
-                });
-                logger.info("🚀 Routes loaded successfully");
-                startJobs();
-            })
-            .catch((error) => {
-                logger.error(`Error loading routes: ${error}`);
-            });
-    } catch (error) {
-        fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
-            flag: "a",
+    initRoutes()
+      .then(() => {
+        app.listen(port, () => {
+          logger.info(`🟢 Server is running at http://${host}:${port}`);
         });
-    }
+        logger.info("🚀 Routes loaded successfully");
+        startJobs();
+      })
+      .catch((error) => {
+        logger.error(`Error loading routes: ${error}`);
+      });
+  } catch (error) {
+    fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
+      flag: "a",
+    });
+  }
 });

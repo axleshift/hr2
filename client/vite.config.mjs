@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+// import react from '@vitejs/plugin-react-swc'
 import path from 'node:path'
 import autoprefixer from 'autoprefixer'
 
@@ -8,6 +9,27 @@ export default defineConfig(() => {
     base: './',
     build: {
       outDir: 'build',
+      chunkSizeWarningLimit: 500,
+      minify: 'terser',
+      sourcemap: false,
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        }
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react'],
+            'react-dom': ['react-dom'],
+            'react-router-dom': ['react-router-dom'],
+            'react-hook-form': ['react-hook-form'],
+            'zod': ['zod'],
+            '@hookform/resolvers/zod': ['@hookform/resolvers/zod'],
+          },
+        },
+      }
     },
     css: {
       postcss: {
@@ -24,6 +46,8 @@ export default defineConfig(() => {
     optimizeDeps: {
       force: true,
       esbuildOptions: {
+        treeShaking: true,
+        minify: true,
         loader: {
           '.js': 'jsx',
         },
@@ -33,7 +57,7 @@ export default defineConfig(() => {
     resolve: {
       alias: [
         {
-          find: 'src/',
+          find: 'src',
           replacement: `${path.resolve(__dirname, 'src')}/`,
         },
       ],

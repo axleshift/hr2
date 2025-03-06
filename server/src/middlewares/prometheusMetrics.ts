@@ -1,3 +1,8 @@
+/**
+ * @file /middlewares/prometheusMetrics.ts
+ * @description Middleware to collect Prometheus metrics for HTTP requests
+ */
+
 import { Request, Response, NextFunction } from "express";
 import promClient from "prom-client";
 import { config } from "../config";

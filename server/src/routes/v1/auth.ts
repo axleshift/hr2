@@ -3,20 +3,50 @@ const router = Router();
 
 import dotenv from "dotenv";
 dotenv.config();
-
+import verifySession from "../../middlewares/verifySession";
 import { createUser, login, logout, verify } from "../../database/v1/controllers/authController";
 
-router.post("/register", createUser);
-router.post("/login", login);
-router.get("/logout", logout);
-router.get("/verify", verify);
+router.post(
+  "/register",
+  verifySession(
+    {
+      permissions: ["guest", "user", "admin", "superadmin"],
+    },
+    true,
+    true
+  ),
+  createUser
+);
+router.post(
+  "/login",
+  verifySession(
+    {
+      permissions: ["guest", "user", "admin", "superadmin"],
+    },
+    true,
+    true
+  ),
+  login 
+);
+router.get(
+  "/logout",
+  verifySession({
+    permissions: ["user", "admin", "superadmin"],
+  }),
+  logout
+);
+router.get(
+  "/verify",
+  verifySession({
+    permissions: ["user", "admin", "superadmin"],
+  }),
+  verify
+);
 
 export default {
-    metadata: {
-        path: "/auth",
-        method: ["POST", "GET"],
-        description: "This route is used to register, login, logout and verify user",
-        permissions: ["admin", "user", "guest"],
-    },
-    router,
+  metadata: {
+    path: "/auth",
+    description: "This route is used to register, login, logout and verify user",
+  },
+  router,
 };
