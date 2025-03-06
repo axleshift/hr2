@@ -143,12 +143,6 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Compose',
-    to: '/mail/compose',
-    icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: 'Inbox',
     to: '/mail/inbox',
     icon: <FontAwesomeIcon icon={faInbox} className="nav-icon" />,
