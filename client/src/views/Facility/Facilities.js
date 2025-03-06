@@ -274,6 +274,7 @@ const Facilities = () => {
               isVisible={isManageFacilityFormVisible}
               onClose={() => setIsManageFacilityFormVisible(false)}
               facilityData={facilityData}
+              onChange={() => getAllFacilitiesData()}
             />
           </CCol>
         </CRow>

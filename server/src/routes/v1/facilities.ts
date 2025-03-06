@@ -10,9 +10,11 @@ import {
   getAllFacilities,
   getFacilityById,
   removeFacility,
-  createFacilityEvent,
-  updateFacilityEvent,
-  getFacilityEventsByIdAndDate
+
+  // timeslot
+  createFacilityTimeslot,
+  getAllFacilityTimeslotsForDate,
+  removeFacilityTimeslot
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -55,32 +57,31 @@ router.delete(
   removeFacility
 );
 
-// Facilitiy events
 
+// Timeslots
 router.post(
-  "/event/:id",
+  "/timeslot/create/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
   }),
-  createFacilityEvent
-)
-
-router.put(
-  "/event/:id",
-  verifySession({
-    permissions: ["webhook", "admin", "instructor"],
-  }),
-  updateFacilityEvent
-)
-
-router.get(
-  "/events/:id/date/:date",
-  verifySession({
-    permissions: ["webhook", "admin", "instructor"],
-  }),
-  getFacilityEventsByIdAndDate
+  createFacilityTimeslot
 );
 
+router.get(
+  "/timeslot/:id/:date",
+  verifySession({
+    permissions: ["webhook", "admin", "instructor"],
+  }),
+  getAllFacilityTimeslotsForDate
+);
+
+router.delete(
+  "/timeslot/delete/:id",
+  verifySession({
+    permissions: ["webhook", "admin", "instructor"],
+  }),
+  removeFacilityTimeslot
+)
 
 export default {
   metadata: {

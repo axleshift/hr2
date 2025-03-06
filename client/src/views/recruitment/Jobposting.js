@@ -81,9 +81,13 @@ const Jobposting = () => {
       jpfLoc: z.string().min(1, { message: 'Location is required' }),
       jpfBnft: z.string().min(1, { message: 'Benefit is required' }),
       jpfReq: z.string().min(1, { message: 'Requirement is required' }),
+      // jpfSchedStart: z.preprocess(
+      //   (val) => new Date(val),
+      //   z.date().min(yesterday, { message: 'Start Date must be today or later' }),
+      // ),
       jpfSchedStart: z.preprocess(
         (val) => new Date(val),
-        z.date().min(yesterday, { message: 'Start Date must be today or later' }),
+        z.date(),
       ),
       jpfSchedEnd: z.preprocess(
         (val) => new Date(val),
@@ -176,8 +180,8 @@ const Jobposting = () => {
           jpfBnft: res.data.data.benefits,
           jpfReq: res.data.data.requirements,
           // jpfResp: res.data.data.responsibilities,
-          jpfSchedStart: formatDate(res.data.data.schedule_start),
-          jpfSchedEnd: formatDate(res.data.data.schedule_end),
+          jpfSchedStart: new Date(res.data.data.schedule_start).toISOString().split('T')[0],
+          jpfSchedEnd: new Date(res.data.data.schedule_end).toISOString().split('T')[0],
           jpfStatus: res.data.status,
         }
         formReset(formattedData)
@@ -204,8 +208,8 @@ const Jobposting = () => {
       jpfLoc: '',
       jpfBnft: '',
       jpfReq: '',
-      jpfSchedStart: new Date(),
-      jpfSchedEnd: new Date(),
+      jpfSchedStart: new Date().toISOString().split('T')[0],
+      jpfSchedEnd: new Date().toISOString().split('T')[0],
       jpfStatus: 'active',
     }
     formReset(emptyFormData)
@@ -493,7 +497,6 @@ const Jobposting = () => {
                         <CFormInput
                           type="date"
                           id="jpfSchedStart"
-                          defaultValue={formatDate(tommorrow)}
                           {...formRegister('jpfSchedStart')}
                           invalid={!!errors.jpfSchedStart}
                         />
@@ -508,7 +511,6 @@ const Jobposting = () => {
                         <CFormInput
                           type="date"
                           id="jpfSchedEnd"
-                          defaultValue={formatDate(tommorrow)}
                           {...formRegister('jpfSchedEnd')}
                           invalid={!!errors.jpfSchedEnd}
                         />

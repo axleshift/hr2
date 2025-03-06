@@ -18,8 +18,17 @@ const Overview = () => {
 			<CContainer>
 				<CRow>
 					<CCol>
-						<h1>Overview</h1>
-						<small className="text-muted">In this page, you can see an overview of your application.</small>
+						<h1>Dashboard</h1>
+						{/* <small className="text-muted text-danger">
+							
+						</small> */}
+					</CCol>
+				</CRow>
+				<CRow>
+					<CCol>
+						<p className="text-danger">
+							Page is still under construction. Please check back later.
+						</p>
 					</CCol>
 				</CRow>
 			</CContainer></>

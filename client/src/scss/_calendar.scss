@@ -56,6 +56,13 @@
       background-color: var(--cui-warning); // Example: blue background for dates with events
       color: var(--cui-white); // Adjust text color for contrast
     }
+
+    &.has-timeslots {
+      // color: var(--cui-success)
+      // border-color: --var(cui-success);
+      background-color: var(--cui-success); // Example: green background for dates with available slots
+      color: var(--cui-white); // Adjust text color for contrast
+    }
   }
 
   // Navigation buttons (prev/next month)
@@ -122,6 +129,13 @@
         background-color: var(--cui-warning);
         color: var(--cui-white);
       }
+
+      &.has-timeslots {
+        // color: var(--cui-success);
+        // border-color: var(--cui-success);
+        background-color: var(--cui-success);
+        color: var(--cui-white);
+      }
     }
 
     .react-calendar__navigation button {
@@ -163,6 +177,7 @@
       font-size: 0.8rem;
     }
   }
+
   @media (max-width: 320px) {
     .react-calendar__month-view__weekdays__weekday {
       padding: 0.15rem;

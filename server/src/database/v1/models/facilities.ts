@@ -21,14 +21,10 @@ const facilitiesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAvailable: {
-      type: Boolean,
-      default: true,
-    },
-    dates: {
+    timeslots: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "facilityEvents",
-    },
+      ref: "time",
+    }
   },
   {
     timestamps: true,

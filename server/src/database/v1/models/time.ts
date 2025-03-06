@@ -6,21 +6,31 @@ const timeSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    facility: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "facilities",
+      required: true,
+    },
+    event: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "facilityEvents",
+      required: false
+    },
     start: {
-      type: Date,
+      type: String,
       required: true,
     },
     end: {
-      type: Date,
+      type: String,
       required: true,
     },
-    capacity: {
-      type: Number,
-      required: true,
+    isAvaliable: {
+      type: Boolean,
+      default: true,
     },
     participants: {
-      type: Array,
-      required: true,
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "applicants",
     },
     isAvailable: {
       type: Boolean,

@@ -22,12 +22,16 @@ const facilityEventsSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    capacity: {
+      type: Number,
+      required: true,
+    },
     participants: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "applicants",
     },
-    timeslots: {
-      type: [mongoose.Schema.Types.ObjectId],
+    timeslot: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "time",
     }
   },

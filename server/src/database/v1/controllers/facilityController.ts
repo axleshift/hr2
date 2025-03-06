@@ -1,7 +1,9 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
+import { Types } from "mongoose";
 import Facility from "../models/facilities";
 import Events from "../models/facilityEvents";
+import Time from "../models/time";
 
 export const createFacility = async (req: req, res: res) => {
   try {
@@ -32,8 +34,14 @@ export const createFacility = async (req: req, res: res) => {
 
 export const updateFacility = async (req: req, res: res) => {
   try {
+    console.log("req.params", req.params);
+    console.log("req.body", req.body);
     const { id } = req.params;
     const { name, type, description, location } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
 
     if (!name || !type || !description || !location) {
       return res.status(400).json({ message: "All fields are required" });
@@ -68,7 +76,17 @@ export const getAllFacilities = async (req: req, res: res) => {
       return res.status(404).json({ message: "Facilities not found" });
     }
 
-    return res.status(200).json({ message: "Facilities found", data: facilities });
+    // get all timeslots for each facility
+    const facilitiesData = await Promise.all(facilities.map(async (facility) => {
+      const timeslots = await Time.find({ facility: facility._id });
+      return {
+        ...facility.toObject(),
+        timeslots,
+      };
+    }));
+
+    return res.status(200).json({ message: "Facilities found", data: facilitiesData });
+
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -109,104 +127,145 @@ export const removeFacility = async (req: req, res: res) => {
   }
 };
 
-// Facility events
+// Facility timeslots
+const convertTimeToMinutes = (time: string): number => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
 
-export const createFacilityEvent = async (req: req, res: res) => {
+const convertMinutesToTime = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours}:${mins < 10 ? '0' : ''}${mins}`;
+}
+
+export const createFacilityTimeslot = async (req: req, res: res) => {
   try {
     const { id } = req.params;
-    const { name, description, date } = req.body;
+    const { date, start, end } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: "Facility id is required" });
     }
 
-    if (!name || !date) {
+    if (!date || !start || !end) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const eventData = {
-      name,
-      description,
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const startMinutes = convertTimeToMinutes(start);
+    const endMinutes = convertTimeToMinutes(end);
+
+    // Check if timeslot overlaps with existing timeslots
+    const overlappingTimeslot = await Time.findOne({
+      facility: id,
       date,
+      $or: [
+        { start: { $lt: endMinutes, $gte: startMinutes } },
+        { end: { $gt: startMinutes, $lte: endMinutes } },
+        { start: { $lte: startMinutes }, end: { $gte: endMinutes } }
+      ]
+    });
+    if (overlappingTimeslot) {
+      return res.status(400).json({ message: "Timeslot overlaps with an existing timeslot" });
+    }
+
+    const timeslotData = {
+      date,
+      facility: id,
+      start: startMinutes,
+      end: endMinutes,
     };
 
-    const facility = await Facility.findById(id);
-    if (!facility) {
-      return res.status(404).json({ message: "Facility not found" });
-    }
-    const newEventData = await Events.create(eventData);
-    if (!newEventData) {
-      return res.status(500).json({ message: "Facility date not created" });
+    const newTimeslot = await Time.create(timeslotData);
+    if (!newTimeslot) {
+      return res.status(500).json({ message: "Timeslot not created" });
     }
 
-    facility.dates.push(newEventData._id);
+    facility.timeslots.push(newTimeslot._id);
     await facility.save();
 
-    return res.status(201).json({ message: "Facility date created", data: newEventData });
+    return res.status(201).json({ message: "Timeslot created", data: newTimeslot });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
-export const updateFacilityEvent = async (req: req, res: res) => {
-  try {
-    const { id } = req.params;
-    const { name, description, date, timeslots } = req.body;
-
-    if (!name || !date || !timeslots) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const events = await Events.findById(id);
-    if (!events) {
-      return res.status(404).json({ message: "Facility date not found" });
-    }
-
-    events.name = name;
-    events.description = description;
-    events.date = date;
-    events.timeslots = timeslots;
-
-    const updatedFacilityDate = await events.save();
-    if (!updatedFacilityDate) {
-      return res.status(500).json({ message: "Facility date not updated" });
-    }
-
-    return res.status(200).json({ message: "Facility date updated", data: updatedFacilityDate });
-  } catch (error) {
-    logger.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-export const getFacilityEventsByIdAndDate = async (req: req, res: res) => {
+export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
   try {
     const { id, date } = req.params;
+
+    console.log("id", id);
+    console.log("date", new Date(date).toISOString());
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+
     const facility = await Facility.findById(id);
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
 
-    const defDate = new Date(date);
-    const tomorrow = new Date(defDate);
-    // const log = {
-    //   "defDate": defDate,
-    //   "tomorrow": tomorrow
-    // }
-    // console.log(JSON.stringify(log, null, 2));
-    tomorrow.setDate(defDate.getDate() + 1);
-    const dataForDate = await Events.find({
-      date: {
-        $gte: defDate,
-        $lt: tomorrow,
-      },
+    const today = new Date(date)
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const timeslots = await Time.find({ facility: id, date: today });
+    if (!timeslots) {
+      return res.status(404).json({ message: "Timeslots not found" });
+    }
+
+    const timeslotsData = timeslots.map((timeslot) => {
+      return {
+        ...timeslot.toObject(),
+        start: convertMinutesToTime(parseInt(timeslot.start)),
+        end: convertMinutesToTime(parseInt(timeslot.end)),
+      };
     });
 
-    return res.status(200).json({
-      message: "Data for date found", data: dataForDate
-    });
+    return res.status(200).json({ message: "Timeslots found", data: timeslotsData });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
+export const removeFacilityTimeslot = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+    const timeslot = await Time.findById(id);
+
+    if (!timeslot) {
+      return res.status(404).json({ message: "Timeslot not found" });
+    }
+
+    // delete the timeslot from the facility as well
+    const facility = await Facility.findById(timeslot.facility);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    // check if the timeslot is associated with an event
+    const event = await Events.findOne({ timeslot: id });
+    if (event) {
+      return res.status(400).json({ message: "Timeslot is associated with an event. Cannot be deleted." });
+    }
+
+    facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(id));
+    await facility.save();
+
+    await timeslot.deleteOne();
+
+    return res.status(200).json({ message: "Timeslot removed" });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });

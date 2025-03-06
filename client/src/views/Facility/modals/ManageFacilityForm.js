@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, use } from 'react'
-import propTypes from 'prop-types'
+import React, { useState, useEffect, useContext } from 'react';
+import propTypes from 'prop-types';
 import {
 	CModal,
 	CModalHeader,
@@ -9,146 +9,90 @@ import {
 	CRow,
 	CCol,
 	CForm,
-	CFormLabel,
+	CInputGroup,
 	CFormInput,
 	CFormTextarea,
-	CInputGroup,
 	CButton,
-	CBadge,
+	CCard,
+	CCardBody,
 	CTable,
 	CTableHead,
 	CTableBody,
 	CTableHeaderCell,
 	CTableDataCell,
 	CTableRow,
-	CCard,
-	CCardBody,
 	CTabs,
 	CTab,
 	CTabList,
 	CTabContent,
 	CTabPanel,
-	CFormCheck,
 	CAlert,
-} from '@coreui/react'
-import { date, set, z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { get, post, put, del } from '../../../api/axios'
+	CBadge,
+	CTooltip,
+} from '@coreui/react';
+import { z } from 'zod';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { del, get, post } from '../../../api/axios';
+import { Calendar } from 'react-calendar';
+import { AppContext } from '../../../context/appContext';
+import { formatDate } from '../../../utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { Calendar } from 'react-calendar'
-import { AppContext } from '../../../context/appContext'
-import { config } from '../../../config'
-import { formatDate } from '../../../utils'
-
-const ManageFacilityForm = ({ isVisible, onClose, facilityData = {} }) => {
-	const { addToast } = useContext(AppContext)
+const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange }) => {
+	const { addToast } = useContext(AppContext);
 
 	// Calendar state
-	const [isDarkMode, setIsDarkMode] = useState(false)
-	const [defaultDate, setDefaultDate] = useState(new Date())
-	const [notAvailableDates, setNotAvailableDates] = useState([])
-	const [hasEvents, setHasEvents] = useState([])
+	const [isDarkMode, setIsDarkMode] = useState(false);
+	const [defaultDate, setDefaultDate] = useState(new Date());
+	const [isDismissed, setIsDismissed] = useState(false);
+	const [hasSlots, setHasSlots] = useState([]);
 
-	const [Events, setEvents] = useState([])
-	const [isEdit, setIsEdit] = useState(false)
+	// timeslot
+	const [timeslots, setTimeslots] = useState([])
 
-	// Timeslots state
-	const [timeSlots, setTimeSlots] = useState([])
+	// Event state
+	const [Events, setEvents] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+
+	// Counter state
+	const [milliseconds, setMilliseconds] = useState(5000);
+	const [timeleft, setTimeleft] = useState(0);
+
+	const formatTime = (timeString, format = "12h") => {
+		const [hours, minutes] = timeString.split(':');
+		const hour = hours % 12 || 12;
+		const modifier = hours < 12 ? 'AM' : 'PM';
+		return `${hour}:${minutes} ${modifier}`;
+	};
 
 	const handleDateChange = (date) => {
-		// idk why but the date is off by 1 day
-		// so we need to subtract the timezone offset
-		// to get the correct date
-		// THIS HAS BEEN DRIVING ME CRAZY AND I'M TOO CAFFEINATED TO THINK
-		// SO I'M JUST GONNA DO THIS
-		const formattedDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+		const formattedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 		setDefaultDate(formattedDate);
+	};
+
+	const parseCalendarStates = () => {
+		const dates = facilityData.timeslots.map(slot => new Date(slot.date));
+		const hasSlots = dates.map(date => new Date(date.getTime() - date.getTimezoneOffset() * 60000));
+		console.log(hasSlots);
+		setHasSlots(hasSlots);
 	}
 
-	const formatTime = (time, format = "12h") => {
-		// if time is 12 but format is 12h return 12h
-		const twelveHrRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
-		const twentyFourHrRegex = /^(1[012]|[1-9]):[0-5]\d\s[APap][mM]$/
-
-		switch (format) {
-			case "12h":
-				if (twelveHrRegex.test(time)) {
-					const [hours, minutes] = time.split(':')
-					const suffix = hours >= 12 ? 'PM' : 'AM'
-					const formattedHours = hours % 12 || 12
-					return `${formattedHours}:${minutes} ${suffix}`
-				}
-				return time
-			case "24h":
-				if (twentyFourHrRegex.test(time)) {
-					const [time, suffix] = time.split(' ')
-					const [hours, minutes] = time.split(':')
-					const formattedHours = hours === '12' ? '00' : hours
-					return `${formattedHours}:${minutes}`
-				}
-				return time
-			default:
-				return time
-		}
-	}
-
-	const getEventsForDate = async (date) => {
+	const getAllTimeslotsForDate = async () => {
 		try {
-			const newDate = new Date(date)
-			const res = await get(`facilities/events/${facilityData._id}/date/${newDate}`)
-			console.log(res.data)
-			if (res.status === 404) {
-				return addToast('Error', res.message, 'danger')
+			const res = await get(`/facilities/timeslot/${facilityData._id}/${new Date(defaultDate)}`);
+			console.log(res.data);
+			if (res.status === 200) {
+				return setTimeslots(res.data.data);
 			}
-			setEvents(res.data.data)
 		} catch (error) {
-			addToast('Error', 'An error occurred', 'danger')
-			console.error(error)
+			console.error(error);
+			addToast('error', 'An error occurred while fetching timeslots', 'danger');
 		}
 	}
 
-	const formSchema = z.object({
-		name: z.string().min(3).max(255),
-		description: z.string().optional(),
-		date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-			message: "Invalid date format",
-		}),
-		// timeslots: z.array(z.object({
-		// 	start: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
-		// 	end: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
-		// })),
-	})
-
-	const {
-		register,
-		handleSubmit,
-		reset: formReset,
-		formState: { errors } } = useForm({
-			resolver: zodResolver(formSchema),
-		})
-
-	const handleSubmitEvent = async (data) => {
-		try {
-			const formattedData = {
-				...data,
-				date: new Date(data.date),
-			}
-			console.log('Formatted Data:', formattedData)
-			const res = await post(`facilities/event/${facilityData._id}`, formattedData)
-			if (res.status === 404) {
-				return addToast('Error', 'An error occurred', 'danger')
-			}
-			console.log(res.data)
-			addToast('Success', 'Event created successfully', 'success')
-
-		} catch (error) {
-			addToast('Error', 'An error occurred', 'danger')
-			console.error(error)
-		}
-	}
-
-	const timeSchema = z.object({
+	const timeslotSchema = z.object({
 		start: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
 		end: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format"),
 	}).superRefine((data, ctx) => {
@@ -160,7 +104,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {} }) => {
 			});
 		}
 		// Check for overlapping timeslots
-		const overlappingSlot = timeSlots.find(slot =>
+		const overlappingSlot = timeslots.find(slot =>
 			(data.start < slot.end && data.end > slot.start)
 		);
 		if (overlappingSlot) {
@@ -173,374 +117,202 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {} }) => {
 	});
 
 	const {
-		register: timeFormRegister,
-		handleSubmit: timeHandleSubmit,
-		reset: timeFormReset,
-		formState: { errors: timeErrors }
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
 	} = useForm({
-		// resolver: zodResolver(timeSchema),\
-		// debug
-		resolver: async (data, context, options) => {
-			const result = await zodResolver(timeSchema)(data, context, options)
-			console.log('Validation result:', result)
-			return result
-		},
-	})
+		resolver: zodResolver(timeslotSchema),
+	});
 
-	const handleAddTimeslot = async (data) => {
+	const handleTimeslotSubmit = async (data) => {
 		try {
-			// push to timeslots
-			setTimeSlots([...timeSlots, data]);
-			// timeFormReset([...timeSlots, data]);
-			addToast('Success', 'Timeslot added successfully', 'success');
-			timeFormReset();
-		} catch (error) {
-			addToast('Error', 'An error occurred', 'danger');
-			console.error(error);
-		}
-	};
+			const formdata = new FormData();
+			formdata.append('date', new Date(defaultDate));
+			formdata.append('start', data.start);
+			formdata.append('end', data.end);
 
-	const handleRemoveTimeslot = (id) => {
-		try {
-			const newTimeSlots = timeSlots.filter((slot, i) => i !== id);
-			setTimeSlots(newTimeSlots);
+			const res = await post(`/facilities/timeslot/create/${facilityData._id}`, formdata);
+			if (res.status === 404) {
+				return addToast('error', JSON.stringify(res.message.message), 'danger');
+			}
+			if (res.status === 400) {
+				return addToast('error', JSON.stringify(res.message.message), 'danger');
+			}
+			getAllTimeslotsForDate();
+			return addToast('success', 'Timeslot added successfully', 'success');
 		} catch (error) {
 			console.error(error);
+			addToast('error', 'An error occurred while adding timeslot', 'danger');
 		}
 	}
 
-	const handleResetForm = () => {
-		formReset({
-			name: '',
-			description: '',
-			date: new Date().toISOString().split('T')[0],
-		});
-		setTimeSlots([]);
-	}
-
-	const handleFillMockData = () => {
-		formReset({
-			name: 'Event Name',
-			description: 'Event Description',
-			date: new Date().toISOString().split('T')[0],
-		})
+	const handleTimeSlotRemove = async (timeslot) => {
+		try {
+			const res = await del(`/facilities/timeslot/delete/${timeslot._id}`);
+			if (res.status === 200) {
+				addToast('success', 'Timeslot removed successfully', 'success');
+				getAllTimeslotsForDate();
+			}
+		} catch (error) {
+			console.error(error);
+			addToast('error', 'An error occurred while removing timeslot', 'danger');
+		}
 	}
 
 	useEffect(() => {
-		getEventsForDate(defaultDate)
-		// console.log('Default Date:', defaultDate)
-	}, [defaultDate, timeSlots])
+		if (isVisible) {
+			parseCalendarStates();
+			getAllTimeslotsForDate();
+		}
+	}, [defaultDate, isVisible]);
 
 	return (
-		<>
-			<CModal visible={isVisible} onClose={onClose} size="lg" backdrop="static">
-				<CModalHeader>
-					<CModalTitle>
-						Manage {facilityData.name || 'Facility'}
-					</CModalTitle>
-				</CModalHeader>
-
-				<CModalBody>
-					<CTabs activeItemKey="calendar">
-						<CTabList variant='underline-border'>
-							<CTab itemKey="calendar">Calendar</CTab>
-							<CTab itemKey="form">Form</CTab>
-						</CTabList>
-						<CTabContent>
-							<CTabPanel itemKey="calendar">
-								<CContainer>
-									{/* <CRow className='mb-3 mt-3'>
-										<CCol>
-											<CFormInput
-												type='text'
-												label='Facility Name'
-												defaultValue={facilityData.name}
-												readOnly
-											/>
-										</CCol>
-									</CRow>
-									<CRow className='mb-3'>
-										<CCol>
+		<CModal visible={isVisible} onClose={onClose} size="lg" backdrop="static">
+			<CModalHeader>
+				<CModalTitle>Manage {facilityData.name || 'Facility'}</CModalTitle>
+			</CModalHeader>
+			<CModalBody>
+				<CTabs activeItemKey={0}>
+					<CTabList variant='underline-border'>
+						<CTab itemKey={0}>Timeslots</CTab>
+						<CTab itemKey={1}>Events</CTab>
+					</CTabList>
+					<CTabContent>
+						<CTabPanel itemKey={0}>
+							<CContainer>
+								<CRow className="mb-3">
+									<CCol>
+										<Calendar
+											onChange={handleDateChange}
+											className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
+											defaultValue={defaultDate}
+											tileClassName={({ date }) => {
+												if (hasSlots.find(slot => slot.toDateString() === date.toDateString())) {
+													return 'has-timeslots';
+												}
+											}}
+										/>
+									</CCol>
+								</CRow>
+								<CRow className="mb-3">
+									<CCol>
+										<strong>
+											Timeslots for {formatDate(defaultDate)}
+										</strong>
+									</CCol>
+								</CRow>
+								<CRow className="mb-3">
+									<CCol>
+										<CForm
+											onSubmit={handleSubmit(handleTimeslotSubmit)}
+										>
+											<CRow className="d-flex gap-2">
+												<CCol>
+													<CFormInput
+														type="time"
+														{...register('start')}
+														placeholder="Start time"
+														invalid={!!errors.start}
+													/>
+													{errors.start && (
+														<div className="invalid-feedback">{errors.start.message}</div>
+													)}
+												</CCol>
+												<CCol>
+													<CFormInput
+														type="time"
+														{...register('end')}
+														placeholder="End time"
+														invalid={!!errors.end}
+													/>
+													{errors.end && (
+														<div className="invalid-feedback">{errors.end.message}</div>
+													)}
+												</CCol>
+												{/* <CCol>
 										<CFormInput
-												type='text'
-												label='Facility Type'
-												defaultValue={facilityData.type}
-												readOnly
-											/>
-										</CCol>
-									</CRow>
-									<CRow>
-										<CCol>
-											<hr />
-										</CCol>
-									</CRow> */}
-									<CRow className='mb-3'>
-										<CCol>
-											<div>
-												{/* <CAlert dismissible color='info' className='mb-2 mt-2' >
-													How to use the calendar:
-													Select Date, then goto Form tab to create event
-												</CAlert> */}
-												<Calendar
-													onChange={handleDateChange}
-													className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
-													defaultValue={defaultDate}
-												/>
-											</div>
-										</CCol>
-									</CRow>
-									<CRow className='mb-3'>
-										<CCol>
-											<CInputGroup>
-												<CFormInput
-													type='text'
-													placeholder='Enter date'
-													value={defaultDate}
-													readOnly
-												/>
-												{/* <CButton
-													color='primary'
-												>
-													Create Event
-												</CButton> */}
-											</CInputGroup>
-										</CCol>
-									</CRow>
-									<CRow>
-										<CCol>
-											<CCard>
-												<CCardBody>
-													<CTable align='middle' hover responsive striped>
-														<CTableHead>
-															<CTableRow>
-																<CTableHeaderCell>Name</CTableHeaderCell>
-																<CTableHeaderCell>Date</CTableHeaderCell>
-																<CTableHeaderCell>Available</CTableHeaderCell>
-																<CTableHeaderCell>Actions</CTableHeaderCell>
-															</CTableRow>
-														</CTableHead>
-														<CTableBody>
-															{/* if empty say no data */}
-															{
-																Events.length === 0 ? (
-																	<CTableRow>
-																		<CTableDataCell colSpan='4'>
-																			<div className='d-flex justify-content-center'>
-																				No data for {formatDate(defaultDate)}
+											type="number"
+											{...register('capacity', { valueAsNumber: true })}
+											placeholder="Capacity"
+											defaultValue={1}
+											invalid={!!errors.capacity}
+										/>
+										{errors.capacity && (
+											<div className="invalid-feedback">{errors.capacity.message}</div>
+										)}
+									</CCol> */}
+												<CCol>
+													<div className="d-flex justify-content-end">
+														<CButton type="submit" color='success'>Add</CButton>
+													</div>
+												</CCol>
+											</CRow>
+										</CForm>
+									</CCol>
+								</CRow>
+								<CRow>
+									<CCol>
+										<CCard>
+											<CCardBody>
+												<CTable small striped responsive>
+													<CTableHead>
+														<CTableRow>
+															<CTableHeaderCell>Start</CTableHeaderCell>
+															<CTableHeaderCell>End</CTableHeaderCell>
+															<CTableHeaderCell>Action</CTableHeaderCell>
+														</CTableRow>
+													</CTableHead>
+													<CTableBody>
+														{
+															timeslots.length === 0 ? (
+																<CTableRow>
+																	<CTableDataCell colSpan="4" className="text-center">
+																		No timeslots found for {formatDate(defaultDate)}
+																	</CTableDataCell>
+																</CTableRow>
+															) : (
+																timeslots.map((slot) => (
+																	<CTableRow key={slot._id}>
+																		<CTableDataCell>
+																			<div>
+																				{formatTime(slot.start, "12h")}
 																			</div>
 																		</CTableDataCell>
+																		<CTableDataCell>{formatTime(slot.end, "12h")}</CTableDataCell>
+																		<CTableDataCell>
+																			<CButton color="danger" size='sm'
+																				onClick={() => handleTimeSlotRemove(slot)}
+																			>Delete</CButton>
+																		</CTableDataCell>
 																	</CTableRow>
-																) : (
-																	Events.map((event, index) => (
-																		<CTableRow key={event._id}>
-																			<CTableDataCell>{event.name}</CTableDataCell>
-																			<CTableDataCell>{formatDate(event.date)}</CTableDataCell>
-																			<CTableDataCell>{event.isAvailable ? 'yes' : 'no'}</CTableDataCell>
-																			<CTableDataCell>
-																				<CButton color='info' className='me-2'>
-																					Edit
-																				</CButton>
-																				<CButton color='danger'>
-																					Delete
-																				</CButton>
-																			</CTableDataCell>
-																		</CTableRow>
-																	))
-																)
-															}
-														</CTableBody>
-													</CTable>
-												</CCardBody>
-											</CCard>
-										</CCol>
-									</CRow>
-								</CContainer>
-							</CTabPanel>
-							<CTabPanel itemKey="form">
-								<CForm onSubmit={handleSubmit(handleSubmitEvent)}>
-									<CContainer>
-										<CRow className='mb-3 mt-3'>
-											<CCol>
-												<CFormInput
-													type='text'
-													label='Event Name'
-													placeholder='Event Name'
-													{...register('name')}
-													invalid={!!errors.name}
-												/>
-												{errors.name && (
-													<div className="invalid-feedback">{errors.name.message}</div>
-												)}
-											</CCol>
-										</CRow>
-										<CRow className='mb-3'>
-											<CCol>
-												<CFormTextarea
-													label='Description'
-													placeholder='Description'
-													{...register('description')}
-													invalid={!!errors.description}
-												/>
-												{errors.description && (
-													<div className="invalid-feedback">{errors.description.message}</div>
-												)}
-											</CCol>
-										</CRow>
-										<CRow className='mb-3'>
-											<CCol>
-												<CFormInput
-													type='date'
-													label='Date'
-													placeholder='Date'
-													defaultValue={(new Date()).toISOString().split('T')[0]}
-													onChange={(e) => {
-														setDefaultDate(e.target.value)
-													}}
-													{...register('date')}
-													invalid={!!errors.date}
-												/>
-												{errors.date && (
-													<div className="invalid-feedback">{errors.date.message}</div>
-												)}
-											</CCol>
-										</CRow>
-										<CRow className='mb-3'>
-											{
-												config.env === 'development' && (
-													<CCol>
-														<CButton color='info' onClick={handleFillMockData}>
-															Fill Mock Data
-														</CButton>
-													</CCol>
-												)
-											}
-											<CCol className='d-flex justify-content-end'>
-												<CButton color='secondary' className='me-2' onClick={handleResetForm}>
-													Reset
-												</CButton>
-												<CButton color='primary' type='submit'>
-													Submit
-												</CButton>
-											</CCol>
-										</CRow>
-									</CContainer>
-								</CForm>
-								{
-									isEdit && (<hr />)
-								}
-								{
-									isEdit && (
-										<CForm onSubmit={timeHandleSubmit(handleAddTimeslot)}>
-											<CContainer>
-												<CRow className='mb-3'>
-													<CCol>
-														<CCard>
-															<CCardBody>
-																<CTable align='middle' hover responsive striped>
-																	<CTableHead>
-																		<CTableRow>
-																			<CTableHeaderCell>#</CTableHeaderCell>
-																			<CTableHeaderCell>Start Time</CTableHeaderCell>
-																			<CTableHeaderCell>End Time</CTableHeaderCell>
-																			<CTableHeaderCell>Actions</CTableHeaderCell>
-																		</CTableRow>
-																	</CTableHead>
-																	<CTableBody>
-																		{
-																			timeSlots.length === 0 ? (
-																				<CTableRow>
-																					<CTableDataCell colSpan='4'>
-																						<div className='d-flex justify-content-center'>
-																							No data
-																						</div>
-																					</CTableDataCell>
-																				</CTableRow>
-																			) : (
-																				timeSlots.map((slot, index) => (
-																					<CTableRow key={index}>
-																						<CTableDataCell>
-																							{/* if slot._id exits, active */}
-																							{
-																								slot._id ? (
-																									<small>
-																										{slot._id}
-																									</small>
-																								) : (
-																									<span className='text-danger'>
-																										Inactive
-																									</span>
-																								)
-																							}
-																						</CTableDataCell>
-																						<CTableDataCell>{formatTime(slot.start)}</CTableDataCell>
-																						<CTableDataCell>{formatTime(slot.end)}</CTableDataCell>
-																						<CTableDataCell>
-																							<CButton
-																								color='danger'
-																								onClick={() => handleRemoveTimeslot(index)}
-																							>
-																								Delete
-																							</CButton>
-																						</CTableDataCell>
-																					</CTableRow>
-																				))
-																			)
-																		}
-																	</CTableBody>
-																</CTable>
-															</CCardBody>
-														</CCard>
-													</CCol>
-												</CRow>
-												<CRow className='mb-3'>
-													<CCol>
-														<CFormInput
-															type='time'
-															label='Start Time'
-															{...timeFormRegister('start')}
-															invalid={!!timeErrors.start}
-														/>
-														{timeErrors.start && (
-															<div className="invalid-feedback">{timeErrors.start.message}</div>
-														)}
-													</CCol>
-													<CCol>
-														<CFormInput
-															type='time'
-															label='End Time'
-															{...timeFormRegister('end')}
-															invalid={!!timeErrors.end}
-														/>
-														{timeErrors.end && (
-															<div className="invalid-feedback">{timeErrors.end.message}</div>
-														)}
-													</CCol>
-												</CRow>
-												<CRow className='mb-3'>
-													<CCol className='d-flex justify-content-end'>
-														<CButton type='submit' color='primary'>
-															Add Timeslot
-														</CButton>
-													</CCol>
-												</CRow>
-											</CContainer>
-										</CForm>
-									)
-								}
-							</CTabPanel>
-						</CTabContent>
-					</CTabs>
-				</CModalBody>
-			</CModal >
-		</>
-	)
-}
+																))
+															)
+														}
+													</CTableBody>
+												</CTable>
+											</CCardBody>
+										</CCard>
+									</CCol>
+								</CRow>
+							</CContainer>
+						</CTabPanel>
+						<CTabPanel itemKey={1}>
+							events
+						</CTabPanel>
+					</CTabContent>
+				</CTabs>
 
+			</CModalBody>
+		</CModal>
+	);
+};
 
 ManageFacilityForm.propTypes = {
 	isVisible: propTypes.bool.isRequired,
 	onClose: propTypes.func.isRequired,
 	facilityData: propTypes.object,
-}
+	onChange: propTypes.func,
+};
 
-export default ManageFacilityForm
+export default ManageFacilityForm;

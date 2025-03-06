@@ -15,6 +15,4 @@ let envContent = existsSync(envPath) ? readFileSync(envPath, 'utf-8') : ''
 envContent = envContent.replace(/^VITE_APP_VERSION=.*/m, '').trim() // Remove old version
 writeFileSync(envPath, `${envContent}\nVITE_APP_VERSION=${version}\n`)
 
-writeFileSync(join(process.cwd(), 'src/config.js'), `export const version = "${version}";\n`)
-
 console.log(`Updated version: ${version}`)
