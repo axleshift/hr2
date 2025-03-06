@@ -162,13 +162,19 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
 	useEffect(() => {
 		if (isVisible) {
+			onChange();
 			parseCalendarStates();
 			getAllTimeslotsForDate();
 		}
 	}, [defaultDate, isVisible]);
 
 	return (
-		<CModal visible={isVisible} onClose={onClose} size="lg" backdrop="static">
+		<CModal visible={isVisible} onClose={() => {
+			setHasSlots([]);
+			onChange();
+			onClose();
+			reset();
+		}} size="lg" backdrop="static">
 			<CModalHeader>
 				<CModalTitle>Manage {facilityData.name || 'Facility'}</CModalTitle>
 			</CModalHeader>
@@ -258,6 +264,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 												<CTable small striped responsive>
 													<CTableHead>
 														<CTableRow>
+															<CTableHeaderCell>Date</CTableHeaderCell>
 															<CTableHeaderCell>Start</CTableHeaderCell>
 															<CTableHeaderCell>End</CTableHeaderCell>
 															<CTableHeaderCell>Action</CTableHeaderCell>
@@ -275,9 +282,10 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 																timeslots.map((slot) => (
 																	<CTableRow key={slot._id}>
 																		<CTableDataCell>
-																			<div>
-																				{formatTime(slot.start, "12h")}
-																			</div>
+																			{formatDate(new Date(slot.date))}
+																		</CTableDataCell>
+																		<CTableDataCell>
+																			{formatTime(slot.start, "12h")}
 																		</CTableDataCell>
 																		<CTableDataCell>{formatTime(slot.end, "12h")}</CTableDataCell>
 																		<CTableDataCell>
