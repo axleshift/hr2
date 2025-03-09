@@ -23,13 +23,18 @@ jobs:
           npm i
           npm run lint:fix
 
+      - name: Generate App Version
+        run: echo "VITE_APP_VERSION=v$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+
       - name: Setup Environment Variables
         run: |
           cd client
           echo "VITE_NODE_ENV=${{ secrets.CLIENT_NODE_ENV}}" > .env
           echo "VITE_REACT_SERVER_URL=${{ secrets.CLIENT_VITE_REACT_SERVER_URL}}" >> .env
+          echo "VITE_REACT_SERVER_API_MASTER_KEY=${{ secrets.CLIENT_VITE_REACT_SERVER_API_MASTER_KEY}}" >> .env
           echo "VITE_REACT_GOOGLE_RECAPTCHA_SITE_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SITE_KEY}}" >> .env
           echo "VITE_REACT_GOOGLE_RECAPTCHA_SECRET_KEY=${{ secrets.CLIENT_GOOGLE_RECAPTCHA_SECRET_KEY}}" >> .env
+          echo "VITE_APP_VERSION=${{ env.VITE_APP_VERSION }}" >> .env
 
       - name: Build Client
         run: |

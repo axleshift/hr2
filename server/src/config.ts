@@ -19,8 +19,8 @@ export const config = {
   server: {
     host: process.env.SERVER_HOST,
     port: process.env.SERVER_PORT,
-    csrfProtection: process.env.SERVER_CSRF === "true" || false,
-    trustProxy: process.env.SERVER_TRUST_PROXY === "true" || false,
+    csrfProtection: process.env.SERVER_CSRF,
+    trustProxy: process.env.SERVER_TRUST_PROXY,
     jwt: {
       secret: process.env.JWT_SECRET,
       expiry: process.env.JWT_EXPIRES_IN,
