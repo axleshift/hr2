@@ -25,7 +25,7 @@ const formSubmit = async (req, res) => {
             preferredWorkLocation,
             linkedInProfile,
             portfolioLink,
-            resumeFileLoc,
+            resumeFileLoc: resumeFileLoc[0],
             yearsOfExperience,
             currentMostRecentJob,
             highestQualification,
