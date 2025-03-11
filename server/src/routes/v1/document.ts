@@ -38,7 +38,10 @@ router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getDocumentById
 );
 
@@ -47,7 +50,10 @@ router.get(
   "/applicant/:applicantId/:category",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getDocumentByApplicantId
 );
 
@@ -56,7 +62,10 @@ router.get(
   "/category/:category",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getDocumentByCategory
 );
 
@@ -65,7 +74,10 @@ router.get(
   "/search",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   searchDocument
 );
 
