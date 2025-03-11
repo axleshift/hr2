@@ -131,7 +131,12 @@ connectDB().then(async () => {
         if (file.endsWith(".ts") || file.endsWith(".js")) {
           const route = await import(path.join(routesPath, file));
           const { metadata, router: routeRouter } = route.default;
-          router.use(metadata.path, verifyApiKey, generateCsrfToken, routeRouter);
+          const sessionExceptions = config.route.sessionExceptions || [];
+          if (sessionExceptions.includes(metadata.path)) {
+            router.use(metadata.path, routeRouter);
+          } else {
+            router.use(metadata.path, verifyApiKey, generateCsrfToken, routeRouter);
+          }
           logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
         }
       }
