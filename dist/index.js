@@ -143,7 +143,13 @@ app.get("/api/", (req, res) => {
                 if (file.endsWith(".ts") || file.endsWith(".js")) {
                     const route = await Promise.resolve(`${path_1.default.join(routesPath, file)}`).then(s => __importStar(require(s)));
                     const { metadata, router: routeRouter } = route.default;
-                    router.use(metadata.path, verifyApiKey_1.default, csrfToken_1.default, routeRouter);
+                    const sessionExceptions = config_1.config.route.sessionExceptions || [];
+                    if (sessionExceptions.includes(metadata.path)) {
+                        router.use(metadata.path, routeRouter);
+                    }
+                    else {
+                        router.use(metadata.path, verifyApiKey_1.default, csrfToken_1.default, routeRouter);
+                    }
                     logger_1.default.info(`🚀 Route loaded: ${version}${metadata.path}`);
                 }
             }
