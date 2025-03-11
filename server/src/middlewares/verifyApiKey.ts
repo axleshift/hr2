@@ -28,7 +28,6 @@ const verifyApiKey = async (req: CustomRequest, res: Response, next: NextFunctio
   try {
     const key = req.headers["x-api-key"] as string;
     const masterKey = config.api.masterKey as string;
-
     if (!key) {
       return sendError(res, 400, "API key is required");
     }

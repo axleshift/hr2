@@ -75,7 +75,7 @@ export const config = {
 
   route: {
     dir: path.join(__dirname, "routes"),
-    sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || ["auth"],
+    sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || ["googleform"],
   },
 
   env: process.env.NODE_ENV || "development",
