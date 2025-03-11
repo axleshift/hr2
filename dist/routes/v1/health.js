@@ -9,7 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 router.get("/", (0, verifySession_1.default)({
-    permissions: ["all"],
+    permissions: ["user", "admin", "superadmin"],
 }, true, true), (req, res) => {
     res.send("OK");
 });

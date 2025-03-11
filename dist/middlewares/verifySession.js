@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../config");
 // sendError helper function
 const sendError = (res, statusCode, message) => {
+    console.error(`Error ${statusCode}: ${message}`);
     return res.status(statusCode).json({
         statusCode,
         success: false,
@@ -15,9 +16,9 @@ const sendError = (res, statusCode, message) => {
 };
 // validate csrf token helper function
 const validateCSRFToken = (req) => {
-    const csrfToken = req.session.csrfToken;
+    const csrfToken = req.session?.csrfToken;
     const clientToken = req.headers["x-csrf-token"] || csrfToken;
-    return csrfToken === clientToken;
+    return csrfToken && clientToken && csrfToken === clientToken;
 };
 /**
  * verifySession middleware
@@ -36,7 +37,6 @@ const verifySession = (metadata, validateCsrf = true, allowGuest = false) => {
             return sendError(res, 401, "Unauthorized: Session not initialized");
         }
         const user = req.session.user;
-        // Guard clause extravaganza.. let's gooo
         if (!user) {
             if (allowGuest) {
                 return next(); // Allow access if guest access is enabled

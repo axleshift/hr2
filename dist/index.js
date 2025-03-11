@@ -49,6 +49,7 @@ const connectDB_1 = require("./database/connectDB");
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const verifyApiKey_1 = __importDefault(require("./middlewares/verifyApiKey"));
+const csrfToken_1 = __importDefault(require("./middlewares/csrfToken"));
 const app = (0, express_1.default)();
 const host = config_1.config.server.host;
 const port = config_1.config.server.port;
@@ -142,7 +143,7 @@ app.get("/api/", (req, res) => {
                 if (file.endsWith(".ts") || file.endsWith(".js")) {
                     const route = await Promise.resolve(`${path_1.default.join(routesPath, file)}`).then(s => __importStar(require(s)));
                     const { metadata, router: routeRouter } = route.default;
-                    router.use(metadata.path, verifyApiKey_1.default, routeRouter);
+                    router.use(metadata.path, verifyApiKey_1.default, csrfToken_1.default, routeRouter);
                     logger_1.default.info(`🚀 Route loaded: ${version}${metadata.path}`);
                 }
             }
