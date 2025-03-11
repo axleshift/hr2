@@ -136,6 +136,7 @@ app.get("/api/", (req, res) => {
         const loadRoutes = async (version) => {
             const routesPath = path_1.default.join(__dirname, "routes", version);
             const router = express_1.default.Router();
+            const sessionExceptions = config_1.config.route.sessionExceptions.map((route) => `/${route}`);
             // Read the directory to get route files
             const files = fs_1.default.readdirSync(routesPath);
             // Import each route file dynamically
@@ -143,7 +144,6 @@ app.get("/api/", (req, res) => {
                 if (file.endsWith(".ts") || file.endsWith(".js")) {
                     const route = await Promise.resolve(`${path_1.default.join(routesPath, file)}`).then(s => __importStar(require(s)));
                     const { metadata, router: routeRouter } = route.default;
-                    const sessionExceptions = config_1.config.route.sessionExceptions || [];
                     if (sessionExceptions.includes(metadata.path)) {
                         router.use(metadata.path, routeRouter);
                     }
