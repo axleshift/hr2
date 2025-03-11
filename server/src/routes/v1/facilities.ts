@@ -21,7 +21,10 @@ router.post(
   "/create",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   createFacility
 );
 
@@ -29,7 +32,10 @@ router.put(
   "/update/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   updateFacility
 );
 
@@ -37,7 +43,10 @@ router.get(
   "/all",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   getAllFacilities
 );
 
@@ -45,7 +54,10 @@ router.get(
   "/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   getFacilityById
 );
 
@@ -53,7 +65,10 @@ router.delete(
   "/delete/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   removeFacility
 );
 
@@ -63,7 +78,10 @@ router.post(
   "/timeslot/create/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   createFacilityTimeslot
 );
 
@@ -79,7 +97,10 @@ router.delete(
   "/timeslot/delete/:id",
   verifySession({
     permissions: ["webhook", "admin", "instructor"],
-  }),
+  },
+  true,
+  true
+),
   removeFacilityTimeslot
 )
 

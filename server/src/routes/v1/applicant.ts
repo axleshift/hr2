@@ -16,21 +16,30 @@ router.post(
   "/",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   addNewResume
 );
 router.put(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   updateResume
 );
 router.get(
   "/all",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getAllResumeData
 );
 
@@ -38,7 +47,10 @@ router.get(
   "/category/:category",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getApplicantByDocumentCategory
 );
 
@@ -46,28 +58,40 @@ router.get(
   "/download/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getResumeFile
 );
 router.get(
   "/search",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   searchResume
 );
 router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getResumeById
 );
 router.delete(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   deleteResume
 );
 

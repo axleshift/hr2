@@ -16,21 +16,30 @@ router.get(
   "/all",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getAllAccounts
 );
 router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   getAccountById
 );
 router.put(
   "/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   updateAccount
 );
 export default {

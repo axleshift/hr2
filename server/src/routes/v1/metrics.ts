@@ -11,7 +11,10 @@ router.get(
   "/",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+    true,
+    true
+  ),
   metricsHandler
 );
 

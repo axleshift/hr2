@@ -11,7 +11,10 @@ router.get(
   "/update/:id",
   verifySession({
     permissions: ["admin", "superadmin"],
-  }),
+  },
+  true,
+  true
+),
   updateApikey
 );
 
