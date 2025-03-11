@@ -50,7 +50,7 @@ export const formSubmit = async (req: req, res: res) => {
       preferredWorkLocation,
       linkedInProfile,
       portfolioLink,
-      resumeFileLoc,
+      resumeFileLoc: resumeFileLoc[0],
       yearsOfExperience,
       currentMostRecentJob,
       highestQualification,
