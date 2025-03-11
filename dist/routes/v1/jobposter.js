@@ -11,16 +11,16 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const jobposterController_1 = require("../../database/v1/controllers/jobposterController");
 router.post("/:id/post", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobposterController_1.createJobposter);
+}, true, true), jobposterController_1.createJobposter);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobposterController_1.getAllJobposters);
+}, true, true), jobposterController_1.getAllJobposters);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobposterController_1.getJobposterByRefId);
+}, true, true), jobposterController_1.getJobposterByRefId);
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobposterController_1.removeJobposter);
+}, true, true), jobposterController_1.removeJobposter);
 exports.default = {
     metadata: {
         path: "/jobposter",

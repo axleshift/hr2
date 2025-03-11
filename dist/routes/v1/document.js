@@ -20,19 +20,19 @@ router.put("/update/:id", (0, verifySession_1.default)({
 // Get a document by ID
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), documentController_1.getDocumentById);
+}, true, true), documentController_1.getDocumentById);
 // Get documents by applicant ID
 router.get("/applicant/:applicantId/:category", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), documentController_1.getDocumentByApplicantId);
+}, true, true), documentController_1.getDocumentByApplicantId);
 // Get documents by category
 router.get("/category/:category", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), documentController_1.getDocumentByCategory);
+}, true, true), documentController_1.getDocumentByCategory);
 // Search documents
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), documentController_1.searchDocument);
+}, true, true), documentController_1.searchDocument);
 exports.default = {
     metadata: {
         path: "/document",

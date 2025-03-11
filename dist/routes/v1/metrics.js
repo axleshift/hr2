@@ -11,7 +11,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 router.get("/", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), prometheusMetrics_1.metricsHandler);
+}, true, true), prometheusMetrics_1.metricsHandler);
 exports.default = {
     metadata: {
         path: "/metrics",

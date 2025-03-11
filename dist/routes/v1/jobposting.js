@@ -11,25 +11,25 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const jobpostingController_1 = require("../../database/v1/controllers/jobpostingController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.createJobposting);
+}, true, true), jobpostingController_1.createJobposting);
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.searchJobpostings);
+}, true, true), jobpostingController_1.searchJobpostings);
 router.get("/", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.getAllJobpostings);
+}, true, true), jobpostingController_1.getAllJobpostings);
 router.get("/scheduled", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.getAllScheduledJobpostings);
+}, true, true), jobpostingController_1.getAllScheduledJobpostings);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.getJobpostingById);
+}, true, true), jobpostingController_1.getJobpostingById);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.updateJobposting);
+}, true, true), jobpostingController_1.updateJobposting);
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "superadmin"],
-}), jobpostingController_1.deleteJobposting);
+}, true, true), jobpostingController_1.deleteJobposting);
 exports.default = {
     metadata: {
         path: "/jobposting",
