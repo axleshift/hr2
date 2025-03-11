@@ -122,16 +122,14 @@ connectDB().then(async () => {
     const loadRoutes = async (version: string) => {
       const routesPath = path.join(__dirname, "routes", version);
       const router = express.Router();
-
+      const sessionExceptions = config.route.sessionExceptions.map((route) => `/${route}`);      
       // Read the directory to get route files
       const files = fs.readdirSync(routesPath);
-
       // Import each route file dynamically
       for (const file of files) {
         if (file.endsWith(".ts") || file.endsWith(".js")) {
           const route = await import(path.join(routesPath, file));
           const { metadata, router: routeRouter } = route.default;
-          const sessionExceptions = config.route.sessionExceptions || [];
           if (sessionExceptions.includes(metadata.path)) {
             router.use(metadata.path, routeRouter);
           } else {
