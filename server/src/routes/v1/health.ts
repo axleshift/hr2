@@ -10,7 +10,7 @@ router.get(
   "/",
   verifySession(
     {
-      permissions: ["all"],
+      permissions: ["user", "admin", "superadmin"],
     },
     true,
     true
