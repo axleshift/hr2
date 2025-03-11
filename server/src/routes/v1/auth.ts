@@ -10,7 +10,7 @@ router.post(
   "/register",
   verifySession(
     {
-      permissions: ["guest", "user", "admin", "superadmin"],
+      permissions: ["user", "admin", "superadmin"],
     },
     true,
     true
@@ -21,25 +21,28 @@ router.post(
   "/login",
   verifySession(
     {
-      permissions: ["guest", "user", "admin", "superadmin"],
+      permissions: ["user", "admin", "superadmin"],
     },
     true,
     true
   ),
-  login 
+  login
 );
 router.get(
   "/logout",
   verifySession({
     permissions: ["user", "admin", "superadmin"],
-  }),
+  },
+    true,
+    true
+  ),
   logout
 );
 router.get(
   "/verify",
   verifySession({
     permissions: ["user", "admin", "superadmin"],
-  }),
+  }, true, true),
   verify
 );
 

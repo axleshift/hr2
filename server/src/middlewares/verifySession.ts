@@ -8,6 +8,7 @@ import { config } from "../config";
 
 // sendError helper function
 const sendError = (res: Response, statusCode: number, message: string) => {
+  console.error(`Error ${statusCode}: ${message}`);
   return res.status(statusCode).json({
     statusCode,
     success: false,
@@ -17,9 +18,9 @@ const sendError = (res: Response, statusCode: number, message: string) => {
 
 // validate csrf token helper function
 const validateCSRFToken = (req: Request) => {
-  const csrfToken = req.session.csrfToken;
-  const clientToken = (req.headers["x-csrf-token"] as string) || (csrfToken as string);
-  return csrfToken === clientToken;
+  const csrfToken = req.session?.csrfToken;
+  const clientToken = req.headers["x-csrf-token"] as string || csrfToken;
+  return csrfToken && clientToken && csrfToken === clientToken;
 };
 
 interface Metadata {
@@ -43,10 +44,8 @@ const verifySession = (metadata: Metadata, validateCsrf = true, allowGuest = fal
     if (!req.session) {
       return sendError(res, 401, "Unauthorized: Session not initialized");
     }
-
+    
     const user = req.session.user;
-
-    // Guard clause extravaganza.. let's gooo
 
     if (!user) {
       if (allowGuest) {
@@ -71,7 +70,5 @@ const verifySession = (metadata: Metadata, validateCsrf = true, allowGuest = fal
     next();
   };
 };
-
-
 
 export default verifySession;
