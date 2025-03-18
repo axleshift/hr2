@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "The Freight Capsone Team (https://github.com/orgs/freight-capstone/people) && The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "vite",
     "start": "vite",
     "serve": "vite preview",

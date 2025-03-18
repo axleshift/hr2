@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 
 import { z } from 'zod'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { post, put, get, del } from '../../api/axios'
@@ -13,7 +13,6 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CCol,
@@ -43,10 +42,7 @@ import {
   faSearch,
   faLock,
   faUnlock,
-  faGear,
-  faUserGear,
 } from '@fortawesome/free-solid-svg-icons'
-import { firstLetterUppercase } from '../../utils'
 
 const Tags = () => {
   const { addToast } = useContext(AppContext)
@@ -480,7 +476,7 @@ const Tags = () => {
                 <CCardBody>
                   <CRow className="mb-3">
                     <CCol>
-                      <h5>{firstLetterUppercase(tag.name)}</h5>
+                      <h5 className="text-capitalize">{tag.name}</h5>
                       <small className="text-muted">{tag.category}</small>
                     </CCol>
                   </CRow>

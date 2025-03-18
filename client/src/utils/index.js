@@ -39,26 +39,12 @@ export const trimString = (str, maxLength) => {
   return str
 }
 
-/**
- * Capitalize first letter of a string
- * @param {string} str
- * @returns string with first letter capitalized
- */
-
-export const firstLetterUppercase = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
 export const randomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
 }
 
 export const randomTime = () => {
   return new Date(1970, 0, 1, hours, minutes, seconds)
-}
-
-const textToTime = (text) => {
-  return text.match(/(\d+)(?::(\d\d))?\s*(p?)/)
 }
 
 /**
@@ -115,11 +101,11 @@ export const timeComparator = async (time1, time2) => {
  *
  * formatTime('2021-09-01T12:00:00', '12')
  */
-export const formatTime = (time, clock) => {
-  if (clock === '12') {
-    return dayjs(time).format('hh:mm A') // 12-hour format with AM/PM
-  }
-  return dayjs(time).format('HH:mm:ss') // 24-hour format
+export const formatTime = (timeString = '00:00', format = '12h') => {
+  const [hours, minutes] = timeString.split(':')
+  const hour = hours % 12 || 12
+  const modifier = hours < 12 ? 'AM' : 'PM'
+  return `${hour}:${minutes} ${modifier}`
 }
 
 /**

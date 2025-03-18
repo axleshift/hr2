@@ -15,8 +15,8 @@ export default defineConfig(() => {
       terserOptions: {
         compress: {
           drop_console: true,
-          drop_debugger: true
-        }
+          drop_debugger: true,
+        },
       },
       rollupOptions: {
         output: {
@@ -25,11 +25,11 @@ export default defineConfig(() => {
             'react-dom': ['react-dom'],
             'react-router-dom': ['react-router-dom'],
             'react-hook-form': ['react-hook-form'],
-            'zod': ['zod'],
+            zod: ['zod'],
             '@hookform/resolvers/zod': ['@hookform/resolvers/zod'],
           },
         },
-      }
+      },
     },
     css: {
       postcss: {

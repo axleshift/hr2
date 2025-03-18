@@ -36,7 +36,7 @@ import {
   CFormSelect,
 } from '@coreui/react'
 import AppPagination from '../../components/AppPagination'
-import { pdfjs, Document, Page } from 'react-pdf'
+import { pdfjs } from 'react-pdf'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../context/appContext'
 import {
@@ -46,12 +46,8 @@ import {
   faPencil,
   faSearch,
   faUser,
-  faEye,
-  faMobileScreenButton,
   faBolt,
-  faClipboardList,
 } from '@fortawesome/free-solid-svg-icons'
-import { firstLetterUppercase } from '../../utils'
 import { config } from '../../config'
 import DocumentForm from './modal/DocumentForm'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
@@ -1238,7 +1234,7 @@ const Screening = () => {
                 <CTableBody>
                   {isLoading ? (
                     <CTableRow>
-                      <CTableDataCell colSpan="5">
+                      <CTableDataCell colSpan="6">
                         <div className="pt-3 text-center">
                           <CSpinner color="primary" variant="grow" />
                         </div>
