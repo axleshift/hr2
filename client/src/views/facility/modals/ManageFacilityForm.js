@@ -29,8 +29,9 @@ import {
   CAlert,
   CBadge,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { del, get, post } from '../../../api/axios'
@@ -40,8 +41,14 @@ import { formatDate } from '../../../utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
+import EventForm from './EventForm'
+import { trimString } from '../../../utils/index'
+
 const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange }) => {
   const { addToast } = useContext(AppContext)
+
+  // Modal state
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   // Calendar state
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -51,10 +58,18 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
   // timeslot
   const [timeslots, setTimeslots] = useState([])
+  const [isTimeslotLoading, setIsTimeslotLoading] = useState(false)
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+  const [isRemoveLoading, setIsRemoveLoading] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState({})
 
   // Event state
   const [Events, setEvents] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isEventFormVisible, setIsEventFormVisible] = useState(false)
+  const [isEventEdit, setIsEventEdit] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState({})
+  const [isEventSubmitLoading, setIsEventSubmitLoading] = useState(false)
 
   // Counter state
   const [milliseconds, setMilliseconds] = useState(5000)
@@ -83,12 +98,15 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
   const getAllTimeslotsForDate = async () => {
     try {
+      setIsTimeslotLoading(true)
       const res = await get(`/facilities/timeslot/${facilityData._id}/${new Date(defaultDate)}`)
       console.log(res.data)
       if (res.status === 200) {
+        setIsTimeslotLoading(false)
         return setTimeslots(res.data.data)
       }
     } catch (error) {
+      setIsTimeslotLoading(false)
       console.error(error)
       addToast('error', 'An error occurred while fetching timeslots', 'danger')
     }
@@ -96,8 +114,8 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
   const timeslotSchema = z
     .object({
-      start: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format'),
-      end: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format'),
+      start: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format, must be HH:MM'),
+      end: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format, must be HH:MM'),
     })
     .superRefine((data, ctx) => {
       if (data.start >= data.end) {
@@ -131,6 +149,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
   const handleTimeslotSubmit = async (data) => {
     try {
+      setIsSubmitLoading(true)
       const formdata = new FormData()
       formdata.append('date', new Date(defaultDate))
       formdata.append('start', data.start)
@@ -138,26 +157,36 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
       const res = await post(`/facilities/timeslot/create/${facilityData._id}`, formdata)
       if (res.status === 404) {
+        setIsSubmitLoading(false)
         return addToast('error', JSON.stringify(res.message.message), 'danger')
       }
       if (res.status === 400) {
+        setIsSubmitLoading(false)
         return addToast('error', JSON.stringify(res.message.message), 'danger')
       }
+      onChange()
       getAllTimeslotsForDate()
+      setIsSubmitLoading(false)
       return addToast('success', 'Timeslot added successfully', 'success')
     } catch (error) {
       console.error(error)
+      setIsSubmitLoading(false)
       addToast('error', 'An error occurred while adding timeslot', 'danger')
     }
   }
 
   const handleTimeSlotRemove = async (timeslot) => {
     try {
+      setIsRemoveLoading(true)
       const res = await del(`/facilities/timeslot/delete/${timeslot._id}`)
       if (res.status === 200) {
-        addToast('success', 'Timeslot removed successfully', 'success')
+        setIsRemoveLoading(false)
         getAllTimeslotsForDate()
+        return addToast('success', 'Timeslot removed successfully', 'success')
       }
+      setIsRemoveLoading(false)
+      getAllTimeslotsForDate()
+      return addToast('error', 'Failed to remove timeslot', 'danger')
     } catch (error) {
       console.error(error)
       addToast('error', 'An error occurred while removing timeslot', 'danger')
@@ -166,6 +195,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 
   useEffect(() => {
     if (isVisible) {
+      setIsModalVisible(isVisible)
       onChange()
       parseCalendarStates()
       getAllTimeslotsForDate()
@@ -173,148 +203,221 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
   }, [defaultDate, isVisible])
 
   return (
-    <CModal
-      visible={isVisible}
-      onClose={() => {
-        setHasSlots([])
-        onChange()
-        onClose()
-        reset()
-      }}
-      size="lg"
-      backdrop="static"
-    >
-      <CModalHeader>
-        <CModalTitle>Manage {facilityData.name || 'Facility'}</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CTabs activeItemKey={0}>
-          <CTabList variant="underline-border">
-            <CTab itemKey={0}>Timeslots</CTab>
-            <CTab itemKey={1}>Events</CTab>
-          </CTabList>
-          <CTabContent>
-            <CTabPanel itemKey={0}>
-              <CContainer>
-                <CRow className="mb-3">
-                  <CCol>
-                    <Calendar
-                      onChange={handleDateChange}
-                      className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
-                      defaultValue={defaultDate}
-                      tileClassName={({ date }) => {
-                        if (hasSlots.find((slot) => slot.toDateString() === date.toDateString())) {
-                          return 'has-timeslots'
-                        }
-                      }}
-                    />
-                  </CCol>
-                </CRow>
-                <CRow className="mb-3">
-                  <CCol>
-                    <strong>Timeslots for {formatDate(defaultDate)}</strong>
-                  </CCol>
-                </CRow>
-                <CRow className="mb-3">
-                  <CCol>
-                    <CForm onSubmit={handleSubmit(handleTimeslotSubmit)}>
-                      <CRow className="d-flex gap-2">
+    <CContainer>
+      <CRow>
+        <CCol>
+          <CModal
+            visible={isModalVisible}
+            onClose={() => {
+              setIsModalVisible(false)
+              setHasSlots([])
+              onChange()
+              onClose()
+              reset()
+            }}
+            size="lg"
+            backdrop="static"
+          >
+            <CModalHeader>
+              <CModalTitle>Manage {facilityData.name || 'Facility'}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <CTabs activeItemKey={0}>
+                <CTabList variant="underline-border">
+                  <CTab itemKey={0}>Timeslots</CTab>
+                  <CTab itemKey={1}>Events</CTab>
+                </CTabList>
+                <CTabContent>
+                  <CTabPanel itemKey={0}>
+                    <CContainer>
+                      <CRow className="mb-3">
                         <CCol>
-                          <CFormInput
-                            type="time"
-                            {...register('start')}
-                            placeholder="Start time"
-                            invalid={!!errors.start}
+                          <Calendar
+                            onChange={handleDateChange}
+                            className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
+                            defaultValue={defaultDate}
+                            tileClassName={({ date }) => {
+                              if (
+                                hasSlots.find((slot) => slot.toDateString() === date.toDateString())
+                              ) {
+                                return 'has-timeslots'
+                              }
+                            }}
                           />
-                          {errors.start && (
-                            <div className="invalid-feedback">{errors.start.message}</div>
-                          )}
-                        </CCol>
-                        <CCol>
-                          <CFormInput
-                            type="time"
-                            {...register('end')}
-                            placeholder="End time"
-                            invalid={!!errors.end}
-                          />
-                          {errors.end && (
-                            <div className="invalid-feedback">{errors.end.message}</div>
-                          )}
-                        </CCol>
-                        {/* <CCol>
-										<CFormInput
-											type="number"
-											{...register('capacity', { valueAsNumber: true })}
-											placeholder="Capacity"
-											defaultValue={1}
-											invalid={!!errors.capacity}
-										/>
-										{errors.capacity && (
-											<div className="invalid-feedback">{errors.capacity.message}</div>
-										)}
-									</CCol> */}
-                        <CCol>
-                          <div className="d-flex justify-content-end">
-                            <CButton type="submit" color="success">
-                              Add
-                            </CButton>
-                          </div>
                         </CCol>
                       </CRow>
-                    </CForm>
-                  </CCol>
-                </CRow>
-                <CRow>
-                  <CCol>
-                    <CCard>
-                      <CCardBody>
-                        <CTable small striped responsive>
-                          <CTableHead>
-                            <CTableRow>
-                              <CTableHeaderCell>Date</CTableHeaderCell>
-                              <CTableHeaderCell>Start</CTableHeaderCell>
-                              <CTableHeaderCell>End</CTableHeaderCell>
-                              <CTableHeaderCell>Action</CTableHeaderCell>
-                            </CTableRow>
-                          </CTableHead>
-                          <CTableBody>
-                            {timeslots.length === 0 ? (
-                              <CTableRow>
-                                <CTableDataCell colSpan="4" className="text-center">
-                                  No timeslots found for {formatDate(defaultDate)}
-                                </CTableDataCell>
-                              </CTableRow>
-                            ) : (
-                              timeslots.map((slot) => (
-                                <CTableRow key={slot._id}>
-                                  <CTableDataCell>{formatDate(new Date(slot.date))}</CTableDataCell>
-                                  <CTableDataCell>{formatTime(slot.start, '12h')}</CTableDataCell>
-                                  <CTableDataCell>{formatTime(slot.end, '12h')}</CTableDataCell>
-                                  <CTableDataCell>
-                                    <CButton
-                                      color="danger"
-                                      size="sm"
-                                      onClick={() => handleTimeSlotRemove(slot)}
-                                    >
-                                      Delete
+                      <CRow className="mb-3">
+                        <CCol>
+                          Manage timeslots for{' '}
+                          <span className="text-info">{formatDate(defaultDate)}</span>
+                        </CCol>
+                      </CRow>
+                      <CRow className="mb-3">
+                        <CCol>
+                          <CForm onSubmit={handleSubmit(handleTimeslotSubmit)}>
+                            <CRow className="d-flex gap-2">
+                              <CCol>
+                                <CFormInput
+                                  type="time"
+                                  {...register('start')}
+                                  placeholder="Start time"
+                                  invalid={!!errors.start}
+                                />
+                                {errors.start && (
+                                  <div className="invalid-feedback">{errors.start.message}</div>
+                                )}
+                              </CCol>
+                              <CCol>
+                                <CFormInput
+                                  type="time"
+                                  {...register('end')}
+                                  placeholder="End time"
+                                  invalid={!!errors.end}
+                                />
+                                {errors.end && (
+                                  <div className="invalid-feedback">{errors.end.message}</div>
+                                )}
+                              </CCol>
+                              <CCol>
+                                <div className="d-flex justify-content-end">
+                                  {isSubmitLoading ? (
+                                    <CButton color="primary" disabled>
+                                      <span
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                      ></span>
+                                      &nbsp;Adding...
                                     </CButton>
-                                  </CTableDataCell>
-                                </CTableRow>
-                              ))
-                            )}
-                          </CTableBody>
-                        </CTable>
-                      </CCardBody>
-                    </CCard>
-                  </CCol>
-                </CRow>
-              </CContainer>
-            </CTabPanel>
-            <CTabPanel itemKey={1}>events</CTabPanel>
-          </CTabContent>
-        </CTabs>
-      </CModalBody>
-    </CModal>
+                                  ) : (
+                                    <CButton color="primary" type="submit">
+                                      Add
+                                    </CButton>
+                                  )}
+                                </div>
+                              </CCol>
+                            </CRow>
+                          </CForm>
+                        </CCol>
+                      </CRow>
+                      <CRow>
+                        <CCol>
+                          <CCard>
+                            <CCardBody>
+                              <CTable align="middle" hover responsive striped>
+                                <CTableHead>
+                                  <CTableRow>
+                                    <CTableHeaderCell>#</CTableHeaderCell>
+                                    <CTableHeaderCell>Date</CTableHeaderCell>
+                                    <CTableHeaderCell>Start</CTableHeaderCell>
+                                    <CTableHeaderCell>End</CTableHeaderCell>
+                                    <CTableHeaderCell>Availability</CTableHeaderCell>
+                                    <CTableHeaderCell>Action</CTableHeaderCell>
+                                  </CTableRow>
+                                </CTableHead>
+                                <CTableBody>
+                                  {timeslots.length === 0 ? (
+                                    <CTableRow>
+                                      <CTableDataCell colSpan="6" className="text-center">
+                                        No timeslots found for {formatDate(defaultDate)}
+                                      </CTableDataCell>
+                                    </CTableRow>
+                                  ) : (
+                                    timeslots.map((slot) => (
+                                      <CTableRow key={slot._id}>
+                                        <CTableDataCell>
+                                          <CTooltip content={slot._id} placement="top">
+                                            <span className="text-muted">
+                                              {trimString(slot._id, 10)}
+                                            </span>
+                                          </CTooltip>
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                          {formatDate(new Date(slot.date))}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                          {formatTime(slot.start, '12h')}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                          {formatTime(slot.end, '12h')}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                          {slot.isAvailable ? (
+                                            <span className="text-success">Available</span>
+                                          ) : (
+                                            <span className="text-danger">Booked</span>
+                                          )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                          <CInputGroup>
+                                            <CButton
+                                              color="danger"
+                                              size="sm"
+                                              onClick={() => handleTimeSlotRemove(slot)}
+                                            >
+                                              {isRemoveLoading ? <CSpinner size="sm" /> : 'Delete'}
+                                            </CButton>
+                                            {slot.isAvailable ? (
+                                              <CButton
+                                                color="info"
+                                                size="sm"
+                                                onClick={() => {
+                                                  setSelectedSlot(slot)
+                                                  setIsEventFormVisible(true)
+                                                  setIsModalVisible(false)
+                                                  setIsEventEdit(true)
+                                                }}
+                                              >
+                                                Edit Event
+                                              </CButton>
+                                            ) : (
+                                              <CButton
+                                                color="info"
+                                                size="sm"
+                                                onClick={() => {
+                                                  setSelectedSlot(slot)
+                                                  setIsEventFormVisible(true)
+                                                  setIsModalVisible(false)
+                                                }}
+                                              >
+                                                Set Event
+                                              </CButton>
+                                            )}
+                                          </CInputGroup>
+                                        </CTableDataCell>
+                                      </CTableRow>
+                                    ))
+                                  )}
+                                </CTableBody>
+                              </CTable>
+                            </CCardBody>
+                          </CCard>
+                        </CCol>
+                      </CRow>
+                    </CContainer>
+                  </CTabPanel>
+                  <CTabPanel itemKey={1}>events</CTabPanel>
+                </CTabContent>
+              </CTabs>
+            </CModalBody>
+          </CModal>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          <EventForm
+            isVisible={isEventFormVisible}
+            onClose={() => {
+              setIsEventFormVisible(false)
+              setIsModalVisible(true)
+            }}
+            isEdit={isEventEdit}
+            eventData={selectedEvent}
+            slot={selectedSlot}
+          />
+        </CCol>
+      </CRow>
+    </CContainer>
   )
 }
 

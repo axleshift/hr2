@@ -261,10 +261,67 @@ export const removeFacilityTimeslot = async (req: req, res: res) => {
 
     facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(id));
     await facility.save();
-
     await timeslot.deleteOne();
 
     return res.status(200).json({ message: "Timeslot removed" });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const createFacilityEvent = async (req: req, res: res) => {
+  try {
+    const { timeslotId } = req.params;
+    const { name, description, capacity } = req.body;
+
+    if (!timeslotId) {
+      return res.status(400).json({ message: "Timeslot id is required" });
+    }
+
+    if (!name || !capacity) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const timeslot = await Time.findById(timeslotId);
+    if (!timeslot) {
+      return res.status(404).json({ message: "Timeslot not found" });
+    }
+
+    if (!timeslot.isAvailable) {
+      return res.status(400).json({ message: "Timeslot is not available" });
+    }
+
+    const date = timeslot.date;
+    const formattedDate = new Date(date);
+    
+    if (formattedDate.toDateString() !== new Date(timeslot.date).toDateString()) {
+      return res.status(400).json({ message: "Event date does not match timeslot date" });
+    }
+    if (!req.session.user) {
+      return res.status(400).json({ message: "User session not found" });
+    }
+    const authorId = req.session.user._id as string;
+    const eventData = {
+      name,
+      author: authorId,
+      description,
+      date: formattedDate,
+      capacity,
+      timeslot: timeslotId,
+    };
+
+    const newEvent = await Events.create(eventData);
+    if (!newEvent) {
+      return res.status(500).json({ message: "Event not created" });
+    }
+    timeslot.isAvailable = false;
+
+    await timeslot.save();
+    return res.status(201).json({
+      message: "Event created",
+      data: newEvent
+    });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });

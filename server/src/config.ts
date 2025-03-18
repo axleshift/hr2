@@ -18,7 +18,7 @@ export const config = {
 
   server: {
     host: process.env.SERVER_HOST,
-    port: process.env.SERVER_PORT,
+    port: process.env.SERVER_PORT || 8000,
     csrfProtection: process.env.SERVER_CSRF,
     trustProxy: process.env.SERVER_TRUST_PROXY,
     jwt: {
@@ -38,7 +38,7 @@ export const config = {
   },
 
   google: {
-    formsKey: process.env.GOOGLE_FORMS_KEY,
+    key: process.env.GOOGLE_FORMS_KEY,
   },
 
   mongoDB: {
@@ -71,6 +71,7 @@ export const config = {
     activeSessions: {
       timeout: 10000,
     },
+    key: process.env.PROMETHEUS_METRICS_KEY,
   },
 
   route: {

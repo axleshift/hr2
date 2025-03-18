@@ -282,7 +282,11 @@ const Facilities = () => {
           <CCol>
             <ManageFacilityForm
               isVisible={isManageFacilityFormVisible}
-              onClose={() => setIsManageFacilityFormVisible(false)}
+              onClose={() => {
+                setIsManageFacilityFormVisible(false)
+                setFacilityData({})
+                getAllFacilitiesData()
+              }}
               facilityData={facilityData}
               onChange={() => getAllFacilitiesData()}
             />
