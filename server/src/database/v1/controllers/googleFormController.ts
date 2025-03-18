@@ -33,7 +33,7 @@ export const formSubmit = async (req: req, res: res) => {
       whyAreYouInterestedInRole,
     } = req.body;
 
-    const SECRET = config.google.formsKey;
+    const SECRET = config.google.key;
 
     if (secret !== SECRET) {
       return res.status(401).json({ message: "Unauthorized" });

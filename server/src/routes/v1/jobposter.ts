@@ -9,7 +9,7 @@ import { createJobposter, getJobposterByRefId, getAllJobposters, removeJobposter
 
 router.post("/:id/post",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -17,7 +17,7 @@ router.post("/:id/post",
   createJobposter);
 router.get("/all",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -25,7 +25,7 @@ router.get("/all",
   getAllJobposters);
 router.get("/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -33,7 +33,7 @@ router.get("/:id",
   getJobposterByRefId);
 router.delete("/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true

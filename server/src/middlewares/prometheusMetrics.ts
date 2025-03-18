@@ -103,6 +103,13 @@ const prometheusMetrics = (req: Request, res: Response, next: NextFunction) => {
  */
 const metricsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const { secret } = req.body;
+        const SECRET = config.prom.key;
+
+        if (secret !== SECRET) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
+    
         const metrics = await promClient.register.metrics(); // Await the Promise
         res.set("Content-Type", promClient.register.contentType);
         res.end(metrics);

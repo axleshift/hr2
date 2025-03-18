@@ -24,10 +24,6 @@ const timeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAvaliable: {
-      type: Boolean,
-      default: true,
-    },
     participants: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "applicants",

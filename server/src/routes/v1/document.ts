@@ -12,7 +12,7 @@ router.post(
   "/create",
   verifySession(
     {
-      permissions: ["admin", "superadmin"],
+      permissions: ["user", "admin"],
     },
     true,
     true
@@ -25,7 +25,7 @@ router.put(
   "/update/:id",
   verifySession(
     {
-      permissions: ["admin", "superadmin"],
+      permissions: ["user", "admin"],
     },
     true,
     true
@@ -37,7 +37,7 @@ router.put(
 router.get(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -49,7 +49,7 @@ router.get(
 router.get(
   "/applicant/:applicantId/:category",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -61,7 +61,7 @@ router.get(
 router.get(
   "/category/:category",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -73,7 +73,7 @@ router.get(
 router.get(
   "/search",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true

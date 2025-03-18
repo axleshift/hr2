@@ -11,6 +11,11 @@ const facilityEventsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     description: {
       type: String,
     },

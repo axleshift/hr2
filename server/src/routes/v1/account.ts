@@ -15,7 +15,7 @@ import verifySession from "../../middlewares/verifySession";
 router.get(
   "/all",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -25,7 +25,7 @@ router.get(
 router.get(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -35,7 +35,7 @@ router.get(
 router.put(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true

@@ -122,7 +122,7 @@ connectDB().then(async () => {
     const loadRoutes = async (version: string) => {
       const routesPath = path.join(__dirname, "routes", version);
       const router = express.Router();
-      const sessionExceptions = config.route.sessionExceptions.map((route) => `/${route}`);      
+      const sessionExceptions = config.route.sessionExceptions.map((route) => `/${route}`);
       // Read the directory to get route files
       const files = fs.readdirSync(routesPath);
       // Import each route file dynamically
@@ -154,7 +154,18 @@ connectDB().then(async () => {
       .then(() => {
         app.listen(port, () => {
           logger.info(`🟢 Server is running at http://${host}:${port}`);
-        });
+        })
+          .on("error", (error) => {
+            if ((error as NodeJS.ErrnoException).code === "EADDRINUSE") {
+              const newPort = parseInt(port.toString()) + 1;
+              logger.warn(`Port ${port} is already in use. Trying ${newPort}...`);
+              app.listen(newPort, () => {
+                logger.info(`🟢 Server is running at http://${host}:${newPort}`)
+                });
+            } else {
+              logger.error(`Error starting server: ${error}`);
+            }
+          });
         logger.info("🚀 Routes loaded successfully");
         startJobs();
       })

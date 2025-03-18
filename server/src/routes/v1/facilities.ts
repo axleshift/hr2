@@ -14,61 +14,64 @@ import {
   // timeslot
   createFacilityTimeslot,
   getAllFacilityTimeslotsForDate,
-  removeFacilityTimeslot
+  removeFacilityTimeslot,
+
+  // event
+  createFacilityEvent
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
   "/create",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   createFacility
 );
 
 router.put(
   "/update/:id",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   updateFacility
 );
 
 router.get(
   "/all",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   getAllFacilities
 );
 
 router.get(
   "/:id",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   getFacilityById
 );
 
 router.delete(
   "/delete/:id",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   removeFacility
 );
 
@@ -77,18 +80,18 @@ router.delete(
 router.post(
   "/timeslot/create/:id",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   createFacilityTimeslot
 );
 
 router.get(
   "/timeslot/:id/:date",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   }),
   getAllFacilityTimeslotsForDate
 );
@@ -96,12 +99,25 @@ router.get(
 router.delete(
   "/timeslot/delete/:id",
   verifySession({
-    permissions: ["webhook", "admin", "instructor"],
+    permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+    true
+  ),
   removeFacilityTimeslot
+)
+
+// Event
+
+router.post(
+  "/event/create/:timeslotId",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  createFacilityEvent
 )
 
 export default {
