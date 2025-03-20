@@ -41,7 +41,7 @@ const AppHeaderDropdown = () => {
           <CSpinner color="primary" variant="grow" />
         </div>
       )}
-      <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
+      <CDropdownToggle placement="bottom-end" className="pe-0 py-0" caret={false}>
         <CAvatar src={defaultAvatar} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">

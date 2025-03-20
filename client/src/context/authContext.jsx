@@ -2,11 +2,22 @@ import React, { createContext, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
 import { post, get } from '../api/axios'
+export const AuthContext = createContext({
+  userInformation: {
+    _id: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    username: '',
+    status: '',
+    role: '',
+  },
+  isAuthenticated: false,
+  login: () => {},
+  logout: () => {},
+})
 
-// Create the context
-export const AuthContext = createContext()
-
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userInformation, setUserInformation] = useState({
     _id: '',

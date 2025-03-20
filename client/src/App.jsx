@@ -22,7 +22,7 @@ const Terms = React.lazy(() => import('./views/legal/Terms'))
 const Policy = React.lazy(() => import('./views/legal/Policy'))
 
 const App = () => {
-  const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+  const { isColorModeSet, setColorMode } = useColorModes('theme')
   const storedTheme = useSelector((state) => state.theme)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const App = () => {
           <BrowserRouter>
             <Suspense
               fallback={
-                <div className="pt-3 text-center">
+                <div className="text-center pt-3">
                   <CSpinner color="primary" variant="grow" />
                 </div>
               }
