@@ -1,10 +1,10 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { expect, vi } from 'vitest'
-import Register from './Register'
-import { AppContext } from '../../context/appContext'
+import Register from '../../../src/views/auth/Register'
+import { AppContext } from '../../../src/context/appContext'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { post } from '../../api/axios'
+import { post } from '../../../src/api/axios'
 
 vi.mock('../../api/axios')
 
