@@ -64,8 +64,8 @@ const EventForm = ({ isVisible, onClose, isEdit, eventData, slot }) => {
       formData.append('description', data.description)
       formData.append('capacity', data.capacity)
       const res = isEdit
-        ? await put(`facilities/event/create/${slot._id}`, data)
-        : await post(`facilities/event/create/${slot._id}`, data)
+        ? await put(`facilities/event/timeslot/${slot._id}`, data)
+        : await post(`facilities/event/timeslot/${slot._id}`, data)
       if (res.status === 201) {
         setIsLoading(false)
         onClose()

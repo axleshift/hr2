@@ -17,7 +17,9 @@ import {
   removeFacilityTimeslot,
 
   // event
-  createFacilityEvent
+  createFacilityEvent,
+  getFacilityEventsForDate,
+  getFacilityCalendarStates
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -110,7 +112,7 @@ router.delete(
 // Event
 
 router.post(
-  "/event/create/:timeslotId",
+  "/event/timeslot/:timeslotId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -118,6 +120,28 @@ router.post(
     true
   ),
   createFacilityEvent
+)
+
+router.get(
+  "/events/:id/calendar-states",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  getFacilityCalendarStates
+)
+
+router.get(
+  "/events/:id/:date",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  getFacilityEventsForDate
 )
 
 export default {

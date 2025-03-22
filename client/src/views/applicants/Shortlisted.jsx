@@ -198,14 +198,14 @@ const Shortlisted = () => {
           </CCol>
         </CRow>
         <CRow>
-          <CCol>
+          {/* <CCol>
             <ApplicantForm
               isVisible={isAppFormVisible}
               onClose={() => setIsAppFormVisible(false)}
               isDarkMode={true}
               applicantData={selectedApplicantData}
             />
-          </CCol>
+          </CCol> */}
         </CRow>
         <CRow>
           <CCol>

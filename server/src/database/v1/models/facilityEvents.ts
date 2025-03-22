@@ -35,6 +35,11 @@ const facilityEventsSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "applicants",
     },
+    facility: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "facilities",
+      required: true,
+    },
     timeslot: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "time",

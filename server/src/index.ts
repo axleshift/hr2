@@ -166,7 +166,7 @@ connectDB().then(async () => {
               logger.error(`Error starting server: ${error}`);
             }
           });
-        logger.info("🚀 Routes loaded successfully");
+        logger.info("✅ Routes loaded successfully");
         startJobs();
       })
       .catch((error) => {

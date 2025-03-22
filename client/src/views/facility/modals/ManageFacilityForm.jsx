@@ -35,13 +35,13 @@ import { set, z } from 'zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { del, get, post } from '../../../api/axios'
-import { Calendar } from 'react-calendar'
 import { AppContext } from '../../../context/appContext'
 import { formatDate } from '../../../utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
-import EventForm from './EventForm'
+const Calendar = React.lazy(() => import('react-calendar'))
+const EventForm = React.lazy(() => import('./EventForm'))
 import { trimString } from '../../../utils/index'
 
 const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange }) => {
@@ -357,7 +357,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                                             >
                                               {isRemoveLoading ? <CSpinner size="sm" /> : 'Delete'}
                                             </CButton>
-                                            {slot.isAvailable ? (
+                                            {!slot.isAvailable ? (
                                               <CButton
                                                 color="info"
                                                 size="sm"
@@ -378,6 +378,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                                                   setSelectedSlot(slot)
                                                   setIsEventFormVisible(true)
                                                   setIsModalVisible(false)
+                                                  setIsEventEdit(false)
                                                 }}
                                               >
                                                 Set Event

@@ -215,10 +215,10 @@ export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
     }
 
     const today = new Date(date)
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const timeslots = await Time.find({ facility: id, date: today });
+    const timeslots = await Time.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
     if (!timeslots) {
       return res.status(404).json({ message: "Timeslots not found" });
     }
@@ -270,6 +270,8 @@ export const removeFacilityTimeslot = async (req: req, res: res) => {
   }
 }
 
+// Facility events
+
 export const createFacilityEvent = async (req: req, res: res) => {
   try {
     const { timeslotId } = req.params;
@@ -294,7 +296,7 @@ export const createFacilityEvent = async (req: req, res: res) => {
 
     const date = timeslot.date;
     const formattedDate = new Date(date);
-    
+
     if (formattedDate.toDateString() !== new Date(timeslot.date).toDateString()) {
       return res.status(400).json({ message: "Event date does not match timeslot date" });
     }
@@ -308,6 +310,7 @@ export const createFacilityEvent = async (req: req, res: res) => {
       description,
       date: formattedDate,
       capacity,
+      facility: timeslot.facility,
       timeslot: timeslotId,
     };
 
@@ -322,6 +325,178 @@ export const createFacilityEvent = async (req: req, res: res) => {
       message: "Event created",
       data: newEvent
     });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityEventById = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+    const event = await Events.findById(id);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    return res.status(200).json({ message: "Event found", data: event });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityEventsForDate = async (req: req, res: res) => {
+  try {
+    const { id, date } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const today = new Date(date)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const events = await Events.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
+
+    if (!events) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// TODO: add pagination 
+export const getFacilityCalendarStates = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate facility ID
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    // Retrieve facility by ID
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const { month, year } = req.query;
+
+    // Validate month and year
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Create start and end dates for the specified month and year
+    // Note: month is expected to be 1-based (1 for January, 2 for February, etc.)
+    // Date object expects month to be 0-based (0 for January, 1 for February, etc.)
+    const startDate = new Date(parseInt(year as string), parseInt(month as string) - 1, 1);
+    // set one month before the next month
+    startDate.setMonth(startDate.getMonth() - 1);
+    const endDate = new Date(parseInt(year as string), parseInt(month as string), 0);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const events = await Events.find({ facility: id, date: { $gte: startDate, $lte: endDate } });
+    const formattedEvents = events.map((event) => {
+      return new Date(event.date).toISOString();
+    });
+
+    if (!events) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    // Return the timeslots and events in the response
+    return res.status(200).json({ message: "Calendar states found", data: formattedEvents, startDate, endDate });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityUpcomingEvents = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const today = new Date();
+    const events = await Events.find({ date: { $gte: today } });
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getUpcomingEvents = async (req: req, res: res) => {
+  try {
+    const today = new Date();
+    const events = await Events.find({ date: { $gte: today } });
+    if (!events || events.length === 0) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const BookApplicantToEvent = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+    const { applicantId } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Event id is required" });
+    }
+
+    if (!applicantId) {
+      return res.status(400).json({ message: "Applicant id is required" });
+    }
+
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.participants.includes(applicantId)) {
+      return res.status(400).json({ message: "Applicant already booked for event" });
+    }
+
+    event.participants.push(applicantId);
+    await event.save();
+
+    return res.status(200).json({ message: "Applicant booked for event" });
+
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });

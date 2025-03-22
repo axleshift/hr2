@@ -62,7 +62,6 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
 
   const formSchema = z.object({
     document_id: z.string().optional(),
-    author_Id: z.string().min(1).max(255),
     authorName: z.string().min(1).max(255),
     applicant_Id: z.string().min(1).max(255),
     applicantName: z.string().min(1).max(255),
@@ -134,7 +133,6 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
       // set form data
       formReset({
         document_id: res._id,
-        author_Id: res.author_Id,
         authorName: res.authorName,
         applicant_Id: res.applicant_Id,
         applicantName: res.applicantName,
@@ -160,7 +158,6 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
   const handleReset = () => {
     setIsEdit(false)
     formReset({
-      author_Id: userInformation._id,
       authorName: `${userInformation.lastname}, ${userInformation.firstname}`,
       applicant_Id: applicantData._id,
       applicantName: `${applicantData.lastname}, ${applicantData.firstname}`,
@@ -228,10 +225,9 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
 
   useEffect(() => {
     if (isVisible) {
-      getAllTagOptions()
+      // getAllTagOptions()
       getApplicantScreeningHistory()
       formReset({
-        author_Id: `${userInformation.lastname}, ${userInformation.firstname}`,
         authorName: `${userInformation.lastname}, ${userInformation.firstname}`,
         applicant_Id: applicantData._id,
         applicantName: `${applicantData.lastname}, ${applicantData.firstname}`,
@@ -268,15 +264,9 @@ const DocumentForm = ({ isVisible, onClose, applicantData, docCategory }) => {
                   </CRow>
                   <CRow>
                     <CCol>
-                      <CFormInput
-                        type="hidden"
-                        {...register('author_Id')}
-                        invalid={!!errors.author_Id}
-                        readOnly
-                      />
-                      {errors.author && (
-                        <div className="invalid-feedback">{errors.author.message}</div>
-                      )}
+                      <small className="text-muted">
+                        Author ID: {userInformation && userInformation._id}
+                      </small>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3 mt-3">
