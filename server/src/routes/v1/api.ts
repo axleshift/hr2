@@ -10,7 +10,7 @@ import { updateApikey } from "../../database/v1/controllers/apiKeyController";
 router.get(
   "/update/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true

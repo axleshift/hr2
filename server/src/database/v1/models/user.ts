@@ -72,6 +72,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "inactive",
     },
+    suspension: {
+      status: {
+        type: Boolean,
+        default: false,
+      },
+      reason: {
+        type: String,
+      },
+      expiresAt: {
+        type: Date
+      }
+    },
     rememberToken: {
       type: String,
       required: false,

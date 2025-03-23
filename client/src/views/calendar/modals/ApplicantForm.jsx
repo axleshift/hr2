@@ -31,8 +31,8 @@ import { get } from '../../../api/axios'
 import React, { useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { formatDate, UTCDate, convertTimeStringTo12Hour } from '../../../utils'
-import { trimString } from './../../../utils/index'
-import AppPagination from './../../../components/AppPagination'
+import { trimString } from '../../../utils/index'
+import AppPagination from '../../../components/AppPagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { AppContext } from '../../../context/appContext'
@@ -314,7 +314,7 @@ const ApplicantForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                         )}
                       </CTableBody>
                     </CTable>
-                    <div className="d-flex justify-content-center align-items-center">
+                    <div className="d-flex align-items-center justify-content-center">
                       <AppPagination
                         currentPage={currentPage}
                         totalPages={totalPages}

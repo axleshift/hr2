@@ -21,7 +21,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { post } from '../../api/axios'
 import { AppContext } from '../../context/appContext'
-import { icon } from '@fortawesome/fontawesome-svg-core'
 
 const Register = () => {
   const { addToast } = React.useContext(AppContext)
@@ -89,7 +88,7 @@ const Register = () => {
   }
 
   return (
-    <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+    <div className="d-flex flex-row align-items-center bg-body-tertiary min-vh-100">
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={6}>

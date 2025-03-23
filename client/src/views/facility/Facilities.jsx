@@ -3,6 +3,7 @@ import {
   CRow,
   CCol,
   CCard,
+  CCardHeader,
   CCardBody,
   CButton,
   CTable,
@@ -30,8 +31,8 @@ import { del, get } from '../../api/axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 
-import FacilityForm from './modals/FacilityForm'
-import ManageFacilityForm from './modals/ManageFacilityForm'
+const FacilityForm = React.lazy(() => import('./modals/FacilityForm'))
+const ManageFacilityForm = React.lazy(() => import('./modals/ManageFacilityForm'))
 
 const Facilities = () => {
   const { addToast } = useContext(AppContext)
@@ -147,15 +148,17 @@ const Facilities = () => {
                   <CTable align="middle" hover responsive striped>
                     <CTableHead>
                       <CTableRow>
-                        <CTableHeaderCell>Facility Name</CTableHeaderCell>
-                        <CTableHeaderCell>Facility Type</CTableHeaderCell>
-                        <CTableHeaderCell>Facility Description</CTableHeaderCell>
+                        <CTableHeaderCell>#</CTableHeaderCell>
+                        <CTableHeaderCell>Name</CTableHeaderCell>
+                        <CTableHeaderCell>Type</CTableHeaderCell>
+                        <CTableHeaderCell>Description</CTableHeaderCell>
                         <CTableHeaderCell>Actions</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
                       {facilities.map((item) => (
                         <CTableRow key={item._id}>
+                          <CTableDataCell>{item._id}</CTableDataCell>
                           <CTableDataCell>{item.name}</CTableDataCell>
                           <CTableDataCell>{item.type}</CTableDataCell>
                           <CTableDataCell>{item.description}</CTableDataCell>
@@ -282,9 +285,12 @@ const Facilities = () => {
           <CCol>
             <ManageFacilityForm
               isVisible={isManageFacilityFormVisible}
-              onClose={() => setIsManageFacilityFormVisible(false)}
-              facilityData={facilityData}
-              onChange={() => getAllFacilitiesData()}
+              onClose={() => {
+                setIsManageFacilityFormVisible(false)
+                setFacilityData({})
+                getAllFacilitiesData()
+              }}
+              facility={facilityData}
             />
           </CCol>
         </CRow>

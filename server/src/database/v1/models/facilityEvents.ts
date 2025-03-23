@@ -11,6 +11,11 @@ const facilityEventsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     description: {
       type: String,
     },
@@ -29,6 +34,11 @@ const facilityEventsSchema = new mongoose.Schema(
     participants: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "applicants",
+    },
+    facility: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "facilities",
+      required: true,
     },
     timeslot: {
       type: mongoose.Schema.Types.ObjectId,

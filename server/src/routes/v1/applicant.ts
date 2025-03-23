@@ -15,7 +15,7 @@ import {
 router.post(
   "/",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -25,7 +25,7 @@ router.post(
 router.put(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -35,7 +35,7 @@ router.put(
 router.get(
   "/all",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -46,7 +46,7 @@ router.get(
 router.get(
   "/category/:category",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -57,7 +57,7 @@ router.get(
 router.get(
   "/download/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -67,7 +67,7 @@ router.get(
 router.get(
   "/search",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -77,7 +77,7 @@ router.get(
 router.get(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -87,7 +87,7 @@ router.get(
 router.delete(
   "/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   true,
   true
@@ -100,7 +100,7 @@ export default {
     path: "/applicant",
     method: ["POST", "GET"],
     description: "This route is used to add, update, delete, get all, get by id, search and download resume data",
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
   router,
 };

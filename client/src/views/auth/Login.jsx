@@ -239,7 +239,7 @@ const Login = () => {
           <CCol>
             <div className="text-center mt-3">
               <small>
-                <span className="text-muted">Version: {appVersion}</span>
+                <span className="text-muted">{appVersion}</span>
               </small>
             </div>
           </CCol>

@@ -10,7 +10,7 @@ import { getAllSlotsForADate, getSlotById, createSlotForADate, deleteSlotById } 
 
 router.get("/slots/:year/:month",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -18,7 +18,7 @@ router.get("/slots/:year/:month",
   getInterviewForAMonth);
 router.get("/slots/",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -26,7 +26,7 @@ router.get("/slots/",
   getAllSlotsForADate);
 router.get("/slot/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -34,7 +34,7 @@ router.get("/slot/:id",
   getSlotById);
 router.get("/all/",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -43,7 +43,7 @@ router.get("/all/",
 
 router.post("/slots",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -51,7 +51,7 @@ router.post("/slots",
   createSlotForADate);
 router.post("/schedule/",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -60,7 +60,7 @@ router.post("/schedule/",
 
 router.put("/schedule/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -69,7 +69,7 @@ router.put("/schedule/:id",
 
 router.delete("/slot/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true
@@ -77,7 +77,7 @@ router.delete("/slot/:id",
   deleteSlotById);
 router.delete("/schedule/:id",
   verifySession({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
   },
     true,
     true

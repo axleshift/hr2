@@ -97,7 +97,7 @@ export const login = async (req: req, res: res) => {
     });
 
     const data = {
-      _id: user._id,
+      _id: user._id.toString(),
       firstname: user.firstname,
       lastname: user.lastname,
       username: user.username,

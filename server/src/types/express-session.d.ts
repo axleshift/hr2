@@ -1,6 +1,7 @@
 import "express-session";
 
 export interface SessionUser {
+    _id: string;
     username: string;
     role: string;
     email: string;

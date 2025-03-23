@@ -77,7 +77,7 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Documentations',
+    name: 'Application Tracking',
   },
   // {
   //   component: CNavItem,

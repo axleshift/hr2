@@ -3,6 +3,8 @@ import { Request as req, Response as res } from "express";
 import Facility from "../models/facilities";
 import Events from "../models/facilityEvents";
 import Time from "../models/time";
+import Applicant from "../models/applicant";
+import mongoose from "mongoose";
 
 export const createFacility = async (req: req, res: res) => {
   try {
@@ -101,7 +103,22 @@ export const getFacilityById = async (req: req, res: res) => {
       return res.status(404).json({ message: "Facility not found" });
     }
 
-    return res.status(200).json({ message: "Facility found", data: facility });
+    const timeslots = await Time.find({ facility: id });
+
+    const timeslotsData = await Promise.all(timeslots.map(async (timeslot) => {
+      const participants = await Applicant.find({ events: timeslot.event });
+      return {
+        ...timeslot.toObject(),
+        participants,
+      };
+    }));
+
+    const facilityData = {
+      ...facility.toObject(),
+      timeslots: timeslotsData,
+    };
+
+    return res.status(200).json({ message: "Facility found", data: facilityData });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -215,10 +232,10 @@ export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
     }
 
     const today = new Date(date)
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const timeslots = await Time.find({ facility: id, date: today });
+    const timeslots = await Time.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
     if (!timeslots) {
       return res.status(404).json({ message: "Timeslots not found" });
     }
@@ -261,10 +278,332 @@ export const removeFacilityTimeslot = async (req: req, res: res) => {
 
     facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(id));
     await facility.save();
-
     await timeslot.deleteOne();
 
     return res.status(200).json({ message: "Timeslot removed" });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// Facility events
+
+export const createFacilityEvent = async (req: req, res: res) => {
+  try {
+    const { timeslotId } = req.params;
+    const { name, description, capacity } = req.body;
+
+    if (!timeslotId) {
+      return res.status(400).json({ message: "Timeslot id is required" });
+    }
+
+    if (!name || !capacity) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const timeslot = await Time.findById(timeslotId);
+    if (!timeslot) {
+      return res.status(404).json({ message: "Timeslot not found" });
+    }
+
+    if (!timeslot.isAvailable) {
+      return res.status(400).json({ message: "Timeslot is not available" });
+    }
+
+    const date = timeslot.date;
+    const formattedDate = new Date(date);
+
+    if (formattedDate.toDateString() !== new Date(timeslot.date).toDateString()) {
+      return res.status(400).json({ message: "Event date does not match timeslot date" });
+    }
+    if (!req.session.user) {
+      return res.status(400).json({ message: "User session not found" });
+    }
+    const authorId = req.session.user._id as string;
+    const eventData = {
+      name,
+      author: authorId,
+      description,
+      date: formattedDate,
+      capacity,
+      facility: timeslot.facility,
+      timeslot: timeslotId,
+    };
+
+    const newEvent = await Events.create(eventData);
+    if (!newEvent) {
+      return res.status(500).json({ message: "Event not created" });
+    }
+    timeslot.event = new mongoose.Types.ObjectId(newEvent._id)
+    timeslot.isAvailable = false;
+
+    await timeslot.save();
+    return res.status(201).json({
+      message: "Event created",
+      data: newEvent
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityEventByID = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Event id is required" });
+    }
+
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "No Event found" });
+    }
+
+    const participants = await Promise.all(event.participants.map(async (participantId) => {
+      const participant = await Applicant.findById(participantId);
+      if (participant) {
+        return {
+          _id: participant._id,
+          firstname: participant.firstname,
+          lastname: participant.lastname,
+          email: participant.email,
+        };
+      }
+      return null;
+    }));
+
+    const formattedEvent = {
+      ...event.toObject(),
+      participants: participants.filter(participant => participant !== null)
+    };
+
+    return res.status(200).json({ message: "Event found", data: formattedEvent });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateFacilityEvent = async (req: req, res: res) => {
+  try {
+    const { timeslotId } = req.params;
+    const { name, description, capacity } = req.body;
+
+    if (!timeslotId) {
+      return res.status(400).json({ message: "Timeslot id is required" });
+    }
+
+    if (!name || !capacity) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const timeslot = await Time.findById(timeslotId);
+    if (!timeslot) {
+      return res.status(404).json({ message: "Timeslot not found" });
+    }
+
+    const date = timeslot.date;
+    const formattedDate = new Date(date);
+
+    if (formattedDate.toDateString() !== new Date(timeslot.date).toDateString()) {
+      return res.status(400).json({ message: "Event date does not match timeslot date" });
+    }
+    if (!req.session.user) {
+      return res.status(400).json({ message: "User session not found" });
+    }
+    const authorId = req.session.user._id as string;
+    const event = await Events.findOne({ timeslot: timeslotId });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    event.name = name;
+    event.author = new mongoose.Types.ObjectId(authorId)
+    event.description = description;
+    event.date = formattedDate;
+    event.capacity = capacity;
+    // event.facility = new mongoose.Types.ObjectId(event.facility)
+    // event.timeslot = new mongoose.Types.ObjectId(event.timeslot);
+
+    const updatedEvent = await event.save();
+    if (!updatedEvent) {
+      return res.status(500).json({ message: "Event not updated" });
+    }
+
+    return res.status(200).json({ message: "Event updated", data: updatedEvent });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityEventsForDate = async (req: req, res: res) => {
+  try {
+    const { id, date } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const today = new Date(date)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const events = await Events.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
+
+    if (!events) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// TODO: add pagination 
+export const getFacilityCalendarStates = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate facility ID
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    // Retrieve facility by ID
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const { month, year } = req.query;
+
+    // Validate month and year
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Create start and end dates for the specified month and year
+    // Note: month is expected to be 1-based (1 for January, 2 for February, etc.)
+    // Date object expects month to be 0-based (0 for January, 1 for February, etc.)
+    const startDate = new Date(parseInt(year as string), parseInt(month as string) - 1, 1);
+    // set one month before the next month
+    startDate.setMonth(startDate.getMonth() - 1);
+    const endDate = new Date(parseInt(year as string), parseInt(month as string), 0);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const events = await Events.find({ facility: id, date: { $gte: startDate, $lte: endDate } });
+    const formattedEvents = events.map((event) => {
+      return new Date(event.date).toISOString();
+    });
+
+    if (!events) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    // Return the timeslots and events in the response
+    return res.status(200).json({ message: "Calendar states found", data: formattedEvents, startDate, endDate });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getFacilityUpcomingEvents = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Facility id is required" });
+    }
+
+    const facility = await Facility.findById(id);
+    if (!facility) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+
+    const today = new Date();
+    const events = await Events.find({ date: { $gte: today } });
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getUpcomingEvents = async (req: req, res: res) => {
+  try {
+    const today = new Date();
+    const events = await Events.find({ date: { $gte: today } });
+    if (!events || events.length === 0) {
+      return res.status(404).json({ message: "Events not found" });
+    }
+
+    return res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const BookApplicantToEvent = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+    const { applicantId } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Event id is required" });
+    }
+
+    if (!applicantId) {
+      return res.status(400).json({ message: "Applicant id is required" });
+    }
+
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
+    }
+
+    if (event.participants.includes(applicantId)) {
+      return res.status(400).json({ message: "Applicant already booked for event" });
+    }
+
+    if (event.participants.length >= event.capacity) {
+      return res.status(400).json({ message: "Event is full" });
+    }
+
+    if (applicant.events.includes(applicantId)) {
+      return res.status(400).json({ message: "Applicant already booked for event" });
+    }
+
+    applicant.events.push(new mongoose.Types.ObjectId(id));
+    event.participants.push(applicantId);
+
+    await event.save();
+    await applicant.save();
+
+    return res.status(200).json({ message: "Applicant booked for event" });
+
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });

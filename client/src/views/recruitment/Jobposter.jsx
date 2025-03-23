@@ -5,13 +5,11 @@ import { post, get, del } from '../../api/axios'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CCol,
@@ -40,18 +38,14 @@ import {
   faLocationPin,
   faMoneyBill,
   faTrash,
-  faPencil,
   faCalendar,
-  faCheck,
-  faX,
-  faClipboard,
   faClipboardQuestion,
 } from '@fortawesome/free-solid-svg-icons'
-import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons'
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../context/appContext'
 
-import { firstLetterUppercase, formatCurency, formatDate, trimString } from '../../utils'
+import { formatCurency, formatDate, trimString } from '../../utils'
 
 const Jobposter = () => {
   const sectionRefs = {}
@@ -246,8 +240,9 @@ const Jobposter = () => {
                       >
                         <CBadge
                           color={data.status?.toLowerCase() === 'active' ? 'success' : 'danger'}
+                          className="text-capitalize"
                         >
-                          {firstLetterUppercase(data.status)}
+                          {data.status}
                         </CBadge>
                       </CTooltip>
                     </CCol>
@@ -258,18 +253,12 @@ const Jobposter = () => {
                         id="title"
                         name="title"
                         label="Title"
-                        value={firstLetterUppercase(data.title)}
+                        value={data.title}
                         readOnly
                       />
                     </CCol>
                     <CCol>
-                      <CFormInput
-                        id="type"
-                        name="type"
-                        label="Type"
-                        value={firstLetterUppercase(data.type)}
-                        readOnly
-                      />
+                      <CFormInput id="type" name="type" label="Type" value={data.type} readOnly />
                     </CCol>
                   </CRow>
                   <CRow>
@@ -279,12 +268,7 @@ const Jobposter = () => {
                         <CInputGroupText>
                           <FontAwesomeIcon icon={faLocationPin} />
                         </CInputGroupText>
-                        <CFormInput
-                          id="location"
-                          name="location"
-                          value={firstLetterUppercase(data.location)}
-                          readOnly
-                        />
+                        <CFormInput id="location" name="location" value={data.location} readOnly />
                       </CInputGroup>
                     </CCol>
                     <CCol>
