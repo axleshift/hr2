@@ -13,6 +13,11 @@ const facilityEventsSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    author: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "users",
+        required: true,
+    },
     description: {
         type: String,
     },
@@ -31,6 +36,11 @@ const facilityEventsSchema = new mongoose_1.default.Schema({
     participants: {
         type: [mongoose_1.default.Schema.Types.ObjectId],
         ref: "applicants",
+    },
+    facility: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "facilities",
+        required: true,
     },
     timeslot: {
         type: mongoose_1.default.Schema.Types.ObjectId,

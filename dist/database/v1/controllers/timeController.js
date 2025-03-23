@@ -66,8 +66,8 @@ exports.updateDate = updateDate;
 const updateTimeslot = async (req, res) => {
     try {
         const { id } = req.params;
-        const { date, start, end, capacity, participants, isAvailable } = req.body;
-        if (!date || !start || !end || !capacity || !participants || !isAvailable) {
+        const { date, start, end, capacity, isAvailable } = req.body;
+        if (!date || !start || !end || !capacity || !isAvailable) {
             return res.status(400).json({ message: "All fields are required" });
         }
         const timeslot = await time_1.default.findById(id);
@@ -77,7 +77,6 @@ const updateTimeslot = async (req, res) => {
         timeslot.date = date;
         timeslot.start = start;
         timeslot.end = end;
-        timeslot.participants = participants;
         timeslot.isAvailable = isAvailable;
         const updatedTimeslot = await timeslot.save();
         if (!updatedTimeslot) {

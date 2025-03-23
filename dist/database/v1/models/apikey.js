@@ -19,6 +19,8 @@ const apiKeySchema = new mongoose_1.default.Schema({
     },
     expiresAt: {
         type: Date,
+        // this is the default expiration date with 1 year
+        default: new Date().setFullYear(new Date().getFullYear() + 1),
         required: true,
     },
 }, {

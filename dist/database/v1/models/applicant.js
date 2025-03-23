@@ -147,6 +147,10 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false,
     },
+    events: {
+        type: [mongoose_1.default.Schema.Types.ObjectId],
+        ref: "Event",
+    },
     documentations: {
         screening: {
             remarks: {

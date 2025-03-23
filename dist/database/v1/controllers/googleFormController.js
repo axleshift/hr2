@@ -10,7 +10,7 @@ const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const formSubmit = async (req, res) => {
     try {
         const { secret, firstname, lastname, middlename, suffix, email, phone, address, preferredWorkLocation, linkedInProfile, portfolioLink, resumeFileLoc, yearsOfExperience, currentMostRecentJob, highestQualification, majorFieldOfStudy, institution, graduationYear, keySkills, softwareProficiency, certifications, salaryExpectation, jobAppliedFor, availability, whyAreYouInterestedInRole, } = req.body;
-        const SECRET = config_1.config.google.formsKey;
+        const SECRET = config_1.config.google.key;
         if (secret !== SECRET) {
             return res.status(401).json({ message: "Unauthorized" });
         }

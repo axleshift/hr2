@@ -24,7 +24,7 @@ const verifyApiKey = async (req, res, next) => {
         const key = req.headers["x-api-key"];
         const masterKey = config_1.config.api.masterKey;
         if (!key) {
-            return sendError(res, 400, "API key is required");
+            return sendError(res, 401, "Unauthorized");
         }
         // If master key is provided, bypass all checks
         if (key === masterKey) {

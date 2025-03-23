@@ -128,7 +128,7 @@ process.on("SIGINT", async () => {
         process.exit(1);
     }
 });
-app.get("/api/", (req, res) => {
+app.get("/api/v1", (req, res) => {
     res.send("Hello, World!");
 });
 (0, connectDB_1.connectDB)().then(async () => {
@@ -166,8 +166,20 @@ app.get("/api/", (req, res) => {
             .then(() => {
             app.listen(port, () => {
                 logger_1.default.info(`🟢 Server is running at http://${host}:${port}`);
+            })
+                .on("error", (error) => {
+                if (error.code === "EADDRINUSE") {
+                    const newPort = parseInt(port.toString()) + 1;
+                    logger_1.default.warn(`Port ${port} is already in use. Trying ${newPort}...`);
+                    app.listen(newPort, () => {
+                        logger_1.default.info(`🟢 Server is running at http://${host}:${newPort}`);
+                    });
+                }
+                else {
+                    logger_1.default.error(`Error starting server: ${error}`);
+                }
             });
-            logger_1.default.info("🚀 Routes loaded successfully");
+            logger_1.default.info("✅ Routes loaded successfully");
             (0, index_1.default)();
         })
             .catch((error) => {

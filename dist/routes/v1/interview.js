@@ -11,31 +11,31 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const interviewController_1 = require("../../database/v1/controllers/interviewController");
 const timeslotController_1 = require("../../database/v1/controllers/timeslotController");
 router.get("/slots/:year/:month", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), interviewController_1.getInterviewForAMonth);
 router.get("/slots/", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), timeslotController_1.getAllSlotsForADate);
 router.get("/slot/:id", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), timeslotController_1.getSlotById);
 router.get("/all/", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), interviewController_1.getInterviewForADay);
 router.post("/slots", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), timeslotController_1.createSlotForADate);
 router.post("/schedule/", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), interviewController_1.createInterviewForADate);
 router.put("/schedule/:id", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), interviewController_1.updateInterview);
 router.delete("/slot/:id", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), timeslotController_1.deleteSlotById);
 router.delete("/schedule/:id", (0, verifySession_1.default)({
-    permissions: ["admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), interviewController_1.deleteInterviewById);
 exports.default = {
     metadata: {

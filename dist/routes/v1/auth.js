@@ -10,16 +10,16 @@ dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 const authController_1 = require("../../database/v1/controllers/authController");
 router.post("/register", (0, verifySession_1.default)({
-    permissions: ["user", "admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), authController_1.createUser);
 router.post("/login", (0, verifySession_1.default)({
-    permissions: ["user", "admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), authController_1.login);
 router.get("/logout", (0, verifySession_1.default)({
-    permissions: ["user", "admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), authController_1.logout);
 router.get("/verify", (0, verifySession_1.default)({
-    permissions: ["user", "admin", "superadmin"],
+    permissions: ["user", "admin"],
 }, true, true), authController_1.verify);
 exports.default = {
     metadata: {

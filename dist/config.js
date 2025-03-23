@@ -20,7 +20,7 @@ exports.config = {
     },
     server: {
         host: process.env.SERVER_HOST,
-        port: process.env.SERVER_PORT,
+        port: process.env.SERVER_PORT || 8000,
         csrfProtection: process.env.SERVER_CSRF,
         trustProxy: process.env.SERVER_TRUST_PROXY,
         jwt: {
@@ -37,7 +37,7 @@ exports.config = {
         masterKey: process.env.API_MASTER_KEY,
     },
     google: {
-        formsKey: process.env.GOOGLE_FORMS_KEY,
+        key: process.env.GOOGLE_FORMS_KEY,
     },
     mongoDB: {
         username: process.env.MONGODB_USERNAME,
@@ -66,6 +66,7 @@ exports.config = {
         activeSessions: {
             timeout: 10000,
         },
+        key: process.env.PROMETHEUS_METRICS_KEY,
     },
     route: {
         dir: path_1.default.join(__dirname, "routes"),

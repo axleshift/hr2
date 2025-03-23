@@ -94,7 +94,7 @@ const login = async (req, res) => {
             expiresIn: "1h",
         });
         const data = {
-            _id: user._id,
+            _id: user._id.toString(),
             firstname: user.firstname,
             lastname: user.lastname,
             username: user.username,
