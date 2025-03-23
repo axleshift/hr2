@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, Suspense } from 'react'
 import propTypes from 'prop-types'
 import {
   CModal,
@@ -14,6 +14,7 @@ import {
   CFormTextarea,
   CButton,
   CCard,
+  CCardHeader,
   CCardBody,
   CTable,
   CTableHead,
@@ -43,10 +44,12 @@ import { faQuestion, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 const Calendar = React.lazy(() => import('react-calendar'))
 const EventForm = React.lazy(() => import('./EventForm'))
 import { trimString } from '../../../utils/index'
+import { config } from '../../../config'
 
-const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange }) => {
+const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   const { addToast } = useContext(AppContext)
-
+  const [facilityData, setFacilityData] = useState({})
+  const [isFacilityDataLoading, setIsFacilityDataLoading] = useState(false)
   // Modal state
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -88,18 +91,36 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
   }
 
   const parseCalendarStates = () => {
-    const dates = facilityData.timeslots.map((slot) => new Date(slot.date))
-    const hasSlots = dates.map(
-      (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
-    )
-    console.log(hasSlots)
-    setHasSlots(hasSlots)
+    if (facilityData.timeslots) {
+      const dates = facilityData.timeslots.map((slot) => new Date(slot.date))
+      const hasSlots = dates.map(
+        (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
+      )
+      console.log('Facility Slots')
+      setHasSlots(hasSlots)
+    }
+  }
+
+  const getFacilityData = async () => {
+    try {
+      setIsFacilityDataLoading(true)
+      const res = await get(`/facilities/${facilityData._id}`)
+      console.log('Facility Data', res.data)
+      if (res.status === 200) {
+        setFacilityData(res.data.data)
+        parseCalendarStates()
+        setIsFacilityDataLoading(false)
+      }
+    } catch (error) {
+      console.error(error)
+      addToast('Error', 'Failed to reload facility data', 'danger')
+    }
   }
 
   const getAllTimeslotsForDate = async () => {
     try {
       setIsTimeslotLoading(true)
-      const res = await get(`/facilities/timeslot/${facilityData._id}/${new Date(defaultDate)}`)
+      const res = await get(`/facilities/timeslot/${facility._id}/${new Date(defaultDate)}`)
       console.log(res.data)
       if (res.status === 200) {
         setIsTimeslotLoading(false)
@@ -158,13 +179,15 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
       const res = await post(`/facilities/timeslot/create/${facilityData._id}`, formdata)
       if (res.status === 404) {
         setIsSubmitLoading(false)
+        getFacilityData()
         return addToast('error', JSON.stringify(res.message.message), 'danger')
       }
       if (res.status === 400) {
         setIsSubmitLoading(false)
+        getFacilityData()
         return addToast('error', JSON.stringify(res.message.message), 'danger')
       }
-      onChange()
+      getFacilityData()
       getAllTimeslotsForDate()
       setIsSubmitLoading(false)
       return addToast('success', 'Timeslot added successfully', 'success')
@@ -196,11 +219,16 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
   useEffect(() => {
     if (isVisible) {
       setIsModalVisible(isVisible)
-      onChange()
       parseCalendarStates()
       getAllTimeslotsForDate()
     }
   }, [defaultDate, isVisible])
+
+  useEffect(() => {
+    if (facility && facility._id) {
+      setFacilityData(facility)
+    }
+  }, [facility])
 
   return (
     <CContainer>
@@ -211,7 +239,6 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
             onClose={() => {
               setIsModalVisible(false)
               setHasSlots([])
-              onChange()
               onClose()
               reset()
             }}
@@ -232,18 +259,31 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                     <CContainer>
                       <CRow className="mb-3">
                         <CCol>
-                          <Calendar
-                            onChange={handleDateChange}
-                            className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
-                            defaultValue={defaultDate}
-                            tileClassName={({ date }) => {
-                              if (
-                                hasSlots.find((slot) => slot.toDateString() === date.toDateString())
-                              ) {
-                                return 'has-timeslots'
-                              }
-                            }}
-                          />
+                          {config.env === 'development' && (
+                            <small>Facility ID: {facilityData._id}</small>
+                          )}
+                          {isFacilityDataLoading ? (
+                            <div className="d-flex justify-content-center">
+                              <span>
+                                <CSpinner size="sm" /> Loading Calendar...
+                              </span>
+                            </div>
+                          ) : (
+                            <Calendar
+                              onChange={handleDateChange}
+                              className={isDarkMode ? 'calendar dark-mode' : 'calendar'}
+                              defaultValue={defaultDate}
+                              tileClassName={({ date }) => {
+                                if (
+                                  hasSlots.find(
+                                    (slot) => slot.toDateString() === date.toDateString(),
+                                  )
+                                ) {
+                                  return 'has-timeslots'
+                                }
+                              }}
+                            />
+                          )}
                         </CCol>
                       </CRow>
                       <CRow className="mb-3">
@@ -279,7 +319,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                                 )}
                               </CCol>
                               <CCol>
-                                <div className="d-flex justify-content-end">
+                                <div className="d-flex justify-content-end gap-2">
                                   {isSubmitLoading ? (
                                     <CButton color="primary" disabled>
                                       <span
@@ -294,6 +334,9 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                                       Add
                                     </CButton>
                                   )}
+                                  <CButton color="primary" onClick={() => getFacilityData()}>
+                                    Refresh
+                                  </CButton>
                                 </div>
                               </CCol>
                             </CRow>
@@ -303,6 +346,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                       <CRow>
                         <CCol>
                           <CCard>
+                            <CCardHeader>Timeslots</CCardHeader>
                             <CCardBody>
                               <CTable align="middle" hover responsive striped>
                                 <CTableHead>
@@ -368,7 +412,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
                                                   setIsEventEdit(true)
                                                 }}
                                               >
-                                                Edit Event
+                                                Manage Event
                                               </CButton>
                                             ) : (
                                               <CButton
@@ -411,9 +455,10 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
             onClose={() => {
               setIsEventFormVisible(false)
               setIsModalVisible(true)
+              getFacilityData()
+              setIsEventEdit(false)
             }}
             isEdit={isEventEdit}
-            eventData={selectedEvent}
             slot={selectedSlot}
           />
         </CCol>
@@ -425,8 +470,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facilityData = {}, onChange })
 ManageFacilityForm.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
-  facilityData: propTypes.object,
-  onChange: propTypes.func,
+  facility: propTypes.object,
 }
 
 export default ManageFacilityForm

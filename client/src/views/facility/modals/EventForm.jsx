@@ -3,6 +3,7 @@ import {
   CRow,
   CCol,
   CCard,
+  CCardHeader,
   CCardBody,
   CButton,
   CTable,
@@ -32,13 +33,33 @@ import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { post, put } from '../../../api/axios'
+import { get, post, put } from '../../../api/axios'
 import { config } from '../../../config'
 import { formatTime } from '../../../utils'
 
-const EventForm = ({ isVisible, onClose, isEdit, eventData, slot }) => {
+const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
   const { addToast } = useContext(AppContext)
+  const [eventData, setEvenData] = React.useState({})
+  const [isEventLoading, setIsEventLoading] = React.useState(false)
+
   const [isLoading, setIsLoading] = React.useState(false)
+
+  const getEventData = async (params) => {
+    try {
+      setIsEventLoading(true)
+      const res = await get(`/facilities/event/${slot.event}`)
+      console.log('Event:', res.data.data)
+      if (res.status === 200) {
+        setEvenData(res.data.data)
+        formReset(res.data.data)
+        setIsEventLoading(false)
+        return addToast('Success', 'Event Fetched', 'success')
+      }
+    } catch (error) {
+      console.error(error)
+      addToast('error', 'failed to load event data', 'danger')
+    }
+  }
 
   const EventSchema = z.object({
     name: z.string().min(3).max(50),
@@ -102,6 +123,12 @@ const EventForm = ({ isVisible, onClose, isEdit, eventData, slot }) => {
     formReset(mockData)
   }
 
+  useEffect(() => {
+    if (isEdit) {
+      getEventData()
+    }
+  }, [isEdit])
+
   return (
     <CContainer>
       <CRow>
@@ -111,10 +138,12 @@ const EventForm = ({ isVisible, onClose, isEdit, eventData, slot }) => {
             onClose={() => {
               handleResetForm()
               onClose()
+              setEvenData({})
             }}
+            size="xl"
           >
             <CModalHeader>
-              <CModalTitle>{isEdit ? 'Edit Event' : 'Add Event'}</CModalTitle>
+              <CModalTitle>{isEdit ? 'Manage Event' : 'Add Event'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CContainer>
@@ -124,76 +153,131 @@ const EventForm = ({ isVisible, onClose, isEdit, eventData, slot }) => {
                       {formatTime(slot.start)} - {formatTime(slot.end)}
                     </strong>
                     <br />
-                    <small className="text-muted">{slot._id}</small>
+                    <small className="text-muted"> Timeslot ID: {slot._id}</small>
                   </CCol>
                 </CRow>
-                <CRow>
-                  <CCol>
-                    <CForm onSubmit={handleSubmit(handleEventSubmit)}>
-                      <CRow className="mb-3">
-                        <CCol>
-                          <CFormInput
-                            type="text"
-                            label="Name"
-                            placeholder="Applicant Interview"
-                            {...register('name')}
-                            invalid={errors.name}
-                          />
-                          {errors.name && (
-                            <CFormFeedback invalid className="text-danger">
-                              {errors.name.message}
-                            </CFormFeedback>
-                          )}
-                        </CCol>
-                      </CRow>
-                      <CRow className="mb-3">
-                        <CCol>
-                          <CFormTextarea
-                            type="text"
-                            label="Description"
-                            placeholder="Lorem ipsum..."
-                            {...register('description')}
-                            invalid={errors.description}
-                          />
-                          {errors.description && (
-                            <CFormFeedback invalid className="text-danger">
-                              {errors.description.message}
-                            </CFormFeedback>
-                          )}
-                        </CCol>
-                      </CRow>
-                      <CRow className="mb-3">
-                        <CCol>
-                          <CFormInput
-                            type="number"
-                            label="Capacity"
-                            placeholder="1"
-                            defaultValue={1}
-                            {...register('capacity', { valueAsNumber: true })}
-                            invalid={errors.capacity}
-                          />
-                          {errors.capacity && (
-                            <CFormFeedback invalid className="text-danger">
-                              {errors.capacity.message}
-                            </CFormFeedback>
-                          )}
-                        </CCol>
-                      </CRow>
-                      <CRow className="mb-3">
-                        <CCol>
-                          <div className="d-flex justify-content-end gap-2">
-                            <CButton type="button" color="warning" onClick={handleMockData}>
-                              Fill Mock Data
-                            </CButton>
-                            <CButton type="submit" color="primary">
-                              {isLoading ? <CSpinner /> : 'Submit'}
-                            </CButton>
-                          </div>
-                        </CCol>
-                      </CRow>
-                    </CForm>
-                  </CCol>
-                </CRow>
+                {isEventLoading && isEdit ? (
+                  <CRow>
+                    <CCol>
+                      <CSpinner size="sm"></CSpinner>
+                    </CCol>
+                  </CRow>
+                ) : (
+                  <>
+                    <CRow>
+                      <CCol>
+                        <CForm onSubmit={handleSubmit(handleEventSubmit)}>
+                          <CRow className="mb-3">
+                            <CCol>
+                              <CFormInput
+                                type="text"
+                                label="Name"
+                                placeholder="Applicant Interview"
+                                {...register('name')}
+                                invalid={errors.name}
+                              />
+                              {errors.name && (
+                                <CFormFeedback invalid className="text-danger">
+                                  {errors.name.message}
+                                </CFormFeedback>
+                              )}
+                            </CCol>
+                          </CRow>
+                          <CRow className="mb-3">
+                            <CCol>
+                              <CFormTextarea
+                                type="text"
+                                label="Description"
+                                placeholder="Lorem ipsum..."
+                                rows={6}
+                                {...register('description')}
+                                invalid={errors.description}
+                              />
+                              {errors.description && (
+                                <CFormFeedback invalid className="text-danger">
+                                  {errors.description.message}
+                                </CFormFeedback>
+                              )}
+                            </CCol>
+                          </CRow>
+                          <CRow className="mb-3">
+                            <CCol>
+                              <CFormInput
+                                type="number"
+                                label="Capacity"
+                                placeholder="1"
+                                defaultValue={1}
+                                {...register('capacity', { valueAsNumber: true })}
+                                invalid={errors.capacity}
+                              />
+                              {errors.capacity && (
+                                <CFormFeedback invalid className="text-danger">
+                                  {errors.capacity.message}
+                                </CFormFeedback>
+                              )}
+                            </CCol>
+                          </CRow>
+                          <CRow className="mb-3">
+                            <CCol>
+                              <div className="d-flex justify-content-end gap-2">
+                                <CButton type="button" color="warning" onClick={handleMockData}>
+                                  Fill Mock Data
+                                </CButton>
+                                <CButton type="submit" color="danger">
+                                  Delete
+                                </CButton>
+                                <CButton type="submit" color="primary">
+                                  {isLoading ? <CSpinner /> : 'Submit'}
+                                </CButton>
+                              </div>
+                            </CCol>
+                          </CRow>
+                        </CForm>
+                      </CCol>
+                    </CRow>
+                    {eventData.participants && (
+                      <>
+                        <CRow>
+                          <CCol>
+                            <CCard>
+                              <CCardHeader>Participants</CCardHeader>
+                              <CCardBody>
+                                <CTable align="middle" hover responsive striped>
+                                  <CTableHead>
+                                    <CTableRow>
+                                      {/* <CTableHeaderCell>#</CTableHeaderCell> */}
+                                      <CTableHeaderCell>Name</CTableHeaderCell>
+                                      <CTableHeaderCell>Email</CTableHeaderCell>
+                                      <CTableHeaderCell>Action</CTableHeaderCell>
+                                    </CTableRow>
+                                  </CTableHead>
+                                  <CTableBody>
+                                    {eventData.participants.map((participant) => {
+                                      return (
+                                        <CTableRow key={participant._id}>
+                                          {/* <CTableDataCell>{participant._id}</CTableDataCell> */}
+                                          <CTableDataCell>
+                                            {participant.lastname}, {participant.firstname}
+                                          </CTableDataCell>
+                                          <CTableDataCell>{participant.email}</CTableDataCell>
+                                          <CTableDataCell>
+                                            <CButton size="sm" color="danger">
+                                              Remove
+                                            </CButton>
+                                          </CTableDataCell>
+                                        </CTableRow>
+                                      )
+                                    })}
+                                  </CTableBody>
+                                </CTable>
+                              </CCardBody>
+                            </CCard>
+                          </CCol>
+                        </CRow>
+                      </>
+                    )}
+                  </>
+                )}
               </CContainer>
             </CModalBody>
           </CModal>
@@ -207,7 +291,6 @@ EventForm.propTypes = {
   isVisible: propTypes.bool,
   onClose: propTypes.func,
   isEdit: propTypes.bool,
-  eventData: propTypes.object,
   slot: propTypes.object,
 }
 

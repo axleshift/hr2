@@ -3,6 +3,7 @@ import {
   CRow,
   CCol,
   CCard,
+  CCardHeader,
   CCardBody,
   CButton,
   CTable,
@@ -147,15 +148,17 @@ const Facilities = () => {
                   <CTable align="middle" hover responsive striped>
                     <CTableHead>
                       <CTableRow>
-                        <CTableHeaderCell>Facility Name</CTableHeaderCell>
-                        <CTableHeaderCell>Facility Type</CTableHeaderCell>
-                        <CTableHeaderCell>Facility Description</CTableHeaderCell>
+                        <CTableHeaderCell>#</CTableHeaderCell>
+                        <CTableHeaderCell>Name</CTableHeaderCell>
+                        <CTableHeaderCell>Type</CTableHeaderCell>
+                        <CTableHeaderCell>Description</CTableHeaderCell>
                         <CTableHeaderCell>Actions</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
                       {facilities.map((item) => (
                         <CTableRow key={item._id}>
+                          <CTableDataCell>{item._id}</CTableDataCell>
                           <CTableDataCell>{item.name}</CTableDataCell>
                           <CTableDataCell>{item.type}</CTableDataCell>
                           <CTableDataCell>{item.description}</CTableDataCell>
@@ -287,8 +290,7 @@ const Facilities = () => {
                 setFacilityData({})
                 getAllFacilitiesData()
               }}
-              facilityData={facilityData}
-              onChange={() => getAllFacilitiesData()}
+              facility={facilityData}
             />
           </CCol>
         </CRow>

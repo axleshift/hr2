@@ -42,6 +42,7 @@ import { get, post, put, del } from '../../../api/axios'
 import { AppContext } from '../../../context/appContext'
 import { formatDate, formatTime, trimString } from '../../../utils'
 import { parse } from '@fortawesome/fontawesome-svg-core'
+import { config } from '../../../config'
 
 const Calendar = React.lazy(() => import('react-calendar'))
 
@@ -57,6 +58,8 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
 
   const [timeslots, setTimeslots] = useState([])
   const [isTimeslotLoading, setIsTimeslotLoading] = useState(false)
+
+  const [isBookingLoading, setIsBookingLoading] = useState(false)
 
   const handleDateChange = (date) => {
     const formattedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -90,11 +93,29 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
   const getEventsForDate = async () => {
     try {
       const res = await get(`/facilities/events/${selectedFacility._id}/${defaultDate}`)
+      console.log('EVENTS', res.data.data)
       if (res.status === 200) {
         setEvents(res.data.data)
       } else {
         setEvents([])
       }
+    } catch (error) {
+      addToast('error', error.message, 'Error')
+    }
+  }
+
+  const handleBookApplicantToEvent = async (eventId) => {
+    try {
+      setIsBookingLoading(true)
+      const formData = new FormData()
+      formData.append('applicantId', applicantData._id)
+      const res = await post(`/facilities/events/${eventId}/book`, formData)
+      console.log('Response', res.data)
+      if (res.status === 200 || res.status === 201) {
+        addToast('success', 'Applicant has been booked to the event', 'Success')
+        getEventsForDate()
+      }
+      setIsBookingLoading(false)
     } catch (error) {
       addToast('error', error.message, 'Error')
     }
@@ -117,6 +138,8 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
         onClose={() => {
           onClose()
           setSelectedFacility('')
+          setEvents([])
+          setHasEvents([])
         }}
         size="xl"
         backdrop="static"
@@ -157,7 +180,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                         {selectedFacility.description}
                       </>
                     ) : (
-                      'Please select a facility'
+                      <span className="text-danger">*Please select a facility first.</span>
                     )}
                   </p>
                 </CCol>
@@ -185,45 +208,94 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                   />
                 </CCol>
               </CRow>
+              {config.env === 'development' && (
+                <CRow>
+                  <CCol className="text-muted d-flex gap-1" style={{ fontSize: '0.9rem' }}>
+                    <span>
+                      <strong>Applicant ID:</strong> {applicantData._id}
+                    </span>
+                    <span>
+                      <strong>Facility ID:</strong> {selectedFacility._id}
+                    </span>
+                  </CCol>
+                </CRow>
+              )}
               <CRow>
                 <CCol>
                   <CCard>
                     <CCardBody>
-                      <CTable align="middle" hover responsive striped>
-                        <CTableHead>
-                          <CTableRow>
-                            <CTableHeaderCell>Facilty</CTableHeaderCell>
-                            <CTableHeaderCell>Date</CTableHeaderCell>
-                            <CTableHeaderCell>Time</CTableHeaderCell>
-                            <CTableHeaderCell>Event</CTableHeaderCell>
-                            <CTableHeaderCell>Capacity</CTableHeaderCell>
-                            <CTableHeaderCell>Participants</CTableHeaderCell>
-                            <CTableHeaderCell>Actions</CTableHeaderCell>
-                          </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          {events.map((event) => (
-                            <CTableRow key={event._id}>
-                              <CTableDataCell>{selectedFacility.name}</CTableDataCell>
-                              <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
-                              <CTableDataCell>
-                                {formatTime(event.timeslot.start)} -{' '}
-                                {formatTime(event.timeslot.end)}
-                              </CTableDataCell>
-                              <CTableDataCell>{event.name}</CTableDataCell>
-                              <CTableDataCell>{event.capacity}</CTableDataCell>
-                              <CTableDataCell>{event.participants.length}</CTableDataCell>
-                              <CTableDataCell>
-                                <CInputGroup>
-                                  <CButton size="sm" color="info">
-                                    Book
-                                  </CButton>
-                                </CInputGroup>
-                              </CTableDataCell>
-                            </CTableRow>
-                          ))}
-                        </CTableBody>
-                      </CTable>
+                      <CRow>
+                        <CCol>
+                          <CTable align="middle" hover responsive striped>
+                            <CTableHead>
+                              <CTableRow>
+                                <CTableHeaderCell>Facilty</CTableHeaderCell>
+                                <CTableHeaderCell>Date</CTableHeaderCell>
+                                <CTableHeaderCell>Time</CTableHeaderCell>
+                                <CTableHeaderCell>Event</CTableHeaderCell>
+                                <CTableHeaderCell>Capacity</CTableHeaderCell>
+                                <CTableHeaderCell>Participants</CTableHeaderCell>
+                                <CTableHeaderCell>Actions</CTableHeaderCell>
+                              </CTableRow>
+                            </CTableHead>
+                            <CTableBody>
+                              {events.length > 0 ? (
+                                events.map((event) => (
+                                  <CTableRow key={event._id}>
+                                    <CTableDataCell>{selectedFacility.name}</CTableDataCell>
+                                    <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
+                                    <CTableDataCell>
+                                      {formatTime(event.timeslot.start)} -{' '}
+                                      {formatTime(event.timeslot.end)}
+                                    </CTableDataCell>
+                                    <CTableDataCell>{event.name}</CTableDataCell>
+                                    <CTableDataCell>{event.capacity}</CTableDataCell>
+                                    <CTableDataCell>{event.participants.length}</CTableDataCell>
+                                    <CTableDataCell>
+                                      <CInputGroup>
+                                        {event.participants.some(
+                                          (participant) =>
+                                            participant.toString() === applicantData._id.toString(),
+                                        ) ? (
+                                          <CButton
+                                            color="success"
+                                            disabled
+                                            className="text-white"
+                                            size="sm"
+                                            onClick={() => handleBookApplicantToEvent(event._id)}
+                                          >
+                                            Booked
+                                          </CButton>
+                                        ) : (
+                                          <CButton
+                                            color="info"
+                                            className="text-white"
+                                            size="sm"
+                                            onClick={() => handleBookApplicantToEvent(event._id)}
+                                          >
+                                            {isBookingLoading ? (
+                                              <CSpinner color="light" size="sm" />
+                                            ) : (
+                                              'Book'
+                                            )}
+                                          </CButton>
+                                        )}
+                                      </CInputGroup>
+                                    </CTableDataCell>
+                                  </CTableRow>
+                                ))
+                              ) : (
+                                <CTableRow>
+                                  <CTableDataCell colSpan="7" className="text-center">
+                                    No events available. Please select a date from the{' '}
+                                    <span className="text-info">calendar</span>.
+                                  </CTableDataCell>
+                                </CTableRow>
+                              )}
+                            </CTableBody>
+                          </CTable>
+                        </CCol>
+                      </CRow>
                     </CCardBody>
                   </CCard>
                 </CCol>
