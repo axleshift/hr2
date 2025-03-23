@@ -72,9 +72,9 @@ export const updateDate = async (req: req, res: res) => {
 export const updateTimeslot = async (req: req, res: res) => {
   try {
     const { id } = req.params;
-    const { date, start, end, capacity, participants, isAvailable } = req.body;
+    const { date, start, end, capacity, isAvailable } = req.body;
 
-    if (!date || !start || !end || !capacity || !participants || !isAvailable) {
+    if (!date || !start || !end || !capacity || !isAvailable) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -86,7 +86,6 @@ export const updateTimeslot = async (req: req, res: res) => {
     timeslot.date = date;
     timeslot.start = start;
     timeslot.end = end;
-    timeslot.participants = participants;
     timeslot.isAvailable = isAvailable;
 
     const updatedTimeslot = await timeslot.save();
