@@ -91,6 +91,7 @@ const Interviews = () => {
                       <CTableHeaderCell>Date</CTableHeaderCell>
                       <CTableHeaderCell>Timeslot</CTableHeaderCell>
                       <CTableHeaderCell>Participants</CTableHeaderCell>
+                      <CTableHeaderCell>Approved</CTableHeaderCell>
                       <CTableHeaderCell>Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
@@ -112,31 +113,36 @@ const Interviews = () => {
                           </CTableDataCell>
                           <CTableDataCell>{event.participants.length}</CTableDataCell>
                           <CTableDataCell>
-                            <CInputGroup>
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => {
-                                  setEventFormState('view')
+                            {event.isApproved.status ? (
+                              <span className="text-success">Approved</span>
+                            ) : (
+                              <small className="text-danger">Requires Approval</small>
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell className="d-flex gap-2 flex-wrap">
+                            <CButton
+                              color="info"
+                              size="sm"
+                              onClick={() => {
+                                setEventFormState('view')
+                                setIsEventFormVisible(true)
+                                setSelectedSlot(event.timeslot)
+                              }}
+                            >
+                              View
+                            </CButton>
+                            {(userInformation.role === 'admin' ||
+                              userInformation.role === 'manager') && (
+                              // eslint-disable-next-line prettier/prettier
+                                  <CButton color="warning" size="sm" onClick={() => {
+                                  setEventFormState('edit')
                                   setIsEventFormVisible(true)
                                   setSelectedSlot(event.timeslot)
                                 }}
                               >
-                                View
+                                Manage
                               </CButton>
-                              {(userInformation.role === 'admin' ||
-                                userInformation.role === 'manager') && (
-                                // eslint-disable-next-line prettier/prettier
-                                  <CButton color="warning" size="sm" onClick={() => {
-                                    setEventFormState('edit')
-                                    setIsEventFormVisible(true)
-                                    setSelectedSlot(event.timeslot)
-                                  }}
-                                >
-                                  Manage
-                                </CButton>
-                              )}
-                            </CInputGroup>
+                            )}
                           </CTableDataCell>
                         </CTableRow>
                       )

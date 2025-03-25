@@ -304,7 +304,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                           </CRow>
                           <CRow className="mb-3">
                             <CCol>
-                              {eventFormState === 'edit' && eventFormState === 'create' && (
+                              {(eventFormState === 'edit' || eventFormState === 'create') && (
                                 <div className="d-flex justify-content-end gap-2">
                                   <CButton type="button" color="warning" onClick={handleMockData}>
                                     Fill Mock Data
