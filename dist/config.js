@@ -38,6 +38,13 @@ exports.config = {
     },
     google: {
         key: process.env.GOOGLE_FORMS_KEY,
+        smtp: {
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_SECURE,
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        }
     },
     mongoDB: {
         username: process.env.MONGODB_USERNAME,
@@ -70,7 +77,7 @@ exports.config = {
     },
     route: {
         dir: path_1.default.join(__dirname, "routes"),
-        sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || ["googleform"],
+        sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || [],
     },
     env: process.env.NODE_ENV || "development",
 };

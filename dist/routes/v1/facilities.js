@@ -50,9 +50,16 @@ router.get("/event/:id", (0, verifySession_1.default)({
 router.get("/events/:id/:date", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getFacilityEventsForDate);
+router.get("/events/upcoming", (0, verifySession_1.default)({
+    permissions: ["user", "admin"],
+}, true, true), facilityController_1.getUpcomingEvents);
+// Booking
 router.post("/events/:id/book", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.BookApplicantToEvent);
+router.delete("/events/:id/unbook", (0, verifySession_1.default)({
+    permissions: ["user", "admin"],
+}, true, true), facilityController_1.UnbookApplicantFromEvent);
 exports.default = {
     metadata: {
         path: "/facilities",

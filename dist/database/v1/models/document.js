@@ -16,7 +16,7 @@ const documentSchema = new mongoose_1.default.Schema({
     },
     author_Id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Users",
         required: true,
     },
     authorName: {
@@ -25,7 +25,7 @@ const documentSchema = new mongoose_1.default.Schema({
     },
     applicant_Id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Applicant",
+        ref: "Applicants",
         required: true,
     },
     applicantName: {
@@ -39,10 +39,10 @@ const documentSchema = new mongoose_1.default.Schema({
     content: {
         type: String,
     },
-    tags: {
-        type: [String],
-        required: false,
-    },
+    tags: [{
+            type: String,
+            required: false,
+        }],
 }, {
     timestamps: true,
     updateAt: true,

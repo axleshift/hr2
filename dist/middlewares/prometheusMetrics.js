@@ -97,7 +97,7 @@ const metricsHandler = async (req, res, next) => {
         const { secret } = req.body;
         const SECRET = config_1.config.prom.key;
         if (secret !== SECRET) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({ message: "Unauthorized", secret });
         }
         const metrics = await prom_client_1.default.register.metrics(); // Await the Promise
         res.set("Content-Type", prom_client_1.default.register.contentType);

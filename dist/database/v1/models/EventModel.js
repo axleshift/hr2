@@ -34,34 +34,75 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const timeSchema = new mongoose_1.Schema({
+const facilityEventsSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
+    },
+    type: {
+        type: String,
+        enum: ['Initial Interview', 'Final Interview', 'Other'],
+        default: 'Other'
+    },
+    description: {
+        type: String
+    },
     date: {
         type: Date,
-        required: true,
-    },
-    facility: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "facilities",
-        required: true,
-    },
-    event: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "facilityEvents",
-        required: false
-    },
-    start: {
-        type: String,
-        required: true,
-    },
-    end: {
-        type: String,
-        required: true,
+        required: true
     },
     isAvailable: {
         type: Boolean,
-        default: true,
+        default: true
+    },
+    isApproved: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        approvedBy: {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'users',
+            required: true
+        },
+    },
+    capacity: {
+        type: Number,
+        required: true
+    },
+    participants: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'applicants'
+        }
+    ],
+    facility: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'facilities',
+        required: true
+    },
+    timeslot: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'times'
+    },
+    emailSent: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        history: [
+            {
+                type: mongoose_1.default.Schema.Types.ObjectId,
+                ref: 'emails'
+            }
+        ],
     },
 }, {
     timestamps: true,
 });
-exports.default = mongoose_1.default.model("Times", timeSchema);
+exports.default = mongoose_1.default.model('facilityEvents', facilityEventsSchema);

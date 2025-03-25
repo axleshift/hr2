@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDateByDate = exports.getDateById = exports.updateTimeslot = exports.updateDate = exports.createDate = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const facilityEvents_1 = __importDefault(require("../models/facilityEvents"));
+const EventModel_1 = __importDefault(require("../models/EventModel"));
 const time_1 = __importDefault(require("../models/time"));
 const convertToUTC = async (date) => {
     return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
@@ -24,7 +24,7 @@ const createDate = async (req, res) => {
             isAvailable,
             timeslots,
         };
-        const newDate = await facilityEvents_1.default.create(dateData);
+        const newDate = await EventModel_1.default.create(dateData);
         if (!newDate) {
             return res.status(500).json({ message: "Date not created" });
         }
@@ -43,7 +43,7 @@ const updateDate = async (req, res) => {
         if (!date || !isAvailable) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const dateData = await facilityEvents_1.default.findById(id);
+        const dateData = await EventModel_1.default.findById(id);
         if (!dateData) {
             return res.status(404).json({ message: "Date not found" });
         }
@@ -93,7 +93,7 @@ exports.updateTimeslot = updateTimeslot;
 const getDateById = async (req, res) => {
     try {
         const { id } = req.params;
-        const date = await facilityEvents_1.default.findById(id);
+        const date = await EventModel_1.default.findById(id);
         if (!date) {
             return res.status(404).json({ message: "Date not found" });
         }
@@ -110,7 +110,7 @@ const getDateByDate = async (req, res) => {
         const { date } = req.params;
         const dateObj = new Date(date);
         const utcDate = await convertToUTC(dateObj);
-        const dateData = await facilityEvents_1.default.findOne({ utcDate });
+        const dateData = await EventModel_1.default.findOne({ utcDate });
         if (!dateData) {
             return res.status(404).json({ message: "Date not found" });
         }

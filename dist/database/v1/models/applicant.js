@@ -147,34 +147,46 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false,
     },
-    events: {
-        type: [mongoose_1.default.Schema.Types.ObjectId],
-        ref: "Event",
-    },
+    events: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "FacilityEvents",
+        }],
+    emails: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "Emails"
+        }],
     documentations: {
         screening: {
-            remarks: {
-                type: [mongoose_1.default.Schema.Types.ObjectId],
-                ref: "Document",
-            },
+            remarks: [
+                {
+                    type: mongoose_1.default.Schema.Types.ObjectId,
+                    ref: "Documents",
+                }
+            ],
         },
         interview: {
-            remarks: {
-                type: [mongoose_1.default.Schema.Types.ObjectId],
-                ref: "Document",
-            },
+            remarks: [
+                {
+                    type: mongoose_1.default.Schema.Types.ObjectId,
+                    ref: "Documents",
+                }
+            ],
         },
         training: {
-            remarks: {
-                type: [mongoose_1.default.Schema.Types.ObjectId],
-                ref: "Document",
-            },
+            remarks: [
+                {
+                    type: mongoose_1.default.Schema.Types.ObjectId,
+                    ref: "Documents",
+                }
+            ],
         },
         others: {
-            remarks: {
-                type: [mongoose_1.default.Schema.Types.ObjectId],
-                ref: "Document",
-            },
+            remarks: [
+                {
+                    type: mongoose_1.default.Schema.Types.ObjectId,
+                    ref: "Documents",
+                }
+            ],
         }
     },
     // documents: {

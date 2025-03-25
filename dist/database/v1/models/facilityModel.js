@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file facilities.ts
+ * @description Facilities model schema
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -32,34 +36,36 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const logger_1 = __importDefault(require("../middlewares/logger"));
-const currentDir = __dirname;
-const jobFiles = fs_1.default.readdirSync(currentDir).filter((file) => {
-    return file.endsWith(".ts") || (file.endsWith(".js") && file !== "index.ts") || file !== "index.js";
+const mongoose_1 = __importStar(require("mongoose"));
+// Schema definition for the Facility model
+const facilitySchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    description: {
+        type: String,
+        trim: true,
+    },
+    location: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    timeslots: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Time',
+        },
+    ],
+}, {
+    timestamps: true,
 });
-const jobModules = jobFiles.map((file) => {
-    const modulePath = path_1.default.join(currentDir, file);
-    return Promise.resolve(`${modulePath}`).then(s => __importStar(require(s)));
-});
-const startJobs = async () => {
-    try {
-        const modules = await Promise.all(jobModules);
-        for (const module of modules) {
-            const m = module.default;
-            if (typeof m.run === "function") {
-                logger_1.default.info(`🤖 Running job: ${m.metadata.name}`);
-                await m.run();
-            }
-        }
-    }
-    catch (error) {
-        logger_1.default.error("Error running jobs:", error);
-    }
-};
-exports.default = startJobs;
+exports.default = mongoose_1.default.model('Facility', facilitySchema);

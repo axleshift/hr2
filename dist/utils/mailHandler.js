@@ -36,30 +36,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+exports.sendEmail = void 0;
+const nodemailer = __importStar(require("nodemailer"));
+const config_1 = require("../config");
 const logger_1 = __importDefault(require("../middlewares/logger"));
-const currentDir = __dirname;
-const jobFiles = fs_1.default.readdirSync(currentDir).filter((file) => {
-    return file.endsWith(".ts") || (file.endsWith(".js") && file !== "index.ts") || file !== "index.js";
+// Configure the transporter once
+const transporter = nodemailer.createTransport({
+    host: config_1.config.google.smtp.host,
+    port: Number(config_1.config.google.smtp.port) || 0,
+    secure: config_1.config.google.smtp.secure || false,
+    auth: {
+        user: config_1.config.google.smtp.user,
+        pass: config_1.config.google.smtp.pass,
+    },
 });
-const jobModules = jobFiles.map((file) => {
-    const modulePath = path_1.default.join(currentDir, file);
-    return Promise.resolve(`${modulePath}`).then(s => __importStar(require(s)));
-});
-const startJobs = async () => {
+/**
+ * Sends an email using nodemailer
+ * @param to Recipient email address
+ * @param subject Email subject
+ * @param text Plain text email body
+ * @param html (Optional) HTML email body
+ */
+const sendEmail = async (to, subject, text, html) => {
     try {
-        const modules = await Promise.all(jobModules);
-        for (const module of modules) {
-            const m = module.default;
-            if (typeof m.run === "function") {
-                logger_1.default.info(`🤖 Running job: ${m.metadata.name}`);
-                await m.run();
-            }
-        }
+        const mailOptions = {
+            from: '"Facility Events" <no-reply@hr2.axleshift.com/>',
+            to,
+            subject,
+            text,
+            html,
+        };
+        await transporter.sendMail(mailOptions);
+        logger_1.default.info(`Email sent to ${to}`);
+        return { success: true, message: `Email sent to ${to}` };
     }
     catch (error) {
-        logger_1.default.error("Error running jobs:", error);
+        logger_1.default.error("Error sending email:", error);
+        return { success: false, message: "Error sending email" };
     }
 };
-exports.default = startJobs;
+exports.sendEmail = sendEmail;
