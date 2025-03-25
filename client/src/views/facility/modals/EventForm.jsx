@@ -37,12 +37,14 @@ import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { get, post, put } from '../../../api/axios'
+import { del, get, post, put } from '../../../api/axios'
 import { config } from '../../../config'
 import { formatTime } from '../../../utils'
+import { AuthContext } from '../../../context/authContext'
 
 const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
+  const { userInformation } = useContext(AuthContext)
   const [eventData, setEvenData] = React.useState({})
   const [isEventLoading, setIsEventLoading] = React.useState(false)
   const [eventFormState, setEventFormState] = React.useState('view')
@@ -53,9 +55,10 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
     'Other',
   ])
 
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isSubmitLoading, setIsSubmitLoading] = React.useState(false)
+  const [isRemoveLoading, setIsRemoveLoading] = React.useState(false)
 
-  const getEventData = async (params) => {
+  const getEventData = async () => {
     try {
       setIsEventLoading(true)
       const res = await get(`/facilities/event/${slot.event}`)
@@ -79,7 +82,10 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
     type: z.enum(eventTypes, {
       errorMap: () => ({ message: 'Invalid Event Type' }),
     }),
-    isApproved: z.boolean().default(false),
+    isApproved: z
+      .union([z.boolean(), z.object({ status: z.boolean() })])
+      .transform((val) => (typeof val === 'boolean' ? val : val.status))
+      .default(false),
   })
 
   const {
@@ -90,14 +96,20 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
     formState: { errors },
     setValue,
   } = useForm({
-    resolver: zodResolver(EventSchema),
+    // resolver: zodResolver(EventSchema),
+    resolver: async (data, context, options) => {
+      const result = await zodResolver(EventSchema)(data, context, options)
+      console.log('Validation result:', result)
+      return result
+    },
+    defaultValues: eventData.isApproved?.status ?? false,
   })
 
-  const isApproved = watch('isApproved', eventData.isApproved)
+  const isApproved = watch('isApproved', eventData.isApproved?.status)
 
   const handleEventSubmit = async (data) => {
     try {
-      setIsLoading(true)
+      setIsSubmitLoading(true)
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('description', data.description)
@@ -109,7 +121,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       //   : await post(`facilities/event/timeslot/${slot._id}`, data)
       let res
       switch (eventFormState) {
-        case edit:
+        case 'edit':
           res = await put(`facilities/event/timeslot/${slot._id}`, data)
           break
         default:
@@ -118,16 +130,16 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       }
 
       if (res.status === 201) {
-        setIsLoading(false)
+        setIsSubmitLoading(false)
         onClose()
         return addToast('success', 'Event created!', 'success')
       }
       if (res.status === 200) {
-        setIsLoading(false)
+        setIsSubmitLoading(false)
         onClose()
         return addToast('success', 'Event Updated!', 'success')
       }
-      setIsLoading(false)
+      setIsSubmitLoading(false)
       onClose()
       return addToast('Error', 'Failed to create event', 'error')
     } catch (error) {
@@ -153,6 +165,29 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       capacity: Math.floor(Math.random() * 100) + 1,
     }
     formReset(mockData)
+  }
+
+  const removeApplicantFromEvent = async (applicant) => {
+    try {
+      setIsRemoveLoading(true)
+      console.log(applicant._id)
+      const formData = new FormData()
+      formData.append('applicantId', applicant._id)
+      const res = await del(
+        `/facilities/events/${eventData._id}/unbook?applicantId=${applicant._id}`,
+      )
+      if (res.status === 200) {
+        getEventData()
+        setIsRemoveLoading(false)
+        return addToast('Success', 'Applicant removed from the event', 'success')
+      } else {
+        setIsRemoveLoading(false)
+        return addToast('Error', res.message, 'danger')
+      }
+    } catch (error) {
+      console.error(error)
+      addToast('Error', 'An error occured', 'danger')
+    }
   }
 
   useEffect(() => {
@@ -189,12 +224,12 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
             <CModalBody>
               <CContainer>
                 <CRow className="mb-3">
-                  <CCol>
+                  <CCol className="d-flex flex-column">
                     <strong>
                       {formatTime(slot.start)} - {formatTime(slot.end)}
                     </strong>
-                    <br />
                     <small className="text-muted"> Timeslot ID: {slot._id}</small>
+                    {eventData && <small className="text-muted"> Event ID: {eventData._id}</small>}
                   </CCol>
                 </CRow>
                 {isEventLoading ? (
@@ -297,8 +332,12 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                               <CFormSwitch
                                 id="isApproved"
                                 label={`${isApproved ? 'Approved' : 'Not Approved'}`}
-                                {...register('isApproved')}
-                                disabled={isReadOnly}
+                                {...register('isApproved', { valueAsBoolean: true })}
+                                disabled={
+                                  (userInformation.role === 'admin' ||
+                                    userInformation.role === 'manager') &&
+                                  isReadOnly
+                                }
                               />
                             </CCol>
                           </CRow>
@@ -306,14 +345,19 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                             <CCol>
                               {(eventFormState === 'edit' || eventFormState === 'create') && (
                                 <div className="d-flex justify-content-end gap-2">
-                                  <CButton type="button" color="warning" onClick={handleMockData}>
+                                  <CButton
+                                    type="button"
+                                    color="warning"
+                                    size="sm"
+                                    onClick={handleMockData}
+                                  >
                                     Fill Mock Data
                                   </CButton>
-                                  <CButton type="submit" color="danger">
+                                  <CButton type="submit" color="danger" size="sm">
                                     Delete
                                   </CButton>
-                                  <CButton type="submit" color="primary">
-                                    {isLoading ? <CSpinner /> : 'Submit'}
+                                  <CButton type="submit" color="primary" size="sm">
+                                    {isSubmitLoading ? <CSpinner /> : 'Submit'}
                                   </CButton>
                                 </div>
                               )}
@@ -327,7 +371,21 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                         <CRow>
                           <CCol>
                             <CCard>
-                              <CCardHeader>Participants</CCardHeader>
+                              <CCardHeader>
+                                <div className="d-flex justify-content-between">
+                                  <div>Participants</div>
+                                  {(userInformation.role === 'admin' ||
+                                    userInformation.role === 'recruiter') &&
+                                    eventFormState === 'edit' &&
+                                    eventData.participants.length > 0 && (
+                                      <div>
+                                        <CButton size="sm" color="info">
+                                          Send Mail to Participants
+                                        </CButton>
+                                      </div>
+                                    )}
+                                </div>
+                              </CCardHeader>
                               <CCardBody>
                                 <CTable align="middle" hover responsive striped>
                                   <CTableHead>
@@ -335,6 +393,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                       {/* <CTableHeaderCell>#</CTableHeaderCell> */}
                                       <CTableHeaderCell>Name</CTableHeaderCell>
                                       <CTableHeaderCell>Email</CTableHeaderCell>
+                                      <CTableHeaderCell>Phone</CTableHeaderCell>
                                       <CTableHeaderCell>Action</CTableHeaderCell>
                                     </CTableRow>
                                   </CTableHead>
@@ -347,11 +406,23 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                             {participant.lastname}, {participant.firstname}
                                           </CTableDataCell>
                                           <CTableDataCell>{participant.email}</CTableDataCell>
+                                          <CTableDataCell>{participant.phone}</CTableDataCell>
                                           <CTableDataCell>
                                             {eventFormState === 'edit' ||
                                             eventFormState === 'create' ? (
-                                              <CButton size="sm" color="danger">
-                                                Remove
+                                              <CButton
+                                                size="sm"
+                                                color="danger"
+                                                onClick={() =>
+                                                  removeApplicantFromEvent(participant)
+                                                }
+                                                disabled={isRemoveLoading}
+                                              >
+                                                {isRemoveLoading ? (
+                                                  <CSpinner size="sm" />
+                                                ) : (
+                                                  'Remove'
+                                                )}
                                               </CButton>
                                             ) : (
                                               <CButton size="sm" color="danger" disabled>

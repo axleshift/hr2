@@ -163,39 +163,41 @@ const Facilities = () => {
                           <CTableDataCell>{item.type}</CTableDataCell>
                           <CTableDataCell>{item.description}</CTableDataCell>
                           <CTableDataCell>
-                            <CButton
-                              color="info"
-                              size="sm"
-                              onClick={() => {
-                                setIsEdit(true)
-                                setFacilityData(item)
-                                setIsFormVisible(true)
-                              }}
-                            >
-                              Edit
-                            </CButton>
-                            <CButton
-                              color="danger"
-                              size="sm"
-                              className="ms-2"
-                              onClick={() => {
-                                setSelectedFacility(item)
-                                setDeleteModal(true)
-                              }}
-                            >
-                              Delete
-                            </CButton>
-                            <CButton
-                              color="primary"
-                              size="sm"
-                              className="ms-2"
-                              onClick={() => {
-                                setFacilityData(item)
-                                setIsManageFacilityFormVisible(true)
-                              }}
-                            >
-                              Manage
-                            </CButton>
+                            <div className="d-flex flex-wrap gap-2">
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => {
+                                  setIsEdit(true)
+                                  setFacilityData(item)
+                                  setIsFormVisible(true)
+                                }}
+                              >
+                                Edit
+                              </CButton>
+                              <CButton
+                                color="danger"
+                                size="sm"
+                                className="ms-2"
+                                onClick={() => {
+                                  setSelectedFacility(item)
+                                  setDeleteModal(true)
+                                }}
+                              >
+                                Delete
+                              </CButton>
+                              <CButton
+                                color="primary"
+                                size="sm"
+                                className="ms-2"
+                                onClick={() => {
+                                  setFacilityData(item)
+                                  setIsManageFacilityFormVisible(true)
+                                }}
+                              >
+                                Manage
+                              </CButton>
+                            </div>
                           </CTableDataCell>
                         </CTableRow>
                       ))}

@@ -358,36 +358,23 @@ export const getFacilityEventByID = async (req: req, res: res) => {
   try {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ message: "Event id is required" });
+      return res.status(400).json({ message: "Event ID is required" });
     }
 
-    const event = await Events.findById(id);
+    const event = await Events.findById(id).populate({
+      path: 'participants',
+      model: 'Applicant',
+      select: 'firstname lastname email phone',
+    });
+
     if (!event) {
-      return res.status(404).json({ message: "No Event found" });
+      return res.status(404).json({ message: "No event found" });
     }
 
-    const participants = await Promise.all(event.participants.map(async (participantId) => {
-      const participant = await Applicant.findById(participantId);
-      if (participant) {
-        return {
-          _id: participant._id,
-          firstname: participant.firstname,
-          lastname: participant.lastname,
-          email: participant.email,
-        };
-      }
-      return null;
-    }));
-
-    const formattedEvent = {
-      ...event.toObject(),
-      participants: participants.filter(participant => participant !== null)
-    };
-
-    return res.status(200).json({ message: "Event found", data: formattedEvent });
+    return res.status(200).json({ message: "Event found", data: event });
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -690,6 +677,55 @@ export const BookApplicantToEvent = async (req: req, res: res) => {
   }
 }
 
+export const UnbookApplicantFromEvent = async (req: req, res: res) => {
+  try {
+    const { id } = req.params
+    if (!id) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+
+    if (!req.query.applicantId) {
+      return res.status(400).json({ message: "Applicant ID is required" });
+    }
+    // converts query to string, sometimes I hate typescript man.
+    const applicantId = new mongoose.Types.ObjectId(req.query.applicantId as string);
+
+    // Find the event by ID
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Find the applicant by ID
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
+    }
+
+    // Check if the applicant is currently booked for the event
+    if (!event.participants.includes(applicantId)) {
+      return res.status(400).json({ message: "Applicant is not booked for this event" });
+    }
+
+    await Events.updateOne(
+      { _id: id },
+      { $pull: { participants: applicantId } }
+    );
+
+    // Remove the event from the applicant's events array
+    await Applicant.updateOne(
+      { _id: applicantId },
+      { $pull: { events: id } }
+    );
+
+    return res.status(200).json({ message: "Applicant unbooked from event successfully", data: applicant });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) => {
   try {
     const { id } = req.params;
@@ -749,3 +785,4 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
     res.status(500).json({ message: "Internal server error" });
   }
 };
+

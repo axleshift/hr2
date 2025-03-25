@@ -394,7 +394,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
                                           )}
                                         </CTableDataCell>
                                         <CTableDataCell>
-                                          <CInputGroup>
+                                          <div className="d-flex flex-wrap gap-2">
                                             <CButton
                                               color="danger"
                                               size="sm"
@@ -429,7 +429,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
                                                 Set Event
                                               </CButton>
                                             )}
-                                          </CInputGroup>
+                                          </div>
                                         </CTableDataCell>
                                       </CTableRow>
                                     ))

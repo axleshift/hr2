@@ -25,6 +25,7 @@ import {
 
   // booking
   BookApplicantToEvent,
+  UnbookApplicantFromEvent,
   getFacilityEventByID,
 } from "../../database/v1/controllers/facilityController";
 
@@ -196,6 +197,16 @@ router.post(
   BookApplicantToEvent
 )
 
+router.delete(
+  "/events/:id/unbook",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  UnbookApplicantFromEvent
+)
 
 export default {
   metadata: {

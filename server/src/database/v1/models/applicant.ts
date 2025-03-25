@@ -103,7 +103,6 @@ const applicantSchema = new mongoose.Schema(
     /**
      * Job specific questions
      */
-
     coverLetter: {
       type: String,
       // (optional) cover letter

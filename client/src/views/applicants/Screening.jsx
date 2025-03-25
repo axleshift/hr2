@@ -1280,7 +1280,9 @@ const Screening = () => {
                             <div className="d-flex flex-row gap-2">
                               <CTooltip content="Screen Applicant" placement="top">
                                 <CButton
-                                  className="btn btn-outline-info"
+                                  color='success'
+                                  variant='outline'
+                                  size='sm'
                                   onClick={() => {
                                     setSelectedApplicant(item)
                                     setScreeningFormModalVisible(true)
@@ -1289,24 +1291,20 @@ const Screening = () => {
                                   <FontAwesomeIcon icon={faBolt} />
                                 </CButton>
                               </CTooltip>
-                              <CButtonGroup>
-                                <CTooltip content="Edit" placement="top">
-                                  <CButton
-                                    onClick={() => handleEdit(item._id)}
-                                    className="btn btn-outline-primary"
-                                  >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                  </CButton>
-                                </CTooltip>
-                                <CTooltip content="Delete" placement="top">
-                                  <CButton
-                                    onClick={() => handleDelete(item._id)}
-                                    className="btn btn-outline-danger"
-                                  >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </CButton>
-                                </CTooltip>
-                              </CButtonGroup>
+                              <CButton
+                                color='primary'
+                                size='sm'
+                                onClick={() => handleEdit(item._id)}
+                              >
+                                Edit
+                              </CButton>
+                              <CButton
+                                color='danger'
+                                size='sm'
+                                onClick={() => handleDelete(item._id)}
+                              >
+                                Remove
+                              </CButton>
                             </div>
                           </CTableDataCell>
                         </CTableRow>

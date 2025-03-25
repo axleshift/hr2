@@ -119,30 +119,34 @@ const Interviews = () => {
                               <small className="text-danger">Requires Approval</small>
                             )}
                           </CTableDataCell>
-                          <CTableDataCell className="d-flex gap-2 flex-wrap">
-                            <CButton
-                              color="info"
-                              size="sm"
-                              onClick={() => {
-                                setEventFormState('view')
-                                setIsEventFormVisible(true)
-                                setSelectedSlot(event.timeslot)
-                              }}
-                            >
-                              View
-                            </CButton>
-                            {(userInformation.role === 'admin' ||
-                              userInformation.role === 'manager') && (
-                              // eslint-disable-next-line prettier/prettier
-                                  <CButton color="warning" size="sm" onClick={() => {
-                                  setEventFormState('edit')
+                          <CTableDataCell>
+                            <div className="d-flex gap-2 flex-wrap">
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => {
+                                  setEventFormState('view')
                                   setIsEventFormVisible(true)
                                   setSelectedSlot(event.timeslot)
                                 }}
                               >
-                                Manage
+                                View
                               </CButton>
-                            )}
+                              {(userInformation.role === 'admin' ||
+                                userInformation.role === 'manager') && (
+                                <CButton
+                                  color="warning"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEventFormState('edit')
+                                    setIsEventFormVisible(true)
+                                    setSelectedSlot(event.timeslot)
+                                  }}
+                                >
+                                  Manage
+                                </CButton>
+                              )}
+                            </div>
                           </CTableDataCell>
                         </CTableRow>
                       )
@@ -158,7 +162,7 @@ const Interviews = () => {
             <EventForm
               isVisible={isEventFormVisible}
               onClose={() => {
-                setEventFormState(false)
+                setEventFormState('view')
                 setIsEventFormVisible(false)
               }}
               state={eventFormState}
