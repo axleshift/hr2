@@ -1,6 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
-const timeSchema = new mongoose.Schema(
+interface ITime extends Document {
+  date: Date,
+  facility: mongoose.Types.ObjectId,
+  event: mongoose.Types.ObjectId,
+  start: string,
+  end: string,
+  isAvailable: boolean,
+}
+
+const timeSchema = new Schema<ITime>(
   {
     date: {
       type: Date,
@@ -31,8 +40,7 @@ const timeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    updateAt: true,
   }
 );
 
-export default mongoose.model("Time", timeSchema);
+export default mongoose.model<ITime>("Times", timeSchema);

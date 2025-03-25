@@ -25,6 +25,10 @@ import {
   CModalBody,
   CModalFooter,
   CFormTextarea,
+  CFormLabel,
+  CFormSelect,
+  CFormCheck,
+  CFormSwitch,
 } from '@coreui/react'
 
 import React, { useContext, useEffect } from 'react'
@@ -37,10 +41,17 @@ import { get, post, put } from '../../../api/axios'
 import { config } from '../../../config'
 import { formatTime } from '../../../utils'
 
-const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
+const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
   const [eventData, setEvenData] = React.useState({})
   const [isEventLoading, setIsEventLoading] = React.useState(false)
+  const [eventFormState, setEventFormState] = React.useState('view')
+  const [isReadOnly, setIsReadOnly] = React.useState(true)
+  const [eventTypes, setEventTypes] = React.useState([
+    'Initial Interview',
+    'Final Interview',
+    'Other',
+  ])
 
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -65,10 +76,15 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
     name: z.string().min(3).max(50),
     description: z.string().optional(),
     capacity: z.number().int().positive(),
+    type: z.enum(eventTypes, {
+      errorMap: () => ({ message: 'Invalid Event Type' }),
+    }),
+    isApproved: z.boolean().default(false),
   })
 
   const {
     register,
+    watch,
     handleSubmit,
     reset: formReset,
     formState: { errors },
@@ -77,6 +93,8 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
     resolver: zodResolver(EventSchema),
   })
 
+  const isApproved = watch('isApproved', eventData.isApproved)
+
   const handleEventSubmit = async (data) => {
     try {
       setIsLoading(true)
@@ -84,9 +102,21 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
       formData.append('name', data.name)
       formData.append('description', data.description)
       formData.append('capacity', data.capacity)
-      const res = isEdit
-        ? await put(`facilities/event/timeslot/${slot._id}`, data)
-        : await post(`facilities/event/timeslot/${slot._id}`, data)
+      formData.append('type', data.type)
+      formData.append('isApproved', data.isApproved)
+      // const res = isEdit
+      //   ? await put(`facilities/event/timeslot/${slot._id}`, data)
+      //   : await post(`facilities/event/timeslot/${slot._id}`, data)
+      let res
+      switch (eventFormState) {
+        case edit:
+          res = await put(`facilities/event/timeslot/${slot._id}`, data)
+          break
+        default:
+          await post(`facilities/event/timeslot/${slot._id}`, data)
+          break
+      }
+
       if (res.status === 201) {
         setIsLoading(false)
         onClose()
@@ -110,6 +140,8 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
       name: '',
       description: '',
       capacity: 1,
+      type: '',
+      isApproved: false,
     })
   }
 
@@ -124,10 +156,17 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
   }
 
   useEffect(() => {
-    if (isEdit) {
-      getEventData()
+    if (isVisible) {
+      setEventFormState(state)
+      if (state === 'view' || state === 'edit') {
+        getEventData()
+      }
     }
-  }, [isEdit])
+  }, [isVisible, state])
+
+  useEffect(() => {
+    setIsReadOnly(eventFormState !== 'edit')
+  }, [eventFormState])
 
   return (
     <CContainer>
@@ -139,11 +178,13 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
               handleResetForm()
               onClose()
               setEvenData({})
+              setEventFormState('view')
+              setIsReadOnly(false)
             }}
             size="xl"
           >
             <CModalHeader>
-              <CModalTitle>{isEdit ? 'Manage Event' : 'Add Event'}</CModalTitle>
+              <CModalTitle>{eventFormState === 'edit' ? 'Manage Event' : 'View Event'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CContainer>
@@ -156,7 +197,7 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                     <small className="text-muted"> Timeslot ID: {slot._id}</small>
                   </CCol>
                 </CRow>
-                {isEventLoading && isEdit ? (
+                {isEventLoading ? (
                   <CRow>
                     <CCol>
                       <CSpinner size="sm"></CSpinner>
@@ -174,6 +215,7 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                                 label="Name"
                                 placeholder="Applicant Interview"
                                 {...register('name')}
+                                readOnly={isReadOnly}
                                 invalid={errors.name}
                               />
                               {errors.name && (
@@ -192,6 +234,7 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                                 rows={6}
                                 {...register('description')}
                                 invalid={errors.description}
+                                readOnly={isReadOnly}
                               />
                               {errors.description && (
                                 <CFormFeedback invalid className="text-danger">
@@ -208,6 +251,7 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                                 placeholder="1"
                                 defaultValue={1}
                                 {...register('capacity', { valueAsNumber: true })}
+                                readOnly={isReadOnly}
                                 invalid={errors.capacity}
                               />
                               {errors.capacity && (
@@ -219,17 +263,60 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                           </CRow>
                           <CRow className="mb-3">
                             <CCol>
-                              <div className="d-flex justify-content-end gap-2">
-                                <CButton type="button" color="warning" onClick={handleMockData}>
-                                  Fill Mock Data
-                                </CButton>
-                                <CButton type="submit" color="danger">
-                                  Delete
-                                </CButton>
-                                <CButton type="submit" color="primary">
-                                  {isLoading ? <CSpinner /> : 'Submit'}
-                                </CButton>
-                              </div>
+                              <CFormLabel htmlFor="type">Event Type</CFormLabel>
+                              <CFormSelect
+                                id="type"
+                                {...register('type')}
+                                invalid={!!errors.type}
+                                disabled={isReadOnly}
+                              >
+                                <option value="">Select an event type</option>
+                                {eventTypes.map((eventType) => (
+                                  <option key={eventType} value={eventType}>
+                                    {eventType}
+                                  </option>
+                                ))}
+                              </CFormSelect>
+                              {errors.type && (
+                                <CFormFeedback invalid className="text-danger">
+                                  {errors.type.message}
+                                </CFormFeedback>
+                              )}
+                            </CCol>
+                          </CRow>
+                          <CRow className="mb-3">
+                            <CCol>
+                              <CFormLabel htmlFor="isApproved">
+                                Current approval status:{' '}
+                                {eventData.isApproved ? (
+                                  <span className="text-success">Approved</span>
+                                ) : (
+                                  <span className="text-danger">Not approved</span>
+                                )}
+                              </CFormLabel>
+                              <CFormSwitch
+                                id="isApproved"
+                                label={`${isApproved ? 'Approved' : 'Not Approved'}`}
+                                {...register('isApproved')}
+                                disabled={isReadOnly}
+                              />
+                            </CCol>
+                          </CRow>
+                          <CRow className="mb-3">
+                            <CCol>
+                              {eventFormState === 'edit' && eventFormState === 'create' && (
+                                <div className="d-flex justify-content-end gap-2">
+                                  <CButton type="button" color="warning" onClick={handleMockData}>
+                                    Fill Mock Data
+                                  </CButton>
+                                  <CButton type="submit" color="danger">
+                                    Delete
+                                  </CButton>
+                                  <CButton type="submit" color="primary">
+                                    {isLoading ? <CSpinner /> : 'Submit'}
+                                  </CButton>
+                                </div>
+                              )}
                             </CCol>
                           </CRow>
                         </CForm>
@@ -261,9 +348,16 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
                                           </CTableDataCell>
                                           <CTableDataCell>{participant.email}</CTableDataCell>
                                           <CTableDataCell>
-                                            <CButton size="sm" color="danger">
-                                              Remove
-                                            </CButton>
+                                            {eventFormState === 'edit' ||
+                                            eventFormState === 'create' ? (
+                                              <CButton size="sm" color="danger">
+                                                Remove
+                                              </CButton>
+                                            ) : (
+                                              <CButton size="sm" color="danger" disabled>
+                                                No Permissions
+                                              </CButton>
+                                            )}
                                           </CTableDataCell>
                                         </CTableRow>
                                       )
@@ -290,7 +384,7 @@ const EventForm = ({ isVisible, onClose, isEdit, slot }) => {
 EventForm.propTypes = {
   isVisible: propTypes.bool,
   onClose: propTypes.func,
-  isEdit: propTypes.bool,
+  state: propTypes.string,
   slot: propTypes.object,
 }
 

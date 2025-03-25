@@ -21,6 +21,7 @@ import {
   updateFacilityEvent,
   getFacilityEventsForDate,
   getFacilityCalendarStates,
+  getUpcomingEvents,
 
   // booking
   BookApplicantToEvent,
@@ -171,6 +172,19 @@ router.get(
   getFacilityEventsForDate
 )
 
+router.get(
+  "/events/upcoming",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  getUpcomingEvents
+)
+
+// Booking
+
 router.post(
   "/events/:id/book",
   verifySession({
@@ -181,6 +195,7 @@ router.post(
   ),
   BookApplicantToEvent
 )
+
 
 export default {
   metadata: {

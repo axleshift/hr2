@@ -33,12 +33,19 @@ export const config = {
     origins: process.env.CORS_ORIGINS?.split(",") || [],
   },
 
-  api:{
+  api: {
     masterKey: process.env.API_MASTER_KEY,
   },
 
   google: {
     key: process.env.GOOGLE_FORMS_KEY,
+    smtp: {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_SECURE,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    }
   },
 
   mongoDB: {
@@ -76,7 +83,7 @@ export const config = {
 
   route: {
     dir: path.join(__dirname, "routes"),
-    sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || ["googleform"],
+    sessionExceptions: process.env.SESSION_EXCEPTIONS?.split(",") || [],
   },
 
   env: process.env.NODE_ENV || "development",

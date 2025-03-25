@@ -13,7 +13,7 @@ const documentSchema = new mongoose.Schema(
     },
     author_Id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Users",
       required: true,
     },
     authorName: {
@@ -22,7 +22,7 @@ const documentSchema = new mongoose.Schema(
     },
     applicant_Id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Applicant",
+      ref: "Applicants",
       required: true,
     },
     applicantName: {
@@ -36,10 +36,10 @@ const documentSchema = new mongoose.Schema(
     content: {
       type: String,
     },
-    tags: {
-      type: [String],
+    tags: [{
+      type: String,
       required: false,
-    },
+    }],
   },
   {
     timestamps: true,

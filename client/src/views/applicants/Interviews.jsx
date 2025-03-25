@@ -14,23 +14,52 @@ import {
   CFormInput,
   CInputGroup,
   CButton,
+  CTooltip,
 } from '@coreui/react'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faRefresh, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { get } from '../../api/axios'
+import { formatDate, formatTime, trimString } from '../../utils'
+import { AuthContext } from '../../context/authContext'
+
+import EventForm from '../facility/modals/EventForm'
 
 const Interviews = () => {
+  const { userInformation } = useContext(AuthContext)
+  const [upcomingEvents, setUpcomingEvents] = useState([])
+  const [isUpcomingEventsLoading, setIsUpcomingEventsLoading] = useState(false)
+
+  // Event form state
+  const [isEventFormVisible, setIsEventFormVisible] = useState(false)
+  const [eventFormState, setEventFormState] = useState('view')
+  const [selectedSlot, setSelectedSlot] = useState({})
+
+  const getAllUpcomingEvents = async () => {
+    try {
+      setIsUpcomingEventsLoading(true)
+      const res = await get('/facilities/events/upcoming')
+      console.log('Upcoming Events', res.data)
+      if (res.status === 200) {
+        setUpcomingEvents(res.data.data)
+        setIsUpcomingEventsLoading(false)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllUpcomingEvents()
+  }, [])
   return (
     <>
       <CContainer>
         <CRow className="mb-3">
           <CCol>
             <h2>Interviews</h2>
-            <small>
-              In this page, you can view and edit the list of applicants which needs training for
-              the job, or is currently undergoing training.
-            </small>
+            <small>In this page, you can view and edit the list of upcoming interviews.</small>
           </CCol>
         </CRow>
         <CRow className="mb-3">
@@ -52,20 +81,83 @@ const Interviews = () => {
           <CCol>
             <CCard>
               <CCardBody>
-                <CTable>
+                <CTable align="middle" hover responsive striped>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>Applicant ID</CTableHeaderCell>
-                      <CTableHeaderCell>Applicant Name</CTableHeaderCell>
-                      <CTableHeaderCell>Job Title</CTableHeaderCell>
-                      <CTableHeaderCell>Application Date</CTableHeaderCell>
+                      <CTableHeaderCell>#</CTableHeaderCell>
+                      <CTableHeaderCell>Event</CTableHeaderCell>
+                      <CTableHeaderCell>Author</CTableHeaderCell>
+                      <CTableHeaderCell>Type</CTableHeaderCell>
+                      <CTableHeaderCell>Date</CTableHeaderCell>
+                      <CTableHeaderCell>Timeslot</CTableHeaderCell>
+                      <CTableHeaderCell>Participants</CTableHeaderCell>
                       <CTableHeaderCell>Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
-                  <CTableBody></CTableBody>
+                  <CTableBody>
+                    {upcomingEvents.map((event) => {
+                      return (
+                        <CTableRow key={event._id}>
+                          <CTooltip placement="top" content={event._id}>
+                            <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
+                          </CTooltip>
+                          <CTableDataCell>{event.name}</CTableDataCell>
+                          <CTableDataCell>
+                            {event.author.lastname}, {event.author.firstname}
+                          </CTableDataCell>
+                          <CTableDataCell>{event.type}</CTableDataCell>
+                          <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
+                          <CTableDataCell>
+                            {formatTime(event.timeslot.start)} - {formatTime(event.timeslot.start)}
+                          </CTableDataCell>
+                          <CTableDataCell>{event.participants.length}</CTableDataCell>
+                          <CTableDataCell>
+                            <CInputGroup>
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => {
+                                  setEventFormState('view')
+                                  setIsEventFormVisible(true)
+                                  setSelectedSlot(event.timeslot)
+                                }}
+                              >
+                                View
+                              </CButton>
+                              {(userInformation.role === 'admin' ||
+                                userInformation.role === 'manager') && (
+                                // eslint-disable-next-line prettier/prettier
+                                  <CButton color="warning" size="sm" onClick={() => {
+                                    setEventFormState('edit')
+                                    setIsEventFormVisible(true)
+                                    setSelectedSlot(event.timeslot)
+                                  }}
+                                >
+                                  Manage
+                                </CButton>
+                              )}
+                            </CInputGroup>
+                          </CTableDataCell>
+                        </CTableRow>
+                      )
+                    })}
+                  </CTableBody>
                 </CTable>
               </CCardBody>
             </CCard>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <EventForm
+              isVisible={isEventFormVisible}
+              onClose={() => {
+                setEventFormState(false)
+                setIsEventFormVisible(false)
+              }}
+              state={eventFormState}
+              slot={selectedSlot}
+            />
           </CCol>
         </CRow>
       </CContainer>

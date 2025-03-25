@@ -123,6 +123,7 @@ connectDB().then(async () => {
       const routesPath = path.join(__dirname, "routes", version);
       const router = express.Router();
       const sessionExceptions = config.route.sessionExceptions.map((route) => `/${route}`);
+      console.log(sessionExceptions)
       // Read the directory to get route files
       const files = fs.readdirSync(routesPath);
       // Import each route file dynamically
@@ -161,7 +162,7 @@ connectDB().then(async () => {
               logger.warn(`Port ${port} is already in use. Trying ${newPort}...`);
               app.listen(newPort, () => {
                 logger.info(`🟢 Server is running at http://${host}:${newPort}`)
-                });
+              });
             } else {
               logger.error(`Error starting server: ${error}`);
             }

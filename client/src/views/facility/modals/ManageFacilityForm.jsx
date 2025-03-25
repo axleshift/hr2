@@ -73,6 +73,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   const [isEventEdit, setIsEventEdit] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState({})
   const [isEventSubmitLoading, setIsEventSubmitLoading] = useState(false)
+  const [eventState, setEventState] = useState('edit')
 
   // Counter state
   const [milliseconds, setMilliseconds] = useState(5000)
@@ -409,7 +410,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
                                                   setSelectedSlot(slot)
                                                   setIsEventFormVisible(true)
                                                   setIsModalVisible(false)
-                                                  setIsEventEdit(true)
+                                                  setEventState('edit')
                                                 }}
                                               >
                                                 Manage Event
@@ -422,7 +423,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
                                                   setSelectedSlot(slot)
                                                   setIsEventFormVisible(true)
                                                   setIsModalVisible(false)
-                                                  setIsEventEdit(false)
+                                                  setEventState('create')
                                                 }}
                                               >
                                                 Set Event
@@ -456,9 +457,8 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
               setIsEventFormVisible(false)
               setIsModalVisible(true)
               getFacilityData()
-              setIsEventEdit(false)
             }}
-            isEdit={isEventEdit}
+            state={eventState}
             slot={selectedSlot}
           />
         </CCol>
