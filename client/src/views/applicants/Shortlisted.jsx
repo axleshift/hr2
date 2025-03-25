@@ -167,21 +167,19 @@ const Shortlisted = () => {
                           <CTableDataCell>
                             <div className="d-flex gap-2">
                               <CTooltip content="Remove from list" placement="top">
-                                <CButton
-                                  // onClick={() => handleDelete(item._id)}
-                                  className="btn btn-outline-danger"
-                                >
+                                <CButton color="danger" size="sm">
                                   <FontAwesomeIcon icon={faUndo} />
                                 </CButton>
                               </CTooltip>
                               <CTooltip content="Schedule an initial interview" placement="top">
                                 <CButton
+                                  color="info"
+                                  size="sm"
                                   onClick={() => {
                                     // setIsAppFormVisible(true)
                                     setIsScheduleFormVisible(true)
                                     setSelectedApplicantData(item)
                                   }}
-                                  className="btn btn-outline-success"
                                 >
                                   <FontAwesomeIcon icon={faUserClock} />
                                 </CButton>

@@ -1,3 +1,9 @@
 {
-  "recommendations": ["hossaini.bootstrap-intellisense", "Zignd.html-css-class-completion"]
+  "recommendations": [
+    "hossaini.bootstrap-intellisense",
+    "Zignd.html-css-class-completion",
+    "vitest.explorer",
+    "dbaeumer.vscode-eslint",
+    "formulahendry.auto-rename-tag",
+  ]
 }

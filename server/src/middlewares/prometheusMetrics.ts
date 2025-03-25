@@ -9,50 +9,50 @@ import { config } from "../config";
 import os from "os";
 
 const appInfoGauge = new promClient.Gauge({
-    name: "app_info",
-    help: "Application information",
-    labelNames: ["version", "name", "hostname"],
+  name: "app_info",
+  help: "Application information",
+  labelNames: ["version", "name", "hostname"],
 });
 
 appInfoGauge.set({ version: config.version, name: config.name, hostname: os.hostname() }, 1);
 
 const httpRequestCounter = new promClient.Counter({
-    name: "http_requests_total",
-    help: "Total number of HTTP requests",
-    labelNames: ["method", "route", "status_code"],
+  name: "http_requests_total",
+  help: "Total number of HTTP requests",
+  labelNames: ["method", "route", "status_code"],
 });
 
 const httpRequestDurationHistogram = new promClient.Histogram({
-    name: "http_request_duration_seconds",
-    help: "Histogram of HTTP request durations",
-    labelNames: ["method", "route", "status_code"],
+  name: "http_request_duration_seconds",
+  help: "Histogram of HTTP request durations",
+  labelNames: ["method", "route", "status_code"],
 });
 
 const memoryUsageGauge = new promClient.Gauge({
-    name: "process_memory_usage",
-    help: "Process memory usage",
-    labelNames: ["type"],
+  name: "process_memory_usage",
+  help: "Process memory usage",
+  labelNames: ["type"],
 });
 
 setInterval(() => {
-    const memoryUsage = process.memoryUsage();
-    memoryUsageGauge.set({ type: "rss" }, memoryUsage.rss);
-    memoryUsageGauge.set({ type: "heapTotal" }, memoryUsage.heapTotal);
-    memoryUsageGauge.set({ type: "heapUsed" }, memoryUsage.heapUsed);
-    memoryUsageGauge.set({ type: "external" }, memoryUsage.external);
+  const memoryUsage = process.memoryUsage();
+  memoryUsageGauge.set({ type: "rss" }, memoryUsage.rss);
+  memoryUsageGauge.set({ type: "heapTotal" }, memoryUsage.heapTotal);
+  memoryUsageGauge.set({ type: "heapUsed" }, memoryUsage.heapUsed);
+  memoryUsageGauge.set({ type: "external" }, memoryUsage.external);
 }, 10000);
 
 const cpuUsageGauge = new promClient.Gauge({
-    name: "cpu_usage_percentage",
-    help: "CPU usage percentage",
+  name: "cpu_usage_percentage",
+  help: "CPU usage percentage",
 });
 
 setInterval(() => {
-    const cpuUsage = process.cpuUsage();
-    const userCPU = (cpuUsage.user / 1000000) / os.cpus().length;
-    const systemCPU = (cpuUsage.system / 1000000) / os.cpus().length;
-    cpuUsageGauge.set(userCPU + systemCPU);
-}, 10000); 
+  const cpuUsage = process.cpuUsage();
+  const userCPU = (cpuUsage.user / 1000000) / os.cpus().length;
+  const systemCPU = (cpuUsage.system / 1000000) / os.cpus().length;
+  cpuUsageGauge.set(userCPU + systemCPU);
+}, 10000);
 
 promClient.collectDefaultMetrics(config.prom.metrics);
 
@@ -70,19 +70,19 @@ promClient.collectDefaultMetrics(config.prom.metrics);
  * app.use(prometheusMetrics);
  */
 const prometheusMetrics = (req: Request, res: Response, next: NextFunction) => {
-    const end = httpRequestDurationHistogram.startTimer({ method: req.method, route: req.path });
+  const end = httpRequestDurationHistogram.startTimer({ method: req.method, route: req.path });
 
-    res.on("finish", () => {
-        httpRequestCounter.inc({
-            method: req.method,
-            route: req.route ? req.route.path : req.path,
-            status_code: res.statusCode,
-        });
-
-        end({ status_code: res.statusCode });
+  res.on("finish", () => {
+    httpRequestCounter.inc({
+      method: req.method,
+      route: req.route ? req.route.path : req.path,
+      status_code: res.statusCode,
     });
 
-    next();
+    end({ status_code: res.statusCode });
+  });
+
+  next();
 };
 
 /**
@@ -102,20 +102,20 @@ const prometheusMetrics = (req: Request, res: Response, next: NextFunction) => {
  * @throws Will pass any errors to the next middleware.
  */
 const metricsHandler = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { secret } = req.body;
-        const SECRET = config.prom.key;
+  try {
+    const { secret } = req.body;
+    const SECRET = config.prom.key;
 
-        if (secret !== SECRET) {
-          return res.status(401).json({ message: "Unauthorized" });
-        }
-    
-        const metrics = await promClient.register.metrics(); // Await the Promise
-        res.set("Content-Type", promClient.register.contentType);
-        res.end(metrics);
-    } catch (err) {
-        next(err); // Pass errors to the Express error handler
+    if (secret !== SECRET) {
+      return res.status(401).json({ message: "Unauthorized", secret });
     }
+
+    const metrics = await promClient.register.metrics(); // Await the Promise
+    res.set("Content-Type", promClient.register.contentType);
+    res.end(metrics);
+  } catch (err) {
+    next(err); // Pass errors to the Express error handler
+  }
 };
 
 export { prometheusMetrics, metricsHandler };

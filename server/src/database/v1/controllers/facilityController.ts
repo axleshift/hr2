@@ -1,10 +1,11 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import Facility from "../models/facilities";
-import Events from "../models/facilityEvents";
+import Facility from "../models/facilityModel";
+import Events from "../models/EventModel";
 import Time from "../models/time";
 import Applicant from "../models/applicant";
 import mongoose from "mongoose";
+import { sendEmail } from "../../../utils/mailHandler";
 
 export const createFacility = async (req: req, res: res) => {
   try {
@@ -201,8 +202,11 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
     if (!newTimeslot) {
       return res.status(500).json({ message: "Timeslot not created" });
     }
+    if (!facility.timeslots) {
+      facility.timeslots = [];
+    }
 
-    facility.timeslots.push(newTimeslot._id);
+    facility.timeslots.push(newTimeslot._id as mongoose.Types.ObjectId);
     await facility.save();
 
     return res.status(201).json({ message: "Timeslot created", data: newTimeslot });
@@ -292,7 +296,7 @@ export const removeFacilityTimeslot = async (req: req, res: res) => {
 export const createFacilityEvent = async (req: req, res: res) => {
   try {
     const { timeslotId } = req.params;
-    const { name, description, capacity } = req.body;
+    const { name, description, capacity, type } = req.body;
 
     if (!timeslotId) {
       return res.status(400).json({ message: "Timeslot id is required" });
@@ -324,6 +328,7 @@ export const createFacilityEvent = async (req: req, res: res) => {
     const eventData = {
       name,
       author: authorId,
+      type,
       description,
       date: formattedDate,
       capacity,
@@ -335,7 +340,7 @@ export const createFacilityEvent = async (req: req, res: res) => {
     if (!newEvent) {
       return res.status(500).json({ message: "Event not created" });
     }
-    timeslot.event = new mongoose.Types.ObjectId(newEvent._id)
+    timeslot.event = newEvent._id as mongoose.Types.ObjectId;
     timeslot.isAvailable = false;
 
     await timeslot.save();
@@ -353,43 +358,30 @@ export const getFacilityEventByID = async (req: req, res: res) => {
   try {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ message: "Event id is required" });
+      return res.status(400).json({ message: "Event ID is required" });
     }
 
-    const event = await Events.findById(id);
+    const event = await Events.findById(id).populate({
+      path: 'participants',
+      model: 'Applicant',
+      select: 'firstname lastname email phone',
+    });
+
     if (!event) {
-      return res.status(404).json({ message: "No Event found" });
+      return res.status(404).json({ message: "No event found" });
     }
 
-    const participants = await Promise.all(event.participants.map(async (participantId) => {
-      const participant = await Applicant.findById(participantId);
-      if (participant) {
-        return {
-          _id: participant._id,
-          firstname: participant.firstname,
-          lastname: participant.lastname,
-          email: participant.email,
-        };
-      }
-      return null;
-    }));
-
-    const formattedEvent = {
-      ...event.toObject(),
-      participants: participants.filter(participant => participant !== null)
-    };
-
-    return res.status(200).json({ message: "Event found", data: formattedEvent });
+    return res.status(200).json({ message: "Event found", data: event });
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const updateFacilityEvent = async (req: req, res: res) => {
   try {
     const { timeslotId } = req.params;
-    const { name, description, capacity } = req.body;
+    const { name, description, capacity, type, isApproved } = req.body;
 
     if (!timeslotId) {
       return res.status(400).json({ message: "Timeslot id is required" });
@@ -422,10 +414,20 @@ export const updateFacilityEvent = async (req: req, res: res) => {
     event.name = name;
     event.author = new mongoose.Types.ObjectId(authorId)
     event.description = description;
+    event.type = type;
     event.date = formattedDate;
     event.capacity = capacity;
-    // event.facility = new mongoose.Types.ObjectId(event.facility)
-    // event.timeslot = new mongoose.Types.ObjectId(event.timeslot);
+
+    // Ensure isApproved exists before modifying
+    if (!event.isApproved) {
+      event.isApproved = {
+        status: false,
+        approvedBy: new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId,
+      };
+    } else {
+      event.isApproved.status = isApproved;
+      event.isApproved.approvedBy = new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId;
+    }
 
     const updatedEvent = await event.save();
     if (!updatedEvent) {
@@ -548,18 +550,83 @@ export const getFacilityUpcomingEvents = async (req: req, res: res) => {
 
 export const getUpcomingEvents = async (req: req, res: res) => {
   try {
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+    const skip = (page - 1) * limit;
     const today = new Date();
-    const events = await Events.find({ date: { $gte: today } });
-    if (!events || events.length === 0) {
-      return res.status(404).json({ message: "Events not found" });
+
+    // Initialize the query with the date condition
+    const query: Record<string, unknown> = { date: { $gte: today } };
+
+    // Add eventType to the query only if it's provided
+    if (typeof req.query.eventType === "string") {
+      query.type = req.query.eventType;
     }
 
-    return res.status(200).json({ message: "Events found", data: events });
+    const events = await Events.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate([
+        {
+          path: 'author',
+          model: 'User',
+          select: '_id firstname lastname role'
+        },
+        {
+          path: 'isApproved.approvedBy',
+          model: 'User',
+          select: '_id firstname lastname role'
+        },
+        {
+          path: 'timeslot',
+          model: 'Times',
+          select: '_id date start end event'
+        },
+        {
+          path: 'facility',
+          model: 'Facility',
+          select: '_id name type location'
+        }
+      ])
+      .lean()
+
+    // Modify timeslot start and end times
+    const modifiedEvents = events.map((event) => {
+      if (event.timeslot && typeof event.timeslot === "object") {
+        const timeslot = event.timeslot as unknown as { start: string; end: string }; // Type assertion
+        return {
+          ...event,
+          timeslot: {
+            ...timeslot,
+            start: convertMinutesToTime(parseInt(timeslot.start)),
+            end: convertMinutesToTime(parseInt(timeslot.end)),
+          },
+        };
+      }
+      return event;
+    });
+
+    if (!events.length) {
+      return res.status(404).json({ message: "No upcoming events found" });
+    }
+
+    const totalItems = await Events.countDocuments(query);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({
+      message: "Upcoming events retrieved successfully",
+      data: modifiedEvents,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
+
 
 export const BookApplicantToEvent = async (req: req, res: res) => {
   try {
@@ -609,3 +676,113 @@ export const BookApplicantToEvent = async (req: req, res: res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const UnbookApplicantFromEvent = async (req: req, res: res) => {
+  try {
+    const { id } = req.params
+    if (!id) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+
+    if (!req.query.applicantId) {
+      return res.status(400).json({ message: "Applicant ID is required" });
+    }
+    // converts query to string, sometimes I hate typescript man.
+    const applicantId = new mongoose.Types.ObjectId(req.query.applicantId as string);
+
+    // Find the event by ID
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Find the applicant by ID
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
+    }
+
+    // Check if the applicant is currently booked for the event
+    if (!event.participants.includes(applicantId)) {
+      return res.status(400).json({ message: "Applicant is not booked for this event" });
+    }
+
+    await Events.updateOne(
+      { _id: id },
+      { $pull: { participants: applicantId } }
+    );
+
+    // Remove the event from the applicant's events array
+    await Applicant.updateOne(
+      { _id: applicantId },
+      { $pull: { events: id } }
+    );
+
+    return res.status(200).json({ message: "Applicant unbooked from event successfully", data: applicant });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Event Id is required" });
+    }
+
+    //  Fetch event and populate participants
+    const event = await Events.findById(id).populate("participants");
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (!event.participants || event.participants.length === 0) {
+      return res.status(400).json({ message: "No participants for this event" });
+    }
+
+    const timeslot = await Time.findById(event.timeslot)
+    if (!timeslot) {
+      return res.status(404).json({ message: "timeslot not found" })
+    }
+
+    // Fetch all participants' details
+    const participants = await Applicant.find({
+      _id: { $in: event.participants }
+    }).select("firstname lastname email");
+
+    if (participants.length === 0) {
+      return res.status(400).json({ message: "No valid participants with emails" });
+    }
+
+    for (const participant of participants) {
+      if (!participant.email) {
+        console.warn(`Skipping participant ${participant._id} - Email not found`);
+        continue;
+      }
+
+      const fullName = `${participant.firstname} ${participant.lastname}`;
+
+      await sendEmail(
+        participant.email,
+        `Reminder: ${event.name} on ${event.date}`,
+        `Hello ${fullName},\n\nYou are invited to ${event.name} happening on ${event.date} - ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.\n\nBest regards,\nThe Events Team`
+      );
+    }
+
+    await Events.findByIdAndUpdate(id, {
+      $set: { 'emailSent.status': true }
+    })
+
+    return res.status(200).json({ message: "Emails sent successfully" });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+

@@ -21,9 +21,11 @@ import {
   updateFacilityEvent,
   getFacilityEventsForDate,
   getFacilityCalendarStates,
+  getUpcomingEvents,
 
   // booking
   BookApplicantToEvent,
+  UnbookApplicantFromEvent,
   getFacilityEventByID,
 } from "../../database/v1/controllers/facilityController";
 
@@ -171,6 +173,19 @@ router.get(
   getFacilityEventsForDate
 )
 
+router.get(
+  "/events/upcoming",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  getUpcomingEvents
+)
+
+// Booking
+
 router.post(
   "/events/:id/book",
   verifySession({
@@ -180,6 +195,17 @@ router.post(
     true
   ),
   BookApplicantToEvent
+)
+
+router.delete(
+  "/events/:id/unbook",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  UnbookApplicantFromEvent
 )
 
 export default {
