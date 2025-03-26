@@ -92,12 +92,12 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   }
 
   const parseCalendarStates = () => {
+    console.log('Parsing States', JSON.stringify(facilityData, null, 2))
     if (facilityData.timeslots) {
       const dates = facilityData.timeslots.map((slot) => new Date(slot.date))
       const hasSlots = dates.map(
         (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
       )
-      console.log('Facility Slots')
       setHasSlots(hasSlots)
     }
   }
@@ -121,11 +121,20 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   const getAllTimeslotsForDate = async () => {
     try {
       setIsTimeslotLoading(true)
-      const res = await get(`/facilities/timeslot/${facility._id}/${new Date(defaultDate)}`)
+      const res = await get(`/facilities/timeslot/${facilityData._id}/${new Date(defaultDate)}`)
       console.log(res.data)
       if (res.status === 200) {
+        console.log(
+          `Timeslot for Date ${new Date(defaultDate).toISOString()}`,
+          JSON.stringify(res.data.data, null, 2),
+        )
         setIsTimeslotLoading(false)
         return setTimeslots(res.data.data)
+      }
+
+      if (res.status === 404) {
+        setIsTimeslotLoading(false)
+        return setTimeslots([])
       }
     } catch (error) {
       setIsTimeslotLoading(false)
@@ -218,18 +227,23 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   }
 
   useEffect(() => {
-    if (isVisible) {
-      setIsModalVisible(isVisible)
+    if (isModalVisible) {
       parseCalendarStates()
       getAllTimeslotsForDate()
     }
-  }, [defaultDate, isVisible])
+  }, [defaultDate, isModalVisible])
 
   useEffect(() => {
     if (facility && facility._id) {
       setFacilityData(facility)
     }
   }, [facility])
+
+  useEffect(() => {
+    if (isVisible) {
+      setIsModalVisible(isVisible)
+    }
+  }, [isVisible])
 
   return (
     <CContainer>
@@ -457,6 +471,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
               setIsEventFormVisible(false)
               setIsModalVisible(true)
               getFacilityData()
+              parseCalendarStates()
             }}
             state={eventState}
             slot={selectedSlot}

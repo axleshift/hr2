@@ -112,7 +112,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
       const res = await post(`/facilities/events/${eventId}/book`, formData)
       console.log('Response', res.data)
       if (res.status === 200 || res.status === 201) {
-        addToast('success', 'Applicant has been booked to the event', 'Success')
+        addToast('Success', 'Applicant has been booked to the event', 'success')
         getEventsForDate()
       }
       setIsBookingLoading(false)
@@ -230,6 +230,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                             <CTableHead>
                               <CTableRow>
                                 <CTableHeaderCell>Facilty</CTableHeaderCell>
+                                <CTableHeaderCell>Type</CTableHeaderCell>
                                 <CTableHeaderCell>Date</CTableHeaderCell>
                                 <CTableHeaderCell>Time</CTableHeaderCell>
                                 <CTableHeaderCell>Event</CTableHeaderCell>
@@ -243,6 +244,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                 events.map((event) => (
                                   <CTableRow key={event._id}>
                                     <CTableDataCell>{selectedFacility.name}</CTableDataCell>
+                                    <CTableDataCell>{selectedFacility.type}</CTableDataCell>
                                     <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
                                     <CTableDataCell>
                                       {formatTime(event.timeslot.start)} -{' '}
@@ -254,8 +256,8 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                     <CTableDataCell>
                                       <CInputGroup>
                                         {event.participants.some(
-                                          (participant) =>
-                                            participant.toString() === applicantData._id.toString(),
+                                          (p) =>
+                                            p.applicant.toString() === applicantData._id.toString(),
                                         ) ? (
                                           <CButton
                                             color="success"
@@ -286,7 +288,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                 ))
                               ) : (
                                 <CTableRow>
-                                  <CTableDataCell colSpan="7" className="text-center">
+                                  <CTableDataCell colSpan="8" className="text-center">
                                     No events available. Please select a date from the{' '}
                                     <span className="text-info">calendar</span>.
                                   </CTableDataCell>

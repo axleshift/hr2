@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh, faSearch, faUndo, faUser, faUserClock } from '@fortawesome/free-solid-svg-icons'
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
-import ApplicantForm from './../calendar/modals/ApplicantForm'
 import ScheduleForm from './modal/ScheduleForm'
 
 const Shortlisted = () => {
@@ -93,7 +92,10 @@ const Shortlisted = () => {
           <CCol>
             <h2>Shortlisted</h2>
             <small>
-              In this page, you can view and remove applicants from being qualified for the job.
+              In this page, you can <span className="text-info">view</span> and{' '}
+              <span className="text-danger">remove</span> applicants from being qualified for the
+              job. As well as{' '}
+              <span className="text-primary">schedule an APPLICANT for an interview</span>.
             </small>
           </CCol>
         </CRow>
@@ -105,7 +107,7 @@ const Shortlisted = () => {
                 <CButton type="button" color="primary">
                   <FontAwesomeIcon icon={faSearch} />
                 </CButton>
-                <CButton type="button" color="primary">
+                <CButton type="button" color="primary" onClick={() => getAllData()}>
                   <FontAwesomeIcon icon={faRefresh} />
                 </CButton>
               </CInputGroup>
@@ -171,7 +173,7 @@ const Shortlisted = () => {
                                   <FontAwesomeIcon icon={faUndo} />
                                 </CButton>
                               </CTooltip>
-                              <CTooltip content="Schedule an initial interview" placement="top">
+                              <CTooltip content="Schedule an interview" placement="top">
                                 <CButton
                                   color="info"
                                   size="sm"
