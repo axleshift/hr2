@@ -36,10 +36,10 @@ export const createFacility = async (req: req, res: res) => {
 
 export const updateFacility = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
+    const { facilityId } = req.params;
     const { name, type, description, location } = req.body;
 
-    if (!id) {
+    if (!facilityId) {
       return res.status(400).json({ message: "Facility id is required" });
     }
 
@@ -47,7 +47,7 @@ export const updateFacility = async (req: req, res: res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const facility = await Facility.findById(id);
+    const facility = await Facility.findById(facilityId);
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
@@ -126,8 +126,8 @@ export const getFacilityById = async (req: req, res: res) => {
 
 export const removeFacility = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
-    const facility = await Facility.findById(id);
+    const { facilityId } = req.params;
+    const facility = await Facility.findById(facilityId);
 
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
@@ -156,10 +156,10 @@ const convertMinutesToTime = (minutes: number): string => {
 
 export const createFacilityTimeslot = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
+    const { facilityId } = req.params;
     const { date, start, end } = req.body;
 
-    if (!id) {
+    if (!facilityId) {
       return res.status(400).json({ message: "Facility id is required" });
     }
 
@@ -167,7 +167,7 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const facility = await Facility.findById(id);
+    const facility = await Facility.findById(facilityId);
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
@@ -177,7 +177,7 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
 
     // Check if timeslot overlaps with existing timeslots
     const overlappingTimeslot = await Timeslot.findOne({
-      facility: id,
+      facility: facilityId,
       date,
       $or: [
         { start: { $lt: endMinutes, $gte: startMinutes } },
@@ -191,7 +191,7 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
 
     const timeslotData = {
       date,
-      facility: id,
+      facility: facilityId,
       start: startMinutes,
       end: endMinutes,
     };
@@ -216,7 +216,7 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
 
 export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
   try {
-    const { id: facilityId, date } = req.params;
+    const { facilityId, date } = req.params;
 
     // Input Validation
     if (!facilityId) {
@@ -267,8 +267,8 @@ export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
 
 export const removeFacilityTimeslot = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
-    const timeslot = await Timeslot.findById(id);
+    const { timeslotId} = req.params;
+    const timeslot = await Timeslot.findById(timeslotId);
 
     if (!timeslot) {
       return res.status(404).json({ message: "Timeslot not found" });
@@ -281,12 +281,12 @@ export const removeFacilityTimeslot = async (req: req, res: res) => {
     }
 
     // check if the timeslot is associated with an event
-    const event = await FacilityEvent.findOne({ timeslot: id });
+    const event = await FacilityEvent.findOne({ timeslot: timeslotId });
     if (event) {
       return res.status(400).json({ message: "Timeslot is associated with an event. Cannot be deleted." });
     }
 
-    facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(id));
+    facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(timeslotId));
     await facility.save();
     await timeslot.deleteOne();
 
@@ -362,12 +362,12 @@ export const createFacilityEvent = async (req: req, res: res) => {
 
 export const getFacilityEventByID = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { eventId } = req.params;
+    if (!eventId) {
       return res.status(400).json({ message: "Event ID is required" });
     }
 
-    const event = await FacilityEvent.findById(id).populate({
+    const event = await FacilityEvent.findById(eventId).populate({
       path: 'participants.applicant',
       model: 'Applicant',
       select: 'firstname lastname email phone',
@@ -488,9 +488,9 @@ export const deleteFacilityEvent = async (req: req, res: res) => {
 
 export const getFacilityEventsForDate = async (req: req, res: res) => {
   try {
-    const { id, date } = req.params;
+    const { eventId, date } = req.params;
 
-    if (!id) {
+    if (!eventId) {
       return res.status(400).json({ message: "Facility id is required" });
     }
 
@@ -498,7 +498,7 @@ export const getFacilityEventsForDate = async (req: req, res: res) => {
       return res.status(400).json({ message: "Date is required" });
     }
 
-    const facility = await Facility.findById(id);
+    const facility = await Facility.findById(eventId);
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
@@ -507,7 +507,7 @@ export const getFacilityEventsForDate = async (req: req, res: res) => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const events = await FacilityEvent.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
+    const events = await FacilityEvent.find({ facility: eventId, date: { $gte: today, $lt: tomorrow } });
 
     if (!events) {
       return res.status(404).json({ message: "Events not found" });
@@ -523,15 +523,15 @@ export const getFacilityEventsForDate = async (req: req, res: res) => {
 // TODO: add pagination 
 export const getFacilityCalendarStates = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
+    const { eventId } = req.params;
 
     // Validate facility ID
-    if (!id) {
+    if (!eventId) {
       return res.status(400).json({ message: "Facility id is required" });
     }
 
     // Retrieve facility by ID
-    const facility = await Facility.findById(id);
+    const facility = await Facility.findById(eventId);
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
@@ -552,7 +552,7 @@ export const getFacilityCalendarStates = async (req: req, res: res) => {
     const endDate = new Date(parseInt(year as string), parseInt(month as string), 0);
     endDate.setMonth(endDate.getMonth() + 1);
 
-    const events = await FacilityEvent.find({ facility: id, date: { $gte: startDate, $lte: endDate } });
+    const events = await FacilityEvent.find({ facility: eventId, date: { $gte: startDate, $lte: endDate } });
     const formattedEvents = events.map((event) => {
       return new Date(event.date).toISOString();
     });
@@ -674,7 +674,7 @@ export const getUpcomingEvents = async (req: req, res: res) => {
 
 export const bookApplicantToEvent = async (req: req, res: res) => {
   try {
-    const { id: eventId } = req.params;
+    const { eventId } = req.params;
     const { applicantId } = req.body;
 
     // Validate input
@@ -746,7 +746,7 @@ export const bookApplicantToEvent = async (req: req, res: res) => {
 
 export const unbookApplicantFromEvent = async (req: req, res: res) => {
   try {
-    const { id: eventId } = req.params;
+    const { eventId } = req.params;
     const { applicantId } = req.query;
 
     // Validate required parameters
@@ -800,35 +800,36 @@ export const unbookApplicantFromEvent = async (req: req, res: res) => {
 
 export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
+    const { eventId } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ message: "Event ID is required" });
+    if (!eventId || !mongoose.isValidObjectId(eventId)) {
+      return res.status(400).json({ message: "Valid Event ID is required." });
     }
 
     // Fetch event and populate participants
-    const event = await FacilityEvent.findById(id).populate("participants");
+    const event = await FacilityEvent.findById(eventId);
 
     if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+      return res.status(404).json({ message: "Event not found." });
     }
 
     if (!event.participants || event.participants.length < 0) {
-      return res.status(400).json({ message: "No participants for this event" });
+      return res.status(400).json({ message: "No participants for this event." });
     }
 
     const timeslot = await Timeslot.findById(event.timeslot);
     if (!timeslot) {
-      return res.status(404).json({ message: "Timeslot not found" });
+      return res.status(404).json({ message: "Timeslot not found." });
     }
 
-    // Fetch all participants' details
-    const participants = await Applicant.find({
-      _id: { $in: event.participants }
-    }).select("firstname lastname email");
+    // Extract `applicant` IDs from `event.participants`
+    const participantIds = event.participants.map((p) => p.applicant);
 
-    if (participants.length === 0) {
-      return res.status(400).json({ message: "No valid participants with emails" });
+    // Fetch participants' details
+    const participants = await Applicant.find({ _id: { $in: participantIds } }).select("firstname lastname email");
+
+    if (!participants || participants.length === 0) {
+      return res.status(400).json({ message: "No valid participants with emails." });
     }
 
     const failedEmails: { applicant: string; reason: string }[] = [];
@@ -841,18 +842,22 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       }
 
       const fullName = `${participant.firstname} ${participant.lastname}`;
-      let txt = "";
-      txt += `Hello, ${fullName}`
-      txt += `You are invited to ${event.name} happening on ${event.date} `
-      txt += `from ${convertMinutesToTime(parseInt(timeslot.start))} to ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.`
-      txt += `Best regards,`
-      txt += `The Events Team`
+      const emailText = `
+        Hello, ${fullName},
+
+        You are invited to ${event.name} happening on ${event.date.toDateString()}.
+        Time: ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))}
+        Location: Facility
+
+        Best regards,  
+        The Events Team
+      `;
 
       // Attempt to send the email
       const emailResult = await sendEmail(
         participant.email,
-        `Reminder: ${event.name} on ${event.date}`,
-        txt
+        `Reminder: ${event.name} on ${event.date.toDateString()}`,
+        emailText
       );
 
       if (!emailResult.success) {
@@ -863,20 +868,20 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       }
     }
 
-    // Update the event document with failed emails
-    await FacilityEvent.findByIdAndUpdate(id, {
-      $set: { "emailSent.status": successfulEmails > 0 }, // Mark true if at least one email sent
-      $push: { failed: { $each: failedEmails } }, // Add failed emails to the event
+    // Update event's email status and log failed emails
+    await FacilityEvent.findByIdAndUpdate(eventId, {
+      $set: { "emailSent.status": successfulEmails > 0 }, // Set true if at least one email was sent
+      $push: { "emailSent.history": { $each: failedEmails.map((f) => ({ date: new Date(), reason: f.reason })) } },
     });
 
     return res.status(200).json({
-      message: "Emails processed successfully",
+      message: "Emails processed successfully.",
       successfulEmails,
-      failedEmails, // Include failed emails if any
+      failedEmails,
     });
 
   } catch (error) {
     logger.error("Error sending event emails:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error." });
   }
 };

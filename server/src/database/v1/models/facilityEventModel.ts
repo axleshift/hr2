@@ -110,6 +110,9 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
           date: {
             type: Date,
             default: () => new Date()
+          },
+          content: {
+            type: String,
           }
         }
       ]
