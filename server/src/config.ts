@@ -5,7 +5,7 @@
 
 import path from "path";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({path: path.resolve(__dirname, '../.env')});
 
 export const config = {
   version: "1.0.0",
@@ -42,9 +42,10 @@ export const config = {
     smtp: {
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_SECURE,
+      secure: process.env.SMTP_SECURE || true,
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
+      tls: process.env.SMTP_TLS,
     }
   },
 

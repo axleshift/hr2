@@ -23,6 +23,7 @@ import MongoStore from "connect-mongo";
 import errorHandler from "./middlewares/errorHandler";
 import verifyApiKey from "./middlewares/verifyApiKey";
 import generateCsrfToken from "./middlewares/csrfToken";
+import { verifyMailConn } from "./utils/mailHandler";
 
 const app: Application = express();
 const host = config.server.host;
@@ -173,6 +174,8 @@ connectDB().then(async () => {
       .catch((error) => {
         logger.error(`Error loading routes: ${error}`);
       });
+
+    verifyMailConn()
   } catch (error) {
     fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
       flag: "a",

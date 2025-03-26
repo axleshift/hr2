@@ -6,6 +6,8 @@ import Timeslot from "../models/timeslotModel";
 import Applicant from "../models/applicantModel";
 import mongoose from "mongoose";
 import { sendEmail } from "../../../utils/mailHandler";
+import path from "path";
+import fs from "fs/promises"
 
 export const createFacility = async (req: req, res: res) => {
   try {
@@ -148,11 +150,18 @@ const convertTimeToMinutes = (time: string): number => {
   return hours * 60 + minutes;
 };
 
-const convertMinutesToTime = (minutes: number): string => {
-  const hours = Math.floor(minutes / 60);
+const convertMinutesToTime = (minutes: number, format: "24h" | "12h" = "24h"): string => {
+  let hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  return `${hours}:${mins < 10 ? '0' : ''}${mins}`;
-}
+
+  if (format === "12h") {
+    const period = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 0 to 12 for AM
+    return `${hours}:${mins < 10 ? "0" : ""}${mins} ${period}`;
+  }
+
+  return `${hours}:${mins < 10 ? "0" : ""}${mins}`;
+};
 
 export const createFacilityTimeslot = async (req: req, res: res) => {
   try {
@@ -267,7 +276,7 @@ export const getAllFacilityTimeslotsForDate = async (req: req, res: res) => {
 
 export const removeFacilityTimeslot = async (req: req, res: res) => {
   try {
-    const { timeslotId} = req.params;
+    const { timeslotId } = req.params;
     const timeslot = await Timeslot.findById(timeslotId);
 
     if (!timeslot) {
@@ -798,7 +807,7 @@ export const unbookApplicantFromEvent = async (req: req, res: res) => {
   }
 };
 
-export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) => {
+export const SendEmailToFacilityEventParticipants = async (req: req, res: res) => {
   try {
     const { eventId } = req.params;
 
@@ -822,10 +831,11 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       return res.status(404).json({ message: "Timeslot not found." });
     }
 
-    // Extract `applicant` IDs from `event.participants`
+    const templatePath = path.join(__dirname, '../../../public/templates/eventEmail.html');
+    const emailTemplate = await fs.readFile(templatePath, "utf-8");
+
     const participantIds = event.participants.map((p) => p.applicant);
 
-    // Fetch participants' details
     const participants = await Applicant.find({ _id: { $in: participantIds } }).select("firstname lastname email");
 
     if (!participants || participants.length === 0) {
@@ -835,37 +845,71 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
     const failedEmails: { applicant: string; reason: string }[] = [];
     let successfulEmails = 0;
 
+    const participantUpdates = [];
+
     for (const participant of participants) {
       if (!participant.email) {
         failedEmails.push({ applicant: participant._id.toString(), reason: "No email provided" });
+        participantUpdates.push({
+          applicant: participant._id,
+          mail: { sent: false, reason: "No email provided" }
+        });
         continue;
       }
 
       const fullName = `${participant.firstname} ${participant.lastname}`;
-      const emailText = `
-        Hello, ${fullName},
+      const facility = await Facility.findById(event.facility);
+      if (!facility) {
+        return res.status(404).json({ message: "Facility not found." });
+      }
 
-        You are invited to ${event.name} happening on ${event.date.toDateString()}.
-        Time: ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))}
-        Location: Facility
+      const emailText = emailTemplate
+        .replace(/{{fullName}}/g, fullName)
+        .replace(/{{eventName}}/g, event.name || "Event")
+        .replace(/{{eventDate}}/g, event.date ? event.date.toDateString() : "Unknown Date")
+        .replace(/{{startTime}}/g, convertMinutesToTime(parseInt(timeslot.start), "12h"))
+        .replace(/{{endTime}}/g, convertMinutesToTime(parseInt(timeslot.end), "12h"))
+        .replace(/{{facilityName}}/g, facility.name || "Venue")
+        .replace(/{{facilityLocation}}/g, facility.location || "Address")
+        .replace(/{{eventType}}/g, event.type);
 
-        Best regards,  
-        The Events Team
-      `;
-
-      // Attempt to send the email
       const emailResult = await sendEmail(
+        event.type,
         participant.email,
         `Reminder: ${event.name} on ${event.date.toDateString()}`,
+        "",
         emailText
       );
 
+      logger.info(JSON.stringify(emailResult, null, 2));
+
       if (!emailResult.success) {
         failedEmails.push({ applicant: participant._id.toString(), reason: emailResult.message });
+        participantUpdates.push({
+          applicant: participant._id,
+          mail: { sent: false, reason: emailResult.message }
+        });
         logger.error(`Failed to send email to ${participant.email}: ${emailResult.message}`);
       } else {
         successfulEmails++;
+        participantUpdates.push({
+          applicant: participant._id,
+          mail: { sent: true, reason: "" }
+        });
       }
+    }
+
+    // Update participants' mail status in bulk
+    for (const update of participantUpdates) {
+      await FacilityEvent.updateOne(
+        { _id: eventId, "participants.applicant": update.applicant },
+        {
+          $set: {
+            "participants.$.mail.sent": update.mail.sent,
+            "participants.$.mail.reason": update.mail.reason
+          }
+        }
+      );
     }
 
     // Update event's email status and log failed emails

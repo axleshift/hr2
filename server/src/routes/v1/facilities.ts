@@ -30,7 +30,7 @@ import {
   getFacilityEventByID,
 
   // Emailing
-  SendEmailToFacilityEventsParticipants,
+  SendEmailToFacilityEventParticipants,
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -220,7 +220,7 @@ router.post(
     true,
     true
   ),
-  SendEmailToFacilityEventsParticipants
+  SendEmailToFacilityEventParticipants
 )
 
 router.delete(
