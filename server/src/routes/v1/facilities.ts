@@ -45,7 +45,7 @@ router.post(
 );
 
 router.put(
-  "/update/:id",
+  "/update/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -67,7 +67,7 @@ router.get(
 );
 
 router.get(
-  "/:id",
+  "/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -78,7 +78,7 @@ router.get(
 );
 
 router.delete(
-  "/delete/:id",
+  "/delete/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -91,7 +91,7 @@ router.delete(
 
 // Timeslots
 router.post(
-  "/timeslot/create/:id",
+  "/timeslot/create/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -102,7 +102,7 @@ router.post(
 );
 
 router.get(
-  "/timeslot/:id/:date",
+  "/timeslot/:facilityId/:date",
   verifySession({
     permissions: ["user", "admin"],
   }),
@@ -110,7 +110,7 @@ router.get(
 );
 
 router.delete(
-  "/timeslot/delete/:id",
+  "/timeslot/delete/:timeslotId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -156,7 +156,7 @@ router.delete(
 )
 
 router.get(
-  "/events/:id/calendar-states",
+  "/events/:eventId/calendar-states",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -167,7 +167,7 @@ router.get(
 )
 
 router.get(
-  "/event/:id",
+  "/event/:eventId",
   verifySession({
     permissions: ["user", "admin"]
   },
@@ -178,7 +178,7 @@ router.get(
 )
 
 router.get(
-  "/events/:id/:date",
+  "/events/:eventId/:date",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -202,7 +202,7 @@ router.get(
 // Booking
 
 router.post(
-  "/events/:id/book",
+  "/events/:eventId/book",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -213,7 +213,7 @@ router.post(
 )
 
 router.post(
-  "/events/:id/send-email",
+  "/events/:eventId/send-email",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -224,7 +224,7 @@ router.post(
 )
 
 router.delete(
-  "/events/:id/unbook",
+  "/events/:eventId/unbook",
   verifySession({
     permissions: ["user", "admin"],
   },
