@@ -1,4 +1,4 @@
-import JobpostingRequest from "../models/jobpostingRequest";
+import JobpostingRequest from "../models/jobpostingRequestModel";
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
 

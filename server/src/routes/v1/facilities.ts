@@ -27,6 +27,9 @@ import {
   BookApplicantToEvent,
   UnbookApplicantFromEvent,
   getFacilityEventByID,
+
+  // Emailing
+  SendEmailToFacilityEventsParticipants,
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -197,6 +200,17 @@ router.post(
   BookApplicantToEvent
 )
 
+router.post(
+  "/events/:id/send-email",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  SendEmailToFacilityEventsParticipants
+)
+
 router.delete(
   "/events/:id/unbook",
   verifySession({
@@ -207,6 +221,7 @@ router.delete(
   ),
   UnbookApplicantFromEvent
 )
+
 
 export default {
   metadata: {

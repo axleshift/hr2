@@ -13,7 +13,7 @@ const documentSchema = new mongoose.Schema(
     },
     author_Id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
     authorName: {
@@ -22,7 +22,7 @@ const documentSchema = new mongoose.Schema(
     },
     applicant_Id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Applicants",
+      ref: "Applicant",
       required: true,
     },
     applicantName: {
@@ -47,4 +47,4 @@ const documentSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("document", documentSchema);
+export default mongoose.model("Document", documentSchema);

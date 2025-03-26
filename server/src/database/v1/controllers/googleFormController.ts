@@ -1,4 +1,4 @@
-import Applicant from "../models/applicant";
+import Applicant from "../models/applicantModel";
 import { Request as req, Response as res } from "express";
 import { config } from "../../../config";
 import logger from "../../../middlewares/logger";

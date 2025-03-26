@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import apiKey from "./apikey";
+import apiKey from "./apikeyModel";
 const userSettingsSchema = new mongoose.Schema(
   {
     user_id: {
@@ -38,4 +38,4 @@ const userSettingsSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("UserSettings", userSettingsSchema);
+export default mongoose.model("UserSetting", userSettingsSchema);

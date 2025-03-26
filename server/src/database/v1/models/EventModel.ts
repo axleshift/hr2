@@ -30,7 +30,7 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'User',
       required: true
     },
     type: {
@@ -56,8 +56,7 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
       },
       approvedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: true
+        ref: 'User',
       },
     },
     capacity: {
@@ -67,18 +66,18 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     participants: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'applicants'
+        ref: 'Applicant'
       }
     ],
     facility: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'facilities',
+      ref: 'Facility',
       required: true
     },
     timeslot: {
       type:
         mongoose.Schema.Types.ObjectId,
-      ref: 'times'
+      ref: 'Timeslot'
     },
     emailSent: {
       status: {
@@ -88,7 +87,7 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
       history: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'emails'
+          ref: 'Email'
         }
       ],
     },

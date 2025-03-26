@@ -1,4 +1,4 @@
-import tagModel from "../models/tag";
+import tagModel from "../models/tagModel";
 import logger from '../../../middlewares/logger';
 
 const tags  = [

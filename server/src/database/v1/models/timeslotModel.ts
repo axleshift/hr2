@@ -17,12 +17,12 @@ const timeSchema = new Schema<ITime>(
     },
     facility: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "facilities",
+      ref: "Facility",
       required: true,
     },
     event: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "facilityEvents",
+      ref: "Event",
       required: false
     },
     start: {
@@ -43,4 +43,4 @@ const timeSchema = new Schema<ITime>(
   }
 );
 
-export default mongoose.model<ITime>("Times", timeSchema);
+export default mongoose.model<ITime>("Timeslot", timeSchema);

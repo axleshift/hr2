@@ -1,6 +1,6 @@
 import { hasher } from "../../../utils/hasher";
 import { Request as req, Response as res } from "express";
-import User from "../models/user";
+import User from "../models/userModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../../../config";

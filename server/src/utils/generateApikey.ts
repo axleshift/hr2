@@ -4,7 +4,7 @@
  */
 
 import logger from "../middlewares/logger";
-import apiKey from "../database/v1/models/apikey";
+import apiKey from "../database/v1/models/apikeyModel";
 
 export const generateApikey = async () => {
     try {

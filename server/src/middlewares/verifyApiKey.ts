@@ -5,7 +5,7 @@
 
 import { Request, Response, NextFunction } from "express";
 
-import apiKey from "../database/v1/models/apikey";
+import apiKey from "../database/v1/models/apikeyModel";
 import { config } from "../config";
 import logger from "./logger";
 

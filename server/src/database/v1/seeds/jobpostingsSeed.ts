@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { faker } from "@faker-js/faker";
-import JobPosting from "../models/jobposting";
-import JobPoster from "../models/jobposter";
+import JobPosting from "../models/jobpostingModel";
+import JobPoster from "../models/jobposterModel";
 import logger from "../../../middlewares/logger";
 
 dotenv.config();

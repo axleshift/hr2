@@ -1,6 +1,6 @@
 import logger from "../../../middlewares/logger";
-import Tag from "../models/tag";
-import Applicant from "../models/applicant";
+import Tag from "../models/tagModel";
+import Applicant from "../models/applicantModel";
 import { Request as req, Response as res } from "express";
 
 export const createTag = async (req: req, res: res) => {

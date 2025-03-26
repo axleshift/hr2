@@ -1,6 +1,6 @@
 import { Request as res, Response as req } from "express";
 
-import apiKey from "../models/apikey";
+import apiKey from "../models/apikeyModel";
 import logger from "../../../middlewares/logger";
 
 interface CustomRequest extends res {

@@ -1,9 +1,9 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
 import Facility from "../models/facilityModel";
-import Events from "../models/EventModel";
-import Time from "../models/time";
-import Applicant from "../models/applicant";
+import Events from "../models/eventModel";
+import Time from "../models/timeslotModel";
+import Applicant from "../models/applicantModel";
 import mongoose from "mongoose";
 import { sendEmail } from "../../../utils/mailHandler";
 
@@ -767,10 +767,16 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
 
       const fullName = `${participant.firstname} ${participant.lastname}`;
 
+      let txt = "";
+      txt += `Hello ${fullName}, \n\n`
+      txt += `You are invited to ${event.name} happening on ${event.date}`
+      txt += `happening on ${event.date} - ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.\n\n`
+      txt += `Best regards,\nThe Events Team`
+      
       await sendEmail(
         participant.email,
         `Reminder: ${event.name} on ${event.date}`,
-        `Hello ${fullName},\n\nYou are invited to ${event.name} happening on ${event.date} - ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.\n\nBest regards,\nThe Events Team`
+        txt
       );
     }
 

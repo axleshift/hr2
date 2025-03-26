@@ -1,7 +1,7 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import FacilityDates from "../models/EventModel";
-import Time from "../models/time";
+import FacilityDates from "../models/eventModel";
+import Time from "../models/timeslotModel";
 
 const convertToUTC = async (date: Date) => {
   return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
