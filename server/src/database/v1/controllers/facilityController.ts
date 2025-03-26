@@ -580,7 +580,7 @@ export const getUpcomingEvents = async (req: req, res: res) => {
         },
         {
           path: 'timeslot',
-          model: 'Times',
+          model: 'Timeslot',
           select: '_id date start end event'
         },
         {
@@ -734,7 +734,7 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       return res.status(400).json({ message: "Event Id is required" });
     }
 
-    //  Fetch event and populate participants
+    // Fetch event and populate participants
     const event = await Events.findById(id).populate("participants");
 
     if (!event) {
@@ -745,9 +745,9 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       return res.status(400).json({ message: "No participants for this event" });
     }
 
-    const timeslot = await Time.findById(event.timeslot)
+    const timeslot = await Time.findById(event.timeslot);
     if (!timeslot) {
-      return res.status(404).json({ message: "timeslot not found" })
+      return res.status(404).json({ message: "Timeslot not found" });
     }
 
     // Fetch all participants' details
@@ -759,36 +759,41 @@ export const SendEmailToFacilityEventsParticipants = async (req: req, res: res) 
       return res.status(400).json({ message: "No valid participants with emails" });
     }
 
-    for (const participant of participants) {
-      if (!participant.email) {
-        console.warn(`Skipping participant ${participant._id} - Email not found`);
-        continue;
-      }
+    // Extract valid emails
+    const validParticipants = participants.filter(p => p.email);
+    const recipientEmails = validParticipants.map(p => p.email);
 
-      const fullName = `${participant.firstname} ${participant.lastname}`;
-
-      let txt = "";
-      txt += `Hello ${fullName}, \n\n`
-      txt += `You are invited to ${event.name} happening on ${event.date}`
-      txt += `happening on ${event.date} - ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.\n\n`
-      txt += `Best regards,\nThe Events Team`
-      
-      await sendEmail(
-        participant.email,
-        `Reminder: ${event.name} on ${event.date}`,
-        txt
-      );
+    if (recipientEmails.length === 0) {
+      return res.status(400).json({ message: "No valid email addresses found" });
     }
 
+    let txt = "";
+    txt += 'Greetings!'
+    txt += `You are invited to ${event.name} happening on ${event.date} `
+    txt += `from ${convertMinutesToTime(parseInt(timeslot.start))} to ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.`
+    txt += `Best regards,`
+    txt += `The Events Team`
+
+    // Send batch email
+    const emailResult = await sendEmail(
+      recipientEmails,
+      `Reminder: ${event.name} on ${event.date}`,
+      txt
+    );
+
+    if (!emailResult.success) {
+      return res.status(500).json({ message: "Failed to send emails" });
+    }
+
+    // Mark emails as sent
     await Events.findByIdAndUpdate(id, {
       $set: { 'emailSent.status': true }
-    })
+    });
 
     return res.status(200).json({ message: "Emails sent successfully" });
 
   } catch (error) {
-    logger.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    logger.error("Error sending event emails:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
-
