@@ -1,6 +1,6 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import FacilityDates from "../models/eventModel";
+import FacilityDates from "../models/FacilityEventModel";
 import Time from "../models/timeslotModel";
 
 const convertToUTC = async (date: Date) => {

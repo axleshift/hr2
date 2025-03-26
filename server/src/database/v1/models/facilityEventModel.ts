@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 // I hate that I need to do this
+const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Other'] as const;
+
 interface IFacilityEvent extends Document {
   name: string;
   author: mongoose.Types.ObjectId;
@@ -13,7 +15,15 @@ interface IFacilityEvent extends Document {
     approvedBy: mongoose.Types.ObjectId;
   };
   capacity: number;
-  participants: mongoose.Types.ObjectId[];
+  participants: [
+    {
+      applicant: mongoose.Types.ObjectId;
+      mail: {
+        sent: boolean,
+        reason: string,
+      }
+    }
+  ];
   facility: mongoose.Types.ObjectId;
   timeslot: mongoose.Types.ObjectId;
   emailSent: {
@@ -35,7 +45,7 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     },
     type: {
       type: String,
-      enum: ['Initial Interview', 'Final Interview', 'Other'],
+      enum: EVENT_TYPES,
       default: 'Other'
     },
     description: {
@@ -65,8 +75,19 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     },
     participants: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Applicant'
+        applicant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Applicant'
+        },
+        mail: {
+          sent: {
+            type: Boolean,
+            default: false,
+          },
+          reason: {
+            type: String
+          }
+        }
       }
     ],
     facility: {
@@ -86,10 +107,12 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
       },
       history: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Email'
+          date: {
+            type: Date,
+            default: () => new Date()
+          }
         }
-      ],
+      ]
     },
   },
   {

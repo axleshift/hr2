@@ -19,13 +19,14 @@ import {
   // event
   createFacilityEvent,
   updateFacilityEvent,
+  deleteFacilityEvent,
   getFacilityEventsForDate,
   getFacilityCalendarStates,
   getUpcomingEvents,
 
   // booking
-  BookApplicantToEvent,
-  UnbookApplicantFromEvent,
+  bookApplicantToEvent,
+  unbookApplicantFromEvent,
   getFacilityEventByID,
 
   // Emailing
@@ -122,7 +123,7 @@ router.delete(
 // Event
 
 router.post(
-  "/event/timeslot/:timeslotId",
+  "/event/:timeslotId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -133,7 +134,7 @@ router.post(
 )
 
 router.put(
-  "/event/timeslot/:timeslotId",
+  "/event/:timeslotId",
   verifySession({
     permissions: ["user", "admin"]
   },
@@ -141,6 +142,17 @@ router.put(
     true
   ),
   updateFacilityEvent
+)
+
+router.delete(
+  "/event/:timeslotId",
+  verifySession({
+    permissions: ["user", "admin"]
+  },
+    true,
+    true
+  ),
+  deleteFacilityEvent
 )
 
 router.get(
@@ -197,7 +209,7 @@ router.post(
     true,
     true
   ),
-  BookApplicantToEvent
+  bookApplicantToEvent
 )
 
 router.post(
@@ -219,7 +231,7 @@ router.delete(
     true,
     true
   ),
-  UnbookApplicantFromEvent
+  unbookApplicantFromEvent
 )
 
 
