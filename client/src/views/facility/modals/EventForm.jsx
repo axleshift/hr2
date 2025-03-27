@@ -31,7 +31,7 @@ import {
   CFormSwitch,
 } from '@coreui/react'
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
@@ -42,24 +42,29 @@ import { config } from '../../../config'
 import { formatTime } from '../../../utils'
 import { AuthContext } from '../../../context/authContext'
 
+import InterviewForm from './InterviewForm'
+
 const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
-  const [eventData, setEvenData] = React.useState({})
-  const [isEventLoading, setIsEventLoading] = React.useState(false)
-  const [eventFormState, setEventFormState] = React.useState('view')
-  const [isReadOnly, setIsReadOnly] = React.useState(true)
-  const [eventTypes, setEventTypes] = React.useState([
-    'Initial Interview',
-    'Final Interview',
-    'Other',
-  ])
+  const [eventData, setEvenData] = useState({})
+  const [isEventFormVisible, setIsEventFormVisible] = useState(false)
+  const [isEventLoading, setIsEventLoading] = useState(false)
+  const [eventFormState, setEventFormState] = useState('view')
+  const [isReadOnly, setIsReadOnly] = useState(true)
+  const [eventTypes, setEventTypes] = useState(['Initial Interview', 'Final Interview', 'Other'])
 
-  const [isSubmitLoading, setIsSubmitLoading] = React.useState(false)
-  const [isRemoveLoading, setIsRemoveLoading] = React.useState(false)
-  const [isEmailSentLoading, setIsEmailSentLoading] = React.useState(false)
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+  const [isRemoveLoading, setIsRemoveLoading] = useState(false)
+  const [isEmailSentLoading, setIsEmailSentLoading] = useState(false)
 
-  const [failedMails, setFailedMails] = React.useState([])
+  const [failedMails, setFailedMails] = useState([])
+
+  // Interview form state
+  const [isInterviewFormVisible, setIsInterviewFormVisible] = useState(false)
+  const [isInterviewFormIsEdit, setIsInterviewFormIsEdit] = useState(false)
+  const [interviewData, setInterviewData] = useState({})
+  const [applicantData, setApplicanData] = useState({})
 
   const getEventData = async () => {
     try {
@@ -226,15 +231,20 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       addToast('Error', 'An error occured', 'danger')
     }
   }
-
   useEffect(() => {
     if (isVisible) {
+      setIsEventFormVisible(isVisible)
+    }
+  }, [isVisible])
+
+  useEffect(() => {
+    if (isEventFormVisible) {
       setEventFormState(state)
       if (state === 'view' || state === 'edit') {
         getEventData()
       }
     }
-  }, [isVisible, state])
+  }, [isEventFormVisible, state])
 
   useEffect(() => {
     console.log(eventFormState)
@@ -258,13 +268,14 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       <CRow>
         <CCol>
           <CModal
-            visible={isVisible}
+            visible={isEventFormVisible}
             onClose={() => {
               handleResetForm()
               onClose()
               setEvenData({})
               setEventFormState('view')
               setIsReadOnly(false)
+              setIsEventFormVisible(false)
             }}
             size="xl"
           >
@@ -491,27 +502,52 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                             )}
                                           </CTableDataCell>
                                           <CTableDataCell>
-                                            {eventFormState === 'edit' ||
-                                            eventFormState === 'create' ? (
-                                              <CButton
-                                                size="sm"
-                                                color="danger"
-                                                onClick={() =>
-                                                  removeApplicantFromEvent(p.applicant)
-                                                }
-                                                disabled={isRemoveLoading}
-                                              >
-                                                {isRemoveLoading ? (
-                                                  <CSpinner size="sm" />
-                                                ) : (
-                                                  'Remove'
+                                            <div className="d-flex flex-row gap-2">
+                                              {(eventFormState === 'edit' ||
+                                                eventFormState === 'create') && (
+                                                <CButton
+                                                  size="sm"
+                                                  color="danger"
+                                                  onClick={() =>
+                                                    removeApplicantFromEvent(p.applicant)
+                                                  }
+                                                  disabled={isRemoveLoading}
+                                                >
+                                                  {isRemoveLoading ? (
+                                                    <CSpinner size="sm" />
+                                                  ) : (
+                                                    'Remove'
+                                                  )}
+                                                </CButton>
+                                              )}
+                                              {(userInformation.role === 'admin' ||
+                                                userInformation.role === 'interviewer' ||
+                                                userInformation.role === 'manager') &&
+                                                eventFormState === 'view' && (
+                                                  <CButton
+                                                    size="sm"
+                                                    color="info"
+                                                    onClick={() => {
+                                                      setIsInterviewFormVisible(true)
+                                                      setIsInterviewFormIsEdit(false)
+                                                      setIsEventFormVisible(false)
+                                                      setApplicanData(p.applicant)
+                                                      console.log(
+                                                        'Does it have a value?',
+                                                        eventData,
+                                                      )
+                                                      console.log(p.applicant)
+                                                      setInterviewData({
+                                                        _id: eventData._id,
+                                                        name: eventData.name,
+                                                        date: eventData.date,
+                                                      })
+                                                    }}
+                                                  >
+                                                    Interview
+                                                  </CButton>
                                                 )}
-                                              </CButton>
-                                            ) : (
-                                              <CButton size="sm" color="danger" disabled>
-                                                No Permissions
-                                              </CButton>
-                                            )}
+                                            </div>
                                           </CTableDataCell>
                                         </CTableRow>
                                       )
@@ -529,6 +565,21 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
               </CContainer>
             </CModalBody>
           </CModal>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          <InterviewForm
+            isVisible={isInterviewFormVisible}
+            onClose={() => {
+              setIsInterviewFormIsEdit(false)
+              setIsInterviewFormVisible(false)
+              setIsEventFormVisible(true)
+            }}
+            isEdit={isInterviewFormIsEdit}
+            eventData={interviewData}
+            applicantData={applicantData}
+          />
         </CCol>
       </CRow>
     </CContainer>

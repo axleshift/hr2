@@ -253,7 +253,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                     <CTableDataCell>{event.name}</CTableDataCell>
                                     <CTableDataCell>{event.capacity}</CTableDataCell>
                                     <CTableDataCell>{event.participants.length}</CTableDataCell>
-                                    <CTableDataCell>
+                                    <CTableRow>
                                       <CInputGroup>
                                         {event.participants.some(
                                           (p) =>
@@ -283,7 +283,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                           </CButton>
                                         )}
                                       </CInputGroup>
-                                    </CTableDataCell>
+                                    </CTableRow>
                                   </CTableRow>
                                 ))
                               ) : (
