@@ -168,7 +168,7 @@ const Login = () => {
                     <small>
                       By continuing, you agree to our
                       <a
-                        onClick={() => navigate('/policy')}
+                        onClick={() => navigate('/PolicyTerms')}
                         className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                       >
                         {' '}
@@ -176,7 +176,7 @@ const Login = () => {
                       </a>
                       and
                       <a
-                        onClick={() => navigate('/terms')}
+                        onClick={() => navigate('/PolicyTerms')}
                         className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                       >
                         {' '}

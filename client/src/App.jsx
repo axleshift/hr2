@@ -18,8 +18,8 @@ const VerifyEmail = React.lazy(() => import('./views/auth/VerifyEmail'))
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 const Page500 = React.lazy(() => import('./views/errors/Page500'))
 
-const Terms = React.lazy(() => import('./views/legal/Terms'))
-const Policy = React.lazy(() => import('./views/legal/Policy'))
+// const Terms = React.lazy(() => import('./views/legal/Terms'))
+const Policy = React.lazy(() => import('./views/legal/PolicyTerms'))
 
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('theme')
@@ -56,9 +56,10 @@ const App = () => {
                 <Route path="/register" name="Register Page" element={<Register />} />
                 <Route path="/404" name="Page 404" element={<Page404 />} />
                 <Route path="/500" name="Page 500" element={<Page500 />} />
+                <Route path="/PolicyTerms" name="Privacy Policy And Terms" element={<Policy />} />
 
-                <Route path="/terms" name="Terms of Service" element={<Terms />} />
-                <Route path="/policy" name="Privacy Policy" element={<Policy />} />
+                {/* <Route path="/terms" name="Terms of Service" element={<Terms />} />
+                <Route path="/policy" name="Privacy Policy" element={<Policy />} /> */}
 
                 {/* Protect DefaultLayout route */}
                 <Route
