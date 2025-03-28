@@ -50,6 +50,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { config } from '../../config'
 import DocumentForm from './modal/DocumentForm'
+import { trimString } from '../../utils'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const Screening = () => {
@@ -91,6 +92,9 @@ const Screening = () => {
   // Screening
   const [isScreeningFormModalVisible, setScreeningFormModalVisible] = useState(false)
   const [isScreeningHistoryModalVisible, setIsScreeningHistoryModalVisible] = useState(false)
+
+  // AI
+  const [isAiScreeningLoading, setIsAiScreeningLoading] = useState(false)
 
   const [pdfFile, setPdfFile] = useState(null)
   const [pdfScale, setPdfScale] = useState(1.0)
@@ -556,6 +560,7 @@ const Screening = () => {
   //   }
   // }
 
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       getAllData()
@@ -582,7 +587,8 @@ const Screening = () => {
         <CCol>
           <div className="d-flex justify-content-end">
             <CButton
-              className="btn btn-primary"
+              color="primary"
+              size="sm"
               onClick={() => {
                 setIsFormModalVisible(!isFormModalVisible)
                 setIsEdit(false)
@@ -1223,7 +1229,7 @@ const Screening = () => {
                       <strong>#</strong>
                     </CTableHeaderCell>
                     <CTableHeaderCell>
-                      <FontAwesomeIcon icon={faUser} />
+                      Applicant
                     </CTableHeaderCell>
                     <CTableHeaderCell>Email</CTableHeaderCell>
                     <CTableHeaderCell>Phone</CTableHeaderCell>
@@ -1245,7 +1251,7 @@ const Screening = () => {
                       return (
                         <CTableRow key={index}>
                           <CTableDataCell>
-                            <small>{item._id}</small>
+                            <small>{trimString(item._id, 10)}</small>
                           </CTableDataCell>
                           <CTableDataCell>
                             {item.firstname}, {item.lastname} {item?.middlename}
@@ -1304,6 +1310,12 @@ const Screening = () => {
                                 onClick={() => handleDelete(item._id)}
                               >
                                 Remove
+                              </CButton>
+                              <CButton
+                                color='warning'
+                                size='sm'
+                              >
+                                Manage
                               </CButton>
                             </div>
                           </CTableDataCell>

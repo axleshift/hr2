@@ -16,6 +16,7 @@ import {
   CButton,
   CBadge,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -23,6 +24,7 @@ import { faRefresh, faSearch, faUndo, faUser, faUserClock } from '@fortawesome/f
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
 import ScheduleForm from './modal/ScheduleForm'
+import { trimString } from '../../utils'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)
@@ -136,12 +138,14 @@ const Shortlisted = () => {
                   <CTableBody>
                     {isLoading ? (
                       <CTableRow>
-                        <CTableDataCell colSpan="6">Loading...</CTableDataCell>
+                        <CTableDataCell colSpan="6">
+                          <CSpinner variant="glow" size="sm" />
+                        </CTableDataCell>
                       </CTableRow>
                     ) : (
                       applicants.map((item, index) => (
                         <CTableRow key={index}>
-                          <CTableDataCell>{item._id}</CTableDataCell>
+                          <CTableDataCell>{trimString(item._id, 10)}</CTableDataCell>
                           <CTableDataCell>
                             {item.lastname}, {item.firstname}
                           </CTableDataCell>

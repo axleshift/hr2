@@ -296,7 +296,8 @@ const Jobposting = () => {
               <CButton
                 type="button"
                 onClick={() => setIsJobFormVisible(!isJobFormVisible)}
-                className="btn btn-primary w-30"
+                color="primary"
+                size="sm"
               >
                 Create
               </CButton>
@@ -541,7 +542,8 @@ const Jobposting = () => {
                             <CButton
                               type="button"
                               // onClick={() => handleEditReset()}
-                              className="btn btn-info w-30"
+                              color="info"
+                              size="sm"
                             >
                               <FontAwesomeIcon icon={faPrint} />
                             </CButton>
@@ -549,7 +551,7 @@ const Jobposting = () => {
                         )}
                       </div>
                       <div>
-                        <CButton color="primary" type="submit" disabled={!isChecked}>
+                        <CButton color="primary" size="sm" type="submit" disabled={!isChecked}>
                           {isLoading ? <CSpinner color="primary" /> : isEdit ? 'Update' : 'Add'}
                         </CButton>
                       </div>
@@ -576,12 +578,12 @@ const Jobposting = () => {
                 />
 
                 <CTooltip content="Search" placement="top">
-                  <CButton type="submit" className="btn btn-primary">
+                  <CButton type="submit" color="primary" size="sm">
                     <FontAwesomeIcon icon={faSearch} />
                   </CButton>
                 </CTooltip>
                 <CTooltip content="Reset" placement="top">
-                  <CButton onClick={() => resetData()} type="button" className="btn btn-primary">
+                  <CButton onClick={() => resetData()} type="button" color="primary" size="sm">
                     <FontAwesomeIcon icon={faRefresh} />
                   </CButton>
                 </CTooltip>
@@ -656,7 +658,8 @@ const Jobposting = () => {
                             <div className="d-flex justify-content-end">
                               <CButton
                                 onClick={() => handleEdit(data._id)}
-                                className="btn btn-primary"
+                                color="primary"
+                                size="sm"
                               >
                                 <FontAwesomeIcon icon={faPencil} className="me-2" />
                                 Edit
@@ -733,7 +736,8 @@ const Jobposting = () => {
                                 <div className="d-flex justify-content-end">
                                   <CButton
                                     onClick={() => handleEdit(data._id)}
-                                    className="btn btn-primary"
+                                    color="primary"
+                                    size="sm"
                                   >
                                     <FontAwesomeIcon icon={faPencil} className="me-2" />
                                     Edit

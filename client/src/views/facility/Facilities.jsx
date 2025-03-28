@@ -163,7 +163,7 @@ const Facilities = () => {
                           <CTableDataCell>{item.type}</CTableDataCell>
                           <CTableDataCell>{item.description}</CTableDataCell>
                           <CTableDataCell>
-                            <div className="d-flex flex-wrap gap-2">
+                            <div className="d-flex flex-row gap-2">
                               <CButton
                                 color="info"
                                 size="sm"

@@ -15,6 +15,7 @@ import {
   CInputGroup,
   CButton,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -105,66 +106,74 @@ const Interviews = () => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {upcomingEvents.map((event) => {
-                      return (
-                        <CTableRow key={event._id}>
-                          <CTooltip placement="top" content={event._id}>
-                            <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
-                          </CTooltip>
-                          <CTableDataCell>{event.name}</CTableDataCell>
-                          <CTableDataCell>
-                            {event.author.lastname}, {event.author.firstname}
-                          </CTableDataCell>
-                          <CTableDataCell>{event.type}</CTableDataCell>
-                          <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
-                          <CTableDataCell>
-                            {formatTime(event.timeslot?.start)} -{' '}
-                            {formatTime(event.timeslot?.start)}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            <div className="d-flex justify-content-center">
-                              {event.participants?.length}
-                            </div>
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            {event.isApproved.status ? (
-                              <span className="text-success">Approved</span>
-                            ) : (
-                              <small className="text-danger">Requires Approval</small>
-                            )}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            <div className="d-flex gap-2 flex-wrap">
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => {
-                                  setEventFormState('view')
-                                  setIsEventFormVisible(true)
-                                  setSelectedSlot(event.timeslot)
-                                }}
-                              >
-                                View
-                              </CButton>
-                              {(userInformation.role === 'admin' ||
-                                userInformation.role === 'manager') && (
+                    {isUpcomingEventsLoading ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="6">
+                          <CSpinner variant="glow" size="sm" />
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : (
+                      upcomingEvents.map((event) => {
+                        return (
+                          <CTableRow key={event._id}>
+                            <CTooltip placement="top" content={event._id}>
+                              <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
+                            </CTooltip>
+                            <CTableDataCell>{event.name}</CTableDataCell>
+                            <CTableDataCell>
+                              {event.author.lastname}, {event.author.firstname}
+                            </CTableDataCell>
+                            <CTableDataCell>{event.type}</CTableDataCell>
+                            <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
+                            <CTableDataCell>
+                              {formatTime(event.timeslot?.start)} -{' '}
+                              {formatTime(event.timeslot?.start)}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div className="d-flex justify-content-center">
+                                {event.participants?.length}
+                              </div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              {event.isApproved.status ? (
+                                <span className="text-success">Approved</span>
+                              ) : (
+                                <small className="text-danger">Requires Approval</small>
+                              )}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div className="d-flex gap-2 flex-row">
                                 <CButton
-                                  color="warning"
+                                  color="info"
                                   size="sm"
                                   onClick={() => {
-                                    setEventFormState('edit')
+                                    setEventFormState('view')
                                     setIsEventFormVisible(true)
                                     setSelectedSlot(event.timeslot)
                                   }}
                                 >
-                                  Manage
+                                  View
                                 </CButton>
-                              )}
-                            </div>
-                          </CTableDataCell>
-                        </CTableRow>
-                      )
-                    })}
+                                {(userInformation.role === 'admin' ||
+                                  userInformation.role === 'manager') && (
+                                  <CButton
+                                    color="warning"
+                                    size="sm"
+                                    onClick={() => {
+                                      setEventFormState('edit')
+                                      setIsEventFormVisible(true)
+                                      setSelectedSlot(event.timeslot)
+                                    }}
+                                  >
+                                    Manage
+                                  </CButton>
+                                )}
+                              </div>
+                            </CTableDataCell>
+                          </CTableRow>
+                        )
+                      })
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>
