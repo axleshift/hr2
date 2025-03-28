@@ -49,10 +49,48 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
+  // const onSubmit = (data) => {
+  //   setIsLoading(true)
+  //   const token = recaptchaRef.current.getValue()
+  //   login(data.username, data.password, (success) => {
+  //     setIsLoading(false)
+  //     if (success) {
+  //       navigate('/dashboard/overview')
+  //     } else {
+  //       setErrorMessage('Invalid username or password')
+  //     }
+  //   })
+  // }
+
   const onSubmit = (data) => {
     setIsLoading(true)
-    const token = recaptchaRef.current.getValue()
-    login(data.username, data.password, (success) => {
+
+    if (recaptchaRef.current) {
+      recaptchaRef.current.execute() // Trigger reCAPTCHA validation
+      recaptchaRef.current.data = data // Store form data inside recaptchaRef
+    } else {
+      console.error('reCAPTCHA ref is not available.')
+      setIsLoading(false)
+    }
+  }
+
+  const onReCAPTCHAChange = (token) => {
+    if (!token) {
+      console.error('reCAPTCHA token is undefined.')
+      setErrorMessage('reCAPTCHA validation failed. Please try again.')
+      setIsLoading(false)
+      return
+    }
+
+    // Retrieve stored form data from recaptchaRef
+    const formData = recaptchaRef.current.data
+    if (!formData) {
+      console.error('Form data is missing.')
+      setIsLoading(false)
+      return
+    }
+
+    login(formData.username, formData.password, (success) => {
       setIsLoading(false)
       if (success) {
         navigate('/dashboard/overview')
@@ -71,7 +109,6 @@ const Login = () => {
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
-        {isLoading && <CSpinner color="primary" variant="grow" className="loading-overlay" />}
         <CRow className="justify-content-center">
           <CCol md={8} lg={6} xl={5} className="my-2">
             <CCard className="p-1 p-sm-4 shadow">
@@ -84,6 +121,7 @@ const Login = () => {
                     ref={recaptchaRef}
                     size="invisible"
                     sitekey={config.google.recaptcha.siteKey}
+                    onChange={onReCAPTCHAChange}
                   />
 
                   <CInputGroup className="mb-3">
@@ -142,14 +180,22 @@ const Login = () => {
                     </small>
                   </p>
 
-                  <div className="d-grid mb-3">
+                  <div className="d-grid">
                     <CButtonGroup>
-                      <CButton type="submit" color="primary">
-                        Login
-                      </CButton>
-                      <CButton color="outline-primary" onClick={() => navigate('/register')}>
-                        Signup
-                      </CButton>
+                      {!isLoading ? (
+                        <>
+                          <CButton type="submit" color="primary">
+                            Login
+                          </CButton>
+                          <CButton color="outline-primary" onClick={() => navigate('/register')}>
+                            Signup
+                          </CButton>
+                        </>
+                      ) : (
+                        <CButton color="outline-info" disabled>
+                          <CSpinner size="sm" /> <span>Logging in...</span>
+                        </CButton>
+                      )}
                     </CButtonGroup>
                   </div>
                 </CForm>
@@ -157,7 +203,6 @@ const Login = () => {
             </CCard>
           </CCol>
         </CRow>
-
         {config.env === 'development' && (
           <CRow>
             <CCol>
