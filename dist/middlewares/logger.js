@@ -11,15 +11,13 @@ const pino_1 = __importDefault(require("pino"));
 const config_1 = require("../config");
 const logger = (0, pino_1.default)({
     level: config_1.config.env === "production" ? "info" : "debug",
-    transport: config_1.config.env !== "production"
-        ? {
-            target: "pino-pretty",
-            options: {
-                colorize: true, // Colorize logs
-                translateTime: true, // Add timestamps
-                ignore: "pid,hostname", // Ignore process ID and hostname in logs
-            },
-        }
-        : undefined, // No transport in production
+    transport: {
+        target: "pino-pretty",
+        options: {
+            colorize: true, // Colorize logs
+            translateTime: true, // Add timestamps
+            ignore: "pid,hostname", // Ignore process ID and hostname in logs
+        },
+    }
 });
 exports.default = logger;
