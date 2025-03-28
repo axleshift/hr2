@@ -19,7 +19,7 @@ We are committed to maintaining the security of our software. If you discover a 
    - Steps to reproduce the issue
    - The impact of the vulnerability
    - Potential attack scenarios
-3. **Submit vulnerabilities via email** to [security@example.com](mailto:security@example.com). We encourage you to use encryption for sensitive information. Please request our public PGP key if needed.
+3. **Submit vulnerabilities via email** to [hr2axleshift@gmail.com](mailto:hr2axleshift@gmail.com). We encourage you to use encryption for sensitive information. Please request our public PGP key if needed.
 
 ## Disclosure Policy
 
