@@ -92,10 +92,10 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
-        httpOnly: config_1.config.server.session.httpOnly, // Prevents XSS attacks from accessing cookies
-        secure: config_1.config.env === "production",
-        maxAge: config_1.config.server.session.expiry,
-        sameSite: "strict", // Prevent cross-site requests
+        secure: config_1.config.env === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "strict",
     },
     store: mongoStore,
 }));
