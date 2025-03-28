@@ -99,7 +99,8 @@ router.get(
   "/timeslot/:facilityId/:date",
   verifySession({
     permissions: ["user", "admin"],
-  }),
+  }, true,
+  ),
   getAllFacilityTimeslotsForDate
 );
 
