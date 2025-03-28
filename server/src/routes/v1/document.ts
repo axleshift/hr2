@@ -15,7 +15,6 @@ router.post(
       permissions: ["user", "admin"],
     },
     true,
-    true
   ),
   createDocument
 );
@@ -28,7 +27,6 @@ router.put(
       permissions: ["user", "admin"],
     },
     true,
-    true
   ),
   updateDocument
 );
@@ -40,7 +38,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   getDocumentById
 );
@@ -52,7 +49,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   getDocumentByApplicantId
 );
@@ -64,7 +60,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   getDocumentByCategory
 );
@@ -76,7 +71,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   searchDocument
 );

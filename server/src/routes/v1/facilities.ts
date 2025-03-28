@@ -39,7 +39,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createFacility
 );
@@ -50,7 +49,6 @@ router.put(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   updateFacility
 );
@@ -61,7 +59,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getAllFacilities
 );
@@ -72,7 +69,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getFacilityById
 );
@@ -83,7 +79,6 @@ router.delete(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   removeFacility
 );
@@ -96,7 +91,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createFacilityTimeslot
 );
@@ -115,7 +109,6 @@ router.delete(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   removeFacilityTimeslot
 )
@@ -128,7 +121,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createFacilityEvent
 )
@@ -139,7 +131,6 @@ router.put(
     permissions: ["user", "admin"]
   },
     true,
-    true
   ),
   updateFacilityEvent
 )
@@ -150,7 +141,6 @@ router.delete(
     permissions: ["user", "admin"]
   },
     true,
-    true
   ),
   deleteFacilityEvent
 )
@@ -161,7 +151,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getFacilityCalendarStates
 )
@@ -172,7 +161,6 @@ router.get(
     permissions: ["user", "admin"]
   },
     true,
-    true
   ),
   getFacilityEventByID
 )
@@ -183,7 +171,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getFacilityEventsForDate
 )
@@ -194,7 +181,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getUpcomingEvents
 )
@@ -207,7 +193,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   bookApplicantToEvent
 )
@@ -218,7 +203,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   SendEmailToFacilityEventParticipants
 )
@@ -229,7 +213,6 @@ router.delete(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   unbookApplicantFromEvent
 )

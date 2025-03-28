@@ -17,9 +17,8 @@ router.post(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   addNewResume
 );
 router.put(
@@ -27,9 +26,8 @@ router.put(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   updateResume
 );
 router.get(
@@ -37,9 +35,8 @@ router.get(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   getAllResumeData
 );
 
@@ -48,9 +45,8 @@ router.get(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   getApplicantByDocumentCategory
 );
 
@@ -59,9 +55,8 @@ router.get(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   getResumeFile
 );
 router.get(
@@ -69,9 +64,8 @@ router.get(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   searchResume
 );
 router.get(
@@ -79,9 +73,8 @@ router.get(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   getResumeById
 );
 router.delete(
@@ -89,9 +82,8 @@ router.delete(
   verifySession({
     permissions: ["user", "admin"],
   },
-  true,
-  true
-),
+    true,
+  ),
   deleteResume
 );
 

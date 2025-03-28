@@ -13,7 +13,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createTag
 );
@@ -23,7 +22,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getAllTags
 );
@@ -33,7 +31,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   searchTags
 );
@@ -43,7 +40,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getTagByCategory
 );
@@ -53,7 +49,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getTagById
 );
@@ -63,7 +58,6 @@ router.put(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   updateTag
 );
@@ -73,7 +67,6 @@ router.delete(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   deleteTag
 );

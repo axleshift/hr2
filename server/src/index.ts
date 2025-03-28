@@ -22,7 +22,6 @@ import { connectDB } from "./database/connectDB";
 import MongoStore from "connect-mongo";
 import errorHandler from "./middlewares/errorHandler";
 import verifyApiKey from "./middlewares/verifyApiKey";
-import generateCsrfToken from "./middlewares/csrfToken";
 import { verifyMailConn } from "./utils/mailHandler";
 
 const app: Application = express();
@@ -68,7 +67,7 @@ app.use(
       httpOnly: config.server.session.httpOnly as boolean, // Prevents XSS attacks from accessing cookies
       secure: config.env === "production",
       maxAge: config.server.session.expiry,
-      sameSite: 'strict', // Ensure that the cookie is not sent with cross-origin requests. Prevents CSRF attacks
+      sameSite: "strict", // Prevent cross-site requests
     },
     store: mongoStore,
   })
@@ -136,7 +135,7 @@ connectDB().then(async () => {
           if (sessionExceptions.includes(metadata.path)) {
             router.use(metadata.path, routeRouter);
           } else {
-            router.use(metadata.path, verifyApiKey, generateCsrfToken, routeRouter);
+            router.use(metadata.path, verifyApiKey, routeRouter);
           }
           logger.info(`🚀 Route loaded: ${version}${metadata.path}`);
         }

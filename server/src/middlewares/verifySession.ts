@@ -4,7 +4,6 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { config } from "../config";
 
 // sendError helper function
 const sendError = (res: Response, statusCode: number, message: string) => {
@@ -14,13 +13,6 @@ const sendError = (res: Response, statusCode: number, message: string) => {
     success: false,
     message,
   });
-};
-
-// validate csrf token helper function
-const validateCSRFToken = (req: Request) => {
-  const csrfToken = req.session?.csrfToken;
-  const clientToken = req.headers["x-csrf-token"] as string || csrfToken;
-  return csrfToken && clientToken && csrfToken === clientToken;
 };
 
 interface Metadata {
@@ -39,7 +31,7 @@ interface Metadata {
  * It allows guest access if enabled
  */
 
-const verifySession = (metadata: Metadata, validateCsrf = true, allowGuest = false) => {
+const verifySession = (metadata: Metadata, allowGuest = false) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.session) {
       return sendError(res, 401, "Unauthorized: Session not initialized");
@@ -61,10 +53,6 @@ const verifySession = (metadata: Metadata, validateCsrf = true, allowGuest = fal
     const permissions = metadata.permissions;
     if (permissions.length > 0 && !permissions.includes(user.role)) {
       return sendError(res, 403, "Forbidden: Insufficient permissions");
-    }
-
-    if (validateCsrf && config.server.csrfProtection && !validateCSRFToken(req)) {
-      return sendError(res, 403, "Forbidden: Invalid CSRF token");
     }
 
     next();

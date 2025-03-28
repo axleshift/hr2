@@ -13,7 +13,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   updateApikey
 );

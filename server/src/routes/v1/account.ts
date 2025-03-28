@@ -18,7 +18,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   getAllAccounts
 );
@@ -28,7 +27,6 @@ router.get(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   getAccountById
 );
@@ -38,7 +36,6 @@ router.put(
     permissions: ["user", "admin"],
   },
   true,
-  true
 ),
   updateAccount
 );
