@@ -64,10 +64,10 @@ app.use(
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
-      httpOnly: config.server.session.httpOnly as boolean, // Prevents XSS attacks from accessing cookies
-      secure: config.env === "production",
-      maxAge: config.server.session.expiry,
-      sameSite: "strict", // Prevent cross-site requests
+      secure: config.env === 'production',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "strict",
     },
     store: mongoStore,
   })
