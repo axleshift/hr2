@@ -10,16 +10,16 @@ dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 const jobposterController_1 = require("../../database/v1/controllers/jobposterController");
 router.post("/:id/post", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), jobposterController_1.createJobposter);
 router.get("/all", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), jobposterController_1.getAllJobposters);
 router.get("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), jobposterController_1.getJobposterByRefId);
 router.delete("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), jobposterController_1.removeJobposter);
 exports.default = {
     metadata: {

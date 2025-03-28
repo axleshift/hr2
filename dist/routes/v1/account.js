@@ -14,13 +14,13 @@ dotenv_1.default.config();
 const accountController_1 = require("../../database/v1/controllers/accountController");
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 router.get("/all", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
 }, true), accountController_1.getAllAccounts);
 router.get("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
 }, true), accountController_1.getAccountById);
 router.put("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
 }, true), accountController_1.updateAccount);
 exports.default = {
     metadata: {

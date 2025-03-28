@@ -8,35 +8,34 @@ const router = (0, express_1.Router)();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 const applicantController_1 = require("../../database/v1/controllers/applicantController");
 router.post("/", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["applicant", "admin", "manager"],
 }, true), applicantController_1.addNewResume);
 router.put("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
 }, true), applicantController_1.updateResume);
 router.get("/all", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), applicantController_1.getAllResumeData);
 router.get("/category/:category", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), applicantController_1.getApplicantByDocumentCategory);
 router.get("/download/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
 }, true), applicantController_1.getResumeFile);
 router.get("/search", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
 }, true), applicantController_1.searchResume);
 router.get("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
 }, true), applicantController_1.getResumeById);
 router.delete("/:id", (0, verifySession_1.default)({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
 }, true), applicantController_1.deleteResume);
 exports.default = {
     metadata: {
         path: "/applicant",
         method: ["POST", "GET"],
-        description: "This route is used to add, update, delete, get all, get by id, search and download resume data",
-        permissions: ["user", "admin"],
+        description: "This route is used to add, update, delete, get all, get by ID, search, and download resume data",
     },
     router,
 };
