@@ -27,4 +27,4 @@ const apiKeySchema = new mongoose_1.default.Schema({
     timestamps: true,
     updateAt: true,
 });
-exports.default = mongoose_1.default.model("Test", apiKeySchema);
+exports.default = mongoose_1.default.model("Apikey", apiKeySchema);

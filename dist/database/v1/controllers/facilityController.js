@@ -3,14 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SendEmailToFacilityEventsParticipants = exports.UnbookApplicantFromEvent = exports.BookApplicantToEvent = exports.getUpcomingEvents = exports.getFacilityUpcomingEvents = exports.getFacilityCalendarStates = exports.getFacilityEventsForDate = exports.updateFacilityEvent = exports.getFacilityEventByID = exports.createFacilityEvent = exports.removeFacilityTimeslot = exports.getAllFacilityTimeslotsForDate = exports.createFacilityTimeslot = exports.removeFacility = exports.getFacilityById = exports.getAllFacilities = exports.updateFacility = exports.createFacility = void 0;
+exports.SendEmailToFacilityEventParticipants = exports.unbookApplicantFromEvent = exports.bookApplicantToEvent = exports.getUpcomingEvents = exports.getFacilityUpcomingEvents = exports.getFacilityCalendarStates = exports.getFacilityEventsForDate = exports.deleteFacilityEvent = exports.updateFacilityEvent = exports.getFacilityEventByID = exports.createFacilityEvent = exports.removeFacilityTimeslot = exports.getAllFacilityTimeslotsForDate = exports.createFacilityTimeslot = exports.removeFacility = exports.getFacilityById = exports.getAllFacilities = exports.updateFacility = exports.createFacility = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const facilityModel_1 = __importDefault(require("../models/facilityModel"));
-const EventModel_1 = __importDefault(require("../models/EventModel"));
-const time_1 = __importDefault(require("../models/time"));
-const applicant_1 = __importDefault(require("../models/applicant"));
+const facilityEventModel_1 = __importDefault(require("../models/facilityEventModel"));
+const timeslotModel_1 = __importDefault(require("../models/timeslotModel"));
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const mailHandler_1 = require("../../../utils/mailHandler");
+const path_1 = __importDefault(require("path"));
+const promises_1 = __importDefault(require("fs/promises"));
 const createFacility = async (req, res) => {
     try {
         const { name, type, description, location } = req.body;
@@ -37,17 +39,15 @@ const createFacility = async (req, res) => {
 exports.createFacility = createFacility;
 const updateFacility = async (req, res) => {
     try {
-        console.log("req.params", req.params);
-        console.log("req.body", req.body);
-        const { id } = req.params;
+        const { facilityId } = req.params;
         const { name, type, description, location } = req.body;
-        if (!id) {
+        if (!facilityId) {
             return res.status(400).json({ message: "Facility id is required" });
         }
         if (!name || !type || !description || !location) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const facility = await facilityModel_1.default.findById(id);
+        const facility = await facilityModel_1.default.findById(facilityId);
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
@@ -75,7 +75,7 @@ const getAllFacilities = async (req, res) => {
         }
         // get all timeslots for each facility
         const facilitiesData = await Promise.all(facilities.map(async (facility) => {
-            const timeslots = await time_1.default.find({ facility: facility._id });
+            const timeslots = await timeslotModel_1.default.find({ facility: facility._id });
             return {
                 ...facility.toObject(),
                 timeslots,
@@ -89,37 +89,60 @@ const getAllFacilities = async (req, res) => {
     }
 };
 exports.getAllFacilities = getAllFacilities;
+// export const getFacilityById = async (req: req, res: res) => {
+//   try {
+//     const { facilityId } = req.params;
+//     const facility = await Facility.findById(facilityId);
+//     if (!facility) {
+//       return res.status(404).json({ message: "Facility not found" });
+//     }
+//     const timeslots = await Timeslot.find({ facility: facilityId });
+//     const timeslotsData = await Promise.all(timeslots.map(async (timeslot) => {
+//       const participants = await Applicant.find({ events: timeslot.event });
+//       return {
+//         ...timeslot.toObject(),
+//         participants,
+//       };
+//     }));
+//     const facilityData = {
+//       ...facility.toObject(),
+//       timeslots: timeslotsData,
+//     };
+//     return res.status(200).json({ message: "Facility found", data: facilityData });
+//   } catch (error) {
+//     logger.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 const getFacilityById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const facility = await facilityModel_1.default.findById(id);
+        const { facilityId } = req.params;
+        const facility = await facilityModel_1.default.findById(facilityId).populate({
+            path: "timeslots",
+            populate: {
+                path: "event",
+                model: "facilityEvents",
+                // populate: {
+                //   path: "participants.applicant",
+                //   model: "Applicant",
+                // },
+            },
+        });
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
-        const timeslots = await time_1.default.find({ facility: id });
-        const timeslotsData = await Promise.all(timeslots.map(async (timeslot) => {
-            const participants = await applicant_1.default.find({ events: timeslot.event });
-            return {
-                ...timeslot.toObject(),
-                participants,
-            };
-        }));
-        const facilityData = {
-            ...facility.toObject(),
-            timeslots: timeslotsData,
-        };
-        return res.status(200).json({ message: "Facility found", data: facilityData });
+        return res.status(200).json({ message: "Facility found", data: facility });
     }
     catch (error) {
-        logger_1.default.error(error);
+        console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
 exports.getFacilityById = getFacilityById;
 const removeFacility = async (req, res) => {
     try {
-        const { id } = req.params;
-        const facility = await facilityModel_1.default.findById(id);
+        const { facilityId } = req.params;
+        const facility = await facilityModel_1.default.findById(facilityId);
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
@@ -137,30 +160,35 @@ const convertTimeToMinutes = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
 };
-const convertMinutesToTime = (minutes) => {
-    const hours = Math.floor(minutes / 60);
+const convertMinutesToTime = (minutes, format = "24h") => {
+    let hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return `${hours}:${mins < 10 ? '0' : ''}${mins}`;
+    if (format === "12h") {
+        const period = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12; // Convert 0 to 12 for AM
+        return `${hours}:${mins < 10 ? "0" : ""}${mins} ${period}`;
+    }
+    return `${hours}:${mins < 10 ? "0" : ""}${mins}`;
 };
 const createFacilityTimeslot = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { facilityId } = req.params;
         const { date, start, end } = req.body;
-        if (!id) {
+        if (!facilityId) {
             return res.status(400).json({ message: "Facility id is required" });
         }
         if (!date || !start || !end) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const facility = await facilityModel_1.default.findById(id);
+        const facility = await facilityModel_1.default.findById(facilityId);
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
         const startMinutes = convertTimeToMinutes(start);
         const endMinutes = convertTimeToMinutes(end);
         // Check if timeslot overlaps with existing timeslots
-        const overlappingTimeslot = await time_1.default.findOne({
-            facility: id,
+        const overlappingTimeslot = await timeslotModel_1.default.findOne({
+            facility: facilityId,
             date,
             $or: [
                 { start: { $lt: endMinutes, $gte: startMinutes } },
@@ -173,11 +201,11 @@ const createFacilityTimeslot = async (req, res) => {
         }
         const timeslotData = {
             date,
-            facility: id,
+            facility: facilityId,
             start: startMinutes,
             end: endMinutes,
         };
-        const newTimeslot = await time_1.default.create(timeslotData);
+        const newTimeslot = await timeslotModel_1.default.create(timeslotData);
         if (!newTimeslot) {
             return res.status(500).json({ message: "Timeslot not created" });
         }
@@ -196,45 +224,53 @@ const createFacilityTimeslot = async (req, res) => {
 exports.createFacilityTimeslot = createFacilityTimeslot;
 const getAllFacilityTimeslotsForDate = async (req, res) => {
     try {
-        const { id, date } = req.params;
-        console.log("id", id);
-        console.log("date", new Date(date).toISOString());
-        if (!id) {
-            return res.status(400).json({ message: "Facility id is required" });
+        const { facilityId, date } = req.params;
+        // Input Validation
+        if (!facilityId) {
+            return res.status(400).json({ message: 'Facility ID is required.' });
         }
         if (!date) {
-            return res.status(400).json({ message: "Date is required" });
+            return res.status(400).json({ message: 'Date is required.' });
         }
-        const facility = await facilityModel_1.default.findById(id);
+        // Validate Facility Existence
+        const facility = await facilityModel_1.default.findById(facilityId);
         if (!facility) {
-            return res.status(404).json({ message: "Facility not found" });
+            return res.status(404).json({ message: 'Facility not found.' });
         }
+        // Date Range Calculation
         const today = new Date(date);
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const timeslots = await time_1.default.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
-        if (!timeslots) {
-            return res.status(404).json({ message: "Timeslots not found" });
-        }
-        const timeslotsData = timeslots.map((timeslot) => {
-            return {
-                ...timeslot.toObject(),
-                start: convertMinutesToTime(parseInt(timeslot.start)),
-                end: convertMinutesToTime(parseInt(timeslot.end)),
-            };
+        // Fetching Timeslots with Population
+        const timeslots = await timeslotModel_1.default.find({
+            facility: facilityId,
+            date: { $gte: today, $lt: tomorrow },
+        }).populate({
+            path: 'facility',
+            model: 'Facility',
+            select: 'name location',
         });
-        return res.status(200).json({ message: "Timeslots found", data: timeslotsData });
+        if (!timeslots.length) {
+            return res.status(404).json({ message: 'No timeslots found for the specified date.', date: today });
+        }
+        // Data Transformation
+        const timeslotsData = timeslots.map((timeslot) => ({
+            ...timeslot.toObject(),
+            start: convertMinutesToTime(parseInt(timeslot.start)),
+            end: convertMinutesToTime(parseInt(timeslot.end)),
+        }));
+        return res.status(200).json({ message: 'Timeslots retrieved successfully.', data: timeslotsData });
     }
     catch (error) {
-        logger_1.default.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error('Error retrieving timeslots:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 exports.getAllFacilityTimeslotsForDate = getAllFacilityTimeslotsForDate;
 const removeFacilityTimeslot = async (req, res) => {
     try {
-        const { id } = req.params;
-        const timeslot = await time_1.default.findById(id);
+        const { timeslotId } = req.params;
+        const timeslot = await timeslotModel_1.default.findById(timeslotId);
         if (!timeslot) {
             return res.status(404).json({ message: "Timeslot not found" });
         }
@@ -244,11 +280,11 @@ const removeFacilityTimeslot = async (req, res) => {
             return res.status(404).json({ message: "Facility not found" });
         }
         // check if the timeslot is associated with an event
-        const event = await EventModel_1.default.findOne({ timeslot: id });
+        const event = await facilityEventModel_1.default.findOne({ timeslot: timeslotId });
         if (event) {
             return res.status(400).json({ message: "Timeslot is associated with an event. Cannot be deleted." });
         }
-        facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(id));
+        facility.timeslots = facility.timeslots.filter((timeslotId) => !timeslotId.equals(timeslotId));
         await facility.save();
         await timeslot.deleteOne();
         return res.status(200).json({ message: "Timeslot removed" });
@@ -270,11 +306,11 @@ const createFacilityEvent = async (req, res) => {
         if (!name || !capacity) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const timeslot = await time_1.default.findById(timeslotId);
+        const timeslot = await timeslotModel_1.default.findById(timeslotId);
         if (!timeslot) {
             return res.status(404).json({ message: "Timeslot not found" });
         }
-        if (!timeslot.isAvailable) {
+        if (timeslot.event) {
             return res.status(400).json({ message: "Timeslot is not available" });
         }
         const date = timeslot.date;
@@ -296,7 +332,7 @@ const createFacilityEvent = async (req, res) => {
             facility: timeslot.facility,
             timeslot: timeslotId,
         };
-        const newEvent = await EventModel_1.default.create(eventData);
+        const newEvent = await facilityEventModel_1.default.create(eventData);
         if (!newEvent) {
             return res.status(500).json({ message: "Event not created" });
         }
@@ -316,14 +352,15 @@ const createFacilityEvent = async (req, res) => {
 exports.createFacilityEvent = createFacilityEvent;
 const getFacilityEventByID = async (req, res) => {
     try {
-        const { id } = req.params;
-        if (!id) {
+        const { eventId } = req.params;
+        if (!eventId) {
             return res.status(400).json({ message: "Event ID is required" });
         }
-        const event = await EventModel_1.default.findById(id).populate({
-            path: 'participants',
+        const event = await facilityEventModel_1.default.findById(eventId).populate({
+            path: 'participants.applicant',
             model: 'Applicant',
             select: 'firstname lastname email phone',
+            transform: doc => doc ? doc.toObject() : doc
         });
         if (!event) {
             return res.status(404).json({ message: "No event found" });
@@ -346,7 +383,7 @@ const updateFacilityEvent = async (req, res) => {
         if (!name || !capacity) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const timeslot = await time_1.default.findById(timeslotId);
+        const timeslot = await timeslotModel_1.default.findById(timeslotId);
         if (!timeslot) {
             return res.status(404).json({ message: "Timeslot not found" });
         }
@@ -359,7 +396,7 @@ const updateFacilityEvent = async (req, res) => {
             return res.status(400).json({ message: "User session not found" });
         }
         const authorId = req.session.user._id;
-        const event = await EventModel_1.default.findOne({ timeslot: timeslotId });
+        const event = await facilityEventModel_1.default.findOne({ timeslot: timeslotId });
         if (!event) {
             return res.status(404).json({ message: "Event not found" });
         }
@@ -369,17 +406,10 @@ const updateFacilityEvent = async (req, res) => {
         event.type = type;
         event.date = formattedDate;
         event.capacity = capacity;
-        // Ensure isApproved exists before modifying
-        if (!event.isApproved) {
-            event.isApproved = {
-                status: false,
-                approvedBy: new mongoose_1.default.Types.ObjectId(req.session.user._id),
-            };
-        }
-        else {
-            event.isApproved.status = isApproved;
-            event.isApproved.approvedBy = new mongoose_1.default.Types.ObjectId(req.session.user._id);
-        }
+        event.isApproved = {
+            status: isApproved,
+            approvedBy: new mongoose_1.default.Types.ObjectId(req.session.user._id)
+        };
         const updatedEvent = await event.save();
         if (!updatedEvent) {
             return res.status(500).json({ message: "Event not updated" });
@@ -392,23 +422,56 @@ const updateFacilityEvent = async (req, res) => {
     }
 };
 exports.updateFacilityEvent = updateFacilityEvent;
+const deleteFacilityEvent = async (req, res) => {
+    try {
+        const { timeslotId } = req.params;
+        if (!timeslotId) {
+            return res.status(400).json({ message: "Timeslot ID is required." });
+        }
+        // Find the timeslot by ID
+        const timeslot = await timeslotModel_1.default.findById(timeslotId);
+        if (!timeslot) {
+            return res.status(404).json({ message: "Timeslot not found." });
+        }
+        // Check if the timeslot has an associated event
+        if (!timeslot.event) {
+            return res.status(404).json({ message: "No event associated with this timeslot." });
+        }
+        // Delete the associated event
+        const event = await facilityEventModel_1.default.findByIdAndDelete(timeslot.event);
+        if (!event) {
+            return res.status(404).json({ message: "Event not found." });
+        }
+        // Update the timeslot to remove the reference to the deleted event and mark it as available
+        // timeslot.event = null;
+        // timeslot.isAvailable = true;
+        await timeslotModel_1.default.updateOne({ _id: timeslotId }, { $unset: { event: "", isAvailable: true } });
+        await timeslot.save();
+        return res.status(200).json({ message: "Event deleted and timeslot updated successfully." });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        return res.status(500).json({ message: "Internal server error." });
+    }
+};
+exports.deleteFacilityEvent = deleteFacilityEvent;
 const getFacilityEventsForDate = async (req, res) => {
     try {
-        const { id, date } = req.params;
-        if (!id) {
+        const { eventId, date } = req.params;
+        if (!eventId) {
             return res.status(400).json({ message: "Facility id is required" });
         }
         if (!date) {
             return res.status(400).json({ message: "Date is required" });
         }
-        const facility = await facilityModel_1.default.findById(id);
+        const facility = await facilityModel_1.default.findById(eventId);
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
         const today = new Date(date);
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const events = await EventModel_1.default.find({ facility: id, date: { $gte: today, $lt: tomorrow } });
+        const events = await facilityEventModel_1.default.find({ facility: eventId, date: { $gte: today, $lt: tomorrow } });
         if (!events) {
             return res.status(404).json({ message: "Events not found" });
         }
@@ -423,13 +486,13 @@ exports.getFacilityEventsForDate = getFacilityEventsForDate;
 // TODO: add pagination 
 const getFacilityCalendarStates = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { eventId } = req.params;
         // Validate facility ID
-        if (!id) {
+        if (!eventId) {
             return res.status(400).json({ message: "Facility id is required" });
         }
         // Retrieve facility by ID
-        const facility = await facilityModel_1.default.findById(id);
+        const facility = await facilityModel_1.default.findById(eventId);
         if (!facility) {
             return res.status(404).json({ message: "Facility not found" });
         }
@@ -446,7 +509,7 @@ const getFacilityCalendarStates = async (req, res) => {
         startDate.setMonth(startDate.getMonth() - 1);
         const endDate = new Date(parseInt(year), parseInt(month), 0);
         endDate.setMonth(endDate.getMonth() + 1);
-        const events = await EventModel_1.default.find({ facility: id, date: { $gte: startDate, $lte: endDate } });
+        const events = await facilityEventModel_1.default.find({ facility: eventId, date: { $gte: startDate, $lte: endDate } });
         const formattedEvents = events.map((event) => {
             return new Date(event.date).toISOString();
         });
@@ -473,7 +536,7 @@ const getFacilityUpcomingEvents = async (req, res) => {
             return res.status(404).json({ message: "Facility not found" });
         }
         const today = new Date();
-        const events = await EventModel_1.default.find({ date: { $gte: today } });
+        const events = await facilityEventModel_1.default.find({ date: { $gte: today } });
         return res.status(200).json({ message: "Events found", data: events });
     }
     catch (error) {
@@ -494,7 +557,7 @@ const getUpcomingEvents = async (req, res) => {
         if (typeof req.query.eventType === "string") {
             query.type = req.query.eventType;
         }
-        const events = await EventModel_1.default.find(query)
+        const events = await facilityEventModel_1.default.find(query)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
@@ -511,7 +574,7 @@ const getUpcomingEvents = async (req, res) => {
             },
             {
                 path: 'timeslot',
-                model: 'Times',
+                model: 'Timeslot',
                 select: '_id date start end event'
             },
             {
@@ -539,7 +602,7 @@ const getUpcomingEvents = async (req, res) => {
         if (!events.length) {
             return res.status(404).json({ message: "No upcoming events found" });
         }
-        const totalItems = await EventModel_1.default.countDocuments(query);
+        const totalItems = await facilityEventModel_1.default.countDocuments(query);
         const totalPages = Math.ceil(totalItems / limit);
         return res.status(200).json({
             message: "Upcoming events retrieved successfully",
@@ -555,122 +618,196 @@ const getUpcomingEvents = async (req, res) => {
     }
 };
 exports.getUpcomingEvents = getUpcomingEvents;
-const BookApplicantToEvent = async (req, res) => {
+const bookApplicantToEvent = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { eventId } = req.params;
         const { applicantId } = req.body;
-        if (!id) {
-            return res.status(400).json({ message: "Event id is required" });
+        // Validate input
+        if (!eventId) {
+            return res.status(400).json({ message: 'Event ID is required.' });
         }
         if (!applicantId) {
-            return res.status(400).json({ message: "Applicant id is required" });
+            return res.status(400).json({ message: 'Applicant ID is required.' });
         }
-        const event = await EventModel_1.default.findById(id);
+        // Retrieve event and applicant concurrently
+        const [event, applicant] = await Promise.all([
+            facilityEventModel_1.default.findById(eventId),
+            applicantModel_1.default.findById(applicantId),
+        ]);
+        // Check if event exists
         if (!event) {
-            return res.status(404).json({ message: "Event not found" });
+            return res.status(404).json({ message: 'Event not found.' });
         }
-        const applicant = await applicant_1.default.findById(applicantId);
+        // Check if applicant exists
         if (!applicant) {
-            return res.status(404).json({ message: "Applicant not found" });
+            return res.status(404).json({ message: 'Applicant not found.' });
         }
-        if (event.participants.includes(applicantId)) {
-            return res.status(400).json({ message: "Applicant already booked for event" });
+        // Check if applicant is already booked for the event
+        const isAlreadyBooked = event.participants.some((p) => p.applicant.toString() === applicantId);
+        if (isAlreadyBooked) {
+            return res.status(400).json({ message: 'Applicant is already booked for this event.' });
         }
+        // Check if event capacity has been reached
         if (event.participants.length >= event.capacity) {
-            return res.status(400).json({ message: "Event is full" });
+            return res.status(400).json({ message: 'Event has reached its full capacity.' });
         }
-        if (applicant.events.includes(applicantId)) {
-            return res.status(400).json({ message: "Applicant already booked for event" });
+        // Check if applicant is already booked for this event in their own events array
+        const isApplicantAlreadyBooked = applicant.events.some((event) => event.toString() === eventId);
+        if (isApplicantAlreadyBooked) {
+            return res.status(400).json({ message: 'Applicant is already booked for this event.' });
         }
-        applicant.events.push(new mongoose_1.default.Types.ObjectId(id));
-        event.participants.push(applicantId);
-        await event.save();
-        await applicant.save();
-        return res.status(200).json({ message: "Applicant booked for event" });
+        // Add event to applicant's events array
+        applicant.events.push(new mongoose_1.default.Types.ObjectId(eventId));
+        // Add applicant to event's participants array
+        event.participants.push({
+            applicant: new mongoose_1.default.Types.ObjectId(applicantId.toString()),
+            mail: {
+                sent: false,
+                reason: '',
+            },
+        });
+        // Save changes concurrently
+        await Promise.all([event.save(), applicant.save()]);
+        return res.status(200).json({ message: 'Applicant successfully booked for the event.' });
     }
     catch (error) {
-        logger_1.default.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error('Error booking applicant to event:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
     }
 };
-exports.BookApplicantToEvent = BookApplicantToEvent;
-const UnbookApplicantFromEvent = async (req, res) => {
+exports.bookApplicantToEvent = bookApplicantToEvent;
+const unbookApplicantFromEvent = async (req, res) => {
     try {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ message: "Event ID is required" });
+        const { eventId } = req.params;
+        const { applicantId } = req.query;
+        // Validate required parameters
+        if (!eventId || !applicantId) {
+            return res.status(400).json({ message: "Event ID and Applicant ID are required." });
         }
-        if (!req.query.applicantId) {
-            return res.status(400).json({ message: "Applicant ID is required" });
+        // Validate MongoDB ObjectIds
+        if (!mongoose_1.default.isValidObjectId(eventId) || !mongoose_1.default.isValidObjectId(applicantId)) {
+            return res.status(400).json({ message: "Invalid Event ID or Applicant ID." });
         }
-        // converts query to string, sometimes I hate typescript man.
-        const applicantId = new mongoose_1.default.Types.ObjectId(req.query.applicantId);
-        // Find the event by ID
-        const event = await EventModel_1.default.findById(id);
-        if (!event) {
-            return res.status(404).json({ message: "Event not found" });
+        // Convert to ObjectId
+        const applicantObjectId = new mongoose_1.default.Types.ObjectId(applicantId.toString());
+        // Find event and applicant
+        const [event, applicant] = await Promise.all([
+            facilityEventModel_1.default.findById(eventId),
+            applicantModel_1.default.findById(applicantObjectId),
+        ]);
+        if (!event)
+            return res.status(404).json({ message: "Event not found." });
+        if (!applicant)
+            return res.status(404).json({ message: "Applicant not found." });
+        // Check if the applicant is actually booked for the event
+        const isBooked = event.participants.some((p) => p.applicant.toString() === applicantObjectId.toString());
+        if (!isBooked) {
+            return res.status(400).json({ message: "Applicant is not booked for this event." });
         }
-        // Find the applicant by ID
-        const applicant = await applicant_1.default.findById(applicantId);
-        if (!applicant) {
-            return res.status(404).json({ message: "Applicant not found" });
-        }
-        // Check if the applicant is currently booked for the event
-        if (!event.participants.includes(applicantId)) {
-            return res.status(400).json({ message: "Applicant is not booked for this event" });
-        }
-        await EventModel_1.default.updateOne({ _id: id }, { $pull: { participants: applicantId } });
-        // Remove the event from the applicant's events array
-        await applicant_1.default.updateOne({ _id: applicantId }, { $pull: { events: id } });
-        return res.status(200).json({ message: "Applicant unbooked from event successfully", data: applicant });
+        // Unbook applicant from event using `$pull`
+        await facilityEventModel_1.default.updateOne({ _id: eventId }, { $pull: { participants: { applicant: applicantObjectId } } });
+        // Remove event from applicant's events array
+        await applicantModel_1.default.updateOne({ _id: applicantObjectId }, { $pull: { events: eventId } });
+        return res.status(200).json({ message: "Applicant successfully unbooked from event." });
     }
     catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.error("Error unbooking applicant from event:", error);
+        return res.status(500).json({ message: "Internal server error." });
     }
 };
-exports.UnbookApplicantFromEvent = UnbookApplicantFromEvent;
-const SendEmailToFacilityEventsParticipants = async (req, res) => {
+exports.unbookApplicantFromEvent = unbookApplicantFromEvent;
+const SendEmailToFacilityEventParticipants = async (req, res) => {
     try {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ message: "Event Id is required" });
+        const { eventId } = req.params;
+        if (!eventId || !mongoose_1.default.isValidObjectId(eventId)) {
+            return res.status(400).json({ message: "Valid Event ID is required." });
         }
-        //  Fetch event and populate participants
-        const event = await EventModel_1.default.findById(id).populate("participants");
+        // Fetch event and populate participants
+        const event = await facilityEventModel_1.default.findById(eventId);
         if (!event) {
-            return res.status(404).json({ message: "Event not found" });
+            return res.status(404).json({ message: "Event not found." });
         }
-        if (!event.participants || event.participants.length === 0) {
-            return res.status(400).json({ message: "No participants for this event" });
+        if (!event.participants || event.participants.length < 0) {
+            return res.status(400).json({ message: "No participants for this event." });
         }
-        const timeslot = await time_1.default.findById(event.timeslot);
+        const timeslot = await timeslotModel_1.default.findById(event.timeslot);
         if (!timeslot) {
-            return res.status(404).json({ message: "timeslot not found" });
+            return res.status(404).json({ message: "Timeslot not found." });
         }
-        // Fetch all participants' details
-        const participants = await applicant_1.default.find({
-            _id: { $in: event.participants }
-        }).select("firstname lastname email");
-        if (participants.length === 0) {
-            return res.status(400).json({ message: "No valid participants with emails" });
+        const templatePath = path_1.default.join(__dirname, '../../../public/templates/eventEmail.html');
+        const emailTemplate = await promises_1.default.readFile(templatePath, "utf-8");
+        const participantIds = event.participants.map((p) => p.applicant);
+        const participants = await applicantModel_1.default.find({ _id: { $in: participantIds } }).select("firstname lastname email");
+        if (!participants || participants.length === 0) {
+            return res.status(400).json({ message: "No valid participants with emails." });
         }
+        const failedEmails = [];
+        let successfulEmails = 0;
+        const participantUpdates = [];
         for (const participant of participants) {
             if (!participant.email) {
-                console.warn(`Skipping participant ${participant._id} - Email not found`);
+                failedEmails.push({ applicant: participant._id.toString(), reason: "No email provided" });
+                participantUpdates.push({
+                    applicant: participant._id,
+                    mail: { sent: false, reason: "No email provided" }
+                });
                 continue;
             }
             const fullName = `${participant.firstname} ${participant.lastname}`;
-            await (0, mailHandler_1.sendEmail)(participant.email, `Reminder: ${event.name} on ${event.date}`, `Hello ${fullName},\n\nYou are invited to ${event.name} happening on ${event.date} - ${convertMinutesToTime(parseInt(timeslot.start))} - ${convertMinutesToTime(parseInt(timeslot.end))} at the facility.\n\nBest regards,\nThe Events Team`);
+            const facility = await facilityModel_1.default.findById(event.facility);
+            if (!facility) {
+                return res.status(404).json({ message: "Facility not found." });
+            }
+            const emailText = emailTemplate
+                .replace(/{{fullName}}/g, fullName)
+                .replace(/{{eventName}}/g, event.name || "Event")
+                .replace(/{{eventDate}}/g, event.date ? event.date.toDateString() : "Unknown Date")
+                .replace(/{{startTime}}/g, convertMinutesToTime(parseInt(timeslot.start), "12h"))
+                .replace(/{{endTime}}/g, convertMinutesToTime(parseInt(timeslot.end), "12h"))
+                .replace(/{{facilityName}}/g, facility.name || "Venue")
+                .replace(/{{facilityLocation}}/g, facility.location || "Address")
+                .replace(/{{eventType}}/g, event.type);
+            const emailResult = await (0, mailHandler_1.sendEmail)(event.type, participant.email, `Reminder: ${event.name} on ${event.date.toDateString()}`, "", emailText);
+            logger_1.default.info(JSON.stringify(emailResult, null, 2));
+            if (!emailResult.success) {
+                failedEmails.push({ applicant: participant._id.toString(), reason: emailResult.message });
+                participantUpdates.push({
+                    applicant: participant._id,
+                    mail: { sent: false, reason: emailResult.message }
+                });
+                logger_1.default.error(`Failed to send email to ${participant.email}: ${emailResult.message}`);
+            }
+            else {
+                successfulEmails++;
+                participantUpdates.push({
+                    applicant: participant._id,
+                    mail: { sent: true, reason: "" }
+                });
+            }
         }
-        await EventModel_1.default.findByIdAndUpdate(id, {
-            $set: { 'emailSent.status': true }
+        // Update participants' mail status in bulk
+        for (const update of participantUpdates) {
+            await facilityEventModel_1.default.updateOne({ _id: eventId, "participants.applicant": update.applicant }, {
+                $set: {
+                    "participants.$.mail.sent": update.mail.sent,
+                    "participants.$.mail.reason": update.mail.reason
+                }
+            });
+        }
+        // Update event's email status and log failed emails
+        await facilityEventModel_1.default.findByIdAndUpdate(eventId, {
+            $set: { "emailSent.status": successfulEmails > 0 }, // Set true if at least one email was sent
+            $push: { "emailSent.history": { $each: failedEmails.map((f) => ({ date: new Date(), reason: f.reason })) } },
         });
-        return res.status(200).json({ message: "Emails sent successfully" });
+        return res.status(200).json({
+            message: "Emails processed successfully.",
+            successfulEmails,
+            failedEmails,
+        });
     }
     catch (error) {
-        logger_1.default.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        logger_1.default.error("Error sending event emails:", error);
+        return res.status(500).json({ message: "Internal server error." });
     }
 };
-exports.SendEmailToFacilityEventsParticipants = SendEmailToFacilityEventsParticipants;
+exports.SendEmailToFacilityEventParticipants = SendEmailToFacilityEventParticipants;

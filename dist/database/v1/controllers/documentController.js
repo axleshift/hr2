@@ -9,9 +9,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchDocument = exports.getDocumentByCategory = exports.getDocumentByApplicantId = exports.getDocumentById = exports.updateDocument = exports.createDocument = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const applicant_1 = __importDefault(require("../models/applicant"));
-const document_1 = __importDefault(require("../models/document"));
-const user_1 = __importDefault(require("../models/user"));
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
+const documentModel_1 = __importDefault(require("../models/documentModel"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const createDocument = async (req, res) => {
     try {
         console.log("req.body", req.body);
@@ -22,11 +22,11 @@ const createDocument = async (req, res) => {
         if (!category || !author_Id || !applicant_Id || !title) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const applicant = await applicant_1.default.findById(applicant_Id);
+        const applicant = await applicantModel_1.default.findById(applicant_Id);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
-        const author = await user_1.default.findById(author_Id);
+        const author = await userModel_1.default.findById(author_Id);
         if (!author) {
             return res.status(404).json({ message: "Author not found" });
         }
@@ -40,7 +40,7 @@ const createDocument = async (req, res) => {
             content,
             tags,
         };
-        const newDocument = await document_1.default.create(documentData);
+        const newDocument = await documentModel_1.default.create(documentData);
         if (!newDocument) {
             return res.status(500).json({ message: "Document not created" });
         }
@@ -86,15 +86,15 @@ const updateDocument = async (req, res) => {
         if (!category || !author_Id || !applicant_Id || !title) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        const applicant = await applicant_1.default.findById(applicant_Id);
+        const applicant = await applicantModel_1.default.findById(applicant_Id);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
-        const author = await user_1.default.findById(author_Id);
+        const author = await userModel_1.default.findById(author_Id);
         if (!author) {
             return res.status(404).json({ message: "Author not found" });
         }
-        const document = await document_1.default.findById(documentId);
+        const document = await documentModel_1.default.findById(documentId);
         if (!document) {
             return res.status(404).json({ message: "Document not found" });
         }
@@ -108,7 +108,7 @@ const updateDocument = async (req, res) => {
             content,
             tags,
         };
-        const updatedDocument = await document_1.default.findByIdAndUpdate(documentId, documentData, { new: true });
+        const updatedDocument = await documentModel_1.default.findByIdAndUpdate(documentId, documentData, { new: true });
         if (!updatedDocument) {
             return res.status(500).json({ message: "Document not updated" });
         }
@@ -130,11 +130,11 @@ const getDocumentById = async (req, res) => {
         if (!documentId) {
             return res.status(400).json({ message: "Document ID is required" });
         }
-        const applicant = await applicant_1.default.findById(id);
+        const applicant = await applicantModel_1.default.findById(id);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
-        const document = await document_1.default.findById(documentId);
+        const document = await documentModel_1.default.findById(documentId);
         if (!document) {
             return res.status(404).json({ message: "Document not found" });
         }
@@ -156,7 +156,7 @@ const getDocumentByApplicantId = async (req, res) => {
         if (!category) {
             return res.status(400).json({ message: "Category is required" });
         }
-        const applicant = await applicant_1.default.findById(applicantID);
+        const applicant = await applicantModel_1.default.findById(applicantID);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
@@ -167,7 +167,7 @@ const getDocumentByApplicantId = async (req, res) => {
             return res.status(404).json({ message: `No documents found for this category, ${category}` });
         }
         // Fetch documents by IDs
-        const documents = await document_1.default.find({ _id: { $in: documentIds } });
+        const documents = await documentModel_1.default.find({ _id: { $in: documentIds } });
         if (!documents || documents.length === 0) {
             return res.status(404).json({ message: "Documents not found" });
         }
@@ -189,7 +189,7 @@ const getDocumentByCategory = async (req, res) => {
         if (!category) {
             return res.status(400).json({ message: "Category is required" });
         }
-        const applicant = await applicant_1.default.findById(applicantID);
+        const applicant = await applicantModel_1.default.findById(applicantID);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
@@ -197,16 +197,16 @@ const getDocumentByCategory = async (req, res) => {
         let documents;
         switch (category) {
             case "screening":
-                documents = await document_1.default.find({ applicant_Id: applicantID, category: "screening" });
+                documents = await documentModel_1.default.find({ applicant_Id: applicantID, category: "screening" });
                 break;
             case "interview":
-                documents = await document_1.default.find({ applicant_Id: applicantID, category: "interview" });
+                documents = await documentModel_1.default.find({ applicant_Id: applicantID, category: "interview" });
                 break;
             case "training":
-                documents = await document_1.default.find({ applicant_Id: applicantID, category: "training" });
+                documents = await documentModel_1.default.find({ applicant_Id: applicantID, category: "training" });
                 break;
             default:
-                documents = await document_1.default.find({ applicant_Id: applicantID, category: "others" });
+                documents = await documentModel_1.default.find({ applicant_Id: applicantID, category: "others" });
                 break;
         }
         if (!documents) {
@@ -230,11 +230,11 @@ const searchDocument = async (req, res) => {
         if (!query) {
             return res.status(400).json({ message: "Search query is required" });
         }
-        const applicant = await applicant_1.default.findById(applicantID);
+        const applicant = await applicantModel_1.default.findById(applicantID);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
-        const documents = await document_1.default.find({ applicant_Id: applicantID, $text: { $search: query } });
+        const documents = await documentModel_1.default.find({ applicant_Id: applicantID, $text: { $search: query } });
         if (!documents) {
             return res.status(404).json({ message: "Documents not found" });
         }

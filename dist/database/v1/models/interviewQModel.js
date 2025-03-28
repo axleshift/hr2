@@ -1,8 +1,4 @@
 "use strict";
-/**
- * @file facilities.ts
- * @description Facilities model schema
- */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -38,34 +34,25 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-// Schema definition for the Facility model
-const facilitySchema = new mongoose_1.Schema({
-    name: {
+const interviewQuestionSchema = new mongoose_1.Schema({
+    job: {
         type: String,
-        required: true,
-        trim: true,
     },
-    type: {
+    question: {
         type: String,
-        required: true,
-        trim: true,
     },
-    description: {
+    response: {
         type: String,
-        trim: true,
     },
-    location: {
-        type: String,
-        required: true,
-        trim: true,
+    author: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'Users'
     },
-    timeslots: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Timeslot',
-        },
-    ],
+    for: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'InterviewForms'
+    }
 }, {
     timestamps: true,
 });
-exports.default = mongoose_1.default.model('Facility', facilitySchema);
+exports.default = mongoose_1.default.model('interviewQuestion', interviewQuestionSchema);

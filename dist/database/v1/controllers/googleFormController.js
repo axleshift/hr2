@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formSubmit = void 0;
-const applicant_1 = __importDefault(require("../models/applicant"));
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
 const config_1 = require("../../../config");
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const formSubmit = async (req, res) => {
@@ -14,7 +14,7 @@ const formSubmit = async (req, res) => {
         if (secret !== SECRET) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        const newApplicant = await applicant_1.default.create({
+        const newApplicant = await applicantModel_1.default.create({
             firstname,
             lastname,
             middlename,

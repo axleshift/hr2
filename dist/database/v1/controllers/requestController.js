@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getJobpostingRequestById = exports.searchJobpostingRequests = exports.updateJobpostingRequest = exports.createJobpostingRequest = void 0;
-const jobpostingRequest_1 = __importDefault(require("../models/jobpostingRequest"));
+const jobpostingRequestModel_1 = __importDefault(require("../models/jobpostingRequestModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const createJobpostingRequest = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ const createJobpostingRequest = async (req, res) => {
         if (!title || !quantity || !location || !jobType || !salaryRange) {
             return res.status(400).send("Please provide all required fields");
         }
-        const data = new jobpostingRequest_1.default({
+        const data = new jobpostingRequestModel_1.default({
             title,
             description,
             quantity,
@@ -38,7 +38,7 @@ const updateJobpostingRequest = async (req, res) => {
         if (!title || !quantity || !location || !jobType || !salaryRange || !status) {
             return res.status(400).send("Please provide all required fields");
         }
-        const data = await jobpostingRequest_1.default.findById(req.params.id);
+        const data = await jobpostingRequestModel_1.default.findById(req.params.id);
         if (!data) {
             return res.status(404).send("Jobposting request not found");
         }
@@ -75,7 +75,7 @@ const searchJobpostingRequests = async (req, res) => {
             query.salaryRange = salaryRange;
         if (status)
             query.status = status;
-        const data = await jobpostingRequest_1.default.find(query);
+        const data = await jobpostingRequestModel_1.default.find(query);
         res.status(200).send(data);
     }
     catch (error) {
@@ -86,7 +86,7 @@ const searchJobpostingRequests = async (req, res) => {
 exports.searchJobpostingRequests = searchJobpostingRequests;
 const getJobpostingRequestById = async (req, res) => {
     try {
-        const data = await jobpostingRequest_1.default.findById(req.params.id);
+        const data = await jobpostingRequestModel_1.default.findById(req.params.id);
         if (!data) {
             return res.status(404).send("Jobposting request not found");
         }

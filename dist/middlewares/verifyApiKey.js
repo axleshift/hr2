@@ -7,7 +7,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const apikey_1 = __importDefault(require("../database/v1/models/apikey"));
+const apikeyModel_1 = __importDefault(require("../database/v1/models/apikeyModel"));
 const config_1 = require("../config");
 const logger_1 = __importDefault(require("./logger"));
 // sendError helper function
@@ -31,7 +31,7 @@ const verifyApiKey = async (req, res, next) => {
             req.permissions = ["*"]; // * -> Indicate full access
             return next();
         }
-        const apiKeyData = await apikey_1.default.findOne({ key }).select("permissions").lean();
+        const apiKeyData = await apikeyModel_1.default.findOne({ key }).select("permissions").lean();
         if (!apiKeyData) {
             return sendError(res, 401, "Unauthorized");
         }

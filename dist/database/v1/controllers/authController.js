@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyEmail = exports.logout = exports.verify = exports.login = exports.createUser = void 0;
 const hasher_1 = require("../../../utils/hasher");
-const user_1 = __importDefault(require("../models/user"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../../../config");
@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
             const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
             return { code, expiresAt };
         };
-        const user = await user_1.default.create({
+        const user = await userModel_1.default.create({
             firstname,
             lastname,
             email,
@@ -72,16 +72,15 @@ const login = async (req, res) => {
     const { username, password } = req.body;
     logger_1.default.info(`User ${username} is trying to login`);
     try {
-        const user = await user_1.default.findOne({ username });
+        const user = await userModel_1.default.findOne({ username });
         if (!user) {
             return res.status(404).json({
                 statusCode: 404,
                 success: false,
-                error: "User not found",
+                message: "User not found",
             });
         }
-        const storedHashedPassword = user.password;
-        const isPasswordValid = bcryptjs_1.default.compareSync(password, storedHashedPassword);
+        const isPasswordValid = bcryptjs_1.default.compareSync(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({
                 statusCode: 401,
@@ -90,10 +89,10 @@ const login = async (req, res) => {
             });
         }
         const jwtSecret = config_1.config.server.jwt.secret;
-        const token = jsonwebtoken_1.default.sign({ username, password }, jwtSecret, {
+        const token = jsonwebtoken_1.default.sign({ username, id: user._id }, jwtSecret, {
             expiresIn: "1h",
         });
-        const data = {
+        const userData = {
             _id: user._id.toString(),
             firstname: user.firstname,
             lastname: user.lastname,
@@ -101,23 +100,33 @@ const login = async (req, res) => {
             role: user.role,
             email: user.email,
             status: user.status,
-            token: token,
+            token,
             emailVerifiedAt: user.emailVerifiedAt || null,
         };
-        req.session.user = data;
-        req.session.save((err) => {
+        // ✅ Regenerate session to prevent fixation attack
+        req.session.regenerate((err) => {
             if (err) {
                 return res.status(500).json({
                     statusCode: 500,
                     success: false,
-                    message: "Error saving session",
+                    message: "Error regenerating session",
                 });
             }
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
-                message: "User verified successfully",
-                data,
+            req.session.user = userData;
+            req.session.save((saveErr) => {
+                if (saveErr) {
+                    return res.status(500).json({
+                        statusCode: 500,
+                        success: false,
+                        message: "Error saving session",
+                    });
+                }
+                res.status(200).json({
+                    statusCode: 200,
+                    success: true,
+                    message: "User logged in successfully",
+                    data: userData,
+                });
             });
         });
     }
@@ -126,7 +135,7 @@ const login = async (req, res) => {
         res.status(500).json({
             statusCode: 500,
             success: false,
-            message: "Error verifying user",
+            message: "Error logging in",
             error,
         });
     }
@@ -169,13 +178,18 @@ const logout = async (req, res) => {
                 statusCode: 500,
                 success: false,
                 message: "Error destroying session",
-                error: err,
             });
         }
+        res.clearCookie("connect.sid", {
+            path: "/",
+            httpOnly: true,
+            secure: config_1.config.env === "production", // Only use secure cookies in production
+            sameSite: "strict",
+        });
         res.status(200).json({
             statusCode: 200,
             success: true,
-            message: "Session destroyed successfully",
+            message: "Logged out successfully",
         });
     });
 };
@@ -191,7 +205,7 @@ const verifyEmail = async (req, res) => {
                 message: "Please provide all required fields",
             });
         }
-        const user = await user_1.default.findById(id);
+        const user = await userModel_1.default.findById(id);
         // check if user exists
         if (!user) {
             return res.status(404).json({
@@ -202,7 +216,7 @@ const verifyEmail = async (req, res) => {
         }
         // if code is correct & expiration, if both are satisfied update emailVerifiedAt and status to active
         if (user.verification && user.verification.code === code && new Date() < user.verification.expiresAt) {
-            const updated = await user_1.default.findByIdAndUpdate(id, {
+            const updated = await userModel_1.default.findByIdAndUpdate(id, {
                 status: "active",
                 emailVerifiedAt: new Date(),
             });

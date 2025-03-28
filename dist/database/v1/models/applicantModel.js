@@ -149,18 +149,18 @@ const applicantSchema = new mongoose_1.default.Schema({
     },
     events: [{
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "FacilityEvents",
+            ref: "Event",
         }],
     emails: [{
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "Emails"
+            ref: "Email"
         }],
     documentations: {
         screening: {
             remarks: [
                 {
                     type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Documents",
+                    ref: "Document",
                 }
             ],
         },
@@ -168,7 +168,7 @@ const applicantSchema = new mongoose_1.default.Schema({
             remarks: [
                 {
                     type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Documents",
+                    ref: "Document",
                 }
             ],
         },
@@ -176,7 +176,7 @@ const applicantSchema = new mongoose_1.default.Schema({
             remarks: [
                 {
                     type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Documents",
+                    ref: "Document",
                 }
             ],
         },
@@ -184,7 +184,7 @@ const applicantSchema = new mongoose_1.default.Schema({
             remarks: [
                 {
                     type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Documents",
+                    ref: "Document",
                 }
             ],
         }

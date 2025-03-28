@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tag_1 = __importDefault(require("../models/tag"));
+const tagModel_1 = __importDefault(require("../models/tagModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const tags = [
     {
@@ -49,8 +49,8 @@ const tags = [
 ];
 const seedTag = async () => {
     try {
-        await tag_1.default.deleteMany();
-        await tag_1.default.insertMany(tags);
+        await tagModel_1.default.deleteMany();
+        await tagModel_1.default.insertMany(tags);
         return true;
     }
     catch (error) {

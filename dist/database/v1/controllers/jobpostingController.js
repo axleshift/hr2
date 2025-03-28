@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteJobposting = exports.updateJobposting = exports.getJobpostingById = exports.getAllScheduledJobpostings = exports.getAllUpcomingJobpostings = exports.getAllJobpostings = exports.searchJobpostings = exports.createJobposting = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const jobposting_1 = __importDefault(require("../models/jobposting"));
-const jobposter_1 = __importDefault(require("../models/jobposter"));
+const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
+const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 /**
  * Creates a new job posting in the database.
@@ -21,7 +21,7 @@ const createJobposting = async (req, res) => {
     // company,
     salary_min, salary_max, location, description, requirements, responsibilities, benefits, status, schedule_start, schedule_end, } = req.body;
     try {
-        const jobposting = await jobposting_1.default.create({
+        const jobposting = await jobpostingModel_1.default.create({
             title,
             type,
             // company,
@@ -69,10 +69,10 @@ const searchJobpostings = async (req, res) => {
     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
     try {
-        const totalJobpostings = await jobposting_1.default.countDocuments({
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments({
             $or: [{ title: { $regex: searchQuery, $options: "i" } }, { type: { $regex: searchQuery, $options: "i" } }, { company: { $regex: searchQuery, $options: "i" } }, { location: { $regex: searchQuery, $options: "i" } }],
         });
-        const data = await jobposting_1.default.find({
+        const data = await jobpostingModel_1.default.find({
             $or: [{ title: { $regex: searchQuery, $options: "i" } }, { type: { $regex: searchQuery, $options: "i" } }, { company: { $regex: searchQuery, $options: "i" } }, { location: { $regex: searchQuery, $options: "i" } }],
         })
             .sort({ createdAt: -1 })
@@ -112,8 +112,8 @@ const getAllJobpostings = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const totalJobpostings = await jobposting_1.default.countDocuments();
-        const jobpostings = await jobposting_1.default.find().skip(skip).limit(limit);
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments();
+        const jobpostings = await jobpostingModel_1.default.find().skip(skip).limit(limit);
         res.status(200).json({
             statusCode: 200,
             success: true,
@@ -148,8 +148,8 @@ const getAllUpcomingJobpostings = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const totalJobpostings = await jobposting_1.default.countDocuments();
-        const jobpostings = await jobposting_1.default.find({
+        const totalJobpostings = await jobpostingModel_1.default.countDocuments();
+        const jobpostings = await jobpostingModel_1.default.find({
             schedule_start: { $gte: new Date() },
         })
             .skip(skip)
@@ -216,14 +216,14 @@ const getAllScheduledJobpostings = async (req, res) => {
                 $or: [{ title: { $regex: searchQuery, $options: "i" } }],
             };
         }
-        const totalJobPostings = await jobposting_1.default.countDocuments({
+        const totalJobPostings = await jobpostingModel_1.default.countDocuments({
             ...statusFilter,
             ...searchFilter,
             schedule_start: { $gte: startDate, $lte: endDate },
             // schedule_start: { $gte: startDate },
             // schedule_end: { $lte: endDate },
         });
-        const data = await jobposting_1.default.find({
+        const data = await jobpostingModel_1.default.find({
             ...statusFilter,
             ...searchFilter,
             schedule_start: { $gte: startDate, $lte: endDate },
@@ -272,7 +272,7 @@ const getJobpostingById = async (req, res) => {
         });
     }
     try {
-        const jobposting = await jobposting_1.default.findById(id);
+        const jobposting = await jobpostingModel_1.default.findById(id);
         res.status(200).json({
             statusCode: 200,
             success: true,
@@ -312,7 +312,7 @@ const updateJobposting = async (req, res) => {
     // company,
     salary_min, salary_max, location, description, requirements, responsibilities, benefits, status, schedule_start, schedule_end, } = req.body;
     try {
-        const jobposting = await jobposting_1.default.findByIdAndUpdate(id, {
+        const jobposting = await jobpostingModel_1.default.findByIdAndUpdate(id, {
             title,
             type,
             // company,
@@ -327,9 +327,9 @@ const updateJobposting = async (req, res) => {
             schedule_start,
             schedule_end,
         }, { new: true });
-        const jobposter = await jobposter_1.default.findOne({ ref_id: id });
+        const jobposter = await jobposterModel_1.default.findOne({ ref_id: id });
         if (jobposter) {
-            await jobposter_1.default.updateMany({ ref_id: id }, { expiresAt: schedule_end });
+            await jobposterModel_1.default.updateMany({ ref_id: id }, { expiresAt: schedule_end });
         }
         res.status(201).json({
             statusCode: 201,
@@ -366,7 +366,7 @@ const deleteJobposting = async (req, res) => {
         });
     }
     try {
-        const jobposting = await jobposting_1.default.findByIdAndDelete(id);
+        const jobposting = await jobpostingModel_1.default.findByIdAndDelete(id);
         res.status(200).json({
             statusCode: 200,
             success: true,

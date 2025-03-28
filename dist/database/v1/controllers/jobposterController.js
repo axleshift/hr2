@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeJobposter = exports.getAllJobposters = exports.getJobposterByRefId = exports.createJobposter = void 0;
-const jobposter_1 = __importDefault(require("../models/jobposter"));
-const jobposting_1 = __importDefault(require("../models/jobposting"));
+const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
+const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
 const twitter_1 = require("../../../utils/twitter");
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 /**
@@ -21,7 +21,7 @@ const createJobposter = async (req, res) => {
     const contentFB = req.body.facebook;
     const contentTW = req.body.twitter;
     try {
-        const jobposting = await jobposting_1.default.findById(ref_id);
+        const jobposting = await jobpostingModel_1.default.findById(ref_id);
         if (!jobposting) {
             return res.status(404).json({
                 statusCode: 404,
@@ -29,7 +29,7 @@ const createJobposter = async (req, res) => {
                 message: `Jobposting with id ${ref_id} not found`,
             });
         }
-        const jobposterFB = new jobposter_1.default({
+        const jobposterFB = new jobposterModel_1.default({
             ref_id: ref_id,
             platform: "facebook",
             post_id: "",
@@ -43,7 +43,7 @@ const createJobposter = async (req, res) => {
         try {
             // const tweetResponse = await createTweet(contentTW);
             // console.log("Create Tweet Response: ", tweetResponse);
-            jobposterTW = new jobposter_1.default({
+            jobposterTW = new jobposterModel_1.default({
                 ref_id: ref_id,
                 platform: "twitter",
                 post_id: "",
@@ -91,7 +91,7 @@ exports.createJobposter = createJobposter;
 const getJobposterByRefId = async (req, res) => {
     const { id } = req.params;
     try {
-        const jobposter = await jobposter_1.default.find({
+        const jobposter = await jobposterModel_1.default.find({
             ref_id: id,
         });
         if (!jobposter) {
@@ -135,11 +135,11 @@ const getAllJobposters = async (req, res) => {
                 $or: [{ content: { $regex: searchQuery, $options: "i" } }, { platform: { $regex: searchQuery, $options: "i" } }],
             };
         }
-        const total = await jobposter_1.default.countDocuments(searchFilter);
+        const total = await jobposterModel_1.default.countDocuments(searchFilter);
         console.log("getAllJobspoters: total: ", total);
         console.log("getAllJobspoters: limit: ", limit);
         const totalPages = Math.ceil(total / limit);
-        const data = await jobposter_1.default.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+        const data = await jobposterModel_1.default.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
         if (data.length === 0) {
             const txt = searchQuery ? `No jobposter found for query: ${searchQuery}` : "No jobposter found";
             return res.status(404).json({
@@ -172,7 +172,7 @@ exports.getAllJobposters = getAllJobposters;
 const removeJobposter = async (req, res) => {
     const { id } = req.params;
     try {
-        const jobposter = await jobposter_1.default.findById(id);
+        const jobposter = await jobposterModel_1.default.findById(id);
         if (!jobposter) {
             res.status(404).json({
                 statusCode: 404,
@@ -199,19 +199,19 @@ const removeJobposter = async (req, res) => {
             if (jobposter.post_id) {
                 await tweet(jobposter.post_id);
             }
-            await jobposter_1.default.findByIdAndUpdate(id, {
+            await jobposterModel_1.default.findByIdAndUpdate(id, {
                 status: "inactive",
                 isPosted: false,
                 isDeleted: true,
             });
             // check if there are no more jobposters for the jobposting that is active and if none exist,
             // set the jobposting status to inactive
-            const jobposters = await jobposter_1.default.find({
+            const jobposters = await jobposterModel_1.default.find({
                 ref_id: jobposter.ref_id,
                 status: "active",
             });
             if (jobposters.length === 0) {
-                await jobposting_1.default.findByIdAndUpdate(jobposter.ref_id, {
+                await jobpostingModel_1.default.findByIdAndUpdate(jobposter.ref_id, {
                     status: "inactive",
                 });
             }

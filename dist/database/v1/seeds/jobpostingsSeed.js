@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const faker_1 = require("@faker-js/faker");
-const jobposting_1 = __importDefault(require("../models/jobposting"));
-const jobposter_1 = __importDefault(require("../models/jobposter"));
+const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
+const jobposterModel_1 = __importDefault(require("../models/jobposterModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 dotenv_1.default.config();
 const randomJobType = () => {
@@ -37,12 +37,12 @@ const createFakeJobPosting = async () => {
 const multiplier = 100;
 const seedJobposting = async () => {
     try {
-        await jobposting_1.default.deleteMany();
-        await jobposter_1.default.deleteMany();
+        await jobpostingModel_1.default.deleteMany();
+        await jobposterModel_1.default.deleteMany();
         const req = await createFakeJobPosting();
         // console.log(req);
         const fakeJobPostings = await Promise.all(Array.from({ length: multiplier }).map(() => req));
-        await jobposting_1.default.insertMany(fakeJobPostings);
+        await jobpostingModel_1.default.insertMany(fakeJobPostings);
         logger_1.default.info(`Seeded ${multiplier} job postings`);
         return true;
     }

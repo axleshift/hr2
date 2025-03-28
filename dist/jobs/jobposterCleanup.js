@@ -4,20 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_cron_1 = __importDefault(require("node-cron"));
-const jobposter_1 = __importDefault(require("../database/v1/models/jobposter"));
-const jobposting_1 = __importDefault(require("../database/v1/models/jobposting"));
+const jobposterModel_1 = __importDefault(require("../database/v1/models/jobposterModel"));
+const jobpostingModel_1 = __importDefault(require("../database/v1/models/jobpostingModel"));
 const twitter_1 = require("../utils/twitter");
 const logger_1 = __importDefault(require("../middlewares/logger"));
 const now = new Date();
 const fetchExpiredJobposters = async () => {
-    const expiredJobposters = (await jobposter_1.default.find({
+    const expiredJobposters = (await jobposterModel_1.default.find({
         expiresAt: { $lt: now },
         status: "active",
     }));
     return expiredJobposters;
 };
 const fetchScheduledJobposters = async () => {
-    const scheduledJobposters = (await jobposter_1.default.find({
+    const scheduledJobposters = (await jobposterModel_1.default.find({
         postAt: { $lt: now },
     }));
     return scheduledJobposters;
@@ -28,9 +28,9 @@ const postApprovedJobposter = async () => {
         try {
             const tweet = (await (0, twitter_1.createTweet)(jobposter.content));
             console.log("JobspoterCleanUp.ts: postApprovedJobposter: ", tweet);
-            await jobposter_1.default.updateOne({ _id: jobposter._id }, { post_id: tweet.id, isPosted: true });
-            const jobposting = (await jobposting_1.default.findById(jobposter.ref_id));
-            await jobposting_1.default.updateOne({ _id: jobposting._id }, { status: "active" });
+            await jobposterModel_1.default.updateOne({ _id: jobposter._id }, { post_id: tweet.id, isPosted: true });
+            const jobposting = (await jobpostingModel_1.default.findById(jobposter.ref_id));
+            await jobpostingModel_1.default.updateOne({ _id: jobposting._id }, { status: "active" });
         }
         catch (error) {
             logger_1.default.error(`Error posting tweet for jobposter ${jobposter._id}:`, error);
@@ -38,7 +38,7 @@ const postApprovedJobposter = async () => {
     }
 };
 const updateExpiredJobposters = async (expiredJobposters) => {
-    const updatedJobposters = await jobposter_1.default.updateMany({ _id: { $in: expiredJobposters.map((jobposter) => jobposter._id) } }, { status: "expired" });
+    const updatedJobposters = await jobposterModel_1.default.updateMany({ _id: { $in: expiredJobposters.map((jobposter) => jobposter._id) } }, { status: "expired" });
     return updatedJobposters;
 };
 const removeFromTwitter = async (expiredJobposters) => {

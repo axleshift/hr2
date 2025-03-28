@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateNewVerificationCode = exports.deactivateAccount = exports.activeAccount = exports.updateAccount = exports.getAccountById = exports.getAllAccounts = void 0;
-const user_1 = __importDefault(require("../models/user"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const getAllAccounts = async (req, res) => {
     try {
@@ -12,8 +12,8 @@ const getAllAccounts = async (req, res) => {
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
         const sortOrder = req.query.sort === "desc" ? -1 : 1;
-        const totalItems = await user_1.default.find().countDocuments();
-        const data = await user_1.default.find().sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+        const totalItems = await userModel_1.default.find().countDocuments();
+        const data = await userModel_1.default.find().sort({ createdAt: sortOrder }).skip(skip).limit(limit);
         if (data.length < 1) {
             return res.status(404).json({
                 statusCode: 404,
@@ -52,7 +52,7 @@ const getAccountById = async (req, res) => {
                 message: "Please provide an id",
             });
         }
-        const user = await user_1.default.findById(id);
+        const user = await userModel_1.default.findById(id);
         if (!user) {
             return res.status(404).json({
                 statusCode: 404,
@@ -89,7 +89,7 @@ const updateAccount = async (req, res) => {
                 message: "Please provide all required fields",
             });
         }
-        const user = await user_1.default.findById(id);
+        const user = await userModel_1.default.findById(id);
         if (!user) {
             return res.status(404).json({
                 statusCode: 404,
@@ -98,7 +98,7 @@ const updateAccount = async (req, res) => {
             });
         }
         const salt = user.rememberToken;
-        const updated = await user_1.default.findByIdAndUpdate(id, {
+        const updated = await userModel_1.default.findByIdAndUpdate(id, {
             firstname,
             lastname,
             email,
@@ -134,7 +134,7 @@ const activeAccount = async (req, res) => {
                 message: "Please provide all required fields",
             });
         }
-        const user = await user_1.default.findByIdAndUpdate(id, {
+        const user = await userModel_1.default.findByIdAndUpdate(id, {
             status: "active",
             emailVerifiedAt: new Date(),
         });
@@ -174,7 +174,7 @@ const deactivateAccount = async (req, res) => {
                 message: "Please provide all required fields",
             });
         }
-        const user = await user_1.default.findByIdAndUpdate(id, {
+        const user = await userModel_1.default.findByIdAndUpdate(id, {
             status: "inactive",
         });
         if (!user) {
@@ -212,7 +212,7 @@ const generateNewVerificationCode = async (req, res) => {
                 message: "Please provide all required fields",
             });
         }
-        const user = await user_1.default.findById(id);
+        const user = await userModel_1.default.findById(id);
         if (!user) {
             return res.status(404).json({
                 statusCode: 404,
@@ -222,7 +222,7 @@ const generateNewVerificationCode = async (req, res) => {
         }
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-        const updated = await user_1.default.findByIdAndUpdate(id, {
+        const updated = await userModel_1.default.findByIdAndUpdate(id, {
             verification: {
                 code,
                 expiresAt,

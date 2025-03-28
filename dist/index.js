@@ -60,6 +60,7 @@ const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const verifyApiKey_1 = __importDefault(require("./middlewares/verifyApiKey"));
 const csrfToken_1 = __importDefault(require("./middlewares/csrfToken"));
+const mailHandler_1 = require("./utils/mailHandler");
 const app = (0, express_1.default)();
 const host = config_1.config.server.host;
 const port = config_1.config.server.port;
@@ -92,9 +93,10 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
+        httpOnly: config_1.config.server.session.httpOnly, // Prevents XSS attacks from accessing cookies
         secure: config_1.config.env === "production",
         maxAge: config_1.config.server.session.expiry,
-        sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
+        sameSite: 'strict', // Ensure that the cookie is not sent with cross-origin requests. Prevents CSRF attacks
     },
     store: mongoStore,
 }));
@@ -196,6 +198,7 @@ app.get("/api/v1", (req, res) => {
             .catch((error) => {
             logger_1.default.error(`Error loading routes: ${error}`);
         });
+        (0, mailHandler_1.verifyMailConn)();
     }
     catch (error) {
         fs_1.default.writeFileSync(path_1.default.join(config_1.config.logging.dir, `${date}.log`), `Error: ${error}\n`, {

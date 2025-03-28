@@ -16,7 +16,7 @@ const documentSchema = new mongoose_1.default.Schema({
     },
     author_Id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "User",
         required: true,
     },
     authorName: {
@@ -25,7 +25,7 @@ const documentSchema = new mongoose_1.default.Schema({
     },
     applicant_Id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Applicants",
+        ref: "Applicant",
         required: true,
     },
     applicantName: {
@@ -47,4 +47,4 @@ const documentSchema = new mongoose_1.default.Schema({
     timestamps: true,
     updateAt: true,
 });
-exports.default = mongoose_1.default.model("document", documentSchema);
+exports.default = mongoose_1.default.model("Document", documentSchema);

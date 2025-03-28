@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
 exports.config = {
     version: "1.0.0",
     name: "Node.js Express API",
@@ -28,8 +28,9 @@ exports.config = {
             expiry: process.env.JWT_EXPIRES_IN,
         },
         session: {
+            httpOnly: process.env.SESSION_HTTP_ONLY || true,
             secret: process.env.SESSION_SECRET,
-            expiry: 24 * 60 * 60 * 1000,
+            expiry: 24 * 60 * 60 * 1000, // 1 day
         },
         origins: process.env.CORS_ORIGINS?.split(",") || [],
     },
@@ -41,9 +42,10 @@ exports.config = {
         smtp: {
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
-            secure: process.env.SMTP_SECURE,
+            secure: process.env.SMTP_SECURE || true,
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
+            tls: process.env.SMTP_TLS,
         }
     },
     mongoDB: {

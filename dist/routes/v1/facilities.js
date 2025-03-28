@@ -12,54 +12,60 @@ const facilityController_1 = require("../../database/v1/controllers/facilityCont
 router.post("/create", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.createFacility);
-router.put("/update/:id", (0, verifySession_1.default)({
+router.put("/update/:facilityId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.updateFacility);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getAllFacilities);
-router.get("/:id", (0, verifySession_1.default)({
+router.get("/:facilityId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getFacilityById);
-router.delete("/delete/:id", (0, verifySession_1.default)({
+router.delete("/delete/:facilityId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.removeFacility);
 // Timeslots
-router.post("/timeslot/create/:id", (0, verifySession_1.default)({
+router.post("/timeslot/create/:facilityId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.createFacilityTimeslot);
-router.get("/timeslot/:id/:date", (0, verifySession_1.default)({
+router.get("/timeslot/:facilityId/:date", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }), facilityController_1.getAllFacilityTimeslotsForDate);
-router.delete("/timeslot/delete/:id", (0, verifySession_1.default)({
+router.delete("/timeslot/delete/:timeslotId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.removeFacilityTimeslot);
 // Event
-router.post("/event/timeslot/:timeslotId", (0, verifySession_1.default)({
+router.post("/event/:timeslotId", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.createFacilityEvent);
-router.put("/event/timeslot/:timeslotId", (0, verifySession_1.default)({
+router.put("/event/:timeslotId", (0, verifySession_1.default)({
     permissions: ["user", "admin"]
 }, true, true), facilityController_1.updateFacilityEvent);
-router.get("/events/:id/calendar-states", (0, verifySession_1.default)({
+router.delete("/event/:timeslotId", (0, verifySession_1.default)({
+    permissions: ["user", "admin"]
+}, true, true), facilityController_1.deleteFacilityEvent);
+router.get("/events/:eventId/calendar-states", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getFacilityCalendarStates);
-router.get("/event/:id", (0, verifySession_1.default)({
+router.get("/event/:eventId", (0, verifySession_1.default)({
     permissions: ["user", "admin"]
 }, true, true), facilityController_1.getFacilityEventByID);
-router.get("/events/:id/:date", (0, verifySession_1.default)({
+router.get("/events/:eventId/:date", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getFacilityEventsForDate);
 router.get("/events/upcoming", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true, true), facilityController_1.getUpcomingEvents);
 // Booking
-router.post("/events/:id/book", (0, verifySession_1.default)({
+router.post("/events/:eventId/book", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), facilityController_1.BookApplicantToEvent);
-router.delete("/events/:id/unbook", (0, verifySession_1.default)({
+}, true, true), facilityController_1.bookApplicantToEvent);
+router.post("/events/:eventId/send-email", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), facilityController_1.UnbookApplicantFromEvent);
+}, true, true), facilityController_1.SendEmailToFacilityEventParticipants);
+router.delete("/events/:eventId/unbook", (0, verifySession_1.default)({
+    permissions: ["user", "admin"],
+}, true, true), facilityController_1.unbookApplicantFromEvent);
 exports.default = {
     metadata: {
         path: "/facilities",

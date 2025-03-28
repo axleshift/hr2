@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createApikey = exports.updateApikey = exports.generateApikey = void 0;
-const apikey_1 = __importDefault(require("../models/apikey"));
+const apikeyModel_1 = __importDefault(require("../models/apikeyModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const generateApikey = async (req, res) => {
     try {
@@ -15,7 +15,7 @@ const generateApikey = async (req, res) => {
                 message: "User not authenticated",
             });
         }
-        const apiKeyData = await apikey_1.default.find({ owner: req.user._id });
+        const apiKeyData = await apikeyModel_1.default.find({ owner: req.user._id });
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -36,7 +36,7 @@ const updateApikey = async (req, res) => {
     try {
         const { permissions, expiresAt } = req.body;
         const { id } = req.params;
-        const apiKeyData = await apikey_1.default.findById(id);
+        const apiKeyData = await apikeyModel_1.default.findById(id);
         if (!apiKeyData) {
             return res.status(404).json({
                 statusCode: 404,
@@ -67,7 +67,7 @@ const createApikey = async (req, res) => {
     try {
         const { permissions, expiresAt } = req.body;
         const key = Math.random().toString(36).substring(7);
-        const apiKeyData = await apikey_1.default.create({
+        const apiKeyData = await apikeyModel_1.default.create({
             key: key,
             owner: req.user ? req.user._id : undefined,
             permissions: permissions || [],

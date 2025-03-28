@@ -12,7 +12,7 @@ const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const fileUploadHandler_1 = require("../../../utils/fileUploadHandler");
-const applicant_1 = __importDefault(require("../models/applicant"));
+const applicantModel_1 = __importDefault(require("../models/applicantModel"));
 const config_1 = require("../../../config");
 const handleFileUpload = (req, res) => {
     return new Promise((resolve, reject) => {
@@ -69,7 +69,7 @@ const addNewResume = async (req, res) => {
             whyInterestedInRole: req.body.whyInterestedInRole,
             tags: req.body.tags,
         };
-        const newApplicant = await applicant_1.default.create(data);
+        const newApplicant = await applicantModel_1.default.create(data);
         return res.status(201).json({
             statusCode: 201,
             success: true,
@@ -90,7 +90,7 @@ const addNewResume = async (req, res) => {
 exports.addNewResume = addNewResume;
 const updateResume = async (req, res) => {
     try {
-        const applicant = await applicant_1.default.findById(req.params.id);
+        const applicant = await applicantModel_1.default.findById(req.params.id);
         if (!applicant) {
             return res.status(404).json({
                 statusCode: 404,
@@ -129,7 +129,7 @@ const updateResume = async (req, res) => {
             whyInterestedInRole: req.body.whyInterestedInRole,
             tags: req.body.tags,
         };
-        const updatedApplicant = await applicant_1.default.findByIdAndUpdate(req.params.id, data, { new: true });
+        const updatedApplicant = await applicantModel_1.default.findByIdAndUpdate(req.params.id, data, { new: true });
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -153,8 +153,8 @@ const getAllResumeData = async (req, res) => {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
-        const applicants = await applicant_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
-        const totalItems = await applicant_1.default.countDocuments();
+        const applicants = await applicantModel_1.default.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalItems = await applicantModel_1.default.countDocuments();
         const totalPages = Math.ceil(totalItems / limit);
         return res.status(200).json({
             statusCode: 200,
@@ -180,7 +180,7 @@ exports.getAllResumeData = getAllResumeData;
 const getResumeFile = async (req, res) => {
     try {
         // Find the applicant by ID
-        const applicant = await applicant_1.default.findById(req.params.id);
+        const applicant = await applicantModel_1.default.findById(req.params.id);
         if (!applicant) {
             return res.status(404).json({
                 statusCode: 404,
@@ -252,8 +252,8 @@ const searchResume = async (req, res) => {
                 searchCriteria = { tags: { $in: tags } };
             }
         }
-        const applicants = await applicant_1.default.find(searchCriteria).sort({ createdAt: -1 }).skip(skip).limit(limit);
-        const totalItems = await applicant_1.default.countDocuments(searchCriteria);
+        const applicants = await applicantModel_1.default.find(searchCriteria).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalItems = await applicantModel_1.default.countDocuments(searchCriteria);
         if (!applicants || applicants.length === 0) {
             return res.status(404).json({
                 statusCode: 404,
@@ -302,19 +302,19 @@ const getApplicantByDocumentCategory = async (req, res) => {
         let applicants;
         switch (category) {
             case "screening":
-                applicants = await applicant_1.default.find({ "documentations.screening.completed": true }).skip(skip).limit(limit);
+                applicants = await applicantModel_1.default.find({ "documentations.screening.completed": true }).skip(skip).limit(limit);
                 break;
             case "shortlisted":
-                applicants = await applicant_1.default.find({ isShortlisted: true }).skip(skip).limit(limit);
+                applicants = await applicantModel_1.default.find({ isShortlisted: true }).skip(skip).limit(limit);
                 break;
             case "interview":
-                applicants = await applicant_1.default.find({ "documentations.interview.completed": true }).skip(skip).limit(limit);
+                applicants = await applicantModel_1.default.find({ "documentations.interview.completed": true }).skip(skip).limit(limit);
                 break;
             case "training":
-                applicants = await applicant_1.default.find({ "documentations.training.completed": true }).skip(skip).limit(limit);
+                applicants = await applicantModel_1.default.find({ "documentations.training.completed": true }).skip(skip).limit(limit);
                 break;
             case "others":
-                applicants = await applicant_1.default.find({ "documentations.others.completed": true }).skip(skip).limit(limit);
+                applicants = await applicantModel_1.default.find({ "documentations.others.completed": true }).skip(skip).limit(limit);
                 break;
             default:
                 return res.status(400).json({
@@ -330,7 +330,7 @@ const getApplicantByDocumentCategory = async (req, res) => {
                 message: "No applicants found",
             });
         }
-        const totalItems = await applicant_1.default.countDocuments();
+        const totalItems = await applicantModel_1.default.countDocuments();
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -354,7 +354,7 @@ const getApplicantByDocumentCategory = async (req, res) => {
 exports.getApplicantByDocumentCategory = getApplicantByDocumentCategory;
 const getResumeById = async (req, res) => {
     try {
-        const applicant = await applicant_1.default.findById(req.params.id);
+        const applicant = await applicantModel_1.default.findById(req.params.id);
         if (!applicant) {
             return res.status(404).json({
                 statusCode: 404,
@@ -382,7 +382,7 @@ const getResumeById = async (req, res) => {
 exports.getResumeById = getResumeById;
 const deleteResume = async (req, res) => {
     try {
-        const applicant = await applicant_1.default.findById(req.params.id);
+        const applicant = await applicantModel_1.default.findById(req.params.id);
         if (!applicant) {
             return res.status(404).json({
                 statusCode: 404,
@@ -404,7 +404,7 @@ const deleteResume = async (req, res) => {
                 error: fileError,
             });
         }
-        await applicant_1.default.findByIdAndDelete(req.params.id);
+        await applicantModel_1.default.findByIdAndDelete(req.params.id);
         return res.status(200).json({
             statusCode: 200,
             success: true,

@@ -34,4 +34,4 @@ const tagSchema = new mongoose_1.default.Schema({
     timestamps: true,
     updateAt: true,
 });
-exports.default = mongoose_1.default.model("Tags", tagSchema);
+exports.default = mongoose_1.default.model("Tag", tagSchema);

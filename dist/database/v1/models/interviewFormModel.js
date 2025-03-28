@@ -34,75 +34,77 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const facilityEventsSchema = new mongoose_1.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    author: {
+const INTERVIEW_TYPES = [
+    'Phone',
+    'Video',
+    'In-Person'
+];
+const interviewFormSchema = new mongoose_1.Schema({
+    applicant: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'users',
-        required: true
-    },
-    type: {
-        type: String,
-        enum: ['Initial Interview', 'Final Interview', 'Other'],
-        default: 'Other'
-    },
-    description: {
-        type: String
+        ref: 'Applicants'
     },
     date: {
         type: Date,
-        required: true
+        default: () => new Date(),
     },
-    isAvailable: {
-        type: Boolean,
-        default: true
+    interviewer: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'Users'
     },
-    isApproved: {
-        status: {
-            type: Boolean,
-            default: false
+    type: {
+        type: String,
+        enum: INTERVIEW_TYPES,
+    },
+    event: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'facilityEvents'
+    },
+    general: {
+        communication: {
+            type: Number,
+            default: 1
         },
-        approvedBy: {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'users',
-            required: true
+        technical: {
+            type: Number,
+            default: 1
+        },
+        problemSoving: {
+            type: Number,
+            default: 1
+        },
+        culturalFit: {
+            type: Number,
+            default: 1
+        },
+        workExperienceRelevance: {
+            type: Number,
+            default: 1
+        },
+        leadership: {
+            type: Number,
+            default: 1
         },
     },
-    capacity: {
-        type: Number,
-        required: true
-    },
-    participants: [
+    questions: [
         {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'applicants'
+            type: mongoose_1.default.Types.ObjectId,
+            ref: 'InterviewQuestions'
         }
     ],
-    facility: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'facilities',
-        required: true
+    strength: {
+        type: String,
     },
-    timeslot: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'times'
+    weakness: {
+        type: String,
     },
-    emailSent: {
-        status: {
-            type: Boolean,
-            default: false
-        },
-        history: [
-            {
-                type: mongoose_1.default.Schema.Types.ObjectId,
-                ref: 'emails'
-            }
-        ],
+    recommendation: {
+        type: String,
     },
+    finalComments: {
+        type: String,
+    }
 }, {
     timestamps: true,
 });
-exports.default = mongoose_1.default.model('facilityEvents', facilityEventsSchema);
+exports.default = mongoose_1.default.model('InterviewForm', interviewFormSchema);

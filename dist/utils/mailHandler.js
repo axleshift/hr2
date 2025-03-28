@@ -1,78 +1,104 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmail = void 0;
-const nodemailer = __importStar(require("nodemailer"));
-const config_1 = require("../config");
+exports.sendEmail = exports.verifyMailConn = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
+// import { config } from '../config';
 const logger_1 = __importDefault(require("../middlewares/logger"));
-// Configure the transporter once
-const transporter = nodemailer.createTransport({
-    host: config_1.config.google.smtp.host,
-    port: Number(config_1.config.google.smtp.port) || 0,
-    secure: config_1.config.google.smtp.secure || false,
+const path_1 = __importDefault(require("path"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env') });
+// Configure the transporter
+// logger.info(JSON.stringify(config, null, 2))
+// logger.info(config.google.smtp.host)
+// logger.info(process.env.SMTP_HOST)
+// DO NOT WORK
+// const transporter: Transporter = nodemailer.createTransport({
+//   host: config.google.smtp.host?.toString(),
+//   port: Number(config.google.smtp.port),
+//   auth: {
+//     user: config.google.smtp.user?.toString(),
+//     pass: config.google.smtp.pass?.toString(),
+//   },
+//   logger: true,
+//   debug: true,
+// } as unknown as SMTPTransport.Options);
+// DO NOT WORK
+// const transporter: Transporter = nodemailer.createTransport({
+//   host: process.env.SMTP_HOST?.toString(),
+//   port: Number(process.env.SMTP_PORT),
+//   auth: {
+//     user: process.env.SMTP_USER,
+//     pass: process.env.SMTP_PASS
+//   },
+//   logger: true,
+//   debug: true,
+// } as SMTPTransport.Options);
+// WORKS
+// const transporter: Transporter = nodemailer.createTransport({
+//   host: 'smtp.ethereal.email',
+//   port: 587,
+//   auth: {
+//     user: 'donald.rogahn15@ethereal.email',
+//     pass: 'hvSxFSXETupEA1Uq4g'
+//   },
+//   logger: true,
+//   debug: true,
+// } as SMTPTransport.Options);
+const transporter = nodemailer_1.default.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
     auth: {
-        user: config_1.config.google.smtp.user,
-        pass: config_1.config.google.smtp.pass,
+        user: 'hr2axleshift@gmail.com',
+        pass: 'xdfonwngnzqbxidt'
     },
+    logger: true,
+    debug: true,
 });
 /**
- * Sends an email using nodemailer
- * @param to Recipient email address
- * @param subject Email subject
- * @param text Plain text email body
- * @param html (Optional) HTML email body
+ * Verifies the SMTP connection configuration.
+ * @returns A promise that resolves with the verification result.
  */
-const sendEmail = async (to, subject, text, html) => {
+const verifyMailConn = async () => {
     try {
+        logger_1.default.info('📨 Verifying SMTP...');
+        await transporter.verify();
+        logger_1.default.info('SMTP connection verified successfully.');
+    }
+    catch (error) {
+        logger_1.default.error('SMTP connection verification failed:', JSON.stringify(error, null, 2));
+        throw error;
+    }
+};
+exports.verifyMailConn = verifyMailConn;
+/**
+ * Sends an email using Nodemailer to one or multiple recipients.
+ * @param title Title of the emnail
+ * @param to Recipient email address(es).
+ * @param subject Email subject.
+ * @param text Plain text email body.
+ * @param html Optional HTML email body.
+ * @returns A promise that resolves with the send operation result.
+ */
+const sendEmail = async (title, to, subject, text, html) => {
+    try {
+        const recipients = Array.isArray(to) ? to.join(', ') : to;
         const mailOptions = {
-            from: '"Facility Events" <no-reply@hr2.axleshift.com/>',
-            to,
+            from: `"${title}" <no-reply@hr2.axleshift.com>`,
+            to: recipients,
             subject,
             text,
             html,
         };
         await transporter.sendMail(mailOptions);
-        logger_1.default.info(`Email sent to ${to}`);
-        return { success: true, message: `Email sent to ${to}` };
+        logger_1.default.info(`Email sent to: ${recipients}`);
+        return { success: true, message: `Email sent to: ${recipients}` };
     }
     catch (error) {
-        logger_1.default.error("Error sending email:", error);
-        return { success: false, message: "Error sending email" };
+        logger_1.default.error('Error sending email:', error);
+        return { success: false, message: `Error sending email` };
     }
 };
 exports.sendEmail = sendEmail;
