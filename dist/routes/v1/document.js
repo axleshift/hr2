@@ -12,27 +12,27 @@ const documentController_1 = require("../../database/v1/controllers/documentCont
 // Create a new document
 router.post("/create", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.createDocument);
+}, true), documentController_1.createDocument);
 // Update an existing document
 router.put("/update/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.updateDocument);
+}, true), documentController_1.updateDocument);
 // Get a document by ID
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.getDocumentById);
+}, true), documentController_1.getDocumentById);
 // Get documents by applicant ID
 router.get("/applicant/:applicantId/:category", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.getDocumentByApplicantId);
+}, true), documentController_1.getDocumentByApplicantId);
 // Get documents by category
 router.get("/category/:category", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.getDocumentByCategory);
+}, true), documentController_1.getDocumentByCategory);
 // Search documents
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), documentController_1.searchDocument);
+}, true), documentController_1.searchDocument);
 exports.default = {
     metadata: {
         path: "/document",

@@ -9,28 +9,28 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const applicantController_1 = require("../../database/v1/controllers/applicantController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.addNewResume);
+}, true), applicantController_1.addNewResume);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.updateResume);
+}, true), applicantController_1.updateResume);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.getAllResumeData);
+}, true), applicantController_1.getAllResumeData);
 router.get("/category/:category", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.getApplicantByDocumentCategory);
+}, true), applicantController_1.getApplicantByDocumentCategory);
 router.get("/download/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.getResumeFile);
+}, true), applicantController_1.getResumeFile);
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.searchResume);
+}, true), applicantController_1.searchResume);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.getResumeById);
+}, true), applicantController_1.getResumeById);
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), applicantController_1.deleteResume);
+}, true), applicantController_1.deleteResume);
 exports.default = {
     metadata: {
         path: "/applicant",

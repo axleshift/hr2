@@ -11,7 +11,7 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const apiKeyController_1 = require("../../database/v1/controllers/apiKeyController");
 router.get("/update/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), apiKeyController_1.updateApikey);
+}, true), apiKeyController_1.updateApikey);
 exports.default = {
     metadata: {
         path: "/api",

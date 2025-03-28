@@ -15,13 +15,13 @@ const accountController_1 = require("../../database/v1/controllers/accountContro
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), accountController_1.getAllAccounts);
+}, true), accountController_1.getAllAccounts);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), accountController_1.getAccountById);
+}, true), accountController_1.getAccountById);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), accountController_1.updateAccount);
+}, true), accountController_1.updateAccount);
 exports.default = {
     metadata: {
         path: "/account",

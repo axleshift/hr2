@@ -11,25 +11,25 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const tagController_1 = require("../../database/v1/controllers/tagController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.createTag);
+}, true), tagController_1.createTag);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.getAllTags);
+}, true), tagController_1.getAllTags);
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.searchTags);
+}, true), tagController_1.searchTags);
 router.get("/category/:category", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.getTagByCategory);
+}, true), tagController_1.getTagByCategory);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.getTagById);
+}, true), tagController_1.getTagById);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.updateTag);
+}, true), tagController_1.updateTag);
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, true, true), tagController_1.deleteTag);
+}, true), tagController_1.deleteTag);
 exports.default = {
     metadata: {
         path: "/tags",

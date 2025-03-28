@@ -4,7 +4,6 @@
  * @description Middleware to verify user session
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("../config");
 // sendError helper function
 const sendError = (res, statusCode, message) => {
     console.error(`Error ${statusCode}: ${message}`);
@@ -13,12 +12,6 @@ const sendError = (res, statusCode, message) => {
         success: false,
         message,
     });
-};
-// validate csrf token helper function
-const validateCSRFToken = (req) => {
-    const csrfToken = req.session?.csrfToken;
-    const clientToken = req.headers["x-csrf-token"] || csrfToken;
-    return csrfToken && clientToken && csrfToken === clientToken;
 };
 /**
  * verifySession middleware
@@ -31,7 +24,7 @@ const validateCSRFToken = (req) => {
  * It also validates the CSRF token if enabled
  * It allows guest access if enabled
  */
-const verifySession = (metadata, validateCsrf = true, allowGuest = false) => {
+const verifySession = (metadata, allowGuest = false) => {
     return (req, res, next) => {
         if (!req.session) {
             return sendError(res, 401, "Unauthorized: Session not initialized");
@@ -49,9 +42,6 @@ const verifySession = (metadata, validateCsrf = true, allowGuest = false) => {
         const permissions = metadata.permissions;
         if (permissions.length > 0 && !permissions.includes(user.role)) {
             return sendError(res, 403, "Forbidden: Insufficient permissions");
-        }
-        if (validateCsrf && config_1.config.server.csrfProtection && !validateCSRFToken(req)) {
-            return sendError(res, 403, "Forbidden: Invalid CSRF token");
         }
         next();
     };
