@@ -235,7 +235,10 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
 
   useEffect(() => {
     if (facility && facility._id) {
+      console.log('Facility', facility)
       setFacilityData(facility)
+      console.log('Facility Data', facilityData)
+      getFacilityData()
     }
   }, [facility])
 

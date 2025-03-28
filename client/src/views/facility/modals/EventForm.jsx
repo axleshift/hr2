@@ -127,6 +127,8 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       // const res = isEdit
       //   ? await put(`facilities/event/timeslot/${slot._id}`, data)
       //   : await post(`facilities/event/timeslot/${slot._id}`, data)
+
+      console.log('Event Form', formData)
       let res
       switch (eventFormState) {
         case 'edit':
@@ -494,7 +496,6 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                           <CTableDataCell>{p.applicant.email}</CTableDataCell>
                                           <CTableDataCell>{p.applicant.phone}</CTableDataCell>
                                           <CTableDataCell>
-                                            {console.log(p.mail)}
                                             {p.mail.sent ? (
                                               <span className="text-success">Sent</span>
                                             ) : (

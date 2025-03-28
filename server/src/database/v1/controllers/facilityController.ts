@@ -1,7 +1,7 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
 import Facility from "../models/facilityModel";
-import FacilityEvent from "../models/FacilityEventModel";
+import FacilityEvent from "../models/facilityEventModel";
 import Timeslot from "../models/timeslotModel";
 import Applicant from "../models/applicantModel";
 import mongoose from "mongoose";
@@ -95,33 +95,60 @@ export const getAllFacilities = async (req: req, res: res) => {
   }
 };
 
+// export const getFacilityById = async (req: req, res: res) => {
+//   try {
+//     const { facilityId } = req.params;
+//     const facility = await Facility.findById(facilityId);
+
+//     if (!facility) {
+//       return res.status(404).json({ message: "Facility not found" });
+//     }
+
+//     const timeslots = await Timeslot.find({ facility: facilityId });
+
+//     const timeslotsData = await Promise.all(timeslots.map(async (timeslot) => {
+//       const participants = await Applicant.find({ events: timeslot.event });
+//       return {
+//         ...timeslot.toObject(),
+//         participants,
+//       };
+//     }));
+
+//     const facilityData = {
+//       ...facility.toObject(),
+//       timeslots: timeslotsData,
+//     };
+
+//     return res.status(200).json({ message: "Facility found", data: facilityData });
+//   } catch (error) {
+//     logger.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
 export const getFacilityById = async (req: req, res: res) => {
   try {
-    const { id } = req.params;
-    const facility = await Facility.findById(id);
+    const { facilityId } = req.params;
+
+    const facility = await Facility.findById(facilityId).populate({
+      path: "timeslots",
+      populate: {
+        path: "event",
+        model: "facilityEvents",
+        // populate: {
+        //   path: "participants.applicant",
+        //   model: "Applicant",
+        // },
+      },
+    });
 
     if (!facility) {
       return res.status(404).json({ message: "Facility not found" });
     }
 
-    const timeslots = await Timeslot.find({ facility: id });
-
-    const timeslotsData = await Promise.all(timeslots.map(async (timeslot) => {
-      const participants = await Applicant.find({ events: timeslot.event });
-      return {
-        ...timeslot.toObject(),
-        participants,
-      };
-    }));
-
-    const facilityData = {
-      ...facility.toObject(),
-      timeslots: timeslotsData,
-    };
-
-    return res.status(200).json({ message: "Facility found", data: facilityData });
+    return res.status(200).json({ message: "Facility found", data: facility });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -398,7 +425,7 @@ export const updateFacilityEvent = async (req: req, res: res) => {
   try {
     const { timeslotId } = req.params;
     const { name, description, capacity, type, isApproved } = req.body;
-
+    
     if (!timeslotId) {
       return res.status(400).json({ message: "Timeslot id is required" });
     }
@@ -433,16 +460,9 @@ export const updateFacilityEvent = async (req: req, res: res) => {
     event.type = type;
     event.date = formattedDate;
     event.capacity = capacity;
-
-    // Ensure isApproved exists before modifying
-    if (!event.isApproved) {
-      event.isApproved = {
-        status: false,
-        approvedBy: new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId,
-      };
-    } else {
-      event.isApproved.status = isApproved;
-      event.isApproved.approvedBy = new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId;
+    event.isApproved = {
+      status: isApproved,
+      approvedBy: new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId
     }
 
     const updatedEvent = await event.save();
