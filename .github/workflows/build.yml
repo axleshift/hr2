@@ -50,7 +50,7 @@ jobs:
           source-directory: client/build
           destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
           destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
-          target-branch: ${{secrets.CLIENT_TARGET_BRANCH}}
+          target-branch: "hr2-frontend"
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build client"
 
@@ -87,6 +87,6 @@ jobs:
           source-directory: server
           destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
           destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
-          target-branch: ${{secrets.SERVER_TARGET_BRANCH}}
+          target-branch: "hr2-backend"
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build server"
