@@ -12,7 +12,6 @@ router.post("/:id/post",
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createJobposter);
 router.get("/all",
@@ -20,7 +19,6 @@ router.get("/all",
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getAllJobposters);
 router.get("/:id",
@@ -28,7 +26,6 @@ router.get("/:id",
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getJobposterByRefId);
 router.delete("/:id",
@@ -36,7 +33,6 @@ router.delete("/:id",
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   removeJobposter);
 

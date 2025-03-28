@@ -12,8 +12,7 @@ router.post(
     {
       permissions: ["user", "admin"],
     },
-    true,
-    true
+    false,
   ),
   createUser
 );
@@ -23,8 +22,7 @@ router.post(
     {
       permissions: ["user", "admin"],
     },
-    true,
-    true
+    false,
   ),
   login
 );
@@ -34,7 +32,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   logout
 );
@@ -42,7 +39,9 @@ router.get(
   "/verify",
   verifySession({
     permissions: ["user", "admin"],
-  }, true, true),
+  },
+    true,
+  ),
   verify
 );
 

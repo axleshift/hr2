@@ -13,7 +13,6 @@ router.post(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   createJobposting
 );
@@ -24,7 +23,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   searchJobpostings
 );
@@ -34,7 +32,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getAllJobpostings
 );
@@ -44,7 +41,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getAllScheduledJobpostings
 );
@@ -54,7 +50,6 @@ router.get(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   getJobpostingById
 );
@@ -64,7 +59,6 @@ router.put(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   updateJobposting
 );
@@ -74,7 +68,6 @@ router.delete(
     permissions: ["user", "admin"],
   },
     true,
-    true
   ),
   deleteJobposting
 );
