@@ -22,7 +22,7 @@ router.post(
     {
       permissions: ["user", "admin"],
     },
-    false,
+    true,
   ),
   login
 );

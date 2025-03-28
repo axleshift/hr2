@@ -1,10 +1,10 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-// import { config } from '../config';
+import { config } from '../config';
 import logger from '../middlewares/logger';
-import path from 'path'
-import dotenv from "dotenv";
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// import path from 'path'
+// import dotenv, { config } from "dotenv";
+// dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 
 // Configure the transporter
@@ -58,8 +58,8 @@ const transporter: Transporter = nodemailer.createTransport({
     user: 'hr2axleshift@gmail.com',
     pass: 'xdfonwngnzqbxidt'
   },
-  logger: true,
-  debug: true,
+  logger: config.env === "development",
+  debug: config.env === "development",
 } as SMTPTransport.Options);
 
 /**
