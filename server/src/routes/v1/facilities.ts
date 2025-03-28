@@ -33,10 +33,11 @@ import {
   SendEmailToFacilityEventParticipants,
 } from "../../database/v1/controllers/facilityController";
 
+// Facility Management
 router.post(
   "/create",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -46,7 +47,7 @@ router.post(
 router.put(
   "/update/:facilityId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -56,7 +57,7 @@ router.put(
 router.get(
   "/all",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -66,7 +67,7 @@ router.get(
 router.get(
   "/:facilityId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -76,19 +77,18 @@ router.get(
 router.delete(
   "/delete/:facilityId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
   removeFacility
 );
 
-
 // Timeslots
 router.post(
   "/timeslot/create/:facilityId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -98,7 +98,7 @@ router.post(
 router.get(
   "/timeslot/:facilityId/:date",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   }, true,
   ),
   getAllFacilityTimeslotsForDate
@@ -107,117 +107,114 @@ router.get(
 router.delete(
   "/timeslot/delete/:timeslotId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
   removeFacilityTimeslot
-)
+);
 
-// Event
-
+// Event Management
 router.post(
   "/event/:timeslotId",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
   createFacilityEvent
-)
+);
 
 router.put(
   "/event/:timeslotId",
   verifySession({
-    permissions: ["user", "admin"]
+    permissions: ["admin", "manager"]
   },
     true,
   ),
   updateFacilityEvent
-)
+);
 
 router.delete(
   "/event/:timeslotId",
   verifySession({
-    permissions: ["user", "admin"]
+    permissions: ["admin", "manager"]
   },
     true,
   ),
   deleteFacilityEvent
-)
+);
 
 router.get(
   "/events/:eventId/calendar-states",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   getFacilityCalendarStates
-)
+);
 
 router.get(
   "/event/:eventId",
   verifySession({
-    permissions: ["user", "admin"]
+    permissions: ["admin", "manager", "recruiter", "interviewer"]
   },
     true,
   ),
   getFacilityEventByID
-)
+);
 
 router.get(
   "/events/:eventId/:date",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   getFacilityEventsForDate
-)
+);
 
 router.get(
   "/events/upcoming",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   getUpcomingEvents
-)
+);
 
 // Booking
-
 router.post(
   "/events/:eventId/book",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
   bookApplicantToEvent
-)
+);
 
 router.post(
   "/events/:eventId/send-email",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
   SendEmailToFacilityEventParticipants
-)
+);
 
 router.delete(
   "/events/:eventId/unbook",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
   unbookApplicantFromEvent
-)
-
+);
 
 export default {
   metadata: {

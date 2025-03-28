@@ -7,71 +7,71 @@ dotenv.config();
 import verifySession from "../../middlewares/verifySession";
 import { createDocument, updateDocument, getDocumentById, getDocumentByApplicantId, getDocumentByCategory, searchDocument } from "../../database/v1/controllers/documentController";
 
-// Create a new document
+const allowedRoles = ["admin", "manager", "recruiter", "interviewer"];
+
 router.post(
   "/create",
   verifySession(
     {
-      permissions: ["user", "admin"],
+      permissions: allowedRoles,
     },
     true,
   ),
   createDocument
 );
 
-// Update an existing document
 router.put(
   "/update/:id",
   verifySession(
     {
-      permissions: ["user", "admin"],
+      permissions: allowedRoles,
     },
     true,
   ),
   updateDocument
 );
 
-// Get a document by ID
 router.get(
   "/:id",
-  verifySession({
-    permissions: ["user", "admin"],
-  },
-  true,
-),
+  verifySession(
+    {
+      permissions: allowedRoles,
+    },
+    true,
+  ),
   getDocumentById
 );
 
-// Get documents by applicant ID
 router.get(
   "/applicant/:applicantId/:category",
-  verifySession({
-    permissions: ["user", "admin"],
-  },
-  true,
-),
+  verifySession(
+    {
+      permissions: allowedRoles,
+    },
+    true,
+  ),
   getDocumentByApplicantId
 );
 
-// Get documents by category
 router.get(
   "/category/:category",
-  verifySession({
-    permissions: ["user", "admin"],
-  },
-  true,
-),
+  verifySession(
+    {
+      permissions: allowedRoles,
+    },
+    true,
+  ),
   getDocumentByCategory
 );
 
-// Search documents
 router.get(
   "/search",
-  verifySession({
-    permissions: ["user", "admin"],
-  },
-  true,
-),
+  verifySession(
+    {
+      permissions: allowedRoles,
+    },
+    true,
+  ),
   searchDocument
 );
 
