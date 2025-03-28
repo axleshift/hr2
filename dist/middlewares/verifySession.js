@@ -16,7 +16,6 @@ const sendError = (res, statusCode, message) => {
 /**
  * verifySession middleware
  * @param metadata - Metadata object containing permissions
- * @param validateCsrf - Boolean to enable/disable CSRF token validation (default: true)
  * @param allowGuest - Boolean to allow guest access without session (default: false)
  * @returns Express middleware
  *

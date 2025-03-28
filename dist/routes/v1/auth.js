@@ -14,7 +14,7 @@ router.post("/register", (0, verifySession_1.default)({
 }, false), authController_1.createUser);
 router.post("/login", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
-}, false), authController_1.login);
+}, true), authController_1.login);
 router.get("/logout", (0, verifySession_1.default)({
     permissions: ["user", "admin"],
 }, true), authController_1.logout);

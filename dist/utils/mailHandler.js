@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = exports.verifyMailConn = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-// import { config } from '../config';
+const config_1 = require("../config");
 const logger_1 = __importDefault(require("../middlewares/logger"));
-const path_1 = __importDefault(require("path"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env') });
+// import path from 'path'
+// import dotenv, { config } from "dotenv";
+// dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 // Configure the transporter
 // logger.info(JSON.stringify(config, null, 2))
 // logger.info(config.google.smtp.host)
@@ -54,8 +54,8 @@ const transporter = nodemailer_1.default.createTransport({
         user: 'hr2axleshift@gmail.com',
         pass: 'xdfonwngnzqbxidt'
     },
-    logger: true,
-    debug: true,
+    logger: config_1.config.env === "development",
+    debug: config_1.config.env === "development",
 });
 /**
  * Verifies the SMTP connection configuration.
