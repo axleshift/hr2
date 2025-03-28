@@ -14,7 +14,7 @@ const emailSchema = new mongoose.Schema(
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
     recipients: [
@@ -25,7 +25,7 @@ const emailSchema = new mongoose.Schema(
         },
         recipientType: {
           type: String,
-          enum: ["Users", "Applicants"],
+          enum: ["User", "Applicant"],
           required: true,
         },
       },
@@ -41,7 +41,7 @@ const emailSchema = new mongoose.Schema(
     },
     replyTo: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Emails",
+      ref: "Email",
       default: null,
     },
     isRead: {
@@ -60,4 +60,4 @@ const emailSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("emails", emailSchema);
+export default mongoose.model("Email", emailSchema);

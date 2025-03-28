@@ -1,6 +1,6 @@
 import { hasher } from "../../../utils/hasher";
 import { Request as req, Response as res } from "express";
-import User from "../models/user";
+import User from "../models/userModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../../../config";
@@ -71,18 +71,19 @@ export const createUser = async (req: req, res: res) => {
 export const login = async (req: req, res: res) => {
   const { username, password } = req.body;
   logger.info(`User ${username} is trying to login`);
+
   try {
     const user = await User.findOne({ username });
+
     if (!user) {
       return res.status(404).json({
         statusCode: 404,
         success: false,
-        error: "User not found",
+        message: "User not found",
       });
     }
 
-    const storedHashedPassword = user.password;
-    const isPasswordValid = bcrypt.compareSync(password, storedHashedPassword);
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -91,12 +92,13 @@ export const login = async (req: req, res: res) => {
         message: "Invalid credentials",
       });
     }
+
     const jwtSecret = config.server.jwt.secret as string;
-    const token: string = jwt.sign({ username, password }, jwtSecret, {
+    const token: string = jwt.sign({ username, id: user._id }, jwtSecret, {
       expiresIn: "1h",
     });
 
-    const data = {
+    const userData = {
       _id: user._id.toString(),
       firstname: user.firstname,
       lastname: user.lastname,
@@ -104,23 +106,36 @@ export const login = async (req: req, res: res) => {
       role: user.role,
       email: user.email,
       status: user.status,
-      token: token,
+      token,
       emailVerifiedAt: user.emailVerifiedAt || null,
     };
-    req.session.user = data;
-    req.session.save((err) => {
+
+    // ✅ Regenerate session to prevent fixation attack
+    req.session.regenerate((err) => {
       if (err) {
         return res.status(500).json({
           statusCode: 500,
           success: false,
-          message: "Error saving session",
+          message: "Error regenerating session",
         });
       }
-      res.status(200).json({
-        statusCode: 200,
-        success: true,
-        message: "User verified successfully",
-        data,
+
+      req.session.user = userData;
+      req.session.save((saveErr) => {
+        if (saveErr) {
+          return res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Error saving session",
+          });
+        }
+
+        res.status(200).json({
+          statusCode: 200,
+          success: true,
+          message: "User logged in successfully",
+          data: userData,
+        });
       });
     });
   } catch (error) {
@@ -128,7 +143,7 @@ export const login = async (req: req, res: res) => {
     res.status(500).json({
       statusCode: 500,
       success: false,
-      message: "Error verifying user",
+      message: "Error logging in",
       error,
     });
   }
@@ -169,16 +184,24 @@ export const logout = async (req: req, res: res) => {
         statusCode: 500,
         success: false,
         message: "Error destroying session",
-        error: err,
       });
     }
+
+    res.clearCookie("connect.sid", {
+      path: "/",
+      httpOnly: true,
+      secure: config.env === "production", // Only use secure cookies in production
+      sameSite: "strict",
+    });
+
     res.status(200).json({
       statusCode: 200,
       success: true,
-      message: "Session destroyed successfully",
+      message: "Logged out successfully",
     });
   });
 };
+
 
 export const verifyEmail = async (req: req, res: res) => {
   try {

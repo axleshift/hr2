@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 // I hate that I need to do this
+const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Other'] as const;
+
 interface IFacilityEvent extends Document {
   name: string;
   author: mongoose.Types.ObjectId;
@@ -13,7 +15,15 @@ interface IFacilityEvent extends Document {
     approvedBy: mongoose.Types.ObjectId;
   };
   capacity: number;
-  participants: mongoose.Types.ObjectId[];
+  participants: [
+    {
+      applicant: mongoose.Types.ObjectId;
+      mail: {
+        sent: boolean,
+        reason: string,
+      }
+    }
+  ];
   facility: mongoose.Types.ObjectId;
   timeslot: mongoose.Types.ObjectId;
   emailSent: {
@@ -30,12 +40,12 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'User',
       required: true
     },
     type: {
       type: String,
-      enum: ['Initial Interview', 'Final Interview', 'Other'],
+      enum: EVENT_TYPES,
       default: 'Other'
     },
     description: {
@@ -56,8 +66,7 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
       },
       approvedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: true
+        ref: 'User',
       },
     },
     capacity: {
@@ -66,19 +75,30 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
     },
     participants: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'applicants'
+        applicant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Applicant'
+        },
+        mail: {
+          sent: {
+            type: Boolean,
+            default: false,
+          },
+          reason: {
+            type: String
+          }
+        }
       }
     ],
     facility: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'facilities',
+      ref: 'Facility',
       required: true
     },
     timeslot: {
       type:
         mongoose.Schema.Types.ObjectId,
-      ref: 'times'
+      ref: 'Timeslot'
     },
     emailSent: {
       status: {
@@ -87,10 +107,15 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
       },
       history: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'emails'
+          date: {
+            type: Date,
+            default: () => new Date()
+          },
+          content: {
+            type: String,
+          }
         }
-      ],
+      ]
     },
   },
   {

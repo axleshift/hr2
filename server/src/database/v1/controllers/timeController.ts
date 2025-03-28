@@ -1,7 +1,7 @@
 import logger from "../../../middlewares/logger";
 import { Request as req, Response as res } from "express";
-import FacilityDates from "../models/EventModel";
-import Time from "../models/time";
+import FacilityEvent from "../models/facilityEventModel";
+import Time from "../models/timeslotModel";
 
 const convertToUTC = async (date: Date) => {
   return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
@@ -25,7 +25,7 @@ export const createDate = async (req: req, res: res) => {
       timeslots,
     };
 
-    const newDate = await FacilityDates.create(dateData);
+    const newDate = await FacilityEvent.create(dateData);
     if (!newDate) {
       return res.status(500).json({ message: "Date not created" });
     }
@@ -46,7 +46,7 @@ export const updateDate = async (req: req, res: res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const dateData = await FacilityDates.findById(id);
+    const dateData = await FacilityEvent.findById(id);
     if (!dateData) {
       return res.status(404).json({ message: "Date not found" });
     }
@@ -104,7 +104,7 @@ export const getDateById = async (req: req, res: res) => {
   try {
     const { id } = req.params;
 
-    const date = await FacilityDates.findById(id);
+    const date = await FacilityEvent.findById(id);
     if (!date) {
       return res.status(404).json({ message: "Date not found" });
     }
@@ -123,7 +123,7 @@ export const getDateByDate = async (req: req, res: res) => {
     const dateObj = new Date(date);
     const utcDate = await convertToUTC(dateObj);
 
-    const dateData = await FacilityDates.findOne({ utcDate });
+    const dateData = await FacilityEvent.findOne({ utcDate });
     if (!dateData) {
       return res.status(404).json({ message: "Date not found" });
     }

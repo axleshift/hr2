@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useContext } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { AuthContext } from '../../context/authContext'
 import { AppContext } from '../../context/appContext'
 import { useNavigate } from 'react-router-dom'
@@ -23,107 +22,108 @@ import {
   CButtonGroup,
   CAlert,
   CTooltip,
+  CFormFeedback,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faLock, faX, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
-  const appVersion = config.appVersion
   const navigate = useNavigate()
   const recaptchaRef = useRef()
-  const { login, isAuthenticated, userInformation } = useContext(AuthContext)
+  const { login, isAuthenticated } = useContext(AuthContext)
   const { addToast } = useContext(AppContext)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [captchaValue, setCaptchaValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
   const loginSchema = z.object({
-    username: z
-      .string()
-      .min(3, { message: 'Username must be at least 3 characters long' })
-      .max(20, { message: 'Username must be at most 20 characters long' }),
-    password: z
-      .string()
-      .min(8, { message: 'Password must be at least 8 characters long' })
-      .max(50, { message: 'Password must be at most 50 characters long' }),
+    username: z.string().min(3, 'Username must be at least 3 characters long').max(20),
+    password: z.string().min(8, 'Password must be at least 8 characters long').max(50),
   })
 
   const {
-    register: loginRegister,
-    handleSubmit: loginHandleSubmit,
-    formState: { errors: loginErrors },
+    register,
+    handleSubmit,
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   })
 
+  // const onSubmit = (data) => {
+  //   setIsLoading(true)
+  //   const token = recaptchaRef.current.getValue()
+  //   login(data.username, data.password, (success) => {
+  //     setIsLoading(false)
+  //     if (success) {
+  //       navigate('/dashboard/overview')
+  //     } else {
+  //       setErrorMessage('Invalid username or password')
+  //     }
+  //   })
+  // }
+
   const onSubmit = (data) => {
     setIsLoading(true)
-    const token = recaptchaRef.current.getValue()
-    setCaptchaValue(token)
-    login(data.username, data.password, (success) => {
+
+    if (recaptchaRef.current) {
+      recaptchaRef.current.execute() // Trigger reCAPTCHA validation
+      recaptchaRef.current.data = data // Store form data inside recaptchaRef
+    } else {
+      console.error('reCAPTCHA ref is not available.')
+      setIsLoading(false)
+    }
+  }
+
+  const onReCAPTCHAChange = (token) => {
+    if (!token) {
+      console.error('reCAPTCHA token is undefined.')
+      setErrorMessage('reCAPTCHA validation failed. Please try again.')
+      setIsLoading(false)
+      return
+    }
+
+    // Retrieve stored form data from recaptchaRef
+    const formData = recaptchaRef.current.data
+    if (!formData) {
+      console.error('Form data is missing.')
+      setIsLoading(false)
+      return
+    }
+
+    login(formData.username, formData.password, (success) => {
+      setIsLoading(false)
       if (success) {
-        setIsLoading(false)
-        const username = userInformation.username
-        console.log('Login.js: onSubmit: userInformation: ', JSON.stringify(userInformation))
-        console.log('Login.js: onSubmit: username: ', username)
-        // addToast(
-        //   'Login successful',
-        //   `
-        //   Welcome back, ${data.username}! You have successfully logged in.
-        //   `,
-        //   'success',
-        // )
         navigate('/dashboard/overview')
       } else {
         setErrorMessage('Invalid username or password')
-        setIsLoading(false)
       }
     })
-  }
-
-  const handleGoogleLogin = () => {}
-
-  const handleSignUp = () => {
-    navigate('/register')
   }
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard')
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, navigate])
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
-        {isLoading && (
-          <div className="loading-overlay">
-            <CSpinner color="primary" variant="grow" />
-          </div>
-        )}
         <CRow className="justify-content-center">
           <CCol md={8} lg={6} xl={5} className="my-2">
             <CCard className="p-1 p-sm-4 shadow">
               <CCardBody>
-                {errorMessage && (
-                  <CAlert color="danger" className="d-flex align-items-center">
-                    <div className="me-2">
-                      <FontAwesomeIcon icon={faX} />
-                    </div>
-                    <div>
-                      <span>{errorMessage}</span>
-                    </div>
-                  </CAlert>
-                )}
-                <CForm onSubmit={loginHandleSubmit(onSubmit)}>
+                {errorMessage && <CAlert color="danger">{errorMessage}</CAlert>}
+                <CForm onSubmit={handleSubmit(onSubmit)}>
                   <h1>Login</h1>
                   <p className="text-body-secondary">Sign In to your account</p>
                   <ReCAPTCHA
                     ref={recaptchaRef}
                     size="invisible"
                     sitekey={config.google.recaptcha.siteKey}
+                    onChange={onReCAPTCHAChange}
                   />
+
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <FontAwesomeIcon icon={faUser} />
@@ -132,13 +132,14 @@ const Login = () => {
                       type="text"
                       placeholder="Username"
                       autoComplete="username"
-                      {...loginRegister('username')}
-                      invalid={!!loginErrors.username}
+                      {...register('username')}
+                      invalid={!!errors.username}
                     />
-                    {loginErrors.username && (
-                      <div className="invalid-feedback">{loginErrors.username.message}</div>
+                    {errors.username && (
+                      <CFormFeedback invalid>{errors.username.message}</CFormFeedback>
                     )}
                   </CInputGroup>
+
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <FontAwesomeIcon icon={faLock} />
@@ -147,83 +148,57 @@ const Login = () => {
                       type={isPasswordVisible ? 'text' : 'password'}
                       placeholder="Password"
                       autoComplete="current-password"
-                      {...loginRegister('password')}
-                      invalid={!!loginErrors.password}
+                      {...register('password')}
+                      invalid={!!errors.password}
                     />
-                    <CInputGroupText>
+                    <CInputGroupText onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
                       <CTooltip
                         content={isPasswordVisible ? 'Hide password' : 'Show password'}
                         placement="top"
                       >
-                        <span onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
-                          <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
-                        </span>
+                        <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
                       </CTooltip>
                     </CInputGroupText>
-                    {loginErrors.password && (
-                      <div className="invalid-feedback">{loginErrors.password.message}</div>
+                    {errors.password && (
+                      <CFormFeedback invalid>{errors.password.message}</CFormFeedback>
                     )}
                   </CInputGroup>
+
                   <p>
                     <small>
                       By continuing, you agree to our
-                      <a
-                        onClick={() => navigate('/policy')}
-                        className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      >
+                      <a onClick={() => navigate('/PolicyTerms')} className="link-primary">
                         {' '}
                         Privacy Policy{' '}
                       </a>
                       and
-                      <a
-                        onClick={() => navigate('/terms')}
-                        className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      >
+                      <a onClick={() => navigate('/PolicyTerms')} className="link-primary">
                         {' '}
                         Terms of Service
                       </a>
                       .
                     </small>
                   </p>
-                  <div className="d-grid mb-3">
+
+                  <div className="d-grid">
                     <CButtonGroup>
-                      <CButton type="submit" color="primary" className="me-2 rounded">
-                        Login
-                      </CButton>
-                      <CButton
-                        color="outline-primary"
-                        className="me-2 rounded"
-                        onClick={handleSignUp}
-                      >
-                        Signup
-                      </CButton>
+                      {!isLoading ? (
+                        <>
+                          <CButton type="submit" color="primary">
+                            Login
+                          </CButton>
+                          <CButton color="outline-primary" onClick={() => navigate('/register')}>
+                            Signup
+                          </CButton>
+                        </>
+                      ) : (
+                        <CButton color="outline-info" disabled>
+                          <CSpinner size="sm" /> <span>Logging in...</span>
+                        </CButton>
+                      )}
                     </CButtonGroup>
                   </div>
-                  <div className="text-center visually-hidden">
-                    <span className="text-muted d-block mb-1">
-                      <small>Or continue with</small>
-                    </span>
-                    <CButton color="outline-primary" className="me-2" onClick={handleGoogleLogin}>
-                      <FontAwesomeIcon icon={faGoogle} />
-                    </CButton>
-                    <CButton
-                      color="outline-primary"
-                      className="me-2"
-                      // onClick={() =>
-                      //   (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
-                      // }
-                    >
-                      <FontAwesomeIcon icon={faGithub} />
-                    </CButton>
-                  </div>
                 </CForm>
-                <CButton
-                  color="link"
-                  className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                  onClick={() => navigate('/forgot-password')}
-                >
-                  Forgot password?
-                </CButton>
               </CCardBody>
             </CCard>
           </CCol>
@@ -239,7 +214,7 @@ const Login = () => {
           <CCol>
             <div className="text-center mt-3">
               <small>
-                <span className="text-muted">{appVersion}</span>
+                <span className="text-muted">{config.appVersion}</span>
               </small>
             </div>
           </CCol>

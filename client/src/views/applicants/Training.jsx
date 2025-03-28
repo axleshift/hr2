@@ -15,12 +15,14 @@ import {
   CInputGroup,
   CButton,
 } from '@coreui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faRefresh, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const Training = () => {
+  const [applicants, setApplicants] = useState([])
+
   return (
     <>
       <CContainer>
@@ -62,7 +64,15 @@ const Training = () => {
                       <CTableHeaderCell>Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
-                  <CTableBody></CTableBody>
+                  <CTableBody>
+                    {applicants.length <= 0 && (
+                      <CTableRow>
+                        <CTableDataCell colSpan="5" className="text-center">
+                          No applicants found.
+                        </CTableDataCell>
+                      </CTableRow>
+                    )}
+                  </CTableBody>
                 </CTable>
               </CCardBody>
             </CCard>

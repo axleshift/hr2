@@ -7,9 +7,9 @@ import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import logger from "../../../middlewares/logger";
 
-import Applicant from "../models/applicant";
-import Document from "../models/document";
-import User from "../models/user";
+import Applicant from "../models/applicantModel";
+import Document from "../models/documentModel";
+import User from "../models/userModel";
 
 export const createDocument = async (req: Request, res: Response) => {
   try {

@@ -9,7 +9,7 @@ import { Request, Response } from "express";
 import logger from "../../../middlewares/logger";
 import { upload } from "../../../utils/fileUploadHandler";
 
-import Applicant from "../models/applicant";
+import Applicant from "../models/applicantModel";
 import { config } from "../../../config";
 
 export const handleFileUpload = (req: Request, res: Response) => {

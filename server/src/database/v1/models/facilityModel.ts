@@ -39,7 +39,7 @@ const facilitySchema = new Schema<IFacility>(
     timeslots: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Time',
+        ref: 'Timeslot',
       },
     ],
   },

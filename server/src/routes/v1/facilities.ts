@@ -19,14 +19,18 @@ import {
   // event
   createFacilityEvent,
   updateFacilityEvent,
+  deleteFacilityEvent,
   getFacilityEventsForDate,
   getFacilityCalendarStates,
   getUpcomingEvents,
 
   // booking
-  BookApplicantToEvent,
-  UnbookApplicantFromEvent,
+  bookApplicantToEvent,
+  unbookApplicantFromEvent,
   getFacilityEventByID,
+
+  // Emailing
+  SendEmailToFacilityEventParticipants,
 } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -41,7 +45,7 @@ router.post(
 );
 
 router.put(
-  "/update/:id",
+  "/update/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -63,7 +67,7 @@ router.get(
 );
 
 router.get(
-  "/:id",
+  "/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -74,7 +78,7 @@ router.get(
 );
 
 router.delete(
-  "/delete/:id",
+  "/delete/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -87,7 +91,7 @@ router.delete(
 
 // Timeslots
 router.post(
-  "/timeslot/create/:id",
+  "/timeslot/create/:facilityId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -98,7 +102,7 @@ router.post(
 );
 
 router.get(
-  "/timeslot/:id/:date",
+  "/timeslot/:facilityId/:date",
   verifySession({
     permissions: ["user", "admin"],
   }),
@@ -106,7 +110,7 @@ router.get(
 );
 
 router.delete(
-  "/timeslot/delete/:id",
+  "/timeslot/delete/:timeslotId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -119,7 +123,7 @@ router.delete(
 // Event
 
 router.post(
-  "/event/timeslot/:timeslotId",
+  "/event/:timeslotId",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -130,7 +134,7 @@ router.post(
 )
 
 router.put(
-  "/event/timeslot/:timeslotId",
+  "/event/:timeslotId",
   verifySession({
     permissions: ["user", "admin"]
   },
@@ -140,8 +144,19 @@ router.put(
   updateFacilityEvent
 )
 
+router.delete(
+  "/event/:timeslotId",
+  verifySession({
+    permissions: ["user", "admin"]
+  },
+    true,
+    true
+  ),
+  deleteFacilityEvent
+)
+
 router.get(
-  "/events/:id/calendar-states",
+  "/events/:eventId/calendar-states",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -152,7 +167,7 @@ router.get(
 )
 
 router.get(
-  "/event/:id",
+  "/event/:eventId",
   verifySession({
     permissions: ["user", "admin"]
   },
@@ -163,7 +178,7 @@ router.get(
 )
 
 router.get(
-  "/events/:id/:date",
+  "/events/:eventId/:date",
   verifySession({
     permissions: ["user", "admin"],
   },
@@ -187,26 +202,38 @@ router.get(
 // Booking
 
 router.post(
-  "/events/:id/book",
+  "/events/:eventId/book",
   verifySession({
     permissions: ["user", "admin"],
   },
     true,
     true
   ),
-  BookApplicantToEvent
+  bookApplicantToEvent
+)
+
+router.post(
+  "/events/:eventId/send-email",
+  verifySession({
+    permissions: ["user", "admin"],
+  },
+    true,
+    true
+  ),
+  SendEmailToFacilityEventParticipants
 )
 
 router.delete(
-  "/events/:id/unbook",
+  "/events/:eventId/unbook",
   verifySession({
     permissions: ["user", "admin"],
   },
     true,
     true
   ),
-  UnbookApplicantFromEvent
+  unbookApplicantFromEvent
 )
+
 
 export default {
   metadata: {

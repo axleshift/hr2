@@ -59,7 +59,10 @@ const Interviews = () => {
         <CRow className="mb-3">
           <CCol>
             <h2>Interviews</h2>
-            <small>In this page, you can view and edit the list of upcoming interviews.</small>
+            <small>
+              In this page, you can <span className="text-info">view</span> and{' '}
+              <span className="text-warning">edit</span> the list of upcoming interviews.
+            </small>
           </CCol>
         </CRow>
         <CRow className="mb-3">
@@ -70,7 +73,13 @@ const Interviews = () => {
                 <CButton type="button" color="primary">
                   <FontAwesomeIcon icon={faSearch} />
                 </CButton>
-                <CButton type="button" color="primary">
+                <CButton
+                  type="button"
+                  color="primary"
+                  onClick={() => {
+                    getAllUpcomingEvents()
+                  }}
+                >
                   <FontAwesomeIcon icon={faRefresh} />
                 </CButton>
               </CInputGroup>
@@ -109,9 +118,14 @@ const Interviews = () => {
                           <CTableDataCell>{event.type}</CTableDataCell>
                           <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
                           <CTableDataCell>
-                            {formatTime(event.timeslot.start)} - {formatTime(event.timeslot.start)}
+                            {formatTime(event.timeslot?.start)} -{' '}
+                            {formatTime(event.timeslot?.start)}
                           </CTableDataCell>
-                          <CTableDataCell>{event.participants.length}</CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex justify-content-center">
+                              {event.participants?.length}
+                            </div>
+                          </CTableDataCell>
                           <CTableDataCell>
                             {event.isApproved.status ? (
                               <span className="text-success">Approved</span>

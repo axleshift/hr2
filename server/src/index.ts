@@ -23,6 +23,7 @@ import MongoStore from "connect-mongo";
 import errorHandler from "./middlewares/errorHandler";
 import verifyApiKey from "./middlewares/verifyApiKey";
 import generateCsrfToken from "./middlewares/csrfToken";
+import { verifyMailConn } from "./utils/mailHandler";
 
 const app: Application = express();
 const host = config.server.host;
@@ -64,9 +65,10 @@ app.use(
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
+      httpOnly: config.server.session.httpOnly as boolean, // Prevents XSS attacks from accessing cookies
       secure: config.env === "production",
       maxAge: config.server.session.expiry,
-      sameSite: "strict", // Ensure that the cookie is not sent with cross-origin requests
+      sameSite: 'strict', // Ensure that the cookie is not sent with cross-origin requests. Prevents CSRF attacks
     },
     store: mongoStore,
   })
@@ -173,6 +175,8 @@ connectDB().then(async () => {
       .catch((error) => {
         logger.error(`Error loading routes: ${error}`);
       });
+
+    verifyMailConn()
   } catch (error) {
     fs.writeFileSync(path.join(config.logging.dir, `${date}.log`), `Error: ${error}\n`, {
       flag: "a",

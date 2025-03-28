@@ -115,21 +115,25 @@ const _nav = [
     to: '/applicant/rejected',
     icon: <FontAwesomeIcon icon={faFileArchive} className="nav-icon" />,
   },
+  // {
+  //   component: CNavTitle,
+  //   name: 'Calendar',
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Schedules',
+  //   to: '/calendar/schedules',
+  //   icon: <FontAwesomeIcon icon={faCalendarPlus} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Applicants',
+  //   to: '/calendar/applicants',
+  //   icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
+  // },
   {
     component: CNavTitle,
-    name: 'Calendar',
-  },
-  {
-    component: CNavItem,
-    name: 'Schedules',
-    to: '/calendar/schedules',
-    icon: <FontAwesomeIcon icon={faCalendarPlus} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Applicants',
-    to: '/calendar/applicants',
-    icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
+    name: 'Event Management',
   },
   {
     component: CNavItem,
@@ -137,34 +141,34 @@ const _nav = [
     to: '/calendar/facilities',
     icon: <FontAwesomeIcon icon={faBuilding} className="nav-icon" />,
   },
-  {
-    component: CNavTitle,
-    name: 'Mail ',
-  },
-  {
-    component: CNavItem,
-    name: 'Inbox',
-    to: '/mail/inbox',
-    icon: <FontAwesomeIcon icon={faInbox} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Sent',
-    to: '/mail/sent',
-    icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Draft',
-    to: '/mail/drafts',
-    icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Template',
-    to: '/mail/templates',
-    icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavTitle,
+  //   name: 'Mail ',
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Inbox',
+  //   to: '/mail/inbox',
+  //   icon: <FontAwesomeIcon icon={faInbox} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Sent',
+  //   to: '/mail/sent',
+  //   icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Draft',
+  //   to: '/mail/drafts',
+  //   icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Template',
+  //   to: '/mail/templates',
+  //   icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />,
+  // },
   {
     component: CNavTitle,
     name: 'Accounts',

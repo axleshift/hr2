@@ -31,7 +31,7 @@ import {
   CFormSwitch,
 } from '@coreui/react'
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
@@ -42,27 +42,35 @@ import { config } from '../../../config'
 import { formatTime } from '../../../utils'
 import { AuthContext } from '../../../context/authContext'
 
+import InterviewForm from './InterviewForm'
+
 const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
-  const [eventData, setEvenData] = React.useState({})
-  const [isEventLoading, setIsEventLoading] = React.useState(false)
-  const [eventFormState, setEventFormState] = React.useState('view')
-  const [isReadOnly, setIsReadOnly] = React.useState(true)
-  const [eventTypes, setEventTypes] = React.useState([
-    'Initial Interview',
-    'Final Interview',
-    'Other',
-  ])
+  const [eventData, setEvenData] = useState({})
+  const [isEventFormVisible, setIsEventFormVisible] = useState(false)
+  const [isEventLoading, setIsEventLoading] = useState(false)
+  const [eventFormState, setEventFormState] = useState('view')
+  const [isReadOnly, setIsReadOnly] = useState(true)
+  const [eventTypes, setEventTypes] = useState(['Initial Interview', 'Final Interview', 'Other'])
 
-  const [isSubmitLoading, setIsSubmitLoading] = React.useState(false)
-  const [isRemoveLoading, setIsRemoveLoading] = React.useState(false)
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+  const [isRemoveLoading, setIsRemoveLoading] = useState(false)
+  const [isEmailSentLoading, setIsEmailSentLoading] = useState(false)
+
+  const [failedMails, setFailedMails] = useState([])
+
+  // Interview form state
+  const [isInterviewFormVisible, setIsInterviewFormVisible] = useState(false)
+  const [isInterviewFormIsEdit, setIsInterviewFormIsEdit] = useState(false)
+  const [interviewData, setInterviewData] = useState({})
+  const [applicantData, setApplicanData] = useState({})
 
   const getEventData = async () => {
     try {
       setIsEventLoading(true)
       const res = await get(`/facilities/event/${slot.event}`)
-      console.log('Event:', res.data.data)
+      console.log('Event:', JSON.stringify(res.data.data, null, 2))
       if (res.status === 200) {
         setEvenData(res.data.data)
         formReset(res.data.data)
@@ -119,16 +127,18 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       // const res = isEdit
       //   ? await put(`facilities/event/timeslot/${slot._id}`, data)
       //   : await post(`facilities/event/timeslot/${slot._id}`, data)
+
+      console.log('Event Form', formData)
       let res
       switch (eventFormState) {
         case 'edit':
-          res = await put(`facilities/event/timeslot/${slot._id}`, data)
+          res = await put(`/facilities/event/${slot._id}`, data)
           break
         default:
-          await post(`facilities/event/timeslot/${slot._id}`, data)
+          res = await post(`/facilities/event/${slot._id}`, data)
           break
       }
-
+      console.log('Submit Event', JSON.stringify(res.data.data, null, 2))
       if (res.status === 201) {
         setIsSubmitLoading(false)
         onClose()
@@ -137,13 +147,26 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       if (res.status === 200) {
         setIsSubmitLoading(false)
         onClose()
-        return addToast('success', 'Event Updated!', 'success')
+        return addToast('success', 'Event updated!', 'success')
       }
       setIsSubmitLoading(false)
       onClose()
       return addToast('Error', 'Failed to create event', 'error')
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  const handleDeleteEvent = async () => {
+    try {
+      const res = await del(`/facilities/event/${slot._id}`)
+      if (res.status === 200) {
+        handleResetForm()
+        onClose()
+        return addToast('Success', 'Event deleted!', 'success')
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -180,27 +203,66 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
         getEventData()
         setIsRemoveLoading(false)
         return addToast('Success', 'Applicant removed from the event', 'success')
-      } else {
-        setIsRemoveLoading(false)
-        return addToast('Error', res.message, 'danger')
       }
+      setIsRemoveLoading(false)
+      return addToast('Info', res.message.message, 'info')
     } catch (error) {
       console.error(error)
       addToast('Error', 'An error occured', 'danger')
     }
   }
 
+  const handleSendEmail = async () => {
+    try {
+      setIsEmailSentLoading(true)
+      const res = await post(`/facilities/events/${eventData._id}/send-email`)
+      console.log('Send Email', JSON.stringify(res?.data, null, 2))
+      if (res.status === 200) {
+        setIsEmailSentLoading(false)
+        setFailedMails(res.data.failedMails)
+        return addToast(
+          'Success',
+          `Email sent for participant for event ${eventData.name}`,
+          'success',
+        )
+      }
+      setIsEmailSentLoading(false)
+      return addToast('Info', res.message.message, 'info')
+    } catch (error) {
+      console.error(error)
+      addToast('Error', 'An error occured', 'danger')
+    }
+  }
   useEffect(() => {
     if (isVisible) {
+      setIsEventFormVisible(isVisible)
+    }
+  }, [isVisible])
+
+  useEffect(() => {
+    if (isEventFormVisible) {
       setEventFormState(state)
       if (state === 'view' || state === 'edit') {
         getEventData()
       }
     }
-  }, [isVisible, state])
+  }, [isEventFormVisible, state])
 
   useEffect(() => {
-    setIsReadOnly(eventFormState !== 'edit')
+    console.log(eventFormState)
+    switch (eventFormState) {
+      case 'edit':
+        setIsReadOnly(false)
+        break
+
+      case 'create':
+        setIsReadOnly(false)
+        break
+
+      default:
+        setIsReadOnly(true)
+        break
+    }
   }, [eventFormState])
 
   return (
@@ -208,18 +270,23 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       <CRow>
         <CCol>
           <CModal
-            visible={isVisible}
+            visible={isEventFormVisible}
             onClose={() => {
               handleResetForm()
               onClose()
               setEvenData({})
               setEventFormState('view')
               setIsReadOnly(false)
+              setIsEventFormVisible(false)
             }}
             size="xl"
           >
             <CModalHeader>
-              <CModalTitle>{eventFormState === 'edit' ? 'Manage Event' : 'View Event'}</CModalTitle>
+              <CModalTitle>
+                {eventFormState === 'edit' || eventFormState === 'create'
+                  ? 'Manage Event'
+                  : 'View Event'}
+              </CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CContainer>
@@ -230,6 +297,9 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                     </strong>
                     <small className="text-muted"> Timeslot ID: {slot._id}</small>
                     {eventData && <small className="text-muted"> Event ID: {eventData._id}</small>}
+                    {config.env === 'development' && (
+                      <small className="text-muted"> Form State: {eventFormState}</small>
+                    )}
                   </CCol>
                 </CRow>
                 {isEventLoading ? (
@@ -353,7 +423,11 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                   >
                                     Fill Mock Data
                                   </CButton>
-                                  <CButton type="submit" color="danger" size="sm">
+                                  <CButton
+                                    color="danger"
+                                    size="sm"
+                                    onClick={() => handleDeleteEvent()}
+                                  >
                                     Delete
                                   </CButton>
                                   <CButton type="submit" color="primary" size="sm">
@@ -379,8 +453,21 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                     eventFormState === 'edit' &&
                                     eventData.participants.length > 0 && (
                                       <div>
-                                        <CButton size="sm" color="info">
-                                          Send Mail to Participants
+                                        <CButton
+                                          size="sm"
+                                          color="info"
+                                          disabled={isEmailSentLoading}
+                                          onClick={() => handleSendEmail()}
+                                        >
+                                          {isEmailSentLoading ? (
+                                            <span>
+                                              <CSpinner size="sm" /> sending...
+                                            </span>
+                                          ) : eventData.emailSent.status ? (
+                                            'Resend Mail to Participants'
+                                          ) : (
+                                            'Send Mail to Participants'
+                                          )}
                                         </CButton>
                                       </div>
                                     )}
@@ -394,41 +481,74 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                       <CTableHeaderCell>Name</CTableHeaderCell>
                                       <CTableHeaderCell>Email</CTableHeaderCell>
                                       <CTableHeaderCell>Phone</CTableHeaderCell>
+                                      <CTableHeaderCell>Email Sent</CTableHeaderCell>
                                       <CTableHeaderCell>Action</CTableHeaderCell>
                                     </CTableRow>
                                   </CTableHead>
                                   <CTableBody>
-                                    {eventData.participants.map((participant) => {
+                                    {eventData.participants.map((p) => {
                                       return (
-                                        <CTableRow key={participant._id}>
+                                        <CTableRow key={p.applicant._id}>
                                           {/* <CTableDataCell>{participant._id}</CTableDataCell> */}
                                           <CTableDataCell>
-                                            {participant.lastname}, {participant.firstname}
+                                            {p.applicant.lastname}, {p.applicant.firstname}
                                           </CTableDataCell>
-                                          <CTableDataCell>{participant.email}</CTableDataCell>
-                                          <CTableDataCell>{participant.phone}</CTableDataCell>
+                                          <CTableDataCell>{p.applicant.email}</CTableDataCell>
+                                          <CTableDataCell>{p.applicant.phone}</CTableDataCell>
                                           <CTableDataCell>
-                                            {eventFormState === 'edit' ||
-                                            eventFormState === 'create' ? (
-                                              <CButton
-                                                size="sm"
-                                                color="danger"
-                                                onClick={() =>
-                                                  removeApplicantFromEvent(participant)
-                                                }
-                                                disabled={isRemoveLoading}
-                                              >
-                                                {isRemoveLoading ? (
-                                                  <CSpinner size="sm" />
-                                                ) : (
-                                                  'Remove'
-                                                )}
-                                              </CButton>
+                                            {p.mail.sent ? (
+                                              <span className="text-success">Sent</span>
                                             ) : (
-                                              <CButton size="sm" color="danger" disabled>
-                                                No Permissions
-                                              </CButton>
+                                              <span className="text-danger">Failed</span>
                                             )}
+                                          </CTableDataCell>
+                                          <CTableDataCell>
+                                            <div className="d-flex flex-row gap-2">
+                                              {(eventFormState === 'edit' ||
+                                                eventFormState === 'create') && (
+                                                <CButton
+                                                  size="sm"
+                                                  color="danger"
+                                                  onClick={() =>
+                                                    removeApplicantFromEvent(p.applicant)
+                                                  }
+                                                  disabled={isRemoveLoading}
+                                                >
+                                                  {isRemoveLoading ? (
+                                                    <CSpinner size="sm" />
+                                                  ) : (
+                                                    'Remove'
+                                                  )}
+                                                </CButton>
+                                              )}
+                                              {(userInformation.role === 'admin' ||
+                                                userInformation.role === 'interviewer' ||
+                                                userInformation.role === 'manager') &&
+                                                eventFormState === 'view' && (
+                                                  <CButton
+                                                    size="sm"
+                                                    color="info"
+                                                    onClick={() => {
+                                                      setIsInterviewFormVisible(true)
+                                                      setIsInterviewFormIsEdit(false)
+                                                      setIsEventFormVisible(false)
+                                                      setApplicanData(p.applicant)
+                                                      console.log(
+                                                        'Does it have a value?',
+                                                        eventData,
+                                                      )
+                                                      console.log(p.applicant)
+                                                      setInterviewData({
+                                                        _id: eventData._id,
+                                                        name: eventData.name,
+                                                        date: eventData.date,
+                                                      })
+                                                    }}
+                                                  >
+                                                    Interview
+                                                  </CButton>
+                                                )}
+                                            </div>
                                           </CTableDataCell>
                                         </CTableRow>
                                       )
@@ -446,6 +566,21 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
               </CContainer>
             </CModalBody>
           </CModal>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          <InterviewForm
+            isVisible={isInterviewFormVisible}
+            onClose={() => {
+              setIsInterviewFormIsEdit(false)
+              setIsInterviewFormVisible(false)
+              setIsEventFormVisible(true)
+            }}
+            isEdit={isInterviewFormIsEdit}
+            eventData={interviewData}
+            applicantData={applicantData}
+          />
         </CCol>
       </CRow>
     </CContainer>
