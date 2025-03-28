@@ -8,40 +8,30 @@ import { createUser, login, logout, verify } from "../../database/v1/controllers
 
 router.post(
   "/register",
-  verifySession(
-    {
-      permissions: ["user", "admin"],
-    },
-    false,
-  ),
+  verifySession({
+    permissions: []
+  },true),
   createUser
 );
 router.post(
   "/login",
-  verifySession(
-    {
-      permissions: ["user", "admin"],
-    },
-    true,
-  ),
+  verifySession({
+    permissions: []
+  },true),
   login
 );
 router.get(
   "/logout",
   verifySession({
-    permissions: ["user", "admin"],
-  },
-    true,
-  ),
+    permissions: []
+  },true),
   logout
 );
 router.get(
   "/verify",
   verifySession({
-    permissions: ["user", "admin"],
-  },
-    true,
-  ),
+    permissions: []
+  },true),
   verify
 );
 
