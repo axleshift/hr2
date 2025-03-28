@@ -80,7 +80,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 300,
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: true,
   // skip if env is development
   skip: () => {
     return env === "development";
@@ -120,6 +120,7 @@ app.get("/api/v1", (req, res) => {
 
 connectDB().then(async () => {
   try {
+    logger.info("Enviroment: " + config.env)
     const loadRoutes = async (version: string) => {
       const routesPath = path.join(__dirname, "routes", version);
       const router = express.Router();
