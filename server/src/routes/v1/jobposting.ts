@@ -10,7 +10,7 @@ import { createJobposting, searchJobpostings, getAllJobpostings, getAllScheduled
 router.post(
   "/",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -20,7 +20,7 @@ router.post(
 router.get(
   "/search",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -29,7 +29,7 @@ router.get(
 router.get(
   "/",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -38,7 +38,7 @@ router.get(
 router.get(
   "/scheduled",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -47,7 +47,7 @@ router.get(
 router.get(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -56,7 +56,7 @@ router.get(
 router.put(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),

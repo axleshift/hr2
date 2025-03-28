@@ -10,7 +10,7 @@ import { createTag, getAllTags, updateTag, getTagById, getTagByCategory, deleteT
 router.post(
   "/",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -19,7 +19,7 @@ router.post(
 router.get(
   "/all",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -28,7 +28,7 @@ router.get(
 router.get(
   "/search",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -37,7 +37,7 @@ router.get(
 router.get(
   "/category/:category",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -46,7 +46,7 @@ router.get(
 router.get(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -55,7 +55,7 @@ router.get(
 router.put(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -64,7 +64,7 @@ router.put(
 router.delete(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),

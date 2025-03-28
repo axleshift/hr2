@@ -15,28 +15,28 @@ import verifySession from "../../middlewares/verifySession";
 router.get(
   "/all",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
   },
-  true,
-),
+    true,
+  ),
   getAllAccounts
 );
 router.get(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
   },
-  true,
-),
+    true,
+  ),
   getAccountById
 );
 router.put(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin"],
   },
-  true,
-),
+    true,
+  ),
   updateAccount
 );
 export default {

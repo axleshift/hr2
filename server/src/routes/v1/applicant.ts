@@ -15,25 +15,27 @@ import {
 router.post(
   "/",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["applicant", "admin", "manager"],
   },
     true,
   ),
   addNewResume
 );
+
 router.put(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   updateResume
 );
+
 router.get(
   "/all",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -43,7 +45,7 @@ router.get(
 router.get(
   "/category/:category",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
@@ -53,34 +55,37 @@ router.get(
 router.get(
   "/download/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   getResumeFile
 );
+
 router.get(
   "/search",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter"],
   },
     true,
   ),
   searchResume
 );
+
 router.get(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
   },
     true,
   ),
   getResumeById
 );
+
 router.delete(
   "/:id",
   verifySession({
-    permissions: ["user", "admin"],
+    permissions: ["admin", "manager"],
   },
     true,
   ),
@@ -91,8 +96,7 @@ export default {
   metadata: {
     path: "/applicant",
     method: ["POST", "GET"],
-    description: "This route is used to add, update, delete, get all, get by id, search and download resume data",
-    permissions: ["user", "admin"],
+    description: "This route is used to add, update, delete, get all, get by ID, search, and download resume data",
   },
   router,
 };
