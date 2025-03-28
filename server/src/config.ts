@@ -26,8 +26,9 @@ export const config = {
       expiry: process.env.JWT_EXPIRES_IN,
     },
     session: {
+      httpOnly: process.env.SESSION_HTTP_ONLY || true,
       secret: process.env.SESSION_SECRET,
-      expiry: 24 * 60 * 60 * 1000,
+      expiry: 24 * 60 * 60 * 1000, // 1 day
     },
 
     origins: process.env.CORS_ORIGINS?.split(",") || [],
