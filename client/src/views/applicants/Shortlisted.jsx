@@ -139,21 +139,21 @@ const Shortlisted = () => {
                     {isLoading ? (
                       <CTableRow>
                         <CTableDataCell colSpan="6">
-                          <CSpinner variant="glow" size="sm" />
+                          <CSpinner size="sm" />
                         </CTableDataCell>
                       </CTableRow>
                     ) : (
-                      applicants.map((item, index) => (
+                      applicants.map((app, index) => (
                         <CTableRow key={index}>
-                          <CTableDataCell>{trimString(item._id, 10)}</CTableDataCell>
+                          <CTableDataCell>{trimString(app._id, 10)}</CTableDataCell>
                           <CTableDataCell>
-                            {item.lastname}, {item.firstname}
+                            {app.lastname}, {app.firstname}
                           </CTableDataCell>
-                          <CTableDataCell>{item.email}</CTableDataCell>
-                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          <CTableDataCell>{app.email}</CTableDataCell>
+                          <CTableDataCell>{app.phone}</CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex flex-wrap">
-                              {item.tags.map((tag, index) => {
+                              {app.tags.map((tag, index) => {
                                 const tagName = formtags.find(
                                   (formTag) => formTag._id === tag,
                                 )?.name
@@ -184,7 +184,7 @@ const Shortlisted = () => {
                                   onClick={() => {
                                     // setIsAppFormVisible(true)
                                     setIsScheduleFormVisible(true)
-                                    setSelectedApplicantData(item)
+                                    setSelectedApplicantData(app)
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faUserClock} />
