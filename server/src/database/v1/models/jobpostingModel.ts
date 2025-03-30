@@ -28,7 +28,6 @@ const jobpostingSchema = new mongoose.Schema(
         },
         description: {
             type: String,
-            required: true,
         },
         requirements: {
             type: String,
@@ -44,7 +43,6 @@ const jobpostingSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            required: true,
         },
         schedule_start: {
             type: Date,

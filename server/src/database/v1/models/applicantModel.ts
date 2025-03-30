@@ -168,7 +168,7 @@ const applicantSchema = new mongoose.Schema(
         remarks: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
+            ref: "ScreeningForm",
           }
         ],
       },
