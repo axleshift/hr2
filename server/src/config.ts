@@ -52,6 +52,10 @@ export const config = {
     }
   },
 
+  anthropic: {
+    key: process.env.ANTHROPIC_KEY,
+  },
+
   mongoDB: {
     username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD,

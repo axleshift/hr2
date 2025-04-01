@@ -16,9 +16,10 @@ export interface IScreeningForm extends Document {
   aiAnalysis: {
     summary: string;
     scoreBreakdown: {
-      communication: number;
-      technical: number;
-      problemSolving: number;
+      experience: number;
+      education: number;
+      skills: number;
+      motivation: number;
     };
     comments: string;
   };
@@ -52,9 +53,10 @@ const screeningFormSchema = new Schema<IScreeningForm>(
     aiAnalysis: {
       summary: { type: String },
       scoreBreakdown: {
-        communication: { type: Number, default: 1 },
-        technical: { type: Number, default: 1 },
-        problemSolving: { type: Number, default: 1 },
+        experience: { type: Number, default: 1 },
+        education: { type: Number, default: 1 },
+        skills: { type: Number, default: 1 },
+        motivation: { type: Number, default: 1 },
       },
       comments: { type: String },
     },

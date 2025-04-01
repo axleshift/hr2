@@ -12,6 +12,8 @@ import {
   getResumeFile,
 } from "../../database/v1/controllers/applicantController";
 
+import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
+
 router.post(
   "/",
   verifySession({
@@ -91,6 +93,48 @@ router.delete(
   ),
   deleteResume
 );
+
+// Screening
+
+router.post(
+  "/screen/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  createScreening
+)
+
+router.put(
+  "/screen/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  updateScreening
+)
+
+router.get(
+  "/screen/ai/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  screenApplicantViaAI
+)
+
+router.get(
+  "/screen/all/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllScreening
+)
 
 export default {
   metadata: {

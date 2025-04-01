@@ -49,7 +49,7 @@ import {
   faBolt,
 } from '@fortawesome/free-solid-svg-icons'
 import { config } from '../../config'
-import DocumentForm from './modal/DocumentForm'
+import ScreeningForm from './modal/ScreeningForm'
 import { trimString } from '../../utils'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
@@ -92,6 +92,7 @@ const Screening = () => {
   // Screening
   const [isScreeningFormModalVisible, setScreeningFormModalVisible] = useState(false)
   const [isScreeningHistoryModalVisible, setIsScreeningHistoryModalVisible] = useState(false)
+  const [screeningFormState, setScreeningFormState] = useState('view')
 
   // AI
   const [isAiScreeningLoading, setIsAiScreeningLoading] = useState(false)
@@ -1292,6 +1293,7 @@ const Screening = () => {
                                   onClick={() => {
                                     setSelectedApplicant(item)
                                     setScreeningFormModalVisible(true)
+                                    setScreeningFormState('create')
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faBolt} />
@@ -1717,13 +1719,15 @@ const Screening = () => {
       </CRow>
       <CRow>
         <CCol>
-          <DocumentForm
+          <ScreeningForm
             isVisible={isScreeningFormModalVisible}
             onClose={() => {
               setScreeningFormModalVisible(false)
               setSelectedApplicantID('')
+              setScreeningFormState('view')
             }}
-            applicantData={selectedApplicant}
+            state={screeningFormState}
+            applicant={selectedApplicant}
             docCategory="screening"
           />
         </CCol>

@@ -869,7 +869,8 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
 
     for (const participant of participants) {
       if (!participant.email) {
-        failedEmails.push({ applicant: participant._id.toString(), reason: "No email provided" });
+        const id = participant._id as string
+        failedEmails.push({ applicant: id, reason: "No email provided" });
         participantUpdates.push({
           applicant: participant._id,
           mail: { sent: false, reason: "No email provided" }
@@ -904,7 +905,8 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
       logger.info(JSON.stringify(emailResult, null, 2));
 
       if (!emailResult.success) {
-        failedEmails.push({ applicant: participant._id.toString(), reason: emailResult.message });
+        const id = participant._id as string
+        failedEmails.push({ applicant: id, reason: emailResult.message });
         participantUpdates.push({
           applicant: participant._id,
           mail: { sent: false, reason: emailResult.message }

@@ -32,7 +32,7 @@ export const formatCurency = (value) => {
  * @param {integer} maxLength
  * @returns trimmed string
  */
-export const trimString = (str, maxLength) => {
+export const trimString = (str = '', maxLength = 10) => {
   if (str.length > maxLength) {
     return str.substring(0, maxLength) + '...'
   }
