@@ -141,22 +141,35 @@ export const getApplicantDocuments = async (req: req, res: res) => {
     let data;
     let searchCriteria = {};
 
-    if (searchQuery) {
-      searchCriteria = {
-        $or: [
-          { title: { $regex: searchQuery, $options: "i" } },
-          { description: { $regex: searchQuery, $options: "i" } },
-          { author: { $regex: searchQuery, $options: "i" } },
-        ],
-      };
-    }
-
     switch (documentType) {
       case 'screening':
+        if (searchQuery) {
+          searchCriteria = {
+            $or: [
+              { applicant: { $regex: searchQuery, $options: "i" } },
+              { reviewer: { $regex: searchQuery, $options: "i" } },
+              { status: { $regex: searchQuery, $options: "i" } },
+              { recommendation: { $regex: searchQuery, $options: "i" } },
+              { job: { $regex: searchQuery, $options: "i" } },
+            ],
+          };
+        }
+
         data = await ScreeningDocuments.find(searchCriteria).limit(10);
         break;
 
       case 'interview':
+        if (searchQuery) {
+          searchCriteria = {
+            $or: [
+              { applicant: { $regex: searchQuery, $options: "i" } },
+              { interviewer: { $regex: searchQuery, $options: "i" } },
+              { type: { $regex: searchQuery, $options: "i" } },
+              { recommendation: { $regex: searchQuery, $options: "i" } },
+              { finalComments: { $regex: searchQuery, $options: "i" } },
+            ],
+          };
+        }
         data = await InterviewDocuments.find(searchCriteria).limit(10);
         break;
 
