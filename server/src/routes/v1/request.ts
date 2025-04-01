@@ -4,24 +4,27 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import verifyApiKey from "../../middlewares/verifyApiKey";
-import { createJobpostingRequest, updateJobpostingRequest, searchJobpostingRequests, getJobpostingRequestById } from "../..//database/v1/controllers/requestController";
+import { createJobpostingRequest, updateJobpostingRequest, searchJobpostingRequests, getJobpostingRequestById, getApplicantDocuments } from "../..//database/v1/controllers/requestController";
 
 router.post(
-	"/jobposting", verifyApiKey, createJobpostingRequest
+	"/jobposting", createJobpostingRequest
 );
 
 router.get(
-	"/jobposting/search", verifyApiKey, searchJobpostingRequests
+	"/jobposting/search", searchJobpostingRequests
 );
 
 router.get(
-	"/jobposting/:id", verifyApiKey, getJobpostingRequestById
+	"/jobposting/:id", getJobpostingRequestById
 );
 
 router.put(
-	"/jobposting/:id", verifyApiKey, updateJobpostingRequest
+	"/jobposting/:id", updateJobpostingRequest
 );
+
+router.get(
+	"/applicants/document/:documentType", getApplicantDocuments
+)
 
 export default {
 	metadata: {
