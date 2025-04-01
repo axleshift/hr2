@@ -23,7 +23,7 @@ router.put(
 );
 
 router.get(
-	"/applicants/document/:documentType", getApplicantDocuments
+	"/applicants/documents/:documentType", getApplicantDocuments
 )
 
 export default {

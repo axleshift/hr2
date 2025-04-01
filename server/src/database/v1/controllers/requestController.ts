@@ -155,7 +155,23 @@ export const getApplicantDocuments = async (req: req, res: res) => {
           };
         }
 
-        data = await ScreeningDocuments.find(searchCriteria).limit(10);
+        data = await ScreeningDocuments.find(searchCriteria).limit(10)
+          .populate([
+            {
+              path: "applicant",
+              model: "Applicant",
+              select: "_id firstname lastname middlename",
+            },
+            {
+              path: "reviewer",
+              model: "User",
+              select: "_id firstname lastname role",
+            },
+            {
+              path: "job",
+              model: "Job"
+            }
+          ])
         break;
 
       case 'interview':
@@ -170,7 +186,7 @@ export const getApplicantDocuments = async (req: req, res: res) => {
             ],
           };
         }
-        data = await InterviewDocuments.find(searchCriteria).limit(10);
+        data = await InterviewDocuments.find(searchCriteria).limit(10)
         break;
 
       default:

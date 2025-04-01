@@ -1,30 +1,37 @@
 # API Documentation: Get Applicant Documents
 
 ## Endpoint
-`GET /request/applicants/document/:documentType`
+
+`GET /applicants/documents/:documentType`
 
 ## Description
-This API retrieves applicant documents based on the document type (`screening` or `interview`). It also supports searching documents by title, description, or author.
+
+This API retrieves applicant documents based on the document type (`screening` or `interview`). It also supports searching documents by applicant, reviewer/interviewer, status, recommendation, job, type, or final comments.
 
 ## Headers
-| Key           | Type   | Required | Description                      |
-|--------------|--------|----------|----------------------------------|
-| `x-api-key`  | String | Yes      | API key for authentication.     |
+
+| Key         | Type   | Required | Description                 |
+| ----------- | ------ | -------- | --------------------------- |
+| `x-api-key` | String | Yes      | API key for authentication. |
 
 ## Path Parameters
-| Parameter      | Type   | Required | Description                         |
-|--------------|--------|----------|-------------------------------------|
+
+| Parameter      | Type   | Required | Description                                    |
+| -------------- | ------ | -------- | ---------------------------------------------- |
 | `documentType` | String | Yes      | Type of document (`screening` or `interview`). |
 
 ## Query Parameters
-| Parameter  | Type   | Required | Description                                  |
-|-----------|--------|----------|----------------------------------------------|
-| `query`   | String | No       | Search term for filtering documents.        |
+
+| Parameter | Type   | Required | Description                          |
+| --------- | ------ | -------- | ------------------------------------ |
+| `query`   | String | No       | Search term for filtering documents. |
 
 ## Responses
 
 ### **Success Response**
+
 **Status Code: 200**
+
 ```json
 {
   "message": "Documents found!",
@@ -32,18 +39,37 @@ This API retrieves applicant documents based on the document type (`screening` o
   "data": [
     {
       "_id": "60d5f9e7c3b7f814b56fa181",
-      "title": "Screening Report 2024",
-      "description": "Detailed screening report for applicant.",
-      "author": "HR Team",
+      "applicant": {
+        "_id": "60d5f9e7c3b7f814b56fa100",
+        "firstname": "John",
+        "lastname": "Doe",
+        "middlename": "M"
+      },
+      "reviewer": {
+        "_id": "60d5f9e7c3b7f814b56fa101",
+        "firstname": "Jane",
+        "lastname": "Smith",
+        "role": "HR Manager"
+      },
+      "status": "Approved",
+      "recommendation": "Proceed to interview",
+      "job": {
+        "_id": "60d5f9e7c3b7f814b56fa200",
+        "title": "Software Engineer"
+      },
       "createdAt": "2024-03-15T12:00:00Z"
     }
   ]
 }
+
 ```
 
 ### **Error Responses**
+
 #### **Invalid API Key**
+
 **Status Code: 403**
+
 ```json
 {
   "message": "Invalid or missing API key"
@@ -51,7 +77,9 @@ This API retrieves applicant documents based on the document type (`screening` o
 ```
 
 #### **Missing Document Type**
+
 **Status Code: 400**
+
 ```json
 {
   "message": "Document Type is required"
@@ -59,7 +87,9 @@ This API retrieves applicant documents based on the document type (`screening` o
 ```
 
 #### **Invalid Document Type**
+
 **Status Code: 400**
+
 ```json
 {
   "message": "Please use a valid document type"
@@ -67,7 +97,9 @@ This API retrieves applicant documents based on the document type (`screening` o
 ```
 
 #### **No Documents Found**
+
 **Status Code: 404**
+
 ```json
 {
   "message": "No documents found"
@@ -75,7 +107,9 @@ This API retrieves applicant documents based on the document type (`screening` o
 ```
 
 #### **Server Error**
+
 **Status Code: 500**
+
 ```json
 {
   "message": "An error occurred",
@@ -84,17 +118,20 @@ This API retrieves applicant documents based on the document type (`screening` o
 ```
 
 ## Example Requests
+
 ### Request with Search Query
+
 ```http
-GET /request/applicants/document/screening?query=report HTTP/1.1
-Host: backend-hr2.axleshift.com
+GET /applicants/documents/screening?query=John HTTP/1.1
+Host: api.example.com
 x-api-key: your-api-key
 ```
 
 ### Request Without Search Query
+
 ```http
-GET /request/applicants/document/interview HTTP/1.1
-Host: backend-hr2.axleshift.com
+GET /applicants/documents/interview HTTP/1.1
+Host: api.example.com
 x-api-key: your-api-key
 ```
 
