@@ -1,4 +1,4 @@
-# API Documentation: Get Applicant Documents
+# Get Applicant Documents
 
 ## Endpoint
 
