@@ -123,7 +123,7 @@ This API retrieves applicant documents based on the document type (`screening` o
 
 ```http
 GET /applicants/documents/screening?query=John HTTP/1.1
-Host: api.example.com
+Host: https://backend-hr2.axleshift.com/api/v1/
 x-api-key: your-api-key
 ```
 
@@ -131,7 +131,7 @@ x-api-key: your-api-key
 
 ```http
 GET /applicants/documents/interview HTTP/1.1
-Host: api.example.com
+Host: https://backend-hr2.axleshift.com/api/v1/
 x-api-key: your-api-key
 ```
 
