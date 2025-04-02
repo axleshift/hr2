@@ -12,8 +12,11 @@ export const createJob = async (req: req, res: res) => {
       return res.status(400).json({ message: "All fields are required" })
     }
 
+    const userId = req.session.user?._id
+
     const jobData = {
       title,
+      author: new mongoose.Types.ObjectId(userId),
       responsibilities,
       requirements,
       qualifications,
@@ -55,6 +58,7 @@ export const updateJob = async (req: req, res: res) => {
     }
 
     job.title = title
+
     job.responsibilities = responsibilities
     job.requirements = requirements
     job.qualifications = qualifications
@@ -117,8 +121,8 @@ export const getAllJob = async (req: req, res: res) => {
       };
     }
 
-    const total = await Job.countDocuments(searchFilter);
-    const totalPages = Math.ceil(total / limit);
+    const totalItems = await Job.countDocuments(searchFilter);
+    const totalPages = Math.ceil(totalItems / limit);
 
     const jobs = await Job.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
 
@@ -132,7 +136,7 @@ export const getAllJob = async (req: req, res: res) => {
       success: true,
       message: "Jobs found",
       data: jobs,
-      total,
+      totalItems,
       totalPages,
       currentPage: page,
     });

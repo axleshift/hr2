@@ -13,6 +13,7 @@ import {
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
+import { createInterview, getAllInterview, updateInterview } from "../../database/v1/controllers/interviewController";
 
 router.post(
   "/",
@@ -107,7 +108,7 @@ router.post(
 )
 
 router.put(
-  "/screen/:applicantId",
+  "/screen/:screeningId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
   },
@@ -117,7 +118,17 @@ router.put(
 )
 
 router.get(
-  "/screen/ai/:applicantId",
+  "/screen/ai/:applicantId/:jobId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  screenApplicantViaAI
+)
+
+router.get(
+  "/screen/ai/:applicantId/:jobId/:screeningId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
   },
@@ -135,6 +146,39 @@ router.get(
   ),
   getAllScreening
 )
+
+// interview
+
+router.post(
+  "/interview/:applicantId/:eventId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  createInterview
+)
+
+router.put(
+  "/interview/:interviewId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  updateInterview
+)
+
+router.get(
+  "/interview/all/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllInterview
+)
+
 
 export default {
   metadata: {

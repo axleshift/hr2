@@ -123,4 +123,4 @@ const facilityEventsSchema = new Schema<IFacilityEvent>(
   }
 );
 
-export default mongoose.model<IFacilityEvent>('facilityEvents', facilityEventsSchema);
+export default mongoose.model<IFacilityEvent>('FacilityEvent', facilityEventsSchema);

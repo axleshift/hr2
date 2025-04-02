@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useContext } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -47,10 +46,14 @@ import {
   faSearch,
   faUser,
   faBolt,
+  faPrint,
 } from '@fortawesome/free-solid-svg-icons'
 import { config } from '../../config'
 import ScreeningForm from './modal/ScreeningForm'
 import { trimString } from '../../utils'
+
+import ConfirmationDialog from '../../components/ConfirmationDialog'
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const Screening = () => {
@@ -561,7 +564,6 @@ const Screening = () => {
   //   }
   // }
 
-
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       getAllData()
@@ -630,7 +632,8 @@ const Screening = () => {
                     {config.env === 'development' && (
                       <CCol>
                         <CButton
-                          className="btn btn-primary"
+                          color="primary"
+                          size="sm"
                           onClick={() => {
                             handleFillMockData()
                           }}
@@ -639,6 +642,15 @@ const Screening = () => {
                         </CButton>
                       </CCol>
                     )}
+                  </CRow>
+                  <CRow>
+                    <CCol className="d-flex justify-content-end">
+                      <CTooltip placement="top" content="Print (unavailable)">
+                        <CButton color="primary" size="sm">
+                          <FontAwesomeIcon icon={faPrint} />
+                        </CButton>
+                      </CTooltip>
+                    </CCol>
                   </CRow>
                   <CRow>
                     <CCol className="visually-hidden">
@@ -1229,9 +1241,7 @@ const Screening = () => {
                     <CTableHeaderCell>
                       <strong>#</strong>
                     </CTableHeaderCell>
-                    <CTableHeaderCell>
-                      Applicant
-                    </CTableHeaderCell>
+                    <CTableHeaderCell>Applicant</CTableHeaderCell>
                     <CTableHeaderCell>Email</CTableHeaderCell>
                     <CTableHeaderCell>Phone</CTableHeaderCell>
                     <CTableHeaderCell>Tags</CTableHeaderCell>
@@ -1287,9 +1297,9 @@ const Screening = () => {
                             <div className="d-flex flex-row gap-2">
                               <CTooltip content="Screen Applicant" placement="top">
                                 <CButton
-                                  color='success'
-                                  variant='outline'
-                                  size='sm'
+                                  color="success"
+                                  variant="outline"
+                                  size="sm"
                                   onClick={() => {
                                     setSelectedApplicant(item)
                                     setScreeningFormModalVisible(true)
@@ -1300,23 +1310,20 @@ const Screening = () => {
                                 </CButton>
                               </CTooltip>
                               <CButton
-                                color='primary'
-                                size='sm'
+                                color="primary"
+                                size="sm"
                                 onClick={() => handleEdit(item._id)}
                               >
                                 Edit
                               </CButton>
                               <CButton
-                                color='danger'
-                                size='sm'
+                                color="danger"
+                                size="sm"
                                 onClick={() => handleDelete(item._id)}
                               >
                                 Remove
                               </CButton>
-                              <CButton
-                                color='warning'
-                                size='sm'
-                              >
+                              <CButton color="warning" size="sm">
                                 Manage
                               </CButton>
                             </div>

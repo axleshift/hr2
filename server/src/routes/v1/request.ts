@@ -4,23 +4,12 @@ const router = Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-import { createJobpostingRequest, updateJobpostingRequest, searchJobpostingRequests, getJobpostingRequestById, getApplicantDocuments } from "../..//database/v1/controllers/requestController";
+import { externalPostJob, getApplicantDocuments } from "../..//database/v1/controllers/requestController";
 
 router.post(
-	"/jobposting", createJobpostingRequest
+	"/jobposting", externalPostJob
 );
 
-router.get(
-	"/jobposting/search", searchJobpostingRequests
-);
-
-router.get(
-	"/jobposting/:id", getJobpostingRequestById
-);
-
-router.put(
-	"/jobposting/:id", updateJobpostingRequest
-);
 
 router.get(
 	"/applicants/documents/:documentType", getApplicantDocuments

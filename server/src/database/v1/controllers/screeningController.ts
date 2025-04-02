@@ -8,6 +8,7 @@ import fs from "fs/promises"
 import Anthropic from "@anthropic-ai/sdk";
 import { config } from "../../../config";
 import mongoose from "mongoose";
+import Job from "../models/jobModel";
 
 interface ScoreBreakdown {
   experience: number;
@@ -24,15 +25,16 @@ interface AIResponse {
 }
 
 const responseParser = (aiResponse: string): AIResponse => {
+  // God why is regex so hard
   const summaryRegex = /## Summary:\s*([\s\S]*?)\s*(?=## Score Breakdown)/;
   const scoreRegex = /## Score Breakdown:\s*- Experience: (\d+)\s*- Education: (\d+)\s*- Skills: (\d+)\s*- Motivation: (\d+)/;
   const commentsRegex = /## Comments:\s*([\s\S]*)/;
   const recommendationRegex = /## Recommendation:\s*([\s\S]*)/;
 
-  // Log the raw response to check its structure
+  // Log the raw response to check its structure, please do not touch this, self. This is important.
   console.info("Raw AI response:\n", aiResponse);
 
-  // Extract the sections using regular expressions
+  // Extract the sections using regular expressions cuz h
   const summaryMatch = aiResponse.match(summaryRegex);
   const scoreMatch = aiResponse.match(scoreRegex);
   const commentsMatch = aiResponse.match(commentsRegex);
@@ -52,66 +54,115 @@ const responseParser = (aiResponse: string): AIResponse => {
     recommendation = 'needs further review'; 
   }
 
-  // Create the parsed response object
+  // Function to clean text fields by removing symbolic terms and other artifacts
+  const cleanedText = (text: string): string => {
+    return text
+      .replace(/[^a-zA-Z0-9\s\-,]/g, '')  // Allows letters, numbers, spaces, hyphens, and commas
+      .replace(/\s{2,}/g, ' ')             // Collapses multiple spaces
+      .trim();                             // Trims whitespace
+  };
+
+  // Create the parsed response object with cleaned text fields
   const parsedResponse: AIResponse = {
-    summary: summaryMatch[1].trim(),
+    summary: cleanedText(summaryMatch[1]),
     scoreBreakdown: {
       experience: parseInt(scoreMatch[1], 10),
       education: parseInt(scoreMatch[2], 10),
       skills: parseInt(scoreMatch[3], 10),
       motivation: parseInt(scoreMatch[4], 10),
     },
-    comments: commentsMatch[1].trim(),
+    comments: cleanedText(commentsMatch[1]),
     recommendation: recommendation,
   };
 
   return parsedResponse;
 };
 
+interface Job {
+  title: string;
+  responsibilities: string;
+  requirements: string;
+  qualifications: string;
+  benefits: string;
+  category: string;
+}
+
+const jobParser = (job: Job): string => `
+  Title: ${job.title}
+  
+  Responsibilities:
+  ${job.responsibilities}
+  
+  Requirements:
+  ${job.requirements}
+  
+  Qualifications:
+  ${job.qualifications}
+  
+  Benefits:
+  ${job.benefits}
+  
+  Category: ${job.category}
+`;
+
+
+
 export const screenApplicantViaAI = async (req: req, res: res) => {
   try {
-    const { applicantId } = req.params;
-    const { customPrompt } = req.params;
+    const { applicantId, jobId, screenId } = req.params;
+    const { customPrompt } = req.body;
 
     if (!applicantId) {
-      return res.status(400).json({ message: "Applicant Id is required", applicantId})
-    } 
-
-    const applicant = await Applicant.findById(applicantId)
-
-    if (!applicant) {
-      return res.status(404).json({ message: "No applicant found", applicantId})
+      return res.status(400).json({ message: "Applicant Id is required", applicantId });
     }
 
-    const defaultTaskPath = path.join(__dirname, '../../../public/prompts/screeningTask.txt')
-    const taskTemplate = await fs.readFile(defaultTaskPath, "utf-8") 
+    if (!jobId) {
+      return res.status(400).json({ message: "Job Id is required", jobId });
+    }
 
-    const promptPath = path.join(__dirname, '../../../public/prompts/screening.txt')
-    const promptTemplate = await fs.readFile(promptPath, "utf-8")
+    const applicant = await Applicant.findById(applicantId);
+
+    if (!applicant) {
+      return res.status(404).json({ message: "No applicant found", applicantId });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({ message: "Job not found", jobId });
+    }
+
+    const defaultTaskPath = path.join(__dirname, '../../../public/prompts/screeningTask.txt');
+    const taskTemplate = await fs.readFile(defaultTaskPath, "utf-8");
+
+    const promptPath = path.join(__dirname, '../../../public/prompts/screening.txt');
+    const promptTemplate = await fs.readFile(promptPath, "utf-8");
+
+    const jobDescription = jobParser(job);
 
     const prompText = promptTemplate
-    .replace(/{{ task }}/g, customPrompt || taskTemplate)
-    .replace(/{{ yearsOfExperience }}/g, applicant.yearsOfExperience.toString())
-    .replace(/{{ currentMostRecentJob }}/g, applicant.currentMostRecentJob || "")
-    .replace(/{{ highestQualification }}/g, applicant.highestQualification || "")
-    .replace(/{{ majorFieldOfStudy }}/g, applicant.majorFieldOfStudy || "")
-    .replace(/{{ institution }}/g, applicant.institution || "")
-    .replace(/{{ keySkills }}/g, applicant.keySkills || "")
-    .replace(/{{ softwareProficiency }}/g, applicant.softwareProficiency || "")
-    .replace(/{{ certifications }}/g, applicant.certifications || "")
-    .replace(/{{ salaryExpectation }}/g, applicant.salaryExpectation?.toString() || "")
-    .replace(/{{ availability }}/g, applicant.availability || "")
-    .replace(/{{ jobAppliedFor }}/g, applicant.jobAppliedFor || "")
-    .replace(/{{ whyInterestedInRole }}/g, applicant.whyInterestedInRole || "")
+      .replace(/{{ task }}/g, customPrompt || taskTemplate)
+      .replace(/{{ jobDescription }}/g, jobDescription || '')
+      .replace(/{{ yearsOfExperience }}/g, applicant.yearsOfExperience.toString())
+      .replace(/{{ currentMostRecentJob }}/g, applicant.currentMostRecentJob || "")
+      .replace(/{{ highestQualification }}/g, applicant.highestQualification || "")
+      .replace(/{{ majorFieldOfStudy }}/g, applicant.majorFieldOfStudy || "")
+      .replace(/{{ institution }}/g, applicant.institution || "")
+      .replace(/{{ keySkills }}/g, applicant.keySkills || "")
+      .replace(/{{ softwareProficiency }}/g, applicant.softwareProficiency || "")
+      .replace(/{{ certifications }}/g, applicant.certifications || "")
+      .replace(/{{ salaryExpectation }}/g, applicant.salaryExpectation?.toString() || "")
+      .replace(/{{ availability }}/g, applicant.availability || "")
+      .replace(/{{ jobAppliedFor }}/g, applicant.jobAppliedFor || "")
+      .replace(/{{ whyInterestedInRole }}/g, applicant.whyInterestedInRole || "");
 
-    const key = config.anthropic.key
+    const key = config.anthropic.key;
 
     if (!key) {
-      return res.status(400).json({ message: "Antropic Key is empty", key})
+      return res.status(400).json({ message: "Antropic Key is empty", key });
     }
     const ant = new Anthropic({
       apiKey: key
-    })
+    });
 
     const antResponse = await ant.messages.create({
       model: 'claude-3-7-sonnet-20250219',
@@ -119,32 +170,31 @@ export const screenApplicantViaAI = async (req: req, res: res) => {
       messages: [
         { role: 'user', content: prompText }
       ]
-    })
+    });
 
     const formatResponse = antResponse.content
-    .filter(block => 'text' in block)
-    .map(block => (block as { text: string }).text)
-    .join(""); // Ensure newlines are properly preserved
+      .filter(block => 'text' in block)
+      .map(block => (block as { text: string }).text)
+      .join(""); // Ensure newlines are properly preserved
 
-    // const formatResponse = "# Applicant Analysis for Software Engineer Position\n\n## Summary:\nThe applicant has 5 years of experience in software engineering, with strong qualifications in web development. Their technical stack focuses on JavaScript and modern web technologies, particularly the MERN stack (MongoDB, Express.js, React, Node.js). Their skills are highly relevant to a software engineer role, and their motivation shows genuine interest in creating scalable web applications.\n\n## Score Breakdown:\n- Experience: 4/5\n- Education: 4/5\n- Skills: 4/5\n- Motivation: 4/5\n\n## Detailed Analysis:\n\n### Experience (4/5)\nThe applicant has 5 years of experience as a Software Engineer at ABC Corp, which demonstrates a solid foundation in the field. This amount of experience is sufficient for a mid-level software engineering position. Their experience appears relevant, though more details about specific projects or achievements would have strengthened this section.\n\n### Education (4/5)\nThe applicant holds a college degree in Computer Science from the University of Kaasiman, which provides a strong theoretical foundation for the role. Computer Science is directly relevant to software engineering positions and demonstrates formal training in programming concepts, algorithms, and software development principles.\n\n### Skills (4/5)\nThe applicant's technical skill set is well-aligned with web development requirements:\n- Frontend: JavaScript, React\n- Backend: Node.js\n- Database: MongoDB\n- Tools: VS Code, Git, Docker, Postman\n\nTheir Certified JavaScript Developer certification adds credibility to their technical proficiency. The skill set indicates expertise in full-stack JavaScript development, which is valuable for web application development roles.\n\n### Motivation (4/5)\nThe applicant expresses genuine interest in developing scalable and efficient web applications, which aligns well with typical software engineering goals. Their stated ability to bring a fresh perspective and expertise in front-end development shows a clear understanding of how they can contribute to the role.\n\n## Comments:\nThe applicant has a solid foundation in modern web development technologies, particularly the JavaScript ecosystem. Their experience with containerization (Docker) suggests familiarity with modern deployment practices. Their immediate availability and salary expectations of $80,000 appear reasonable for someone with 5 years of experience.\n\nI would recommend proceeding to a technical interview to assess their hands-on coding abilities and problem-solving skills. Additionally, it would be valuable to explore their experience with:\n1. Collaborative development processes (Agile methodologies)\n2. Testing frameworks and practices\n3. Performance optimization techniques for web applications\n4. Experience with cloud platforms (AWS, Azure, or GCP)\n\nOverall, this candidate appears to be a promising mid-level software engineer with relevant experience and skills for web development positions."
-
-    const parsed = responseParser(formatResponse)
+    const parsed = responseParser(formatResponse);
 
     if (!parsed) {
-      return res.status(404).json({ message: "x Failed to create Ai response, Either try again or contact admin."})
+      return res.status(404).json({ message: "Failed to create AI response, either try again or contact admin." });
     }
 
-    console.info("Parsed Response", parsed)
+    console.info("Parsed Response", parsed);
 
     const user = req.session.user;
     if (!user) {
-      return res.status(404).json({ message: "xx Failed to create Ai response, Either try again or contact admin."})
+      return res.status(404).json({ message: "User session not found, please log in again." });
     }
+
     const screeningData = {
       applicant: new mongoose.Types.ObjectId(applicantId),
       reviewer: new mongoose.Types.ObjectId(user._id),
       recommendation: parsed.recommendation.toLowerCase().toString(),
-      // job: applicant.jobAppliedFor,
+      job: new mongoose.Types.ObjectId(jobId),
       aiAnalysis: {
         summary: parsed.summary,
         scoreBreakdown: {
@@ -155,28 +205,39 @@ export const screenApplicantViaAI = async (req: req, res: res) => {
         },
         comments: parsed.comments,
       }
-    }
-    const screening = await ScreeningForm.create(screeningData)
+    };
 
-    if (!screening) {
-      return res.status(404).json({ message: "xxx Failed to create Ai response, Either try again or contact admin."})
+    let screening;
+    if (screenId) {
+      // If screenId is provided, update the existing screening
+      screening = await ScreeningForm.findByIdAndUpdate(screenId, screeningData, { new: true });
+      if (!screening) {
+        return res.status(404).json({ message: "Screening not found for update" });
+      }
+    } else {
+      // If screenId is not provided, create a new screening
+      screening = await ScreeningForm.create(screeningData);
+      if (!screening) {
+        return res.status(404).json({ message: "Failed to create AI response, please try again or contact admin." });
+      }
     }
 
-    const screeningId = screening._id as mongoose.Types.ObjectId
+    const screeningId = screening._id as mongoose.Types.ObjectId;
     await applicant.updateOne(
       {
         $push: {
           'documentations.screening': screeningId
         }
       }
-    )
+    );
 
-    return res.status(200).json({ message: "Analysis Completed!", unparsed: formatResponse, data: screening})
+    return res.status(200).json({ message: "Analysis Completed!", unparsed: formatResponse, data: screening });
   } catch (error) {
-    logger.error(error)
-    res.status(500).json({ message: "Internal Server Error"})
+    logger.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
+
 
 export const createScreening = async (req: req, res: res) => {
   try {
@@ -198,7 +259,7 @@ export const createScreening = async (req: req, res: res) => {
     if (!status || !recommendation || !aiAnalysis) {
       return res.status(400).json({ 
         message: "Missing required fields: status, recommendation, or aiAnalysis",
-        receivedBody: req.body
+        data: req.body
       });
     }
 
@@ -238,6 +299,14 @@ export const createScreening = async (req: req, res: res) => {
       }
     };
 
+    if (status === 'shorlisted') {
+      applicant.isShortlisted = true;
+    } else {
+      applicant.isShortlisted = false;
+    }
+
+    await applicant.save();
+
     // Save screening
     const screening = await ScreeningForm.create(data);
     if (!screening) {
@@ -269,6 +338,13 @@ export const updateScreening = async (req: req, res: res) => {
     const existingScreening = await ScreeningForm.findById(screeningId);
     if (!existingScreening) {
       return res.status(404).json({ message: "Screening record not found" });
+    }
+    
+    const applicantId = existingScreening.applicant;
+    const applicant = await Applicant.findById(applicantId);
+
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
     }
 
     // Validate session and permissions
@@ -328,6 +404,19 @@ export const updateScreening = async (req: req, res: res) => {
       return res.status(500).json({ message: "Failed to update screening" });
     }
 
+    // Update applicant isShortlisted field based on status
+    logger.info("Status")
+    logger.info(updateData.status)
+
+    if (updateData.status === 'shortlisted') {
+      applicant.isShortlisted = true;
+    } else {
+      applicant.isShortlisted = false;
+    }
+
+    // Save the updated applicant data
+    await applicant.save();
+
     res.status(200).json({
       message: "Screening updated successfully",
       screening: updatedScreening
@@ -335,9 +424,10 @@ export const updateScreening = async (req: req, res: res) => {
 
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ message: "Internal Server Error"})
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 export const getAllScreening = async (req: req, res: res) => {
@@ -357,7 +447,7 @@ export const getAllScreening = async (req: req, res: res) => {
     // First verify the applicant exists
     const applicantExists = await Applicant.exists({ _id: applicantId });
     if (!applicantExists) {
-      return res.status(404).json({ message: "Applicant not found" });
+      return res.status(404).json({ message: "Applicant not found", applicantId });
     }
 
     // Define proper type for the search filter
@@ -397,9 +487,13 @@ export const getAllScreening = async (req: req, res: res) => {
             path: "reviewer",
             model: "User",
             select: "_id firstname lastname"
+          },
+          {
+            path: "job",
+            model: "Job"
           }
         ])
-        .sort({ createdAt: sortOrder })
+        .sort({ createdAt: sortOrder})
         .skip(skip)
         .limit(limit)
         .lean(),

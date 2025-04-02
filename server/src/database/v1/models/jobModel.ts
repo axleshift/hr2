@@ -6,12 +6,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export type JobStatus = "open" | "closed";
-
+ 
 export const CATEGORY_TYPES = ["internship", "full-time", "part-time", "contract", "temporary", "freelance"] as const;
 export type JobCategory = (typeof CATEGORY_TYPES)[number];
 
 export interface IJob extends Document {
   title: string;
+  author: [mongoose.Types.ObjectId, string]
   responsibilities: string;
   requirements: string;
   qualifications: string;
@@ -26,6 +27,9 @@ const jobSchema = new Schema<IJob>(
     title: {
       type: String,
       required: true,
+    },
+    author: {
+      type: [mongoose.Schema.Types.ObjectId, String]
     },
     responsibilities: {
       type: String,

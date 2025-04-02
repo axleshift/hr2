@@ -37,6 +37,12 @@ const Interviews = () => {
   const [eventFormState, setEventFormState] = useState('view')
   const [selectedSlot, setSelectedSlot] = useState({})
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalItems, setTotalItems] = useState(0)
+
   const getAllUpcomingEvents = async () => {
     try {
       setIsUpcomingEventsLoading(true)
@@ -47,13 +53,19 @@ const Interviews = () => {
         setIsUpcomingEventsLoading(false)
       }
     } catch (error) {
+      setIsUpcomingEventsLoading(false)
       console.error(error)
     }
   }
 
+  const DEBOUNCE_DELAY = 500
   useEffect(() => {
-    getAllUpcomingEvents()
-  }, [])
+    const handler = setTimeout(() => {
+      getAllUpcomingEvents()
+    }, DEBOUNCE_DELAY)
+    return () => clearTimeout(handler)
+  }, [currentPage, totalPages, totalItems])
+
   return (
     <>
       <CContainer>
@@ -108,71 +120,79 @@ const Interviews = () => {
                   <CTableBody>
                     {isUpcomingEventsLoading ? (
                       <CTableRow>
-                        <CTableDataCell colSpan="6">
-                          <CSpinner variant="glow" size="sm" />
+                        <CTableDataCell colSpan="12">
+                          <div className="d-flex justify-content-center">
+                            <CSpinner variant="grow" size="sm" />
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : upcomingEvents.length === 0 ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="12">
+                          <div className="d-flex justify-content-center">
+                            No upcoming interviews found
+                          </div>
                         </CTableDataCell>
                       </CTableRow>
                     ) : (
-                      upcomingEvents.map((event) => {
-                        return (
-                          <CTableRow key={event._id}>
-                            <CTooltip placement="top" content={event._id}>
-                              <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
-                            </CTooltip>
-                            <CTableDataCell>{event.name}</CTableDataCell>
-                            <CTableDataCell>
-                              {event.author.lastname}, {event.author.firstname}
-                            </CTableDataCell>
-                            <CTableDataCell>{event.type}</CTableDataCell>
-                            <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
-                            <CTableDataCell>
-                              {formatTime(event.timeslot?.start)} -{' '}
-                              {formatTime(event.timeslot?.start)}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="d-flex justify-content-center">
-                                {event.participants?.length}
-                              </div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {event.isApproved.status ? (
-                                <span className="text-success">Approved</span>
-                              ) : (
-                                <small className="text-danger">Requires Approval</small>
-                              )}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="d-flex gap-2 flex-row">
+                      upcomingEvents.map((event) => (
+                        <CTableRow key={event._id}>
+                          <CTooltip placement="top" content={event._id}>
+                            <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
+                          </CTooltip>
+                          <CTableDataCell>{event.name}</CTableDataCell>
+                          <CTableDataCell>
+                            {event.author.lastname}, {event.author.firstname}
+                          </CTableDataCell>
+                          <CTableDataCell>{event.type}</CTableDataCell>
+                          <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
+                          <CTableDataCell>
+                            {formatTime(event.timeslot?.start)} - {formatTime(event.timeslot?.end)}{' '}
+                            {/* Fixed duplicate time */}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex justify-content-center">
+                              {event.participants?.length}
+                            </div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {event.isApproved.status ? (
+                              <span className="text-success">Approved</span>
+                            ) : (
+                              <small className="text-danger">Requires Approval</small>
+                            )}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex gap-2 flex-row">
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => {
+                                  setEventFormState('view')
+                                  setIsEventFormVisible(true)
+                                  setSelectedSlot(event.timeslot)
+                                }}
+                              >
+                                View
+                              </CButton>
+                              {(userInformation.role === 'admin' ||
+                                userInformation.role === 'manager') && (
                                 <CButton
-                                  color="info"
+                                  color="warning"
                                   size="sm"
                                   onClick={() => {
-                                    setEventFormState('view')
+                                    setEventFormState('edit')
                                     setIsEventFormVisible(true)
                                     setSelectedSlot(event.timeslot)
                                   }}
                                 >
-                                  View
+                                  Manage
                                 </CButton>
-                                {(userInformation.role === 'admin' ||
-                                  userInformation.role === 'manager') && (
-                                  <CButton
-                                    color="warning"
-                                    size="sm"
-                                    onClick={() => {
-                                      setEventFormState('edit')
-                                      setIsEventFormVisible(true)
-                                      setSelectedSlot(event.timeslot)
-                                    }}
-                                  >
-                                    Manage
-                                  </CButton>
-                                )}
-                              </div>
-                            </CTableDataCell>
-                          </CTableRow>
-                        )
-                      })
+                              )}
+                            </div>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))
                     )}
                   </CTableBody>
                 </CTable>

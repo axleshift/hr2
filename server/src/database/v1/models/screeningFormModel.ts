@@ -6,12 +6,16 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export type ScreeningStatus = "pending" | "reviewed" | "rejected" | "shortlisted";
+export type RecommendationStatus = "yes" | "no" | "needs further review" | "redirection"
+
+const STATUS_ENUM = ["pending", "reviewed", "rejected", "shortlisted"]
+const RECO_ENUM = ["yes", "no", "needs further review", "redirection"]
 
 export interface IScreeningForm extends Document {
   applicant: mongoose.Types.ObjectId;
   reviewer: mongoose.Types.ObjectId;
   status: ScreeningStatus;
-  recommendation: "yes" | "no" | "needs further review";
+  recommendation: RecommendationStatus;
   job: mongoose.Types.ObjectId;
   aiAnalysis: {
     summary: string;
@@ -39,12 +43,12 @@ const screeningFormSchema = new Schema<IScreeningForm>(
     },
     status: {
       type: String,
-      enum: ["pending", "reviewed", "rejected", "shortlisted"],
+      enum: STATUS_ENUM,
       default: "pending",
     },
     recommendation: {
       type: String,
-      enum: ["yes", "no", "needs further review"],
+      enum: RECO_ENUM,
       required: true,
     },
     job: {
