@@ -84,7 +84,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       console.log('Event:', JSON.stringify(res.data.data, null, 2))
       if (res.status === 200) {
         setEvenData(res.data.data)
-        formReset(res.data.data)
+        formReset({ ...res.data.data, isApproved: res.data.data.isApproved?.status })
         setIsEventLoading(false)
         return addToast('Success', 'Event Fetched', 'success')
       }
@@ -422,7 +422,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                             <CCol>
                               <CFormLabel htmlFor="isApproved">
                                 Current approval status:{' '}
-                                {eventData.isApproved ? (
+                                {eventData.isApproved?.status ? (
                                   <span className="text-success">Approved</span>
                                 ) : (
                                   <span className="text-danger">Not approved</span>
@@ -485,10 +485,10 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                               <CCardHeader>
                                 <div className="d-flex justify-content-between">
                                   <div>Participants</div>
-                                  {(userInformation.role === 'admin' ||
-                                    userInformation.role === 'recruiter') &&
+                                  {['admin', 'recruiter'].includes(userInformation.role) &&
                                     eventFormState === 'edit' &&
-                                    eventData.participants.length > 0 && (
+                                    eventData.participants.length > 0 &&
+                                    (eventData.isApproved.status ? (
                                       <div>
                                         <CButton
                                           size="sm"
@@ -507,7 +507,11 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                           )}
                                         </CButton>
                                       </div>
-                                    )}
+                                    ) : (
+                                      <CButton size="sm" color="info" disabled>
+                                        Needs Approval
+                                      </CButton>
+                                    ))}
                                 </div>
                               </CCardHeader>
                               <CCardBody>
@@ -558,7 +562,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                                   )}
                                                 </CButton>
                                               )}
-                                              {(userInformation.role === 'admin' ||
+                                              {/* {(userInformation.role === 'admin' ||
                                                 userInformation.role === 'interviewer' ||
                                                 userInformation.role === 'manager') &&
                                                 eventFormState === 'view' && (
@@ -570,11 +574,6 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                                       setIsInterviewFormIsEdit(false)
                                                       setIsEventFormVisible(false)
                                                       setApplicanData(p.applicant)
-                                                      console.log(
-                                                        'Does it have a value?',
-                                                        eventData,
-                                                      )
-                                                      console.log(p.applicant)
                                                       setInterviewData({
                                                         _id: eventData._id,
                                                         name: eventData.name,
@@ -585,7 +584,30 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                                   >
                                                     Interview
                                                   </CButton>
-                                                )}
+                                                )} */}
+
+                                              {['admin', 'manager', 'recruiter'].includes(
+                                                userInformation.role,
+                                              ) && (
+                                                <CButton
+                                                  color="info"
+                                                  size="sm"
+                                                  onClick={() => {
+                                                    setIsInterviewFormVisible(true)
+                                                    setIsInterviewFormIsEdit(false)
+                                                    setIsEventFormVisible(false)
+                                                    setApplicanData(p.applicant)
+                                                    setInterviewData({
+                                                      _id: eventData._id,
+                                                      name: eventData.name,
+                                                      date: eventData.date,
+                                                      type: eventData.type,
+                                                    })
+                                                  }}
+                                                >
+                                                  Interview
+                                                </CButton>
+                                              )}
                                             </div>
                                           </CTableDataCell>
                                         </CTableRow>

@@ -10,10 +10,12 @@ import {
   deleteResume,
   searchResume,
   getResumeFile,
+  updateStat,
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
 import { createInterview, getAllInterview, updateInterview } from "../../database/v1/controllers/interviewController";
+import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
 
 router.post(
   "/",
@@ -34,6 +36,16 @@ router.put(
   ),
   updateResume
 );
+
+router.put(
+  "/status/:applicantId/:stat",
+  verifySession({
+    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
+  },
+    true,
+  ),
+  updateStat
+)
 
 router.get(
   "/all",
@@ -94,6 +106,17 @@ router.delete(
   ),
   deleteResume
 );
+
+// Events
+router.get(
+  "/events/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllApplicantFacilityEvents
+)
 
 // Screening
 

@@ -966,7 +966,11 @@ const ScreeningForm = ({ isVisible, onClose, state, applicant }) => {
                                   </CTableDataCell>
                                   <CTableDataCell>{screen.status}</CTableDataCell>
                                   <CTableDataCell>{screen.recommendation}</CTableDataCell>
-                                  <CTableDataCell>{screen.job.title}</CTableDataCell>
+                                  <CTableDataCell>
+                                    {screen.job?.title
+                                      ? screen.job?.title
+                                      : "Can't find job. Perhaps deleted."}
+                                  </CTableDataCell>
                                   <CTableDataCell>
                                     <small>{trimString(screen.aiAnalysis.summary, 50)}</small>
                                   </CTableDataCell>

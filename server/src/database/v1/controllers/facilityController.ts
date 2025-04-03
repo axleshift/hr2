@@ -499,7 +499,12 @@ export const updateFacilityEvent = async (req: req, res: res) => {
       approvedBy: new mongoose.Types.ObjectId(req.session.user._id) as mongoose.Types.ObjectId
     }
 
-    const updatedEvent = await event.save();
+    const updatedEvent = await (await event.save()).populate({
+      path: 'participants.applicant',
+      model: 'Applicant',
+      select: 'firstname lastname email phone',
+      transform: doc => doc ? doc.toObject() : doc
+    })
     if (!updatedEvent) {
       return res.status(500).json({ message: "Event not updated" });
     }
@@ -980,5 +985,88 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
   } catch (error) {
     logger.error("Error sending event emails:", error);
     return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const getAllApplicantFacilityEvents = async (req: req, res: res) => {
+  try {
+    const { applicantId } = req.params;
+
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+    const skip = (page - 1) * limit;
+
+    if (!applicantId) {
+      return res.status(400).json({ message: "Applicant Id is required" });
+    }
+
+    // Check if applicantId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(applicantId)) {
+      return res.status(400).json({ message: "Invalid Applicant Id format" });
+    }
+
+    // Initialize the query with applicantId
+    const query: Record<string, unknown> = {
+      "participants.applicant": new mongoose.Types.ObjectId(applicantId),
+    };
+
+    // Fetch the facility events for the specific applicant
+    const events = await FacilityEvent.find(query)
+      .sort({ date: 1 })  // Sort by date, earliest first
+      .skip(skip)
+      .limit(limit)
+      .populate([
+        {
+          path: 'author',
+          model: 'User',
+          select: '_id firstname lastname role'
+        },
+        {
+          path: 'isApproved.approvedBy',
+          model: 'User',
+          select: '_id firstname lastname role'
+        },
+        {
+          path: 'timeslot',
+          model: 'Timeslot',
+          select: '_id date start end event'
+        },
+        {
+          path: 'facility',
+          model: 'Facility',
+          select: '_id name type location'
+        }
+      ])
+      .lean();
+
+    // Modify timeslot start and end times
+    const modifiedEvents = events.map((event) => {
+      if (event.timeslot && typeof event.timeslot === "object") {
+        const timeslot = event.timeslot as unknown as { start: number; end: number }; // Ensure the correct type
+        return {
+          ...event,
+          timeslot: {
+            ...timeslot,
+            start: convertMinutesToTime(timeslot.start),  // Directly use the number if already in minutes
+            end: convertMinutesToTime(timeslot.end),      // Directly use the number if already in minutes
+          },
+        };
+      }
+      return event;
+    });
+
+    const totalItems = await FacilityEvent.countDocuments(query);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({
+      message: "Applicant facility events retrieved successfully",
+      data: modifiedEvents,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

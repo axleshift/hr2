@@ -57,11 +57,12 @@ const responseParser = (aiResponse: string): AIResponse => {
   // Function to clean text fields by removing symbolic terms and other artifacts
   const cleanedText = (text: string): string => {
     return text
-      .replace(/[^a-zA-Z0-9\s\-,]/g, '')  // Allows letters, numbers, spaces, hyphens, and commas
-      .replace(/\s{2,}/g, ' ')             // Collapses multiple spaces
-      .trim();                             // Trims whitespace
+      // eslint-disable-next-line no-useless-escape
+      .replace(/[^a-zA-Z0-9\s.,!?;:'"(){}\[\]$€¥£%+=*/<>#&_…—-]/g, '') // Allows structured characters
+      .replace(/\s{2,}/g, ' ')  // Collapses multiple spaces
+      .trim();                  // Removes extra whitespace
   };
-
+  
   // Create the parsed response object with cleaned text fields
   const parsedResponse: AIResponse = {
     summary: cleanedText(summaryMatch[1]),
@@ -210,13 +211,19 @@ export const screenApplicantViaAI = async (req: req, res: res) => {
     let screening;
     if (screenId) {
       // If screenId is provided, update the existing screening
-      screening = await ScreeningForm.findByIdAndUpdate(screenId, screeningData, { new: true });
+      screening = await ScreeningForm.findByIdAndUpdate(screenId, screeningData, { new: true }).populate({
+        path: 'job',
+        model: 'Job'
+      })
       if (!screening) {
         return res.status(404).json({ message: "Screening not found for update" });
       }
     } else {
       // If screenId is not provided, create a new screening
-      screening = await ScreeningForm.create(screeningData);
+      screening = await (await ScreeningForm.create(screeningData)).populate({
+        path: 'job',
+        model: 'Job'
+      })
       if (!screening) {
         return res.status(404).json({ message: "Failed to create AI response, please try again or contact admin." });
       }
@@ -427,8 +434,6 @@ export const updateScreening = async (req: req, res: res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
 
 export const getAllScreening = async (req: req, res: res) => {
   try {

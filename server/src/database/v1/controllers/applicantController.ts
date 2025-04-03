@@ -9,7 +9,7 @@ import { Request, Response } from "express";
 import logger from "../../../middlewares/logger";
 import { upload } from "../../../utils/fileUploadHandler";
 
-import Applicant from "../models/applicantModel";
+import Applicant, { IApplicant } from "../models/applicantModel";
 import { config } from "../../../config";
 
 export const handleFileUpload = (req: Request, res: Response) => {
@@ -22,8 +22,6 @@ export const handleFileUpload = (req: Request, res: Response) => {
     });
   });
 };
-
-
 
 export const addNewResume = async (req: Request, res: Response) => {
   try {
@@ -146,6 +144,77 @@ export const updateResume = async (req: Request, res: Response) => {
     });
   } catch (error) {
     logger.error(error);
+    res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "An error occurred",
+      error,
+    });
+  }
+};
+
+export const updateStat = async (req: Request, res: Response) => {
+  try {
+    const { applicantId, stat } = req.params;
+
+    if (!applicantId) {
+      return res.status(400).json({
+        statusCode: 400,
+        success: false,
+        message: "Applicant ID is required",
+      });
+    }
+
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({
+        statusCode: 404,
+        success: false,
+        message: "Applicant not found",
+      });
+    }
+
+    // Define valid status fields
+    const validStatuses: (keyof IApplicant)[] = [
+      "isShortlisted",
+      "isInitialInterview",
+      "isFinalInterview",
+      "isInTraining",
+      "isHired",
+    ];
+
+    if (!validStatuses.includes(stat as keyof IApplicant)) {
+      return res.status(400).json({
+        statusCode: 400,
+        success: false,
+        message: "Invalid status field",
+      });
+    }
+
+    // Get the current value of the status
+    const currentStatus = applicant[stat as keyof IApplicant];
+
+    // Ensure the current status is a boolean
+    if (typeof currentStatus !== "boolean") {
+      return res.status(400).json({
+        statusCode: 400,
+        success: false,
+        message: `Status field ${stat} is not a boolean.`,
+      });
+    }
+
+    // Set the status to the opposite of its current value
+    applicant.set(stat as keyof IApplicant, !currentStatus);
+
+    await applicant.save();
+
+    return res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: `Applicant ${stat} status updated successfully`,
+      data: applicant,
+    });
+  } catch (error) {
     res.status(500).json({
       statusCode: 500,
       success: false,

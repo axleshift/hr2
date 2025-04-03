@@ -10,7 +10,6 @@ router.post(
 	"/jobposting", externalPostJob
 );
 
-
 router.get(
 	"/applicants/documents/:documentType", getApplicantDocuments
 )

@@ -21,6 +21,8 @@ const Page500 = React.lazy(() => import('./views/errors/Page500'))
 // const Terms = React.lazy(() => import('./views/legal/Terms'))
 const Policy = React.lazy(() => import('./views/legal/PolicyTerms'))
 
+// const ApplicantProfilePage = React.lazy(() => import('./views/applicants/ApplicantProfile'))
+
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('theme')
   const storedTheme = useSelector((state) => state.theme)

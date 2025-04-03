@@ -53,11 +53,14 @@ import ScreeningForm from './modal/ScreeningForm'
 import { trimString } from '../../utils'
 
 import ConfirmationDialog from '../../components/ConfirmationDialog'
+import { AuthContext } from '../../context/authContext'
+import { useNavigate } from 'react-router-dom'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const Screening = () => {
   const { addToast } = useContext(AppContext)
+  const { userInformation } = useContext(AuthContext)
 
   const [isFormModalVisible, setIsFormModalVisible] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
@@ -103,6 +106,17 @@ const Screening = () => {
   const [pdfFile, setPdfFile] = useState(null)
   const [pdfScale, setPdfScale] = useState(1.0)
 
+  const navigate = useNavigate()
+
+  const handleGotoPage = (applicantId) => {
+    try {
+      // navigate(`/applicant/profile/${applicantId}`)
+      window.open(`/applicant/profile/${applicantId}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const applicantSchema = z.object({
     id: z.string().optional(),
     firstname: z
@@ -132,7 +146,7 @@ const Screening = () => {
         { message: 'Phone number must be numeric' },
       ),
     address: z.string().min(10).max(255),
-    prefferedWorkLocation: z.enum(['Remote', 'Onsite', 'Hybrid', 'Any']),
+    prefferedWorkLocation: z.string().min(1).max(250),
     linkedInProfile: z.string().optional(),
     portfolioLink: z.string().optional(),
     yearsOfExperience: z.number().int().positive(),
@@ -782,7 +796,7 @@ const Screening = () => {
                       )}
                     </CCol>
                   </CRow>
-                  <CRow className="mt-3">
+                  {/* <CRow className="mt-3">
                     <CCol>
                       <CFormSelect
                         id="prefferedWorkLocation"
@@ -795,6 +809,21 @@ const Screening = () => {
                           { value: 'Hybrid', label: 'Hybrid' },
                           { value: 'Any', label: 'Any' },
                         ]}
+                      />
+                      {errors.prefferedWorkLocation && (
+                        <CFormFeedback className="text-danger">
+                          {errors.prefferedWorkLocation.message}
+                        </CFormFeedback>
+                      )}
+                    </CCol>
+                  </CRow> */}
+                  <CRow className="mt-3">
+                    <CCol>
+                      <CFormInput
+                        id="prefferedWorkLocation"
+                        label="Preffered Work Location"
+                        {...register('prefferedWorkLocation')}
+                        invalid={!!errors.prefferedWorkLocation}
                       />
                       {errors.prefferedWorkLocation && (
                         <CFormFeedback className="text-danger">
@@ -1258,20 +1287,20 @@ const Screening = () => {
                       </CTableDataCell>
                     </CTableRow>
                   ) : (
-                    applicants.map((item, index) => {
+                    applicants.map((applicant, index) => {
                       return (
                         <CTableRow key={index}>
                           <CTableDataCell>
-                            <small>{trimString(item._id, 10)}</small>
+                            <small>{trimString(applicant._id, 10)}</small>
                           </CTableDataCell>
                           <CTableDataCell>
-                            {item.firstname}, {item.lastname} {item?.middlename}
+                            {applicant.firstname}, {applicant.lastname} {applicant?.middlename}
                           </CTableDataCell>
-                          <CTableDataCell>{item.email}</CTableDataCell>
-                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          <CTableDataCell>{applicant.email}</CTableDataCell>
+                          <CTableDataCell>{applicant.phone}</CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex flex-wrap">
-                              {item.tags.map((tag, index) => {
+                              {applicant.tags.map((tag, index) => {
                                 const tagName = formTags.find(
                                   (formTag) => formTag._id === tag,
                                 )?.name
@@ -1286,7 +1315,7 @@ const Screening = () => {
                                   </CBadge>
                                 )
                               })}
-                              {item.isShortlisted && (
+                              {applicant.isShortlisted && (
                                 <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
                                   Shortlisted
                                 </CBadge>
@@ -1301,7 +1330,7 @@ const Screening = () => {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => {
-                                    setSelectedApplicant(item)
+                                    setSelectedApplicant(applicant)
                                     setScreeningFormModalVisible(true)
                                     setScreeningFormState('create')
                                   }}
@@ -1309,21 +1338,35 @@ const Screening = () => {
                                   <FontAwesomeIcon icon={faBolt} />
                                 </CButton>
                               </CTooltip>
-                              <CButton
+                              {/* <CButton
                                 color="primary"
                                 size="sm"
-                                onClick={() => handleEdit(item._id)}
+                                onClick={() => handleEdit(applicant._id)}
                               >
                                 Edit
-                              </CButton>
-                              <CButton
+                              </CButton> */}
+                              {/* <CButton
                                 color="danger"
                                 size="sm"
                                 onClick={() => handleDelete(item._id)}
                               >
                                 Remove
-                              </CButton>
-                              <CButton color="warning" size="sm">
+                              </CButton> */}
+
+                              {/* {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+                                <CButton
+                                  color="danger"
+                                  size="sm"
+                                  onClick={() => handleDelete(applicant._id)}
+                                >
+                                  Remove
+                                </CButton>
+                              )} */}
+                              <CButton
+                                color="warning"
+                                size="sm"
+                                onClick={() => handleGotoPage(applicant._id)}
+                              >
                                 Manage
                               </CButton>
                             </div>
