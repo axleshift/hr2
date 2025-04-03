@@ -7,7 +7,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteResume = exports.getResumeById = exports.getApplicantByDocumentCategory = exports.searchResume = exports.getResumeFile = exports.getAllResumeData = exports.updateResume = exports.addNewResume = exports.handleFileUpload = void 0;
+exports.deleteResume = exports.getResumeById = exports.getApplicantByDocumentCategory = exports.searchResume = exports.getResumeFile = exports.getAllResumeData = exports.updateStat = exports.updateResume = exports.addNewResume = exports.handleFileUpload = void 0;
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
@@ -148,6 +148,69 @@ const updateResume = async (req, res) => {
     }
 };
 exports.updateResume = updateResume;
+const updateStat = async (req, res) => {
+    try {
+        const { applicantId, stat } = req.params;
+        if (!applicantId) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Applicant ID is required",
+            });
+        }
+        const applicant = await applicantModel_1.default.findById(applicantId);
+        if (!applicant) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Applicant not found",
+            });
+        }
+        // Define valid status fields
+        const validStatuses = [
+            "isShortlisted",
+            "isInitialInterview",
+            "isFinalInterview",
+            "isInTraining",
+            "isHired",
+        ];
+        if (!validStatuses.includes(stat)) {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Invalid status field",
+            });
+        }
+        // Get the current value of the status
+        const currentStatus = applicant[stat];
+        // Ensure the current status is a boolean
+        if (typeof currentStatus !== "boolean") {
+            return res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: `Status field ${stat} is not a boolean.`,
+            });
+        }
+        // Set the status to the opposite of its current value
+        applicant.set(stat, !currentStatus);
+        await applicant.save();
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: `Applicant ${stat} status updated successfully`,
+            data: applicant,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "An error occurred",
+            error,
+        });
+    }
+};
+exports.updateStat = updateStat;
 const getAllResumeData = async (req, res) => {
     try {
         const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;

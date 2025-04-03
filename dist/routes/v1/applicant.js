@@ -9,12 +9,16 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const applicantController_1 = require("../../database/v1/controllers/applicantController");
 const screeningController_1 = require("../../database/v1/controllers/screeningController");
 const interviewController_1 = require("../../database/v1/controllers/interviewController");
+const facilityController_1 = require("../../database/v1/controllers/facilityController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager"],
 }, true), applicantController_1.addNewResume);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
 }, true), applicantController_1.updateResume);
+router.put("/status/:applicantId/:stat", (0, verifySession_1.default)({
+    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
+}, true), applicantController_1.updateStat);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
 }, true), applicantController_1.getAllResumeData);
@@ -33,6 +37,10 @@ router.get("/:id", (0, verifySession_1.default)({
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
 }, true), applicantController_1.deleteResume);
+// Events
+router.get("/events/:applicantId", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+}, true), facilityController_1.getAllApplicantFacilityEvents);
 // Screening
 router.post("/screen/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],

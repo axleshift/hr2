@@ -46,7 +46,13 @@ const jobSchema = new mongoose_1.Schema({
         required: true,
     },
     author: {
-        type: [mongoose_1.default.Schema.Types.ObjectId, String]
+        type: mongoose_1.Schema.Types.Mixed,
+        validate: {
+            validator(value) {
+                return mongoose_1.default.Types.ObjectId.isValid(value) || typeof value === 'string';
+            },
+            message: 'Author must be a valid ObjectId or a string.',
+        },
     },
     responsibilities: {
         type: String,

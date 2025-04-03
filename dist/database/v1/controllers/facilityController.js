@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SendEmailToFacilityEventParticipants = exports.unbookApplicantFromEvent = exports.bookApplicantToEvent = exports.getUpcomingEvents = exports.getFacilityUpcomingEvents = exports.getFacilityCalendarStates = exports.getFacilityEventsForDate = exports.deleteFacilityEvent = exports.updateFacilityEvent = exports.getFacilityEventByID = exports.createFacilityEvent = exports.removeFacilityTimeslot = exports.getAllFacilityTimeslotsForDate = exports.createFacilityTimeslot = exports.removeFacility = exports.getFacilityById = exports.getAllFacilities = exports.updateFacility = exports.createFacility = void 0;
+exports.getAllApplicantFacilityEvents = exports.SendEmailToFacilityEventParticipants = exports.unbookApplicantFromEvent = exports.bookApplicantToEvent = exports.getUpcomingEvents = exports.getFacilityUpcomingEvents = exports.getFacilityCalendarStates = exports.getFacilityEventsForDate = exports.deleteFacilityEvent = exports.updateFacilityEvent = exports.getFacilityEventByID = exports.createFacilityEvent = exports.removeFacilityTimeslot = exports.getAllFacilityTimeslotsForDate = exports.createFacilityTimeslot = exports.removeFacility = exports.getFacilityById = exports.getAllFacilities = exports.updateFacility = exports.createFacility = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const facilityModel_1 = __importDefault(require("../models/facilityModel"));
 const facilityEventModel_1 = __importDefault(require("../models/facilityEventModel"));
@@ -431,7 +431,12 @@ const updateFacilityEvent = async (req, res) => {
             status: isApproved,
             approvedBy: new mongoose_1.default.Types.ObjectId(req.session.user._id)
         };
-        const updatedEvent = await event.save();
+        const updatedEvent = await (await event.save()).populate({
+            path: 'participants.applicant',
+            model: 'Applicant',
+            select: 'firstname lastname email phone',
+            transform: doc => doc ? doc.toObject() : doc
+        });
         if (!updatedEvent) {
             return res.status(500).json({ message: "Event not updated" });
         }
@@ -832,3 +837,79 @@ const SendEmailToFacilityEventParticipants = async (req, res) => {
     }
 };
 exports.SendEmailToFacilityEventParticipants = SendEmailToFacilityEventParticipants;
+const getAllApplicantFacilityEvents = async (req, res) => {
+    try {
+        const { applicantId } = req.params;
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        if (!applicantId) {
+            return res.status(400).json({ message: "Applicant Id is required" });
+        }
+        // Check if applicantId is a valid ObjectId
+        if (!mongoose_1.default.Types.ObjectId.isValid(applicantId)) {
+            return res.status(400).json({ message: "Invalid Applicant Id format" });
+        }
+        // Initialize the query with applicantId
+        const query = {
+            "participants.applicant": new mongoose_1.default.Types.ObjectId(applicantId),
+        };
+        // Fetch the facility events for the specific applicant
+        const events = await facilityEventModel_1.default.find(query)
+            .sort({ date: 1 }) // Sort by date, earliest first
+            .skip(skip)
+            .limit(limit)
+            .populate([
+            {
+                path: 'author',
+                model: 'User',
+                select: '_id firstname lastname role'
+            },
+            {
+                path: 'isApproved.approvedBy',
+                model: 'User',
+                select: '_id firstname lastname role'
+            },
+            {
+                path: 'timeslot',
+                model: 'Timeslot',
+                select: '_id date start end event'
+            },
+            {
+                path: 'facility',
+                model: 'Facility',
+                select: '_id name type location'
+            }
+        ])
+            .lean();
+        // Modify timeslot start and end times
+        const modifiedEvents = events.map((event) => {
+            if (event.timeslot && typeof event.timeslot === "object") {
+                const timeslot = event.timeslot; // Ensure the correct type
+                return {
+                    ...event,
+                    timeslot: {
+                        ...timeslot,
+                        start: convertMinutesToTime(timeslot.start), // Directly use the number if already in minutes
+                        end: convertMinutesToTime(timeslot.end), // Directly use the number if already in minutes
+                    },
+                };
+            }
+            return event;
+        });
+        const totalItems = await facilityEventModel_1.default.countDocuments(query);
+        const totalPages = Math.ceil(totalItems / limit);
+        return res.status(200).json({
+            message: "Applicant facility events retrieved successfully",
+            data: modifiedEvents,
+            totalItems,
+            totalPages,
+            currentPage: page,
+        });
+    }
+    catch (error) {
+        logger_1.default.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+exports.getAllApplicantFacilityEvents = getAllApplicantFacilityEvents;

@@ -7,6 +7,7 @@ exports.createJobpostingFromJob = exports.getAllJob = exports.getJobById = expor
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const jobModel_1 = __importDefault(require("../models/jobModel"));
 const jobpostingModel_1 = __importDefault(require("../models/jobpostingModel"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const createJob = async (req, res) => {
     try {
@@ -88,6 +89,46 @@ const getJobById = async (req, res) => {
     }
 };
 exports.getJobById = getJobById;
+// export const getAllJob = async (req: req, res: res) => {
+//   try {
+//     const searchQuery = req.query.query as string;
+//     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+//     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+//     const skip = (page - 1) * limit;
+//     const sortOrder = req.query.sort === "desc" ? -1 : 1;
+//     let searchFilter = {};
+//     if (searchQuery) {
+//       searchFilter = {
+//         $or: [
+//           { title: { $regex: searchQuery, $options: "i" } },
+//           { responsibilities: { $regex: searchQuery, $options: "i" } },
+//           { requirements: { $regex: searchQuery, $options: "i" } },
+//           { qualifications: { $regex: searchQuery, $options: "i" } },
+//           { benefits: { $regex: searchQuery, $options: "i" } },
+//         ],
+//       };
+//     }
+//     const totalItems = await Job.countDocuments(searchFilter);
+//     const totalPages = Math.ceil(totalItems / limit);
+//     const jobs = await Job.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+//     if (jobs.length === 0) {
+//       const msg = searchQuery ? `No jobs found for query: ${searchQuery}` : "No jobs found";
+//       return res.status(404).json({ message: msg });
+//     }
+//     res.status(200).json({
+//       statusCode: 200,
+//       success: true,
+//       message: "Jobs found",
+//       data: jobs,
+//       totalItems,
+//       totalPages,
+//       currentPage: page,
+//     });
+//   } catch (error) {
+//     logger.error(error);
+//     res.status(500).json({ message: "Internal server error", error });
+//   }
+// };
 const getAllJob = async (req, res) => {
     try {
         const searchQuery = req.query.query;
@@ -109,10 +150,30 @@ const getAllJob = async (req, res) => {
         }
         const totalItems = await jobModel_1.default.countDocuments(searchFilter);
         const totalPages = Math.ceil(totalItems / limit);
-        const jobs = await jobModel_1.default.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+        // Fetch jobs without populating first
+        const jobs = await jobModel_1.default.find(searchFilter)
+            .sort({ createdAt: sortOrder })
+            .skip(skip)
+            .limit(limit);
         if (jobs.length === 0) {
             const msg = searchQuery ? `No jobs found for query: ${searchQuery}` : "No jobs found";
             return res.status(404).json({ message: msg });
+        }
+        // Populate valid ObjectId authors only
+        for (let job of jobs) {
+            if (job.author && mongoose_1.default.Types.ObjectId.isValid(job.author)) {
+                const user = await userModel_1.default.findById(job.author);
+                if (user) {
+                    job = await job.populate({
+                        path: "author",
+                        model: "User",
+                        select: "_id firstname lastname role",
+                    });
+                }
+                else {
+                    job.author = null; // Or keep it as is
+                }
+            }
         }
         res.status(200).json({
             statusCode: 200,
@@ -125,7 +186,7 @@ const getAllJob = async (req, res) => {
         });
     }
     catch (error) {
-        logger_1.default.error(error);
+        console.error(error);
         res.status(500).json({ message: "Internal server error", error });
     }
 };
