@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file screeningForm.ts
+ * @description Screening Form model schema with AI analysis field
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -34,52 +38,43 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
-const interviewFormSchema = new mongoose_1.Schema({
+const STATUS_ENUM = ["pending", "reviewed", "rejected", "shortlisted"];
+const RECO_ENUM = ["yes", "no", "needs further review", "redirection"];
+const screeningFormSchema = new mongoose_1.Schema({
     applicant: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Applicants',
+        ref: "Applicant",
         required: true,
     },
-    date: {
-        type: Date,
-        default: () => new Date(),
-    },
-    interviewer: {
+    reviewer: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: "User",
         required: true,
     },
-    type: {
+    status: {
         type: String,
-        enum: INTERVIEW_TYPES,
-        default: 'Phone',
+        enum: STATUS_ENUM,
+        default: "pending",
     },
-    event: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'facilityEvents',
-    },
-    general: {
-        communication: { type: Number, default: 1 },
-        technical: { type: Number, default: 1 },
-        problemSolving: { type: Number, default: 1 }, // Fixed typo
-        culturalFit: { type: Number, default: 1 },
-        workExperienceRelevance: { type: Number, default: 1 },
-        leadership: { type: Number, default: 1 },
-    },
-    questions: [
-        {
-            question: { type: String, required: true },
-            remark: { type: String, default: '' },
-        },
-    ],
-    strength: { type: String, default: '' },
-    weakness: { type: String, default: '' },
     recommendation: {
         type: String,
-        enum: ['yes', 'no', 'need further review'],
-        default: 'need further review',
+        enum: RECO_ENUM,
+        required: true,
     },
-    finalComments: { type: String, default: '' },
-}, { timestamps: true });
-exports.default = mongoose_1.default.model('InterviewForm', interviewFormSchema);
+    job: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+    },
+    aiAnalysis: {
+        summary: { type: String },
+        scoreBreakdown: {
+            experience: { type: Number, default: 1 },
+            education: { type: Number, default: 1 },
+            skills: { type: Number, default: 1 },
+            motivation: { type: Number, default: 1 },
+        },
+        comments: { type: String },
+    },
+}, {
+    timestamps: true,
+});
+exports.default = mongoose_1.default.model("ScreeningForm", screeningFormSchema);

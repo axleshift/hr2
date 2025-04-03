@@ -31,7 +31,6 @@ const jobpostingSchema = new mongoose_1.default.Schema({
     },
     description: {
         type: String,
-        required: true,
     },
     requirements: {
         type: String,
@@ -47,7 +46,6 @@ const jobpostingSchema = new mongoose_1.default.Schema({
     },
     status: {
         type: String,
-        required: true,
     },
     schedule_start: {
         type: Date,

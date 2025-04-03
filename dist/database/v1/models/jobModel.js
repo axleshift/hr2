@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @file jobModel.ts
+ * @description Job model schema
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -33,53 +37,47 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CATEGORY_TYPES = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
-const interviewFormSchema = new mongoose_1.Schema({
-    applicant: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Applicants',
+exports.CATEGORY_TYPES = ["internship", "full-time", "part-time", "contract", "temporary", "freelance"];
+const jobSchema = new mongoose_1.Schema({
+    title: {
+        type: String,
         required: true,
     },
-    date: {
-        type: Date,
-        default: () => new Date(),
+    author: {
+        type: [mongoose_1.default.Schema.Types.ObjectId, String]
     },
-    interviewer: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Users',
+    responsibilities: {
+        type: String,
         required: true,
     },
-    type: {
+    requirements: {
         type: String,
-        enum: INTERVIEW_TYPES,
-        default: 'Phone',
+        required: true,
     },
-    event: {
+    qualifications: {
+        type: String,
+        required: true,
+    },
+    benefits: {
+        type: String,
+        required: true,
+    },
+    category: {
+        type: String,
+        enum: exports.CATEGORY_TYPES,
+        required: true,
+    },
+    capacity: {
+        type: Number,
+        default: 1,
+    },
+    jobpost: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'facilityEvents',
-    },
-    general: {
-        communication: { type: Number, default: 1 },
-        technical: { type: Number, default: 1 },
-        problemSolving: { type: Number, default: 1 }, // Fixed typo
-        culturalFit: { type: Number, default: 1 },
-        workExperienceRelevance: { type: Number, default: 1 },
-        leadership: { type: Number, default: 1 },
-    },
-    questions: [
-        {
-            question: { type: String, required: true },
-            remark: { type: String, default: '' },
-        },
-    ],
-    strength: { type: String, default: '' },
-    weakness: { type: String, default: '' },
-    recommendation: {
-        type: String,
-        enum: ['yes', 'no', 'need further review'],
-        default: 'need further review',
-    },
-    finalComments: { type: String, default: '' },
-}, { timestamps: true });
-exports.default = mongoose_1.default.model('InterviewForm', interviewFormSchema);
+        ref: 'JobPosting'
+    }
+}, {
+    timestamps: true,
+});
+exports.default = mongoose_1.default.model("Job", jobSchema);

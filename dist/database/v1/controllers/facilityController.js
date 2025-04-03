@@ -69,23 +69,44 @@ const updateFacility = async (req, res) => {
 exports.updateFacility = updateFacility;
 const getAllFacilities = async (req, res) => {
     try {
-        const facilities = await facilityModel_1.default.find();
-        if (!facilities) {
-            return res.status(404).json({ message: "Facilities not found" });
+        const searchQuery = req.query.query;
+        const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+        const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+        const skip = (page - 1) * limit;
+        const sortOrder = req.query.sort === "desc" ? -1 : 1;
+        const searchFilter = {};
+        if (searchQuery) {
+            searchFilter.$or = [
+                { name: { $regex: searchQuery, $options: "i" } },
+                { location: { $regex: searchQuery, $options: "i" } },
+            ];
         }
-        // get all timeslots for each facility
+        const [facilities, totalItems] = await Promise.all([
+            facilityModel_1.default.find(searchFilter)
+                .sort({ createdAt: sortOrder })
+                .skip(skip)
+                .limit(limit)
+                .lean(),
+            facilityModel_1.default.countDocuments(searchFilter)
+        ]);
         const facilitiesData = await Promise.all(facilities.map(async (facility) => {
-            const timeslots = await timeslotModel_1.default.find({ facility: facility._id });
+            const timeslots = await timeslotModel_1.default.find({ facility: facility._id }).lean();
             return {
-                ...facility.toObject(),
+                ...facility,
                 timeslots,
             };
         }));
-        return res.status(200).json({ message: "Facilities found", data: facilitiesData });
+        const totalPages = Math.ceil(totalItems / limit);
+        return res.status(200).json({
+            data: facilitiesData,
+            totalItems,
+            totalPages,
+            currentPage: page,
+        });
     }
     catch (error) {
         logger_1.default.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
 };
 exports.getAllFacilities = getAllFacilities;
@@ -121,7 +142,7 @@ const getFacilityById = async (req, res) => {
             path: "timeslots",
             populate: {
                 path: "event",
-                model: "facilityEvents",
+                model: "FacilityEvent",
                 // populate: {
                 //   path: "participants.applicant",
                 //   model: "Applicant",
@@ -551,6 +572,7 @@ const getUpcomingEvents = async (req, res) => {
         const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
         const skip = (page - 1) * limit;
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         // Initialize the query with the date condition
         const query = { date: { $gte: today } };
         // Add eventType to the query only if it's provided
@@ -599,9 +621,6 @@ const getUpcomingEvents = async (req, res) => {
             }
             return event;
         });
-        if (!events.length) {
-            return res.status(404).json({ message: "No upcoming events found" });
-        }
         const totalItems = await facilityEventModel_1.default.countDocuments(query);
         const totalPages = Math.ceil(totalItems / limit);
         return res.status(200).json({
@@ -746,7 +765,8 @@ const SendEmailToFacilityEventParticipants = async (req, res) => {
         const participantUpdates = [];
         for (const participant of participants) {
             if (!participant.email) {
-                failedEmails.push({ applicant: participant._id.toString(), reason: "No email provided" });
+                const id = participant._id;
+                failedEmails.push({ applicant: id, reason: "No email provided" });
                 participantUpdates.push({
                     applicant: participant._id,
                     mail: { sent: false, reason: "No email provided" }
@@ -770,7 +790,8 @@ const SendEmailToFacilityEventParticipants = async (req, res) => {
             const emailResult = await (0, mailHandler_1.sendEmail)(event.type, participant.email, `Reminder: ${event.name} on ${event.date.toDateString()}`, "", emailText);
             logger_1.default.info(JSON.stringify(emailResult, null, 2));
             if (!emailResult.success) {
-                failedEmails.push({ applicant: participant._id.toString(), reason: emailResult.message });
+                const id = participant._id;
+                failedEmails.push({ applicant: id, reason: emailResult.message });
                 participantUpdates.push({
                     applicant: participant._id,
                     mail: { sent: false, reason: emailResult.message }

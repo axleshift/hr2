@@ -3,98 +3,115 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getJobpostingRequestById = exports.searchJobpostingRequests = exports.updateJobpostingRequest = exports.createJobpostingRequest = void 0;
-const jobpostingRequestModel_1 = __importDefault(require("../models/jobpostingRequestModel"));
+exports.getApplicantDocuments = exports.externalPostJob = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
-const createJobpostingRequest = async (req, res) => {
+const screeningFormModel_1 = __importDefault(require("../models/screeningFormModel"));
+const interviewFormModel_1 = __importDefault(require("../models/interviewFormModel"));
+const config_1 = require("../../../config");
+const jobModel_1 = __importDefault(require("../models/jobModel"));
+const externalPostJob = async (req, res) => {
     try {
-        const { title, description, quantity, location, jobType, salaryRange, contact, email, phone } = req.body;
-        if (!title || !quantity || !location || !jobType || !salaryRange) {
-            return res.status(400).send("Please provide all required fields");
+        const { title, responsibilities, requirements, qualifications, benefits, category, capacity } = req.body;
+        const apikey = req.headers['x-api-key'];
+        const key = config_1.config.api.hr1Key;
+        if (!apikey || apikey !== key) {
+            return res.status(403).json({ message: "Invalid or missing API key" });
         }
-        const data = new jobpostingRequestModel_1.default({
+        if (!title || !responsibilities || !requirements || !qualifications || !benefits || !category) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const jobData = {
             title,
-            description,
-            quantity,
-            location,
-            jobType,
-            salaryRange,
-            contact,
-            email,
-            phone,
-        });
-        await data.save();
-        res.status(201).send(data);
-    }
-    catch (error) {
-        logger_1.default.error(error);
-        res.status(400).send(error);
-    }
-};
-exports.createJobpostingRequest = createJobpostingRequest;
-const updateJobpostingRequest = async (req, res) => {
-    try {
-        const { title, description, quantity, location, jobType, salaryRange, contact, email, phone, status } = req.body;
-        if (!title || !quantity || !location || !jobType || !salaryRange || !status) {
-            return res.status(400).send("Please provide all required fields");
+            author: "hr1",
+            responsibilities,
+            requirements,
+            qualifications,
+            benefits,
+            category,
+            capacity,
+        };
+        const newJob = await jobModel_1.default.create(jobData);
+        if (!newJob) {
+            return res.status(500).json({ message: "Job not created" });
         }
-        const data = await jobpostingRequestModel_1.default.findById(req.params.id);
-        if (!data) {
-            return res.status(404).send("Jobposting request not found");
-        }
-        data.title = title;
-        data.description = description;
-        data.quantity = quantity;
-        data.location = location;
-        data.jobType = jobType;
-        data.salaryRange = salaryRange;
-        data.contact = contact;
-        data.email = email;
-        data.phone = phone;
-        data.status = status;
-        await data.save();
-        res.status(200).send(data);
+        return res.status(201).json({ message: "New job created", data: newJob });
     }
     catch (error) {
         logger_1.default.error(error);
-        res.status(400).send(error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
-exports.updateJobpostingRequest = updateJobpostingRequest;
-const searchJobpostingRequests = async (req, res) => {
+exports.externalPostJob = externalPostJob;
+const getApplicantDocuments = async (req, res) => {
     try {
-        const { title, location, jobType, salaryRange, status } = req.query;
-        const query = {};
-        if (title)
-            query.title = title;
-        if (location)
-            query.location = location;
-        if (jobType)
-            query.jobType = jobType;
-        if (salaryRange)
-            query.salaryRange = salaryRange;
-        if (status)
-            query.status = status;
-        const data = await jobpostingRequestModel_1.default.find(query);
-        res.status(200).send(data);
-    }
-    catch (error) {
-        logger_1.default.error(error);
-        res.status(400).send(error);
-    }
-};
-exports.searchJobpostingRequests = searchJobpostingRequests;
-const getJobpostingRequestById = async (req, res) => {
-    try {
-        const data = await jobpostingRequestModel_1.default.findById(req.params.id);
-        if (!data) {
-            return res.status(404).send("Jobposting request not found");
+        const { documentType } = req.params;
+        const apikey = req.headers['x-api-key'];
+        const searchQuery = req.query.query;
+        const key = config_1.config.api.adminKey;
+        if (!apikey || apikey !== key) {
+            return res.status(403).json({ message: "Invalid or missing API key" });
         }
-        res.status(200).send(data);
+        if (!documentType) {
+            return res.status(400).json({ message: "Document Type is required", documentType });
+        }
+        let data;
+        let searchCriteria = {};
+        switch (documentType) {
+            case 'screening':
+                if (searchQuery) {
+                    searchCriteria = {
+                        $or: [
+                            { applicant: { $regex: searchQuery, $options: "i" } },
+                            { reviewer: { $regex: searchQuery, $options: "i" } },
+                            { status: { $regex: searchQuery, $options: "i" } },
+                            { recommendation: { $regex: searchQuery, $options: "i" } },
+                            { job: { $regex: searchQuery, $options: "i" } },
+                        ],
+                    };
+                }
+                data = await screeningFormModel_1.default.find(searchCriteria).limit(10)
+                    .populate([
+                    {
+                        path: "applicant",
+                        model: "Applicant",
+                        select: "_id firstname lastname middlename",
+                    },
+                    {
+                        path: "reviewer",
+                        model: "User",
+                        select: "_id firstname lastname role",
+                    },
+                    {
+                        path: "job",
+                        model: "Job"
+                    }
+                ]);
+                break;
+            case 'interview':
+                if (searchQuery) {
+                    searchCriteria = {
+                        $or: [
+                            { applicant: { $regex: searchQuery, $options: "i" } },
+                            { interviewer: { $regex: searchQuery, $options: "i" } },
+                            { type: { $regex: searchQuery, $options: "i" } },
+                            { recommendation: { $regex: searchQuery, $options: "i" } },
+                            { finalComments: { $regex: searchQuery, $options: "i" } },
+                        ],
+                    };
+                }
+                data = await interviewFormModel_1.default.find(searchCriteria).limit(10);
+                break;
+            default:
+                return res.status(400).json({ message: "Please use a valid document type", documentType });
+        }
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: "No documents found", documentType });
+        }
+        res.status(200).json({ message: "Documents found!", documentType, data });
     }
     catch (error) {
         logger_1.default.error(error);
-        res.status(400).send(error);
+        res.status(500).json({ message: "An error occurred", error });
     }
 };
-exports.getJobpostingRequestById = getJobpostingRequestById;
+exports.getApplicantDocuments = getApplicantDocuments;

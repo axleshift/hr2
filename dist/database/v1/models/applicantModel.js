@@ -81,7 +81,7 @@ const applicantSchema = new mongoose_1.default.Schema({
         // (optional) graduation year
     },
     /**
-     * skills and qualifications
+     * Skills and Qualifications
      */
     keySkills: {
         type: String,
@@ -96,7 +96,7 @@ const applicantSchema = new mongoose_1.default.Schema({
         // (optional) certifications
     },
     /**
-     * Job specific questions
+     * Job Specific Questions
      */
     coverLetter: {
         type: String,
@@ -118,7 +118,7 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: String,
         // (optional) why interested in role
     },
-    // Statuses and remarks for each stage
+    // Statuses and Remarks for Each Stage
     tags: {
         type: [String],
         required: true,
@@ -156,50 +156,37 @@ const applicantSchema = new mongoose_1.default.Schema({
             ref: "Email"
         }],
     documentations: {
-        screening: {
-            remarks: [
-                {
-                    type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Document",
-                }
-            ],
-        },
-        interview: {
-            remarks: [
-                {
-                    type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Document",
-                }
-            ],
-        },
-        training: {
-            remarks: [
-                {
-                    type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Document",
-                }
-            ],
-        },
-        others: {
-            remarks: [
-                {
-                    type: mongoose_1.default.Schema.Types.ObjectId,
-                    ref: "Document",
-                }
-            ],
-        }
+        screening: [
+            {
+                type: mongoose_1.default.Schema.Types.ObjectId,
+                ref: "ScreeningForm",
+            }
+        ],
+        interview: [
+            {
+                type: mongoose_1.default.Schema.Types.ObjectId,
+                ref: "Document",
+            }
+        ],
+        training: [
+            {
+                type: mongoose_1.default.Schema.Types.ObjectId,
+                ref: "Document",
+            }
+        ],
+        others: [
+            {
+                type: mongoose_1.default.Schema.Types.ObjectId,
+                ref: "Document",
+            }
+        ]
     },
-    // documents: {
-    //   type: [mongoose.Schema.Types.ObjectId],
-    //   ref: "Document",
-    // },
     expiresAt: {
         type: Date,
         required: true,
         default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     },
 }, {
-    timestamps: true,
-    updateAt: true,
+    timestamps: true
 });
 exports.default = mongoose_1.default.model("Applicant", applicantSchema);

@@ -7,12 +7,9 @@ const express_1 = require("express");
 const router = (0, express_1.Router)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const verifyApiKey_1 = __importDefault(require("../../middlewares/verifyApiKey"));
 const requestController_1 = require("../..//database/v1/controllers/requestController");
-router.post("/jobposting", verifyApiKey_1.default, requestController_1.createJobpostingRequest);
-router.get("/jobposting/search", verifyApiKey_1.default, requestController_1.searchJobpostingRequests);
-router.get("/jobposting/:id", verifyApiKey_1.default, requestController_1.getJobpostingRequestById);
-router.put("/jobposting/:id", verifyApiKey_1.default, requestController_1.updateJobpostingRequest);
+router.post("/jobposting", requestController_1.externalPostJob);
+router.get("/applicants/documents/:documentType", requestController_1.getApplicantDocuments);
 exports.default = {
     metadata: {
         path: "/request",
