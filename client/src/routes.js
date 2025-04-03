@@ -19,6 +19,7 @@ const AppInterviews = React.lazy(() => import('./views/applicants/Interviews'))
 const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
 const Training = React.lazy(() => import('./views/applicants/Training'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
+const ApplicantProfile = React.lazy(() => import('./views/applicants/ApplicantProfile'))
 
 // Interviews | HR2
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
@@ -56,74 +57,80 @@ const routes = [
     path: '/dashboard/overview',
     name: 'Dashboard',
     element: Dashboard,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   // Recruitment | HR2
   {
     path: '/recruitment/ats',
     name: 'Application Tracking',
     element: ApplicationTracking,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/recruitment/jobposting',
     name: 'Jobposting',
     element: Jobposting,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/recruitment/jobposter/:id',
     name: 'Jobposter',
     element: Jobposter,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/recruitment/jobposts',
     name: 'Jobposts',
     element: Jobposts,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/recruitment/schedules',
     name: 'Schedules',
     element: Schedules,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/recruitment/jobposting/request',
     name: 'Jobposting Request',
     element: JobpostingReq,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/applicant/screening',
     name: 'Screening',
     element: Screening,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/applicant/interviews',
     name: 'Interviews',
     element: AppInterviews,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/applicant/training',
     name: 'Tranings',
     element: Training,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/applicant/shortlisted',
     name: 'Shortlisted',
     element: Shortlisted,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/applicant/rejected',
     name: 'Rejected',
     element: Rejected,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
+  },
+  {
+    path: '/applicant/profile/:applicantId',
+    name: 'Applicant Profile',
+    element: ApplicantProfile,
+    permissions: ['admin', 'manager'],
   },
 
   // Calendar | HR2
@@ -131,19 +138,19 @@ const routes = [
     path: '/calendar/applicants',
     name: 'Create Interview',
     element: CreateInterview,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/calendar/schedules',
     name: 'Interviews',
     element: Interviews,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/calendar/facilities',
     name: 'Facilities',
     element: Facilities,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
 
   // Jobs
@@ -151,7 +158,7 @@ const routes = [
     path: '/jobs',
     name: 'Jobs',
     element: Jobs,
-    permissions: ['superadmin', 'admin'],
+    permissions: ['admin', 'manager'],
   },
 
   // Mail | HR2
@@ -159,31 +166,31 @@ const routes = [
     path: '/mail/compose',
     name: 'Compose',
     element: Compose,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/mail/drafts',
     name: 'Drafts',
     element: Drafts,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/mail/inbox',
     name: 'Inbox',
     element: Inbox,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/mail/sent',
     name: 'Sent',
     element: Sent,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
   {
     path: '/mail/templates',
     name: 'Mail Templates',
     element: MailTemplates,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
 
   // Accounts
@@ -198,7 +205,7 @@ const routes = [
     path: '/widgets',
     name: 'Widgets',
     element: Widgets,
-    permissions: ['superadmin', 'admin', 'user'],
+    permissions: ['admin', 'manager'],
   },
 
   // Configuration | HR2

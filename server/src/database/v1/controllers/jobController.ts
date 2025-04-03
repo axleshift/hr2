@@ -2,6 +2,7 @@ import logger from "../../../middlewares/logger"
 import Job from "../models/jobModel"
 import { Request as req, Response as res } from "express";
 import Jobposting from "../models/jobpostingModel";
+import User from "../models/userModel";
 import mongoose from "mongoose";
 
 export const createJob = async (req: req, res: res) => {
@@ -100,6 +101,52 @@ export const getJobById = async (req: req, res: res) => {
   }
 }
 
+// export const getAllJob = async (req: req, res: res) => {
+//   try {
+//     const searchQuery = req.query.query as string;
+//     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+//     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+//     const skip = (page - 1) * limit;
+//     const sortOrder = req.query.sort === "desc" ? -1 : 1;
+
+//     let searchFilter = {};
+//     if (searchQuery) {
+//       searchFilter = {
+//         $or: [
+//           { title: { $regex: searchQuery, $options: "i" } },
+//           { responsibilities: { $regex: searchQuery, $options: "i" } },
+//           { requirements: { $regex: searchQuery, $options: "i" } },
+//           { qualifications: { $regex: searchQuery, $options: "i" } },
+//           { benefits: { $regex: searchQuery, $options: "i" } },
+//         ],
+//       };
+//     }
+
+//     const totalItems = await Job.countDocuments(searchFilter);
+//     const totalPages = Math.ceil(totalItems / limit);
+
+//     const jobs = await Job.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+
+//     if (jobs.length === 0) {
+//       const msg = searchQuery ? `No jobs found for query: ${searchQuery}` : "No jobs found";
+//       return res.status(404).json({ message: msg });
+//     }
+
+//     res.status(200).json({
+//       statusCode: 200,
+//       success: true,
+//       message: "Jobs found",
+//       data: jobs,
+//       totalItems,
+//       totalPages,
+//       currentPage: page,
+//     });
+//   } catch (error) {
+//     logger.error(error);
+//     res.status(500).json({ message: "Internal server error", error });
+//   }
+// };
+
 export const getAllJob = async (req: req, res: res) => {
   try {
     const searchQuery = req.query.query as string;
@@ -124,11 +171,31 @@ export const getAllJob = async (req: req, res: res) => {
     const totalItems = await Job.countDocuments(searchFilter);
     const totalPages = Math.ceil(totalItems / limit);
 
-    const jobs = await Job.find(searchFilter).sort({ createdAt: sortOrder }).skip(skip).limit(limit);
+    // Fetch jobs without populating first
+    const jobs = await Job.find(searchFilter)
+      .sort({ createdAt: sortOrder })
+      .skip(skip)
+      .limit(limit);
 
     if (jobs.length === 0) {
       const msg = searchQuery ? `No jobs found for query: ${searchQuery}` : "No jobs found";
       return res.status(404).json({ message: msg });
+    }
+
+    // Populate valid ObjectId authors only
+    for (let job of jobs) {
+      if (job.author && mongoose.Types.ObjectId.isValid(job.author)) {
+        const user = await User.findById(job.author);
+        if (user) {
+          job = await job.populate({
+            path: "author",
+            model: "User",
+            select: "_id firstname lastname role",
+          });
+        } else {
+          job.author = null; // Or keep it as is
+        }
+      }
     }
 
     res.status(200).json({
@@ -141,7 +208,7 @@ export const getAllJob = async (req: req, res: res) => {
       currentPage: page,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     res.status(500).json({ message: "Internal server error", error });
   }
 };
