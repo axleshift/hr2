@@ -101,16 +101,38 @@ const JobForm = ({ isVisible, onClose, state, job }) => {
       formData.append('category', data.category)
       formData.append('capacity', data.capacity)
 
-      const res =
-        state !== 'edit' ? await post(`/job/`, formData) : await put(`/job/${job._id}`, formData)
-      console.log(res.data)
+      let res
+      switch (state) {
+        case 'create':
+          res = await post(`/job/`, formData)
+          break
+        case 'edit':
+          res = await put(`/job/${job._id}`, formData)
+          break
+        default:
+          throw new Error('Invalid form state')
+      }
+
       if (res.status === 200 || res.status === 201) {
         addToast('Success', res.data.message, 'success')
+        if (state === 'create') onClose()
       }
     } catch (error) {
       console.error(error)
-      addToast('Error', res.message, 'danger')
+      addToast('Error', error?.response?.data?.message || 'Something went wrong', 'danger')
     }
+  }
+
+  const handleMockFill = () => {
+    formReset({
+      title: 'Software Engineer',
+      responsibilities: 'Develop and maintain web applications.',
+      requirements: 'Experience with JavaScript, React, and Node.js.',
+      qualifications: 'Bachelor’s degree in Computer Science or equivalent experience.',
+      benefits: 'Flexible work hours, health insurance, remote work options.',
+      category: 'full-time',
+      capacity: 3,
+    })
   }
 
   const handleFormReset = async () => {
@@ -126,11 +148,12 @@ const JobForm = ({ isVisible, onClose, state, job }) => {
   }
 
   useEffect(() => {
-    console.log(job)
-    if (isVisible) {
-      if (job) getJob()
+    if (isVisible && job && state === 'edit') {
+      getJob()
+    } else {
+      setIsLoading(false)
     }
-  }, [job, isVisible])
+  }, [job, isVisible, state])
 
   useEffect(() => {
     if (state === 'edit' || state === 'create') {
@@ -141,23 +164,30 @@ const JobForm = ({ isVisible, onClose, state, job }) => {
   }, [state])
 
   return (
-    <CContainer>
-      <CRow>
-        <CCol>
-          <CModal
-            visible={isVisible}
-            onClose={() => {
-              onClose()
-              handleFormReset()
-            }}
-            size="lg"
-          >
-            <CModalHeader>
-              <CModalTitle>
-                {state === 'edit' || state === 'create' ? 'Manage Event' : 'View Event'}
-              </CModalTitle>
-            </CModalHeader>
-            <CModalBody>
+    <CModal
+      visible={isVisible}
+      onClose={() => {
+        onClose()
+        handleFormReset()
+      }}
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle>{state === 'create' ? 'Create job' : 'Manage Job'}</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CContainer>
+          {config.env === 'development' && (
+            <CRow className="mb-3">
+              <CCol className="d-flex justify-content-end">
+                <CButton type="button" color="secondary" size="sm" onClick={handleMockFill}>
+                  Fill Mock Data
+                </CButton>
+              </CCol>
+            </CRow>
+          )}
+          <CRow>
+            <CCol>
               {isLoading ? (
                 <>
                   <CSpinner size="sm" />
@@ -300,25 +330,23 @@ const JobForm = ({ isVisible, onClose, state, job }) => {
                       </CCol>
                     </CRow>
                   )}
-                  {(userInformation.role === 'admin' ||
-                    userInformation.role === 'manager' ||
-                    userInformation === 'recruiter') &&
-                    state !== 'create' && (
-                      <CRow>
-                        <CCol className="d-flex justify-content-end">
-                          <CButton color="info" size="sm">
-                            Create Jobposting from this job?
-                          </CButton>
-                        </CCol>
-                      </CRow>
-                    )}
+
+                  {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+                    <CRow>
+                      <CCol className="d-flex justify-content-end">
+                        <CButton color="info" size="sm">
+                          Create Jobposting from this job?
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                  )}
                 </CForm>
               )}
-            </CModalBody>
-          </CModal>
-        </CCol>
-      </CRow>
-    </CContainer>
+            </CCol>
+          </CRow>
+        </CContainer>
+      </CModalBody>
+    </CModal>
   )
 }
 

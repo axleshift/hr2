@@ -90,12 +90,6 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Training',
-    to: '/applicant/training',
-    icon: <FontAwesomeIcon icon={faFileCircleExclamation} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: 'Rejected',
     to: '/applicant/rejected',
     icon: <FontAwesomeIcon icon={faFileArchive} className="nav-icon" />,

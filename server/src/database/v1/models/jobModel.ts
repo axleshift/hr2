@@ -12,7 +12,7 @@ export type JobCategory = (typeof CATEGORY_TYPES)[number];
 
 export interface IJob extends Document {
   title: string;
-  author: [mongoose.Types.ObjectId, string]
+  author: string | mongoose.Types.ObjectId | null;
   responsibilities: string;
   requirements: string;
   qualifications: string;
@@ -29,8 +29,15 @@ const jobSchema = new Schema<IJob>(
       required: true,
     },
     author: {
-      type: [mongoose.Schema.Types.ObjectId, String]
+      type: Schema.Types.Mixed,
+      validate: {
+        validator(value) {
+          return mongoose.Types.ObjectId.isValid(value) || typeof value === 'string';
+        },
+        message: 'Author must be a valid ObjectId or a string.',
+      },
     },
+
     responsibilities: {
       type: String,
       required: true,

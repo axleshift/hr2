@@ -66,13 +66,15 @@ const interviewSchema = z.object({
   finalComments: z.string().optional(),
 })
 
-const InterviewForm = ({ isVisible, onClose, isEdit, eventData, applicantData }) => {
+const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicantData }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
 
   const [interviews, setInterviews] = useState([])
   const [isInterviewsLoading, setIsInterviewsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const [formState, setFormState] = useState('view')
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -164,6 +166,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, eventData, applicantData })
       recommendation: item.recommendation || 'yes',
       finalComments: item.finalComments || '',
     })
+    addToast('Success', 'Interview fetched. Please change to forms tab.', 'success')
   }
 
   const handleFormReset = () => {
@@ -505,6 +508,7 @@ InterviewForm.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   isEdit: propTypes.bool.isRequired,
+  state: propTypes.string,
   eventData: propTypes.object,
   applicantData: propTypes.object,
 }
