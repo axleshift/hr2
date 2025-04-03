@@ -364,7 +364,7 @@ const Tags = () => {
                           <CTooltip content="Protect" placement="top">
                             <CButton
                               onClick={() => tagsFormReset({ isProtected: true })}
-                              className={'btn btn-primary'}
+                              color="primary"
                             >
                               <FontAwesomeIcon icon={faLock} />
                             </CButton>
@@ -372,7 +372,7 @@ const Tags = () => {
                           <CTooltip content="Unprotect" placement="top">
                             <CButton
                               onClick={() => tagsFormReset({ isProtected: false })}
-                              className={'btn btn-warning'}
+                              color="warning"
                             >
                               <FontAwesomeIcon icon={faUnlock} />
                             </CButton>
@@ -385,7 +385,7 @@ const Tags = () => {
                         )}
                       </CCol>
                     </CRow>
-                    <CRow>
+                    <CRow className="mb-3">
                       <CCol>
                         <CFormLabel>System Tag ?</CFormLabel>
 
@@ -402,7 +402,7 @@ const Tags = () => {
                           <CTooltip content="Protect" placement="top">
                             <CButton
                               onClick={() => tagsFormReset({ isSystem: true })}
-                              className={'btn btn-primary'}
+                              color="primary"
                             >
                               <FontAwesomeIcon icon={faLock} />
                             </CButton>
@@ -410,7 +410,7 @@ const Tags = () => {
                           <CTooltip content="Unprotect" placement="top">
                             <CButton
                               onClick={() => tagsFormReset({ isSystem: false })}
-                              className={'btn btn-secondary'}
+                              color="secondary"
                             >
                               <FontAwesomeIcon icon={faUnlock} />
                             </CButton>
@@ -424,7 +424,7 @@ const Tags = () => {
                       </CCol>
                     </CRow>
                     <div className="d-flex justify-content-end">
-                      <CButton color="primary" type="submit" className="mb-3 w-25">
+                      <CButton color="primary" type="submit">
                         {isEdit ? 'Update' : 'Submit'}
                       </CButton>
                     </div>
@@ -450,7 +450,7 @@ const Tags = () => {
                   invalid={!!searchErrors.searchInput}
                 />
                 <CTooltip content="Search tags" placement="top">
-                  <CButton type="submit" className="btn btn-primary">
+                  <CButton type="submit" color="primary" size="sm">
                     <FontAwesomeIcon icon={faSearch} />
                   </CButton>
                 </CTooltip>
@@ -491,13 +491,14 @@ const Tags = () => {
                     <CCol className="d-flex justify-content-end">
                       <CButtonGroup>
                         <CTooltip content="Edit tag" placement="top">
-                          <CButton color="primary" onClick={() => handleEditTag(tag._id)}>
+                          <CButton color="primary" size="sm" onClick={() => handleEditTag(tag._id)}>
                             <FontAwesomeIcon icon={faPencil} />
                           </CButton>
                         </CTooltip>
                         <CTooltip content="Delete tag" placement="top">
                           <CButton
                             color="danger"
+                            size="sm"
                             onClick={() => handlePreDeleteTag(tag._id)}
                             disabled={tag.isProtected}
                           >
@@ -560,7 +561,7 @@ const Tags = () => {
               <CButton
                 onClick={() => handleDeleteTag(tagData._id)}
                 disabled={!isConfirmed}
-                className="btn btn-danger"
+                size="sm"
               >
                 {isDeleteLoading ? <CSpinner color="primary" variant="grow" /> : 'Delete'}
               </CButton>

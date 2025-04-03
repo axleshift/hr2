@@ -20,9 +20,6 @@ const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
 const Training = React.lazy(() => import('./views/applicants/Training'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
 
-// Facilities | HR2
-const Facilities = React.lazy(() => import('./views/facility/Facilities'))
-
 // Interviews | HR2
 const CreateInterview = React.lazy(() => import('./views/calendar/Applicants'))
 const Interviews = React.lazy(() => import('./views/calendar/Schedules'))
@@ -33,6 +30,12 @@ const Drafts = React.lazy(() => import('./views/mail/Drafts'))
 const Inbox = React.lazy(() => import('./views/mail/Inbox'))
 const Sent = React.lazy(() => import('./views/mail/Sent'))
 const MailTemplates = React.lazy(() => import('./views/mail/Templates'))
+
+// Facilities | HR2
+const Facilities = React.lazy(() => import('./views/facility/Facilities'))
+
+// Job Management
+const Jobs = React.lazy(() => import('./views/job/Jobs'))
 
 // Accounts
 const Users = React.lazy(() => import('./views/accounts/Users'))
@@ -92,14 +95,6 @@ const routes = [
     element: JobpostingReq,
     permissions: ['superadmin', 'admin', 'user'],
   },
-
-  // Applicants
-  // {
-  //   path: '/applicant/list',
-  //   name: 'Resume Create',
-  //   element: Applicant,
-  //   permissions: ['superadmin', 'admin', 'user'],
-  // },
   {
     path: '/applicant/screening',
     name: 'Screening',
@@ -114,19 +109,19 @@ const routes = [
   },
   {
     path: '/applicant/training',
-    name: 'Screening',
+    name: 'Tranings',
     element: Training,
     permissions: ['superadmin', 'admin', 'user'],
   },
   {
     path: '/applicant/shortlisted',
-    name: 'Screening',
+    name: 'Shortlisted',
     element: Shortlisted,
     permissions: ['superadmin', 'admin', 'user'],
   },
   {
     path: '/applicant/rejected',
-    name: 'Screening',
+    name: 'Rejected',
     element: Rejected,
     permissions: ['superadmin', 'admin', 'user'],
   },
@@ -149,6 +144,14 @@ const routes = [
     name: 'Facilities',
     element: Facilities,
     permissions: ['superadmin', 'admin', 'user'],
+  },
+
+  // Jobs
+  {
+    path: '/jobs',
+    name: 'Jobs',
+    element: Jobs,
+    permissions: ['superadmin', 'admin'],
   },
 
   // Mail | HR2

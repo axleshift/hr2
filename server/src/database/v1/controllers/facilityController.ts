@@ -71,27 +71,61 @@ export const updateFacility = async (req: req, res: res) => {
   }
 };
 
-export const getAllFacilities = async (req: req, res: res) => {
+export const getAllFacilities = async (req:req, res:res) => {
   try {
-    const facilities = await Facility.find();
-    if (!facilities) {
-      return res.status(404).json({ message: "Facilities not found" });
+    const searchQuery = req.query.query as string;
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
+    const skip = (page - 1) * limit;
+    const sortOrder = req.query.sort === "desc" ? -1 : 1;
+
+    // Define proper type for the search filter
+    type FacilitySearchFilter = {
+      $or?: Array<{
+        name?: { $regex: string; $options: string };
+        location?: { $regex: string; $options: string };
+      }>;
+    };
+
+    const searchFilter: FacilitySearchFilter = {};
+
+    if (searchQuery) {
+      searchFilter.$or = [
+        { name: { $regex: searchQuery, $options: "i" } },
+        { location: { $regex: searchQuery, $options: "i" } },
+      ];
     }
 
-    // get all timeslots for each facility
-    const facilitiesData = await Promise.all(facilities.map(async (facility) => {
-      const timeslots = await Timeslot.find({ facility: facility._id });
-      return {
-        ...facility.toObject(),
-        timeslots,
-      };
-    }));
+    const [facilities, totalItems] = await Promise.all([
+      Facility.find(searchFilter)
+        .sort({ createdAt: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Facility.countDocuments(searchFilter)
+    ]);
 
-    return res.status(200).json({ message: "Facilities found", data: facilitiesData });
+    const facilitiesData = await Promise.all(
+      facilities.map(async (facility) => {
+        const timeslots = await Timeslot.find({ facility: facility._id }).lean();
+        return {
+          ...facility,
+          timeslots,
+        };
+      })
+    );
 
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({
+      data: facilitiesData,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -134,7 +168,7 @@ export const getFacilityById = async (req: req, res: res) => {
       path: "timeslots",
       populate: {
         path: "event",
-        model: "facilityEvents",
+        model: "FacilityEvent",
         // populate: {
         //   path: "participants.applicant",
         //   model: "Applicant",
@@ -627,7 +661,8 @@ export const getUpcomingEvents = async (req: req, res: res) => {
     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
-    const today = new Date();
+    const today = new Date()
+    today.setHours(0,0,0,0)
 
     // Initialize the query with the date condition
     const query: Record<string, unknown> = { date: { $gte: today } };
@@ -680,10 +715,6 @@ export const getUpcomingEvents = async (req: req, res: res) => {
       }
       return event;
     });
-
-    if (!events.length) {
-      return res.status(404).json({ message: "No upcoming events found" });
-    }
 
     const totalItems = await FacilityEvent.countDocuments(query);
     const totalPages = Math.ceil(totalItems / limit);
@@ -869,7 +900,8 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
 
     for (const participant of participants) {
       if (!participant.email) {
-        failedEmails.push({ applicant: participant._id.toString(), reason: "No email provided" });
+        const id = participant._id as string
+        failedEmails.push({ applicant: id, reason: "No email provided" });
         participantUpdates.push({
           applicant: participant._id,
           mail: { sent: false, reason: "No email provided" }
@@ -904,7 +936,8 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
       logger.info(JSON.stringify(emailResult, null, 2));
 
       if (!emailResult.success) {
-        failedEmails.push({ applicant: participant._id.toString(), reason: emailResult.message });
+        const id = participant._id as string
+        failedEmails.push({ applicant: id, reason: emailResult.message });
         participantUpdates.push({
           applicant: participant._id,
           mail: { sent: false, reason: emailResult.message }

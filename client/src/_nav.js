@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
   faAt,
+  faBriefcase,
   faBuilding,
   faCalendarPlus,
   faClipboardList,
@@ -27,16 +28,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
-  // {
-  //   component: CNavItem,
-  //   name: 'Overview',
-  //   to: '/dashboard',
-  //   icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
-  //   badge: {
-  //     color: 'danger',
-  //     text: 'unfinished',
-  //   },
-  // },
   {
     component: CNavItem,
     name: 'Overview',
@@ -79,12 +70,6 @@ const _nav = [
     component: CNavTitle,
     name: 'Application Tracking',
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Applications',
-  //   to: '/applicant/list',
-  //   icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
-  // },
   {
     component: CNavItem,
     name: 'Screening',
@@ -115,22 +100,6 @@ const _nav = [
     to: '/applicant/rejected',
     icon: <FontAwesomeIcon icon={faFileArchive} className="nav-icon" />,
   },
-  // {
-  //   component: CNavTitle,
-  //   name: 'Calendar',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Schedules',
-  //   to: '/calendar/schedules',
-  //   icon: <FontAwesomeIcon icon={faCalendarPlus} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Applicants',
-  //   to: '/calendar/applicants',
-  //   icon: <FontAwesomeIcon icon={faUserClock} className="nav-icon" />,
-  // },
   {
     component: CNavTitle,
     name: 'Event Management',
@@ -141,34 +110,16 @@ const _nav = [
     to: '/calendar/facilities',
     icon: <FontAwesomeIcon icon={faBuilding} className="nav-icon" />,
   },
-  // {
-  //   component: CNavTitle,
-  //   name: 'Mail ',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Inbox',
-  //   to: '/mail/inbox',
-  //   icon: <FontAwesomeIcon icon={faInbox} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Sent',
-  //   to: '/mail/sent',
-  //   icon: <FontAwesomeIcon icon={faPaperPlane} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Draft',
-  //   to: '/mail/drafts',
-  //   icon: <FontAwesomeIcon icon={faDraftingCompass} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Template',
-  //   to: '/mail/templates',
-  //   icon: <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />,
-  // },
+  {
+    component: CNavTitle,
+    name: 'Job Management',
+  },
+  {
+    component: CNavItem,
+    name: 'Jobs',
+    to: '/jobs',
+    icon: <FontAwesomeIcon icon={faBriefcase} className="nav-icon" />,
+  },
   {
     component: CNavTitle,
     name: 'Accounts',

@@ -99,18 +99,13 @@ const Rejected = () => {
                           {formatDate(applicant.applicationDate, 'MMM DD, YYYY')}
                         </CTableDataCell>
                         <CTableDataCell>
-                          <CInputGroup>
+                          <div className="d-flex flex-row justify-content-center">
                             <CTooltip content="Review" placement="top">
-                              <CButton color="primary">
+                              <CButton color="primary" size="sm">
                                 <FontAwesomeIcon icon={faEye} />
                               </CButton>
                             </CTooltip>
-                            {/* <CTooltip content="Reject" placement="top">
-                              <CButton color="danger">
-                                <FontAwesomeIcon icon={faTrash} />
-                              </CButton>
-                            </CTooltip> */}
-                          </CInputGroup>
+                          </div>
                         </CTableDataCell>
                       </CTableRow>
                     ))}

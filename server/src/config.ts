@@ -36,6 +36,8 @@ export const config = {
 
   api: {
     masterKey: process.env.API_MASTER_KEY,
+    hr1Key: process.env.API_HR1_KEY,
+    adminKey: process.env.API_ADMIN_KEY,
   },
 
   google: {
@@ -48,6 +50,10 @@ export const config = {
       pass: process.env.SMTP_PASS,
       tls: process.env.SMTP_TLS,
     }
+  },
+
+  anthropic: {
+    key: process.env.ANTHROPIC_KEY,
   },
 
   mongoDB: {

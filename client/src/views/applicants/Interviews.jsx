@@ -15,6 +15,7 @@ import {
   CInputGroup,
   CButton,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -36,6 +37,12 @@ const Interviews = () => {
   const [eventFormState, setEventFormState] = useState('view')
   const [selectedSlot, setSelectedSlot] = useState({})
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalItems, setTotalItems] = useState(0)
+
   const getAllUpcomingEvents = async () => {
     try {
       setIsUpcomingEventsLoading(true)
@@ -46,13 +53,19 @@ const Interviews = () => {
         setIsUpcomingEventsLoading(false)
       }
     } catch (error) {
+      setIsUpcomingEventsLoading(false)
       console.error(error)
     }
   }
 
+  const DEBOUNCE_DELAY = 500
   useEffect(() => {
-    getAllUpcomingEvents()
-  }, [])
+    const handler = setTimeout(() => {
+      getAllUpcomingEvents()
+    }, DEBOUNCE_DELAY)
+    return () => clearTimeout(handler)
+  }, [currentPage, totalPages, totalItems])
+
   return (
     <>
       <CContainer>
@@ -105,8 +118,24 @@ const Interviews = () => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {upcomingEvents.map((event) => {
-                      return (
+                    {isUpcomingEventsLoading ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="12">
+                          <div className="d-flex justify-content-center">
+                            <CSpinner variant="grow" size="sm" />
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : upcomingEvents.length === 0 ? (
+                      <CTableRow>
+                        <CTableDataCell colSpan="12">
+                          <div className="d-flex justify-content-center">
+                            No upcoming interviews found
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ) : (
+                      upcomingEvents.map((event) => (
                         <CTableRow key={event._id}>
                           <CTooltip placement="top" content={event._id}>
                             <CTableDataCell>{trimString(event._id, 10)}</CTableDataCell>
@@ -118,8 +147,8 @@ const Interviews = () => {
                           <CTableDataCell>{event.type}</CTableDataCell>
                           <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
                           <CTableDataCell>
-                            {formatTime(event.timeslot?.start)} -{' '}
-                            {formatTime(event.timeslot?.start)}
+                            {formatTime(event.timeslot?.start)} - {formatTime(event.timeslot?.end)}{' '}
+                            {/* Fixed duplicate time */}
                           </CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex justify-content-center">
@@ -134,7 +163,7 @@ const Interviews = () => {
                             )}
                           </CTableDataCell>
                           <CTableDataCell>
-                            <div className="d-flex gap-2 flex-wrap">
+                            <div className="d-flex gap-2 flex-row">
                               <CButton
                                 color="info"
                                 size="sm"
@@ -163,8 +192,8 @@ const Interviews = () => {
                             </div>
                           </CTableDataCell>
                         </CTableRow>
-                      )
-                    })}
+                      ))
+                    )}
                   </CTableBody>
                 </CTable>
               </CCardBody>

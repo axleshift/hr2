@@ -16,6 +16,7 @@ import {
   CButton,
   CBadge,
   CTooltip,
+  CSpinner,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -23,6 +24,7 @@ import { faRefresh, faSearch, faUndo, faUser, faUserClock } from '@fortawesome/f
 import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
 import ScheduleForm from './modal/ScheduleForm'
+import { trimString } from '../../utils'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)
@@ -136,20 +138,22 @@ const Shortlisted = () => {
                   <CTableBody>
                     {isLoading ? (
                       <CTableRow>
-                        <CTableDataCell colSpan="6">Loading...</CTableDataCell>
+                        <CTableDataCell colSpan="6">
+                          <CSpinner size="sm" />
+                        </CTableDataCell>
                       </CTableRow>
                     ) : (
-                      applicants.map((item, index) => (
+                      applicants.map((app, index) => (
                         <CTableRow key={index}>
-                          <CTableDataCell>{item._id}</CTableDataCell>
+                          <CTableDataCell>{trimString(app._id, 10)}</CTableDataCell>
                           <CTableDataCell>
-                            {item.lastname}, {item.firstname}
+                            {app.lastname}, {app.firstname}
                           </CTableDataCell>
-                          <CTableDataCell>{item.email}</CTableDataCell>
-                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          <CTableDataCell>{app.email}</CTableDataCell>
+                          <CTableDataCell>{app.phone}</CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex flex-wrap">
-                              {item.tags.map((tag, index) => {
+                              {app.tags.map((tag, index) => {
                                 const tagName = formtags.find(
                                   (formTag) => formTag._id === tag,
                                 )?.name
@@ -180,7 +184,7 @@ const Shortlisted = () => {
                                   onClick={() => {
                                     // setIsAppFormVisible(true)
                                     setIsScheduleFormVisible(true)
-                                    setSelectedApplicantData(item)
+                                    setSelectedApplicantData(app)
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faUserClock} />

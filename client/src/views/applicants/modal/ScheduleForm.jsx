@@ -253,8 +253,8 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                     <CTableDataCell>{event.name}</CTableDataCell>
                                     <CTableDataCell>{event.capacity}</CTableDataCell>
                                     <CTableDataCell>{event.participants.length}</CTableDataCell>
-                                    <CTableRow>
-                                      <CInputGroup>
+                                    <CTableDataCell>
+                                      <div className="d-flex flex-row gap-2">
                                         {event.participants.some(
                                           (p) =>
                                             p.applicant.toString() === applicantData._id.toString(),
@@ -282,13 +282,13 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
                                             )}
                                           </CButton>
                                         )}
-                                      </CInputGroup>
-                                    </CTableRow>
+                                      </div>
+                                    </CTableDataCell>
                                   </CTableRow>
                                 ))
                               ) : (
                                 <CTableRow>
-                                  <CTableDataCell colSpan="8" className="text-center">
+                                  <CTableDataCell colSpan="12" className="text-center">
                                     No events available. Please select a date from the{' '}
                                     <span className="text-info">calendar</span>.
                                   </CTableDataCell>

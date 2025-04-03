@@ -41,6 +41,8 @@ import { formatDate } from '../../../utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
+import ConfirmationDialog from '../../../components/ConfirmationDialog'
+
 const Calendar = React.lazy(() => import('react-calendar'))
 const EventForm = React.lazy(() => import('./EventForm'))
 import { trimString } from '../../../utils/index'
@@ -74,6 +76,9 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   const [selectedEvent, setSelectedEvent] = useState({})
   const [isEventSubmitLoading, setIsEventSubmitLoading] = useState(false)
   const [eventState, setEventState] = useState('edit')
+
+  // dialog state
+  const [isDialogVisible, setIsDialogVisible] = useState(false)
 
   // Counter state
   const [milliseconds, setMilliseconds] = useState(5000)
@@ -210,6 +215,9 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
 
   const handleTimeSlotRemove = async (timeslot) => {
     try {
+      if (!confirm('Are you sure you want to delete this timeslot?')) {
+        return
+      }
       setIsRemoveLoading(true)
       const res = await del(`/facilities/timeslot/delete/${timeslot._id}`)
       if (res.status === 200) {
@@ -219,7 +227,7 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
       }
       setIsRemoveLoading(false)
       getAllTimeslotsForDate()
-      return addToast('error', 'Failed to remove timeslot', 'danger')
+      return addToast('error', res.data.message, 'danger')
     } catch (error) {
       console.error(error)
       addToast('error', 'An error occurred while removing timeslot', 'danger')
@@ -466,6 +474,22 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
           </CModal>
         </CCol>
       </CRow>
+      {/* <CRow>
+        <CCol>
+          <ConfirmationDialog
+            isVisible={isDialogVisible}
+            onClose={() => {
+              setIsDialogVisible(false)
+              setSelectedSlot({})
+            }}
+            onConfirm={() => {
+              handleTimeSlotRemove(selectedSlot)
+            }}
+            title={'Delete this timeslot?'}
+            message={'Are you sure?'}
+          />
+        </CCol>
+      </CRow> */}
       <CRow>
         <CCol>
           <EventForm

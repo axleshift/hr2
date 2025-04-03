@@ -26,7 +26,7 @@ import {
   CFormTextarea,
 } from '@coreui/react'
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
@@ -37,6 +37,8 @@ import { config } from '../../../config'
 
 const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
   const { addToast } = useContext(AppContext)
+
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
 
   const formSchema = z.object({
     name: z.string().nonempty('Name is required'),
@@ -57,6 +59,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
   const handleFormSubmit = async (data) => {
     console.log('Form data:', data)
     try {
+      setIsSubmitLoading(true)
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('type', data.type)
@@ -69,7 +72,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Facility Added Successfully', 'success')
       }
-
+      setIsSubmitLoading(false)
       formReset()
       onClose()
     } catch (error) {
@@ -180,9 +183,15 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 Mock Data
               </CButton>
             )}
-            <CButton color="primary" type="submit">
-              {isEdit ? 'Update' : 'Create'}
-            </CButton>
+            {isSubmitLoading ? (
+              <CButton color="primary" type="submit">
+                {isEdit ? 'Update' : 'Create'}
+              </CButton>
+            ) : (
+              <CButton color="primary" type="submit" disabled={!isSubmitLoading}>
+                <CSpinner size="sm" /> Loading...
+              </CButton>
+            )}
           </CModalFooter>
         </CForm>
       </CModalBody>

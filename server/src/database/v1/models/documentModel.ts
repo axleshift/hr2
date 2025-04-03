@@ -3,8 +3,22 @@
  * @description Document model schema
  */
 
-import mongoose from "mongoose";
-const documentSchema = new mongoose.Schema(
+import mongoose, { Schema, Document } from "mongoose";
+
+export type DocumentCategory = "screening" | "interview" | "training" | "shortlisted" | "other";
+
+export interface IDocument extends Document {
+  category: DocumentCategory;
+  author_Id: mongoose.Types.ObjectId;
+  authorName: string;
+  applicant_Id: mongoose.Types.ObjectId;
+  applicantName: string;
+  title: string;
+  content?: string;
+  tags?: string[];
+}
+
+const documentSchema = new Schema<IDocument>(
   {
     category: {
       type: String,
@@ -38,13 +52,11 @@ const documentSchema = new mongoose.Schema(
     },
     tags: [{
       type: String,
-      required: false,
     }],
   },
   {
     timestamps: true,
-    updateAt: true,
   }
 );
 
-export default mongoose.model("Document", documentSchema);
+export default mongoose.model<IDocument>("Document", documentSchema);

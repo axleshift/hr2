@@ -3,8 +3,78 @@
  * @description Applicant model schema
  */
 
-import mongoose from "mongoose";
-const applicantSchema = new mongoose.Schema(
+import mongoose, { Document } from "mongoose";
+
+export interface IApplicant extends Document {
+  /**
+   * Basic Information
+   */
+  firstname: string;
+  lastname: string;
+  middlename?: string;
+  suffix?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  preferredWorkLocation?: string;
+  linkedInProfile?: string;
+  portfolioLink?: string;
+
+  /**
+   * Work Experience
+   */
+  resumeFileLoc?: string;
+  yearsOfExperience: number;
+  currentMostRecentJob?: string;
+
+  /**
+   * Education
+   */
+  highestQualification: string;
+  majorFieldOfStudy: string;
+  institution?: string;
+  graduationYear?: number;
+
+  /**
+   * Skills and Qualifications
+   */
+  keySkills: string;
+  softwareProficiency?: string;
+  certifications?: string;
+
+  /**
+   * Job Specific Questions
+   */
+  coverLetter?: string;
+  salaryExpectation?: number;
+  availability: string;
+  jobAppliedFor: string;
+  whyInterestedInRole?: string;
+
+  /**
+   * Statuses and Remarks for Each Stage
+   */
+  tags: string[];
+  emailSent: boolean;
+  isShortlisted: boolean;
+  isInitialInterview: boolean;
+  isFinalInterview: boolean;
+  isInTraining: boolean;
+  isHired: boolean;
+
+  events: mongoose.Types.ObjectId[];
+  emails: mongoose.Types.ObjectId[];
+
+  documentations: {
+    screening: mongoose.Types.ObjectId[];
+    interview: mongoose.Types.ObjectId[];
+    training: mongoose.Types.ObjectId[];
+    others: mongoose.Types.ObjectId[];
+  }
+  expiresAt: Date;
+}
+
+const applicantSchema = new mongoose.Schema<IApplicant>(
   {
     /**
      * Basic Information
@@ -82,7 +152,7 @@ const applicantSchema = new mongoose.Schema(
     },
 
     /**
-     * skills and qualifications
+     * Skills and Qualifications
      */
 
     keySkills: {
@@ -101,7 +171,7 @@ const applicantSchema = new mongoose.Schema(
     },
 
     /**
-     * Job specific questions
+     * Job Specific Questions
      */
     coverLetter: {
       type: String,
@@ -126,7 +196,7 @@ const applicantSchema = new mongoose.Schema(
       // (optional) why interested in role
     },
 
-    // Statuses and remarks for each stage
+    // Statuses and Remarks for Each Stage
     tags: {
       type: [String],
       required: true,
@@ -164,43 +234,31 @@ const applicantSchema = new mongoose.Schema(
       ref: "Email"
     }],
     documentations: {
-      screening: {
-        remarks: [
+      screening:  [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
+            ref: "ScreeningForm",
           }
         ],
-      },
-      interview: {
-        remarks: [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
-          }
-        ],
-      },
-      training: {
-        remarks: [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
-          }
-        ],
-      },
-      others: {
-        remarks: [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
-          }
-        ],
-      }
+      interview: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Document",
+        }
+      ],
+      training: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Document",
+        }
+      ],
+      others: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Document",
+        }
+      ]
     },
-    // documents: {
-    //   type: [mongoose.Schema.Types.ObjectId],
-    //   ref: "Document",
-    // },
     expiresAt: {
       type: Date,
       required: true,
@@ -208,9 +266,8 @@ const applicantSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
-    updateAt: true,
+    timestamps: true
   }
 );
 
-export default mongoose.model("Applicant", applicantSchema);
+export default mongoose.model<IApplicant>("Applicant", applicantSchema);

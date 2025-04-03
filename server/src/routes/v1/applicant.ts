@@ -12,6 +12,9 @@ import {
   getResumeFile,
 } from "../../database/v1/controllers/applicantController";
 
+import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
+import { createInterview, getAllInterview, updateInterview } from "../../database/v1/controllers/interviewController";
+
 router.post(
   "/",
   verifySession({
@@ -91,6 +94,91 @@ router.delete(
   ),
   deleteResume
 );
+
+// Screening
+
+router.post(
+  "/screen/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  createScreening
+)
+
+router.put(
+  "/screen/:screeningId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  updateScreening
+)
+
+router.get(
+  "/screen/ai/:applicantId/:jobId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  screenApplicantViaAI
+)
+
+router.get(
+  "/screen/ai/:applicantId/:jobId/:screeningId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  screenApplicantViaAI
+)
+
+router.get(
+  "/screen/all/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllScreening
+)
+
+// interview
+
+router.post(
+  "/interview/:applicantId/:eventId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  createInterview
+)
+
+router.put(
+  "/interview/:interviewId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  updateInterview
+)
+
+router.get(
+  "/interview/all/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllInterview
+)
+
 
 export default {
   metadata: {

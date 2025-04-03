@@ -12,22 +12,17 @@ import {
   CTableHeaderCell,
   CTableDataCell,
   CTableRow,
-  CBadge,
   CForm,
   CFormInput,
-  CInputGroup,
-  CTooltip,
   CFormFeedback,
   CSpinner,
   CModal,
   CModalHeader,
   CModalTitle,
   CModalBody,
-  CModalFooter,
   CFormTextarea,
   CFormLabel,
   CFormSelect,
-  CFormCheck,
   CFormSwitch,
 } from '@coreui/react'
 
@@ -43,6 +38,8 @@ import { formatTime } from '../../../utils'
 import { AuthContext } from '../../../context/authContext'
 
 import InterviewForm from './InterviewForm'
+
+import ConfirmationDialog from '../../../components/ConfirmationDialog'
 
 const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
@@ -65,6 +62,20 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
   const [isInterviewFormIsEdit, setIsInterviewFormIsEdit] = useState(false)
   const [interviewData, setInterviewData] = useState({})
   const [applicantData, setApplicanData] = useState({})
+  const [interviews, setInterviews] = useState([])
+
+  // dialog state
+
+  const [isDialogVisible, setIsDialogVisible] = useState(false)
+
+  // search
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalItems, setTotalItems] = useState(0)
 
   const getEventData = async () => {
     try {
@@ -124,11 +135,9 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       formData.append('capacity', data.capacity)
       formData.append('type', data.type)
       formData.append('isApproved', data.isApproved)
-      // const res = isEdit
-      //   ? await put(`facilities/event/timeslot/${slot._id}`, data)
-      //   : await post(`facilities/event/timeslot/${slot._id}`, data)
 
       console.log('Event Form', formData)
+
       let res
       switch (eventFormState) {
         case 'edit':
@@ -138,34 +147,47 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
           res = await post(`/facilities/event/${slot._id}`, data)
           break
       }
+
       console.log('Submit Event', JSON.stringify(res.data.data, null, 2))
-      if (res.status === 201) {
-        setIsSubmitLoading(false)
-        onClose()
-        return addToast('success', 'Event created!', 'success')
+      const newData = res.data.data
+
+      switch (res.status) {
+        case 201:
+          addToast('success', 'Event created!', 'success')
+          setEvenData(newData)
+          setEventFormState('edit')
+          break
+        case 200:
+          addToast('success', 'Event updated!', 'success')
+          setEvenData(newData)
+          break
+        default:
+          addToast('Error', 'Failed to create event', 'danger')
+          break
       }
-      if (res.status === 200) {
-        setIsSubmitLoading(false)
-        onClose()
-        return addToast('success', 'Event updated!', 'success')
-      }
+
       setIsSubmitLoading(false)
-      onClose()
-      return addToast('Error', 'Failed to create event', 'error')
     } catch (error) {
-      console.log(error)
+      console.error(error)
+      setIsSubmitLoading(false)
+      addToast('Error', 'An unexpected error occurred', 'danger')
     }
   }
-
   const handleDeleteEvent = async () => {
     try {
+      if (!confirm('Are you sure you want to delete this event?')) {
+        return
+      }
+
       const res = await del(`/facilities/event/${slot._id}`)
       if (res.status === 200) {
         handleResetForm()
         onClose()
+        setIsEventFormVisible(false)
         return addToast('Success', 'Event deleted!', 'success')
       }
     } catch (error) {
+      addToast('Error', error, 'danger')
       console.error(error)
     }
   }
@@ -192,6 +214,9 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
 
   const removeApplicantFromEvent = async (applicant) => {
     try {
+      if (!confirm('Are you sure you want to delete this applicant?')) {
+        return
+      }
       setIsRemoveLoading(true)
       console.log(applicant._id)
       const formData = new FormData()
@@ -214,6 +239,9 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
 
   const handleSendEmail = async () => {
     try {
+      if (!confirm('Are you sure you want to send email?')) {
+        return
+      }
       setIsEmailSentLoading(true)
       const res = await post(`/facilities/events/${eventData._id}/send-email`)
       console.log('Send Email', JSON.stringify(res?.data, null, 2))
@@ -233,6 +261,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
       addToast('Error', 'An error occured', 'danger')
     }
   }
+
   useEffect(() => {
     if (isVisible) {
       setIsEventFormVisible(isVisible)
@@ -423,15 +452,23 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                   >
                                     Fill Mock Data
                                   </CButton>
-                                  <CButton
-                                    color="danger"
-                                    size="sm"
-                                    onClick={() => handleDeleteEvent()}
-                                  >
-                                    Delete
-                                  </CButton>
+                                  {eventFormState === 'edit' && (
+                                    <CButton
+                                      color="danger"
+                                      size="sm"
+                                      onClick={() => handleDeleteEvent()}
+                                    >
+                                      Delete
+                                    </CButton>
+                                  )}
                                   <CButton type="submit" color="primary" size="sm">
-                                    {isSubmitLoading ? <CSpinner /> : 'Submit'}
+                                    {isSubmitLoading ? (
+                                      <CSpinner size="sm" />
+                                    ) : eventFormState === 'edit' ? (
+                                      'Update'
+                                    ) : (
+                                      'Create'
+                                    )}
                                   </CButton>
                                 </div>
                               )}
@@ -542,6 +579,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                                         _id: eventData._id,
                                                         name: eventData.name,
                                                         date: eventData.date,
+                                                        type: eventData.type,
                                                       })
                                                     }}
                                                   >

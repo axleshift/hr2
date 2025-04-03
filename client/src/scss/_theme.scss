@@ -51,14 +51,53 @@ body {
   min-height: calc(3rem + 1px); // stylelint-disable-line function-disallowed-list
 }
 
+// Custom AI Button styles for purple
+$aiBtn-color: #6A4C93; // Vibrant purple
+$aiBtn-hover-color: #5a3e7a; // Darker purple on hover
+$aiBtn-text-color: white; // Text color for the button
+
+.aiBtn {
+  background-color: $aiBtn-color;
+  border: 1px solid $aiBtn-color;
+  color: $aiBtn-text-color;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 0.375rem; // Rounded corners
+  width: 100%; // Full width button
+
+  &:hover {
+    background-color: $aiBtn-hover-color;
+    border-color: $aiBtn-hover-color;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: #e0e0e0;
+    border-color: #d0d0d0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+  }
+}
+
+// Apply dark mode custom styles for AI Button cuz why not
 @if $enable-dark-mode {
   @include color-mode(dark) {
-    body {
-      background-color: var(--cui-dark-bg-subtle);
-    }
+    .aiBtn {
+      background-color: darken($aiBtn-color, 10%);
+      border-color: darken($aiBtn-color, 10%);
+      color: $aiBtn-text-color;
 
-    .footer {
-      --cui-footer-bg: var(--cui-body-bg);
+      &:hover {
+        background-color: darken($aiBtn-hover-color, 10%);
+        border-color: darken($aiBtn-hover-color, 10%);
+      }
+
+      &:disabled {
+        background-color: #555555;
+        border-color: #444444;
+        color: #888888;
+      }
     }
   }
 }
