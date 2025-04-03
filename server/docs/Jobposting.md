@@ -1,299 +1,136 @@
-## Request Endpoint
+# Post Job Posting
 
-### Endpoint
+## Endpoint
+
 `POST /request/jobposting`
 
-### Description
-This endpoint allows you to create a new job posting request.
+## Description
 
-### Request Headers
-- `Content-Type: application/json`
-- `x-api-key: <your-api-key>`
+This API allows external HR systems to create a job posting. The request must include job details such as title, responsibilities, requirements, qualifications, benefits, category, and capacity.
 
-### Request Body
-The request body should be a JSON object containing the following fields:
+## Headers
 
-- `title`
-    - String
-    - Required
-    - Title of the job
-- `description`
-    - String
-    - Optional
-    - Description of the job
-- `quantity`
-    - Number
-    - Required
-    - Default: 1
-    - Number of positions available
-- `location`
-    - String
-    - Required
-    - Default: "Remote"
-    - Location of the job
-- `jobType`
-    - Array of Strings
-    - Required
-    - Default: ["full time"]
-    - Enum: ["full time", "part time", "contract", "internship", "temporary", "other"]
-    - Type of job
-- `salaryRange`
-    - String
-    - Required
-    - Default: "Not Specified"
-    - Salary range for the job
-- `contact`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Contact information
-- `email`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Email address for contact
-- `phone`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Phone number for contact
-- `status`
-    - String
-    - Optional
-    - Default: "Pending"
-    - Enum: ["Pending", "Approved", "Rejected"]
-    - Status of the job posting request
+| Key         | Type   | Required | Description                 |
+| ----------- | ------ | -------- | --------------------------- |
+| `x-api-key` | String | Yes      | API key for authentication. |
 
-### Example Request
+## Request Body
+
+| Parameter        | Type   | Required | Description                                         |
+| --------------- | ------ | -------- | --------------------------------------------------- |
+| `title`         | String | Yes      | Job title.                                         |
+| `responsibilities` | String | Yes      | Job responsibilities.                              |
+| `requirements`  | String | Yes      | Job requirements.                                  |
+| `qualifications` | String | Yes      | Qualifications required for the job.               |
+| `benefits`      | String | Yes      | Benefits offered for the job.                      |
+| `category`      | String | Yes      | Category of the job posting. Must be one of `internship`, `full-time`, `part-time`, `contract`, `temporary`, or `freelance`. |
+| `capacity`      | Number | No       | Number of positions available. Default is 1.      |
+
+## Responses
+
+### **Success Response**
+
+**Status Code: 201**
+
 ```json
 {
+  "message": "New job created",
+  "data": {
+    "_id": "60d5f9e7c3b7f814b56fa300",
     "title": "Software Engineer",
-    "description": "Develop and maintain web applications",
-    "quantity": 2,
-    "location": "New York",
-    "jobType": ["full time"],
-    "salaryRange": "$70,000 - $90,000",
-    "contact": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "123-456-7890",
-    "status": "Pending"
+    "responsibilities": "Develop and maintain applications",
+    "requirements": "Experience with JavaScript and Node.js",
+    "qualifications": "Bachelor's degree in Computer Science",
+    "benefits": "Health insurance, 401k, remote work options",
+    "category": "Engineering",
+    "capacity": 3,
+    "createdAt": "2024-04-03T12:00:00Z"
+  }
 }
 ```
 
-### Example Response
+### **Error Responses**
+
+#### **Invalid API Key**
+
+**Status Code: 403**
+
 ```json
 {
-    "_id": "12345",
-    "title": "Software Engineer",
-    "description": "Develop and maintain web applications",
-    "quantity": 2,
-    "location": "New York",
-    "jobType": ["full time"],
-    "salaryRange": "$70,000 - $90,000",
-    "contact": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "123-456-7890",
-    "status": "Pending",
-    "createdAt": "2023-10-01T12:34:56Z",
-    "updatedAt": "2023-10-01T12:34:56Z"
+  "message": "Invalid or missing API key"
 }
 ```
 
-### Endpoint
-`GET /request/jobposting/search`
+#### **Missing Required Fields**
 
-### Description
-This endpoint allows you to search for job posting requests based on query parameters.
+**Status Code: 400**
 
-### Request Headers
-- `Content-Type: application/json`
-- `x-api-key: <your-api-key>`
-
-### Query Parameters
-- `title`
-    - String
-    - Optional
-    - Title of the job
-- `location`
-    - String
-    - Optional
-    - Location of the job
-- `jobType`
-    - String
-    - Optional
-    - Type of job
-- `salaryRange`
-    - String
-    - Optional
-    - Salary range for the job
-- `status`
-    - String
-    - Optional
-    - Status of the job posting request
-
-### Example Request
-```
-GET /request/jobposting/search?title=Software%20Engineer&location=New%20York
-```
-
-### Example Response
-```json
-[
-    {
-        "_id": "12345",
-        "title": "Software Engineer",
-        "description": "Develop and maintain web applications",
-        "quantity": 2,
-        "location": "New York",
-        "jobType": ["full time"],
-        "salaryRange": "$70,000 - $90,000",
-        "contact": "John Doe",
-        "email": "john.doe@example.com",
-        "phone": "123-456-7890",
-        "status": "Pending",
-        "createdAt": "2023-10-01T12:34:56Z",
-        "updatedAt": "2023-10-01T12:34:56Z"
-    }
-]
-```
-
-### Endpoint
-`GET /request/jobposting/:id`
-
-### Description
-This endpoint allows you to retrieve a job posting request by its ID.
-
-### Request Headers
-- `Content-Type: application/json`
-- `x-api-key: <your-api-key>`
-
-### Example Request
-```
-GET /request/jobposting/12345
-```
-
-### Example Response
 ```json
 {
-    "_id": "12345",
-    "title": "Software Engineer",
-    "description": "Develop and maintain web applications",
-    "quantity": 2,
-    "location": "New York",
-    "jobType": ["full time"],
-    "salaryRange": "$70,000 - $90,000",
-    "contact": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "123-456-7890",
-    "status": "Pending",
-    "createdAt": "2023-10-01T12:34:56Z",
-    "updatedAt": "2023-10-01T12:34:56Z"
+  "message": "All fields are required"
 }
 ```
 
-### Endpoint
-`PUT /request/jobposting/:id`
+#### **Job Creation Failure**
 
-### Description
-This endpoint allows you to update a job posting request by its ID.
+**Status Code: 500**
 
-### Request Headers
-- `Content-Type: application/json`
-- `x-api-key: <your-api-key>`
-
-### Request Body
-The request body should be a JSON object containing the following fields:
-
-- `title`
-    - String
-    - Required
-    - Title of the job
-- `description`
-    - String
-    - Optional
-    - Description of the job
-- `quantity`
-    - Number
-    - Required
-    - Default: 1
-    - Number of positions available
-- `location`
-    - String
-    - Required
-    - Default: "Remote"
-    - Location of the job
-- `jobType`
-    - Array of Strings
-    - Required
-    - Default: ["full time"]
-    - Enum: ["full time", "part time", "contract", "internship", "temporary", "other"]
-    - Type of job
-- `salaryRange`
-    - String
-    - Required
-    - Default: "Not Specified"
-    - Salary range for the job
-- `contact`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Contact information
-- `email`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Email address for contact
-- `phone`
-    - String
-    - Optional
-    - Default: "Not Specified"
-    - Phone number for contact
-- `status`
-    - String
-    - Required
-    - Enum: ["Pending", "Approved", "Rejected"]
-    - Status of the job posting request
-
-### Example Request
 ```json
 {
-    "title": "Software Engineer",
-    "description": "Develop and maintain web applications",
-    "quantity": 2,
-    "location": "New York",
-    "jobType": ["full time"],
-    "salaryRange": "$70,000 - $90,000",
-    "contact": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "123-456-7890",
-    "status": "Approved"
+  "message": "Job not created"
 }
 ```
 
-### Example Response
+#### **Server Error**
+
+**Status Code: 500**
+
 ```json
 {
-    "_id": "12345",
-    "title": "Software Engineer",
-    "description": "Develop and maintain web applications",
-    "quantity": 2,
-    "location": "New York",
-    "jobType": ["full time"],
-    "salaryRange": "$70,000 - $90,000",
-    "contact": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "123-456-7890",
-    "status": "Approved",
-    "createdAt": "2023-10-01T12:34:56Z",
-    "updatedAt": "2023-10-01T12:34:56Z"
+  "message": "Internal server error"
 }
 ```
 
-### Response Codes
-- `201 Created`: The job posting request was successfully created.
-- `200 OK`: The job posting request was successfully retrieved or updated.
-- `400 Bad Request`: The request was invalid or missing required fields.
-- `401 Unauthorized`: Authentication failed or user does not have permission.
-- `404 Not Found`: The job posting request was not found.
-- `500 Internal Server Error`: An error occurred on the server.
+## Example Requests
+
+### **Successful Job Posting**
+
+```http
+POST /request/jobposting HTTP/1.1
+Host: https://backend-hr2.axleshift.com/api/v1/
+Content-Type: application/json
+x-api-key: your-api-key
+
+{
+  "title": "Software Engineer",
+  "responsibilities": "Develop and maintain applications",
+  "requirements": "Experience with JavaScript and Node.js",
+  "qualifications": "Bachelor's degree in Computer Science",
+  "benefits": "Health insurance, 401k, remote work options",
+  "category": "full-time",
+  "capacity": 3
+}
+```
+
+### **Request with Missing Fields**
+
+```http
+POST /request/jobposting HTTP/1.1
+Host: https://backend-hr2.axleshift.com/api/v1/
+Content-Type: application/json
+x-api-key: your-api-key
+
+{
+  "title": "Software Engineer",
+  "responsibilities": "Develop and maintain applications"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "All fields are required"
+}
+```
 
