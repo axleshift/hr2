@@ -110,8 +110,8 @@ const Screening = () => {
 
   const handleGotoPage = (applicantId) => {
     try {
-      // navigate(`/applicant/profile/${applicantId}`)
-      window.open(`/applicant/profile/${applicantId}`)
+      navigate(`/applicant/profile/${applicantId}`)
+      // window.open(`/applicant/profile/${applicantId}`)
     } catch (error) {
       console.error(error)
     }
