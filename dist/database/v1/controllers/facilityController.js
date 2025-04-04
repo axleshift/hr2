@@ -339,10 +339,7 @@ const createFacilityEvent = async (req, res) => {
         if (formattedDate.toDateString() !== new Date(timeslot.date).toDateString()) {
             return res.status(400).json({ message: "Event date does not match timeslot date" });
         }
-        if (!req.session.user) {
-            return res.status(400).json({ message: "User session not found" });
-        }
-        const authorId = req.session.user._id;
+        const authorId = req.session.user?._id;
         const eventData = {
             name,
             author: authorId,
