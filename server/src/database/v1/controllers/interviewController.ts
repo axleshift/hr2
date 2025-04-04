@@ -64,12 +64,14 @@ export const createInterview = async (req: req, res: res) => {
     // Create the interview record
     const newData = {
       applicant: new mongoose.Types.ObjectId(applicantId),
+      job: data.job,
       date: data.date,
       interviewer: new mongoose.Types.ObjectId(interviewerId),
       type: data.type,
       event: new mongoose.Types.ObjectId(eventId),
       general: data.general,
       questions: data.questions || [],
+      salaryExpectation: data.salaryExpectation,
       strength: data.strength || '',
       weakness: data.weakness || '',
       recommendation: data.recommendation,
@@ -136,15 +138,27 @@ export const updateInterview = async (req: req, res: res) => {
       }
     }
 
+    const userId = req.session.user?._id
+
     // Update the interview record with the new data
     if (data.date) interview.date = data.date;
+    if (data.job) interview.job = data.job;
     if (data.type) interview.type = data.type;
     if (data.recommendation) interview.recommendation = data.recommendation;
     if (data.general) interview.general = data.general;
     if (data.questions) interview.questions = data.questions;
+    if (data.salaryExpectation) interview.salaryExpectation = data.salaryExpectation;
     if (data.strength) interview.strength = data.strength;
     if (data.weakness) interview.weakness = data.weakness;
+    // if (data.isReviewed) interview.isReviewed.status = data.isReviewed;
     if (data.finalComments) interview.finalComments = data.finalComments;
+
+    if (data.isReviewed) {
+      interview.isReviewed = {
+        status: data.isReviewed,
+        by: new mongoose.Types.ObjectId(userId)
+      }
+    }
 
     // Save the updated interview
     await interview.save();
@@ -157,6 +171,54 @@ export const updateInterview = async (req: req, res: res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getInterviewById = async (req: req, res: res) => {
+  try {
+    const { interviewId } = req.params;
+
+    if (!interviewId) {
+      return res.status(400).json({ message: "Interview Id is required"})
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(interviewId)) {
+      return res.status(400).json({ message: "Invalid Interview ID format" });
+    }
+
+    // Fetch the interview by its ID
+    const interview = await Interview.findById(interviewId)
+      .populate([
+        {
+          path: "applicant",
+          model: "Applicant",
+          select: "_id firstname lastname"
+        },
+        {
+          path: "interviewer",
+          model: "User",
+          select: "_id firstname lastname"
+        },
+        {
+          path: "event",
+          model: "FacilityEvent"
+        }
+      ])
+      .lean();
+
+    // If interview not found
+    if (!interview) {
+      return res.status(404).json({ message: "Interview not found", interviewId });
+    }
+
+    return res.status(200).json({
+      data: interview,
+    });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 
 export const getAllInterview = async (req: req, res: res) => {
   try {
@@ -228,6 +290,85 @@ export const getAllInterview = async (req: req, res: res) => {
         .limit(limit)
         .lean(),
       
+      Interview.countDocuments(searchFilter)
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({
+      data: interviews,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getAllRecentInterviews = async (req: req, res: res) => {
+  try {
+    const searchQuery = req.query.query as string;
+    const status = req.query.status as 'yes' | 'no' | 'need further review' | undefined;  // Status filter
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+    const skip = (page - 1) * limit;
+
+    // Define the search filter
+    type InterviewSearchFilter = {
+      recommendation?: 'yes' | 'no' | 'need further review'; // Include recommendation status
+      $or?: Array<{
+        recommendation?: { $regex: string; $options: string };
+        strength?: { $regex: string; $options: string };
+        weakness?: { $regex: string; $options: string };
+        finalComments?: { $regex: string; $options: string };
+      }>;
+    };
+
+    // Initialize the search filter
+    const searchFilter: InterviewSearchFilter = {};
+
+    // Add status filter if provided
+    if (status) {
+      searchFilter.recommendation = status;  // Filter by recommendation status
+    }
+
+    // Add search conditions if a query exists
+    if (searchQuery) {
+      searchFilter.$or = [
+        { recommendation: { $regex: searchQuery, $options: "i" } },
+        { strength: { $regex: searchQuery, $options: "i" } },
+        { weakness: { $regex: searchQuery, $options: "i" } },
+        { finalComments: { $regex: searchQuery, $options: "i" } },
+      ];
+    }
+
+    // Get the most recent interviews with pagination
+    const [interviews, totalItems] = await Promise.all([
+      Interview.find(searchFilter)
+        .populate([
+          {
+            path: "applicant",
+            model: "Applicant",
+            select: "_id firstname lastname"
+          },
+          {
+            path: "interviewer",
+            model: "User",
+            select: "_id firstname lastname"
+          },
+          {
+            path: "event",
+            model: "FacilityEvent"
+          }
+        ])
+        .sort({ date: -1 })  // Sort by most recent interview date
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
       Interview.countDocuments(searchFilter)
     ]);
 

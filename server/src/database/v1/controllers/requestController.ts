@@ -44,6 +44,71 @@ export const externalPostJob = async (req: req, res: res) => {
   }
 }
 
+export const externalgetAllJob = async (req: req, res: res) => {
+  try {
+    const searchQuery = req.query.query as string;
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+    const skip = (page - 1) * limit;
+    const sortOrder = req.query.sort === "desc" ? -1 : 1;
+
+    const apikey = req.headers['x-api-key'];
+    const key = config.api.hr1Key;
+
+    if (!apikey || apikey !== key) {
+      return res.status(403).json({ message: "Invalid or missing API key" });
+    }
+
+    // Define proper type for the search filter
+    type JobSearchFilter = {
+      $or?: Array<{
+        title?: { $regex: string; $options: string };
+        category?: { $regex: string; $options: string };
+        responsibilities?: { $regex: string; $options: string };
+        requirements?: { $regex: string; $options: string };
+      }>;
+    };
+
+    // Initialize empty filter
+    const searchFilter: JobSearchFilter = {};
+
+    // If a search query exists, build OR conditions
+    if (searchQuery) {
+      searchFilter.$or = [
+        { title: { $regex: searchQuery, $options: "i" } },
+        { category: { $regex: searchQuery, $options: "i" } },
+        { responsibilities: { $regex: searchQuery, $options: "i" } },
+        { requirements: { $regex: searchQuery, $options: "i" } },
+      ];
+    }
+
+    // Fetch jobs and total count in parallel
+    const [jobs, totalItems] = await Promise.all([
+      jobModel
+        .find(searchFilter)
+        .sort({ createdAt: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      
+      jobModel.countDocuments(searchFilter)
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return res.status(200).json({
+      data: jobs,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export const getApplicantDocuments = async (req: req, res: res) => {
   try {
     const { documentType } = req.params;

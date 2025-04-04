@@ -189,63 +189,67 @@ const ApplicantProfilePage = () => {
                 ) : (
                   <CForm onSubmit={handleSubmit(updateApplicant)}>
                     {/* Personal Information Section */}
-                    <h4>Applicantion Statuses</h4>
-                    <CRow className="mb-3">
-                      <CCol>
-                        <CInputGroup>
-                          <CInputGroupText>Shotlisted</CInputGroupText>
-                          <CFormInput readOnly defaultValue={applicant?.isShortlisted} />
-                          <CButton
-                            color="info"
-                            size="sm"
-                            onClick={() => handleStatUpdate('isShortlisted')}
-                          >
-                            Update
-                          </CButton>
-                        </CInputGroup>
-                      </CCol>
-                      <CCol>
-                        <CInputGroup>
-                          <CInputGroupText>Initial Interview?</CInputGroupText>
-                          <CFormInput readOnly defaultValue={applicant?.isInitialInterview} />
-                          <CButton
-                            color="info"
-                            size="sm"
-                            onClick={() => handleStatUpdate('isInitialInterview')}
-                          >
-                            Update
-                          </CButton>
-                        </CInputGroup>
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol>
-                        <CInputGroup>
-                          <CInputGroupText>Final Interview?</CInputGroupText>
-                          <CFormInput readOnly defaultValue={applicant?.isFinalInterview} />
-                          <CButton
-                            color="info"
-                            size="sm"
-                            onClick={() => handleStatUpdate('isFinalInterview')}
-                          >
-                            Update
-                          </CButton>
-                        </CInputGroup>
-                      </CCol>
-                      <CCol>
-                        <CInputGroup>
-                          <CInputGroupText>Is Hired?</CInputGroupText>
-                          <CFormInput readOnly defaultValue={applicant?.isHired} />
-                          <CButton
-                            color="info"
-                            size="sm"
-                            onClick={() => handleStatUpdate('isHired')}
-                          >
-                            Update
-                          </CButton>
-                        </CInputGroup>
-                      </CCol>
-                    </CRow>
+                    {['admin', 'manager'].includes(userInformation.role) && (
+                      <>
+                        <h4>Application Statuses</h4>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CInputGroup>
+                              <CInputGroupText>Shotlisted</CInputGroupText>
+                              <CFormInput readOnly defaultValue={applicant?.isShortlisted} />
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => handleStatUpdate('isShortlisted')}
+                              >
+                                Update
+                              </CButton>
+                            </CInputGroup>
+                          </CCol>
+                          <CCol>
+                            <CInputGroup>
+                              <CInputGroupText>Initial Interview?</CInputGroupText>
+                              <CFormInput readOnly defaultValue={applicant?.isInitialInterview} />
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => handleStatUpdate('isInitialInterview')}
+                              >
+                                Update
+                              </CButton>
+                            </CInputGroup>
+                          </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CInputGroup>
+                              <CInputGroupText>Final Interview?</CInputGroupText>
+                              <CFormInput readOnly defaultValue={applicant?.isFinalInterview} />
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => handleStatUpdate('isFinalInterview')}
+                              >
+                                Update
+                              </CButton>
+                            </CInputGroup>
+                          </CCol>
+                          <CCol>
+                            <CInputGroup>
+                              <CInputGroupText>Is Hired?</CInputGroupText>
+                              <CFormInput readOnly defaultValue={applicant?.isHired} />
+                              <CButton
+                                color="info"
+                                size="sm"
+                                onClick={() => handleStatUpdate('isHired')}
+                              >
+                                Update
+                              </CButton>
+                            </CInputGroup>
+                          </CCol>
+                        </CRow>
+                      </>
+                    )}
                     <h4>Personal Information</h4>
                     <CRow className="mb-3">
                       <CCol>

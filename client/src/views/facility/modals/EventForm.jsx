@@ -60,6 +60,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
   // Interview form state
   const [isInterviewFormVisible, setIsInterviewFormVisible] = useState(false)
   const [isInterviewFormIsEdit, setIsInterviewFormIsEdit] = useState(false)
+  const [interviewFormState, setInterviewFormState] = useState('view')
   const [interviewData, setInterviewData] = useState({})
   const [applicantData, setApplicanData] = useState({})
   const [interviews, setInterviews] = useState([])
@@ -588,26 +589,30 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
 
                                               {['admin', 'manager', 'recruiter'].includes(
                                                 userInformation.role,
-                                              ) && (
-                                                <CButton
-                                                  color="info"
-                                                  size="sm"
-                                                  onClick={() => {
-                                                    setIsInterviewFormVisible(true)
-                                                    setIsInterviewFormIsEdit(false)
-                                                    setIsEventFormVisible(false)
-                                                    setApplicanData(p.applicant)
-                                                    setInterviewData({
-                                                      _id: eventData._id,
-                                                      name: eventData.name,
-                                                      date: eventData.date,
-                                                      type: eventData.type,
-                                                    })
-                                                  }}
-                                                >
-                                                  Interview
-                                                </CButton>
-                                              )}
+                                              ) &&
+                                                ['Initial Interview', 'Final Interview'].includes(
+                                                  eventData.type,
+                                                ) &&
+                                                eventData.isApproved.status && (
+                                                  <CButton
+                                                    color="info"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                      setIsInterviewFormVisible(true)
+                                                      setEventFormState('edit')
+                                                      setIsEventFormVisible(false)
+                                                      setApplicanData(p.applicant)
+                                                      setInterviewData({
+                                                        _id: eventData._id,
+                                                        name: eventData.name,
+                                                        date: eventData.date,
+                                                        type: eventData.type,
+                                                      })
+                                                    }}
+                                                  >
+                                                    Interview
+                                                  </CButton>
+                                                )}
                                             </div>
                                           </CTableDataCell>
                                         </CTableRow>
@@ -633,11 +638,11 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
           <InterviewForm
             isVisible={isInterviewFormVisible}
             onClose={() => {
-              setIsInterviewFormIsEdit(false)
+              setEventFormState('view')
               setIsInterviewFormVisible(false)
               setIsEventFormVisible(true)
             }}
-            isEdit={isInterviewFormIsEdit}
+            state={interviewFormState}
             eventData={interviewData}
             applicantData={applicantData}
           />

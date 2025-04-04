@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
   faAt,
+  faBridgeCircleCheck,
   faBriefcase,
   faBuilding,
   faCalendarPlus,
+  faCheckDouble,
   faClipboardList,
   faClockFour,
   faCode,
@@ -20,6 +22,7 @@ import {
   faFileCirclePlus,
   faFileCircleQuestion,
   faInbox,
+  faPaperclip,
   faPaperPlane,
   faPlus,
   faStar,
@@ -87,6 +90,12 @@ const _nav = [
     name: 'Interviews',
     to: '/applicant/interviews',
     icon: <FontAwesomeIcon icon={faFileCirclePlus} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Job Offers',
+    to: '/applicant/joboffer',
+    icon: <FontAwesomeIcon icon={faCheckDouble} className="nav-icon" />,
   },
   {
     component: CNavItem,
