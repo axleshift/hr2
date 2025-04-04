@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const requestController_1 = require("../..//database/v1/controllers/requestController");
 router.post("/jobposting", requestController_1.externalPostJob);
+router.get("/jobposting/all", requestController_1.externalgetAllJob);
 router.get("/applicants/documents/:documentType", requestController_1.getApplicantDocuments);
 exports.default = {
     metadata: {

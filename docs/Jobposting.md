@@ -134,3 +134,109 @@ x-api-key: your-api-key
 }
 ```
 
+## Get All Job Postings
+
+### Endpoint
+
+`GET /request/jobposting`
+
+### Description
+
+This API allows external HR systems to retrieve all job postings created by the system. It supports optional search queries, pagination, and sorting. Authentication via API key is required.
+
+### Headers
+
+| Key         | Type   | Required | Description                 |
+| ----------- | ------ | -------- | --------------------------- |
+| `x-api-key` | String | Yes      | API key for authentication. |
+
+### Query Parameters
+
+| Parameter  | Type   | Required | Description                                                                 |
+| ---------- | ------ | -------- | --------------------------------------------------------------------------- |
+| `query`    | String | No       | Search keyword to filter jobs by title, category, responsibilities, or requirements. |
+| `page`     | Number | No       | Page number for pagination. Default is 1.                                   |
+| `limit`    | Number | No       | Number of results per page. Default is 10.                                  |
+| `sort`     | String | No       | Sort order of results by creation date. Use `asc` or `desc`. Default is `asc`. |
+
+### Responses
+
+#### **Success Response**
+
+**Status Code: 200**
+
+```json
+{
+  "data": [
+    {
+      "_id": "60d5f9e7c3b7f814b56fa300",
+      "title": "Software Engineer",
+      "responsibilities": "Develop and maintain applications",
+      "requirements": "Experience with JavaScript and Node.js",
+      "qualifications": "Bachelor's degree in Computer Science",
+      "benefits": "Health insurance, 401k, remote work options",
+      "category": "full-time",
+      "capacity": 3,
+      "createdAt": "2024-04-03T12:00:00Z"
+    },
+    ...
+  ],
+  "totalItems": 42,
+  "totalPages": 5,
+  "currentPage": 1
+}
+```
+
+#### **Invalid API Key**
+
+**Status Code: 403**
+
+```json
+{
+  "message": "Invalid or missing API key"
+}
+```
+
+#### **Server Error**
+
+**Status Code: 500**
+
+```json
+{
+  "message": "Internal Server Error"
+}
+```
+
+### Example Requests
+
+#### **Successful Job Fetch**
+
+```http
+GET /request/jobposting?query=engineer&page=1&limit=5&sort=desc HTTP/1.1
+Host: https://backend-hr2.axleshift.com/api/v1/
+x-api-key: your-api-key
+```
+
+**Response:**
+
+```json
+{
+  "data": [
+    {
+      "_id": "60d5f9e7c3b7f814b56fa300",
+      "title": "Software Engineer",
+      "responsibilities": "Develop and maintain applications",
+      "requirements": "Experience with JavaScript and Node.js",
+      "qualifications": "Bachelor's degree in Computer Science",
+      "benefits": "Health insurance, 401k, remote work options",
+      "category": "full-time",
+      "capacity": 3,
+      "createdAt": "2024-04-03T12:00:00Z"
+    }
+  ],
+  "totalItems": 1,
+  "totalPages": 1,
+  "currentPage": 1
+}
+```
+

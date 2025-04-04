@@ -34,73 +34,53 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
-const RECO_STATUS = ['yes', 'no', 'need further review'];
-const interviewFormSchema = new mongoose_1.Schema({
+const OFFER_STATUSES = ['Pending', 'Accepted', 'Declined'];
+const jobOfferFormSchema = new mongoose_1.Schema({
     applicant: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'Applicant',
         required: true,
     },
-    // job: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Job',
-    // },
-    job: {
+    position: {
+        type: mongoose_1.Schema.Types.Mixed,
+        validate: {
+            validator(value) {
+                return mongoose_1.default.Types.ObjectId.isValid(value) || typeof value === 'string';
+            },
+            message: 'Author must be a valid ObjectId or a string.',
+        },
+    },
+    salary: {
+        type: Number,
+        required: true,
+    },
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    benefits: {
         type: String,
     },
-    date: {
+    status: {
+        type: String,
+        enum: OFFER_STATUSES,
+        default: 'Pending',
+    },
+    issuedBy: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    issuedDate: {
         type: Date,
         default: () => new Date(),
     },
-    interviewer: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true,
+    responseDate: {
+        type: Date,
     },
-    type: {
+    notes: {
         type: String,
-        enum: INTERVIEW_TYPES,
-        default: 'Phone',
+        default: '',
     },
-    event: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'facilityEvents',
-    },
-    general: {
-        communication: { type: Number, default: 1 },
-        technical: { type: Number, default: 1 },
-        problemSolving: { type: Number, default: 1 }, // Fixed typo
-        culturalFit: { type: Number, default: 1 },
-        workExperienceRelevance: { type: Number, default: 1 },
-        leadership: { type: Number, default: 1 },
-    },
-    questions: [
-        {
-            question: { type: String, required: true },
-            remark: { type: String, default: '' },
-        },
-    ],
-    salaryExpectation: {
-        type: Number,
-        default: 0,
-    },
-    strength: { type: String, default: '' },
-    weakness: { type: String, default: '' },
-    recommendation: {
-        type: String,
-        enum: RECO_STATUS,
-        default: 'need further review',
-    },
-    isReviewed: {
-        status: {
-            type: Boolean,
-            default: false,
-        },
-        by: {
-            type: mongoose_1.default.Types.ObjectId,
-        }
-    },
-    finalComments: { type: String, default: '' },
 }, { timestamps: true });
-exports.default = mongoose_1.default.model('InterviewForm', interviewFormSchema);
+exports.default = mongoose_1.default.model('JobOfferForm', jobOfferFormSchema);

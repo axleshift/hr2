@@ -67,6 +67,12 @@ router.put("/interview/:interviewId", (0, verifySession_1.default)({
 router.get("/interview/all/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
 }, true), interviewController_1.getAllInterview);
+router.get("/interview/recent", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+}, true), interviewController_1.getAllRecentInterviews);
+router.get("/interview/:interviewId", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+}, true), interviewController_1.getAllInterview);
 exports.default = {
     metadata: {
         path: "/applicant",

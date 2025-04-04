@@ -165,13 +165,13 @@ const applicantSchema = new mongoose_1.default.Schema({
         interview: [
             {
                 type: mongoose_1.default.Schema.Types.ObjectId,
-                ref: "Document",
+                ref: "InterviewForm",
             }
         ],
-        training: [
+        jobOffer: [
             {
                 type: mongoose_1.default.Schema.Types.ObjectId,
-                ref: "Document",
+                ref: "jobOfferForm",
             }
         ],
         others: [
