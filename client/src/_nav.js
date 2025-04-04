@@ -31,16 +31,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
-  {
-    component: CNavItem,
-    name: 'Overview',
-    to: '/dashboard/overview',
-    icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
-    badge: {
-      color: 'danger',
-      text: 'unfinished',
-    },
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Overview',
+  //   to: '/dashboard/overview',
+  //   icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
+  //   badge: {
+  //     color: 'danger',
+  //     text: 'unfinished',
+  //   },
+  // },
   {
     component: CNavTitle,
     name: 'Recruitment',
