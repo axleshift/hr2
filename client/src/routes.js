@@ -17,7 +17,7 @@ const JobpostingReq = React.lazy(() => import('./views/recruitment/JobpostingReq
 const Screening = React.lazy(() => import('./views/applicants/Screening'))
 const AppInterviews = React.lazy(() => import('./views/applicants/Interviews'))
 const Shortlisted = React.lazy(() => import('./views/applicants/Shortlisted'))
-const Training = React.lazy(() => import('./views/applicants/Training'))
+const Joboffer = React.lazy(() => import('./views/applicants/Joboffers'))
 const Rejected = React.lazy(() => import('./views/applicants/Rejected'))
 const ApplicantProfile = React.lazy(() => import('./views/applicants/ApplicantProfile'))
 
@@ -109,9 +109,9 @@ const routes = [
     permissions: ['admin', 'manager'],
   },
   {
-    path: '/applicant/training',
-    name: 'Tranings',
-    element: Training,
+    path: '/applicant/joboffers',
+    name: 'Joboffers',
+    element: Joboffer,
     permissions: ['admin', 'manager'],
   },
   {

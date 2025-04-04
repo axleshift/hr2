@@ -11,7 +11,12 @@ interface IJobOfferForm extends Document {
   status: 'Pending' | 'Accepted' | 'Declined';
   issuedBy: mongoose.Types.ObjectId;
   issuedDate: Date;
-  responseDate?: Date;
+  approvedBy: mongoose.Types.ObjectId;
+  approvedDate: Date;
+  responseDate: Date;
+  emailsent: boolean;
+  emailSentDate: Date;
+  expires: Date;
   notes: string;
 }
 
@@ -58,6 +63,22 @@ const jobOfferFormSchema = new Schema<IJobOfferForm>(
       default: () => new Date(),
     },
     responseDate: {
+      type: Date,
+    },
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    approvedDate: {
+      type: Date,
+    },
+    emailsent: {
+      type: Boolean,
+    },
+    emailSentDate: {
+      type: Date,
+    },
+    expires: {
       type: Date,
     },
     notes: {

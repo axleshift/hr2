@@ -179,7 +179,7 @@ export const updateStat = async (req: Request, res: Response) => {
       "isShortlisted",
       "isInitialInterview",
       "isFinalInterview",
-      "isInTraining",
+      "isJobOffer",
       "isHired",
     ];
 

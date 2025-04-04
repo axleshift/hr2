@@ -117,7 +117,7 @@ const Interviews = ({ applicantId }) => {
                 'Refresh'
               )}
             </CButton>
-            {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+            {/* {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
               <CButton
                 color="warning"
                 size="sm"
@@ -136,7 +136,7 @@ const Interviews = ({ applicantId }) => {
                   'Issue Job Offer'
                 )}
               </CButton>
-            )}
+            )} */}
           </CCol>
         </CRow>
         {isInterviewLoading ? (
@@ -157,8 +157,12 @@ const Interviews = ({ applicantId }) => {
                   <CCard>
                     <CCardHeader
                       style={{ backgroundColor: getHeaderColor(index), color: getColor(index) }}
+                      className="d-flex justify-content-between"
                     >
-                      Interview
+                      <div>Interview </div>
+                      <div>
+                        <small className="text-muted">{int._id}</small>
+                      </div>
                     </CCardHeader>
                     <CCardBody>
                       <CForm>
@@ -336,7 +340,7 @@ const Interviews = ({ applicantId }) => {
             </div>
           </CCol>
         </CRow>
-        <CRow>
+        {/* <CRow>
           <CCol>
             <JobOfferForm
               isVisible={jobofferFormIsVisible}
@@ -348,7 +352,7 @@ const Interviews = ({ applicantId }) => {
               applicantId={applicantId}
             />
           </CCol>
-        </CRow>
+        </CRow> */}
       </CContainer>
     </>
   )

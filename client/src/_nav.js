@@ -94,7 +94,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Job Offers',
-    to: '/applicant/joboffer',
+    to: '/applicant/joboffers',
     icon: <FontAwesomeIcon icon={faCheckDouble} className="nav-icon" />,
   },
   {

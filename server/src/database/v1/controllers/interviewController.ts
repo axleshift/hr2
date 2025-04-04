@@ -190,7 +190,7 @@ export const getInterviewById = async (req: req, res: res) => {
         {
           path: "applicant",
           model: "Applicant",
-          select: "_id firstname lastname"
+          select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
         },
         {
           path: "interviewer",
@@ -273,7 +273,7 @@ export const getAllInterview = async (req: req, res: res) => {
           {
             path: "applicant",
             model: "Applicant",
-            select: "_id firstname lastname"
+            select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
           },
           {
             path: "interviewer",
@@ -352,7 +352,7 @@ export const getAllRecentInterviews = async (req: req, res: res) => {
           {
             path: "applicant",
             model: "Applicant",
-            select: "_id firstname lastname"
+            select: "_id firstname lastname isShortlisted isInitialInterview isisFinalInterview isJobOffer isHired"
           },
           {
             path: "interviewer",
