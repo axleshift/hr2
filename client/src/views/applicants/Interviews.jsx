@@ -247,8 +247,8 @@ const Interviews = () => {
                     <CTableRow>
                       <CTableHeaderCell>#</CTableHeaderCell>
                       <CTableHeaderCell>Applicant</CTableHeaderCell>
-                      <CTableHeaderCell>interviewer</CTableHeaderCell>
-                      <CTableHeaderCell>type</CTableHeaderCell>
+                      <CTableHeaderCell>Interviewer</CTableHeaderCell>
+                      <CTableHeaderCell>Type</CTableHeaderCell>
                       <CTableHeaderCell>Date</CTableHeaderCell>
                       <CTableHeaderCell>Recommendation</CTableHeaderCell>
                       <CTableHeaderCell>Action</CTableHeaderCell>
