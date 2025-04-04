@@ -54,12 +54,20 @@ export interface IApplicant extends Document {
   /**
    * Statuses and Remarks for Each Stage
    */
+  statuses: {
+    isShortlisted: boolean;
+    isInitialInterview: boolean;
+    isFinalInterview: boolean;
+    isJobOffer: boolean;
+    isHired: boolean;
+  },
+
   tags: string[];
   emailSent: boolean;
   isShortlisted: boolean;
   isInitialInterview: boolean;
   isFinalInterview: boolean;
-  isInTraining: boolean;
+  isJobOffer: boolean;
   isHired: boolean;
 
   events: mongoose.Types.ObjectId[];
@@ -68,7 +76,7 @@ export interface IApplicant extends Document {
   documentations: {
     screening: mongoose.Types.ObjectId[];
     interview: mongoose.Types.ObjectId[];
-    training: mongoose.Types.ObjectId[];
+    jobOffer: mongoose.Types.ObjectId;
     others: mongoose.Types.ObjectId[];
   }
   expiresAt: Date;
@@ -201,10 +209,35 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       type: [String],
       required: true,
     },
+
     emailSent: {
       type: Boolean,
       default: false,
     },
+
+    statuses: {
+      isShortlisted: {
+        type: Boolean,
+        default: false,
+      },
+      isInitialInterview: {
+        type: Boolean,
+        default: false,
+      },
+      isFinalInterview: {
+        type: Boolean,
+        default: false,
+      },
+      isJobOffer: {
+        type: Boolean,
+        default: false,
+      },
+      isHired: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    
     isShortlisted: {
       type: Boolean,
       default: false,
@@ -217,7 +250,7 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       type: Boolean,
       default: false,
     },
-    isInTraining: {
+    isJobOffer: {
       type: Boolean,
       default: false,
     },
@@ -234,24 +267,23 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       ref: "Email"
     }],
     documentations: {
-      screening:  [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "ScreeningForm",
-          }
-        ],
+      screening: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "ScreeningForm",
+        }
+      ],
       interview: [
         {
           type: mongoose.Schema.Types.ObjectId,
           ref: "InterviewForm",
         }
       ],
-      jobOffer: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "jobOfferForm",
-        }
-      ],
+      jobOffer:
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "jobOfferForm",
+      },
       others: [
         {
           type: mongoose.Schema.Types.ObjectId,

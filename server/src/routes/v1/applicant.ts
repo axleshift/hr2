@@ -16,6 +16,7 @@ import {
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
 import { createInterview, getAllInterview, getAllRecentInterviews, updateInterview } from "../../database/v1/controllers/interviewController";
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
+import { createJoboffer, getAllJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
 
 router.post(
   "/",
@@ -205,7 +206,7 @@ router.get(
 router.get(
   "/interview/recent",
   verifySession({
-    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
@@ -216,11 +217,72 @@ router.get(
 router.get(
   "/interview/:interviewId",
   verifySession({
-    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
   },
     true,
   ),
   getAllInterview
+)
+
+// job offer
+router.post(
+  "/joboffer/:applicantId/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  createJoboffer
+)
+
+router.post(
+  "/joboffer/send-email/:jobofferId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  sendJobOfferMail
+)
+
+router.put(
+  "/joboffer/:jobofferId/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  updateJoboffer
+)
+
+router.get(
+  "/joboffer/all/:applicantId/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  getAllJoboffer
+)
+
+router.get(
+  "/joboffer/recent/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  getAllRecentJoboffer
+)
+
+router.get(
+  "/joboffer/:applicantId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  },
+    true,
+  ),
+  getJobofferById
 )
 
 export default {

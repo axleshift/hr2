@@ -80,10 +80,11 @@ const InterviewForm = ({ isVisible, onClose, state, interview }) => {
     },
   })
 
-  const getInteview = async () => {
+  const getInterview = async () => {
     try {
       const res = await get(`/applicant/interview/${interviewData._id}`)
       console.log('Interview Result', JSON.stringify(res.data, null, 2))
+      setInterviewData(res.data.data)
     } catch (error) {
       console.error(error)
     }
@@ -91,12 +92,11 @@ const InterviewForm = ({ isVisible, onClose, state, interview }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data)
-      if (formState === 'edit') {
-        await put(`/applicant/interview/${interviewData._id}`, data)
-      } else {
-        await post('/applicant/interview', data)
-      }
+      const res =
+        formState === 'edit'
+          ? await put(`/applicant/interview/${interviewData._id}`, data)
+          : await post('/applicant/interview', data)
+      console.log(JSON.stringify(res, null, 2))
       onClose() // Close form after submission
     } catch (error) {
       console.error(error)
@@ -113,6 +113,8 @@ const InterviewForm = ({ isVisible, onClose, state, interview }) => {
 
   useEffect(() => {
     if (formVisible && interview) {
+      console.log('Interview Data:', JSON.stringify(interview, null, 2))
+
       let formattedDate = ''
       if (interview.date) {
         const dateObj = new Date(interview.date)
@@ -125,7 +127,7 @@ const InterviewForm = ({ isVisible, onClose, state, interview }) => {
       }
 
       setInterviewData(interview)
-      console.log('Formatted Interview Data:', formattedInterview)
+      console.log('Formatted Interview Data:', JSON.stringify(formattedInterview, null, 2))
       reset(formattedInterview)
     }
   }, [formVisible, interview, reset])
@@ -311,12 +313,13 @@ const InterviewForm = ({ isVisible, onClose, state, interview }) => {
             <CButton
               color="warning"
               size="sm"
+              disabled={interview.applicant?.isJobOffer}
               onClick={() => {
                 setJobofferFormState('create')
                 setJobofferFormIsVisible(true)
               }}
             >
-              Issue a Job Offer
+              {interview.applicant?.isJobOffer ? 'Job offer already Exists' : 'Issue a Job Offer'}
             </CButton>
           </CCol>
         </CRow>

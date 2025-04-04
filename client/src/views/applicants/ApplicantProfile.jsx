@@ -21,6 +21,7 @@ import {
   CTooltip,
   CSpinner,
   CInputGroupText,
+  CFormLabel,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -157,6 +158,16 @@ const ApplicantProfilePage = () => {
     }
   }
 
+  const handleSendData = async () => {
+    try {
+      if (!confirm('Are you sure you want to send this to Employee Management?')) {
+        return
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     if (applicantId) {
       getApplicant(applicantId)
@@ -194,8 +205,8 @@ const ApplicantProfilePage = () => {
                         <h4>Application Statuses</h4>
                         <CRow className="mb-3">
                           <CCol>
+                            <CFormLabel>Shortlisted</CFormLabel>
                             <CInputGroup>
-                              <CInputGroupText>Shotlisted</CInputGroupText>
                               <CFormInput readOnly defaultValue={applicant?.isShortlisted} />
                               <CButton
                                 color="info"
@@ -207,8 +218,8 @@ const ApplicantProfilePage = () => {
                             </CInputGroup>
                           </CCol>
                           <CCol>
+                            <CFormLabel>Initial Interview</CFormLabel>
                             <CInputGroup>
-                              <CInputGroupText>Initial Interview?</CInputGroupText>
                               <CFormInput readOnly defaultValue={applicant?.isInitialInterview} />
                               <CButton
                                 color="info"
@@ -222,8 +233,8 @@ const ApplicantProfilePage = () => {
                         </CRow>
                         <CRow className="mb-3">
                           <CCol>
+                            <CFormLabel>Final Interview</CFormLabel>
                             <CInputGroup>
-                              <CInputGroupText>Final Interview?</CInputGroupText>
                               <CFormInput readOnly defaultValue={applicant?.isFinalInterview} />
                               <CButton
                                 color="info"
@@ -235,13 +246,14 @@ const ApplicantProfilePage = () => {
                             </CInputGroup>
                           </CCol>
                           <CCol>
+                            <CFormLabel>Job Offer</CFormLabel>
                             <CInputGroup>
-                              <CInputGroupText>Is Hired?</CInputGroupText>
-                              <CFormInput readOnly defaultValue={applicant?.isHired} />
+                              <CFormInput readOnly defaultValue={applicant?.isJobOffer} />
                               <CButton
                                 color="info"
                                 size="sm"
-                                onClick={() => handleStatUpdate('isHired')}
+                                onClick={() => handleStatUpdate('isJobOffer')}
+                                disabled
                               >
                                 Update
                               </CButton>
@@ -250,6 +262,30 @@ const ApplicantProfilePage = () => {
                         </CRow>
                       </>
                     )}
+                    <CRow className="mb-3">
+                      <CCol className="d-flex justify-content-center">
+                        {applicant.isShortlisted &&
+                        applicant.isInitialInterview &&
+                        applicant.isFinalInterview &&
+                        applicant.isJobOffer ? (
+                          <CButton color="warning" onClick={() => handleSendData()}>
+                            Send Applicant Information to Employee Management
+                          </CButton>
+                        ) : (
+                          <CButton
+                            color="secondary"
+                            disabled={
+                              applicant.isShortlisted &&
+                              applicant.isInitialInterview &&
+                              applicant.isFinalInterview &&
+                              applicant.isJobOffer
+                            }
+                          >
+                            Can&apos;t send data to Employee Mngmt, need Checklist to be completed
+                          </CButton>
+                        )}
+                      </CCol>
+                    </CRow>
                     <h4>Personal Information</h4>
                     <CRow className="mb-3">
                       <CCol>
@@ -292,6 +328,20 @@ const ApplicantProfilePage = () => {
                         />
                         {errors.suffix && (
                           <CFormFeedback invalid>{errors.suffix.message}</CFormFeedback>
+                        )}
+                      </CCol>
+                    </CRow>
+                    <CRow className="mb-3">
+                      <CCol>
+                        <CFormInput label="Email" invalid={!!errors.email} {...register('email')} />
+                        {errors.email && (
+                          <CFormFeedback invalid>{errors.email.message}</CFormFeedback>
+                        )}
+                      </CCol>
+                      <CCol>
+                        <CFormInput label="Phone" invalid={!!errors.phone} {...register('phone')} />
+                        {errors.phone && (
+                          <CFormFeedback invalid>{errors.phone.message}</CFormFeedback>
                         )}
                       </CCol>
                     </CRow>

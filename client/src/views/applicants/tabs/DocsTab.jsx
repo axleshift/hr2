@@ -43,6 +43,7 @@ import {
 
 import Interviews from './Interviews'
 import Screenings from './Screenings'
+import Joboffers from './Joboffers'
 
 const DocsTab = ({ applicantId }) => {
   return (
@@ -54,6 +55,7 @@ const DocsTab = ({ applicantId }) => {
               <CTabList variant="tabs">
                 <CTab itemKey={'interview'}>Interviews</CTab>
                 <CTab itemKey={'screening'}>Screenings</CTab>
+                <CTab itemKey={'joboffer'}>Job Offers</CTab>
               </CTabList>
               <CTabContent>
                 <CTabPanel itemKey={'interview'}>
@@ -61,6 +63,9 @@ const DocsTab = ({ applicantId }) => {
                 </CTabPanel>
                 <CTabPanel itemKey={'screening'}>
                   <Screenings applicantId={applicantId} />
+                </CTabPanel>
+                <CTabPanel itemKey={'joboffer'}>
+                  <Joboffers applicantId={applicantId} />
                 </CTabPanel>
               </CTabContent>
             </CTabs>
