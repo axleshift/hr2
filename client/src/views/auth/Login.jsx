@@ -93,7 +93,8 @@ const Login = () => {
     login(formData.username, formData.password, (success) => {
       setIsLoading(false)
       if (success) {
-        navigate('/dashboard/overview')
+        // navigate('/dashboard/overview')
+        navigate('/recruitment/jobposting')
       } else {
         setErrorMessage('Invalid username or password')
       }
