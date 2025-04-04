@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Event Invitation</title>
+</head>
+<body>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "{{eventName}}",
+    "startDate": "{{eventDate}}T{{startTime}}:00",
+    "endDate": "{{eventDate}}T{{endTime}}:00",
+    "location": {
+      "@type": "Place",
+      "name": "{{facilityName}}",
+      "address": "{{facilityLocation}}"
+    },
+    "description": "You are invited to attend {{eventName}}.",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "organizer": {
+      "@type": "Organization",
+      "name": "HR Team",
+      "email": "hr2axleshift@gmail.com"
+    }
+  }
+  </script>
+
+  <p>Dear {{fullName}},</p>
+
+  <p>We are pleased to invite you to <strong>{{eventName}}</strong> on <strong>{{eventDate}}</strong>. Below are the event details:</p>
+
+  <table>
+    <tr>
+      <td><strong>Event Name:</strong></td>
+      <td>{{eventName}}</td>
+    </tr>
+    <tr>
+      <td><strong>Date:</strong></td>
+      <td>{{eventDate}}</td>
+    </tr>
+    <tr>
+      <td><strong>Time:</strong></td>
+      <td>{{startTime}} - {{endTime}}</td>
+    </tr>
+    <tr>
+      <td><strong>Venue:</strong></td>
+      <td>{{facilityName}}</td>
+    </tr>
+    <tr>
+      <td><strong>Address:</strong></td>
+      <td>{{facilityLocation}}</td>
+    </tr>
+    <tr>
+      <td><strong>Type:</strong></td>
+      <td>{{eventType}}</td>
+    </tr>
+  </table>
+
+  <p>Please confirm your attendance at your earliest convenience.</p>
+
+  <p>Best regards,<br><strong>The HR Team</strong></p>
+
+</body>
+</html>
