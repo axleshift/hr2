@@ -1,1 +1,0 @@
-import{_ as r,a,b as e,c as s,p as o}from"./index-idxjfpO7.js";import{r as c}from"./react-router-dom-BnDDw25P.js";var d=c.forwardRef((function(o,c){var d=o.children,i=o.className,m=r(o,["children","className"]);return a("div",{...e({className:s("card-footer",i)},m,{ref:c}),children:d})}));d.propTypes={children:o.node,className:o.string},d.displayName="CCardFooter";export{d as C};
