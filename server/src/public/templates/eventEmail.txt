@@ -1,0 +1,17 @@
+Dear {{fullName}},
+
+We are pleased to invite you to {{eventName}}, which will take place on {{eventDate}}. Below are the event details:
+
+Event Name: {{eventName}}
+Date: {{eventDate}}
+Time: {{startTime}} - {{endTime}}
+Venue: {{facilityName}}
+Address: {{facilityLocation}}
+Type: {{eventType}}
+
+Please confirm your attendance at your earliest convenience. Should you have any questions, feel free to reach out.
+
+We look forward to your participation.
+
+Best regards,
+The HR Team

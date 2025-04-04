@@ -1,0 +1,77 @@
+Task:
+{{ task }}
+
+---
+
+{{ jobDescription }}
+
+---
+
+Resume Analysis Criteria:
+
+- Work Experience:
+  - Years of Experience: {{ yearsOfExperience }}
+  - Current/Most Recent Job: {{ currentMostRecentJob }}
+
+- Education:
+  - Highest Qualification: {{ highestQualification }}
+  - Major Field of Study: {{ majorFieldOfStudy }}
+  - Institution: {{ institution }}
+
+- Skills and Qualifications:
+  - Key Skills: {{ keySkills }}
+  - Software Proficiency: {{ softwareProficiency }}
+  - Certifications: {{ certifications }}
+
+- Job Specific Questions:
+  - Salary Expectation: {{ salaryExpectation }} Pesos per month
+  - Availability: {{ availability }}
+  - Job Applied For: {{ jobAppliedFor }}
+  - Why Interested in Role: {{ whyInterestedInRole }}
+
+---
+
+AI Analysis:
+
+After evaluating the applicant based on the above criteria, please provide the following information:
+
+1. Summary:
+   - A brief summary of the applicant’s overall suitability for the position, focusing on their experience, education, skills, and motivation.
+
+2. Score Breakdown:
+   - Do not be biased, give realistic scores
+   - Experience: {{ experienceScore }} (Rate 1 to 5 based on relevance and years of experience)
+   - Education: {{ educationScore }} (Rate 1 to 5 based on the relevance of their qualifications)
+   - Skills: {{ skillsScore }} (Rate 1 to 5 based on skill proficiency and alignment with job requirements)
+   - Motivation: {{ motivationScore }} (Rate 1 to 5 based on their motivation and job fit)
+
+3. Comments:
+   - Suggest a resonable salary per month for this person, philippines pesos.
+   - Do not be bias. use real data.
+   - Make it detailed, what do you think the kind of job this person deserves? entry? mid? or something else?
+   - Based on their skills, suggest a job better suited for this person.
+   - Provide any additional comments or insights that can help determine the next steps in the review process. This may include suggestions for further assessment or clarification of any aspects of the applicant's background.
+
+4. Recommendation: Yes? No? Need further Data
+---
+
+Please use the following output format exactly. Do not deviate as this mess up the text parser.
+
+Example response template:
+
+---
+
+## Summary:
+The applicant has extensive experience in {{ fieldRole }}, with strong qualifications in {{ specificAreas }}. Their skills are highly relevant to the role, and their motivation aligns with the company's goals.
+
+## Score Breakdown:
+- Experience: 0
+- Education: 0
+- Skills: 0
+- Motivation: 0
+
+## Comments: 
+The applicant has a solid foundation in {{ specificSkills }}. However, additional training in {{ specificArea }} could be beneficial. Their motivation is high, and their salary expectations are reasonable. Further discussion is recommended.
+
+## Recommendation: Yes? No? Need further Data? Redirection?
+---

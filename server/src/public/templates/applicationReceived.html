@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Application Received</title>
+</head>
+<body>
+
+  <p>Dear {{fullName}},</p>
+
+  <p>Thank you for applying for the <strong>{{jobTitle}}</strong> position. We have received your application and appreciate your interest in joining our team.</p>
+
+  <table>
+    <tr>
+      <td><strong>Position Applied:</strong></td>
+      <td>{{jobTitle}}</td>
+    </tr>
+    <tr>
+      <td><strong>Application Date:</strong></td>
+      <td>{{applicationDate}}</td>
+    </tr>
+    <tr>
+      <td><strong>Reference Number:</strong></td>
+      <td>{{referenceNumber}}</td>
+    </tr>
+  </table>
+
+  <p>Our hiring team will review your qualifications, and we will contact you if your application is shortlisted for the next stage of the selection process. If you do not hear from us within <strong>{{responseTimeframe}}</strong>, please feel free to follow up.</p>
+
+  <p>We appreciate your time and effort in applying and wish you the best in your job search.</p>
+
+  <p>Best regards,<br><strong>The HR Team</strong><br>{{companyName}}</p>
+
+</body>
+</html>

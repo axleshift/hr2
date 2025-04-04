@@ -1,4 +1,4 @@
 server/dist
 client/build
 node_modules/*
-server/src/public/*
+

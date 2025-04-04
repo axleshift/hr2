@@ -1,0 +1,4 @@
+You are tasked with reviewing a job application based on the following applicant's details. 
+Please analyze the application in terms of the following criteria: work experience, education, skills and qualifications, 
+and motivation for applying. Provide a summary of your findings along with a breakdown of the scores for each criterion. 
+You should also include any comments or insights that may assist in further evaluating the applicant.
