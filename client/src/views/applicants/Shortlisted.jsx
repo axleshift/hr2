@@ -25,6 +25,7 @@ import { AppContext } from '../../context/appContext'
 import { get } from '../../api/axios'
 import ScheduleForm from './modal/ScheduleForm'
 import { trimString } from '../../utils'
+import AppPagination from '../../components/AppPagination'
 
 const Shortlisted = () => {
   const { addToast } = useContext(AppContext)
@@ -58,11 +59,19 @@ const Shortlisted = () => {
       setIsLoading(true)
       const res = await get('/applicant/category/shortlisted')
       console.log(res.data)
-      setApplicants(res.data.data)
-      setIsLoading(false)
+      if (res.status === 200) {
+        setApplicants(res.data.data)
+        setIsLoading(false)
+      } else {
+        setApplicants([])
+      }
     } catch (error) {
+      addToast('Error', error, 'danger')
+    } finally {
       setIsLoading(false)
-      addToast('Error', 'An error occurred', 'danger')
+      setCurrentPage(1)
+      setTotalItems(0)
+      setTotalPages(0)
     }
   }
 
@@ -210,6 +219,17 @@ const Shortlisted = () => {
               applicantData={selectedApplicantData}
             />
           </CCol> */}
+        </CRow>
+        <CRow>
+          <CCol>
+            <div className="d-flex flex-row gap-2 justify-content-center align-items-center">
+              <AppPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          </CCol>
         </CRow>
         <CRow>
           <CCol>

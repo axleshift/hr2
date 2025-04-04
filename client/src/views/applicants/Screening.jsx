@@ -100,6 +100,9 @@ const Screening = () => {
   const [isScreeningHistoryModalVisible, setIsScreeningHistoryModalVisible] = useState(false)
   const [screeningFormState, setScreeningFormState] = useState('view')
 
+  // loading
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+
   // AI
   const [isAiScreeningLoading, setIsAiScreeningLoading] = useState(false)
 
@@ -275,6 +278,7 @@ const Screening = () => {
 
   const handleUpload = async () => {
     try {
+      setIsSubmitLoading(true)
       const formData = new FormData()
       formData.append('firstname', applicantData.firstname)
       formData.append('lastname', applicantData.lastname)
@@ -321,6 +325,8 @@ const Screening = () => {
       }
     } catch (error) {
       addToast('Error', 'an error occured', 'danger')
+    } finally {
+      setIsSubmitLoading(false)
     }
   }
 
@@ -340,6 +346,7 @@ const Screening = () => {
         addToast('Applicants', res.message.message, 'danger')
         setIsLoading(false)
         setSearchMode(false)
+        setApplicants([])
       }
     } catch (error) {
       addToast('Error', 'An error occurred', 'danger')
@@ -1212,7 +1219,7 @@ const Screening = () => {
                   </CRow> */}
                   <CRow className="mt-3">
                     <CCol className="d-flex justify-content-end mt-2">
-                      <CButton type="submit" color="primary">
+                      <CButton type="submit" color="primary" size="sm">
                         {isEdit ? 'Update' : 'Submit'}
                       </CButton>
                     </CCol>
@@ -1287,20 +1294,20 @@ const Screening = () => {
                       </CTableDataCell>
                     </CTableRow>
                   ) : (
-                    applicants.map((applicant, index) => {
+                    applicants.map((p, index) => {
                       return (
                         <CTableRow key={index}>
                           <CTableDataCell>
-                            <small>{trimString(applicant._id, 10)}</small>
+                            <small>{trimString(p._id, 10)}</small>
                           </CTableDataCell>
                           <CTableDataCell>
-                            {applicant.firstname}, {applicant.lastname} {applicant?.middlename}
+                            {p.firstname}, {p.lastname} {p?.middlename}
                           </CTableDataCell>
-                          <CTableDataCell>{applicant.email}</CTableDataCell>
-                          <CTableDataCell>{applicant.phone}</CTableDataCell>
+                          <CTableDataCell>{p.email}</CTableDataCell>
+                          <CTableDataCell>{p.phone}</CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex flex-wrap">
-                              {applicant.tags.map((tag, index) => {
+                              {p.tags.map((tag, index) => {
                                 const tagName = formTags.find(
                                   (formTag) => formTag._id === tag,
                                 )?.name
@@ -1315,7 +1322,7 @@ const Screening = () => {
                                   </CBadge>
                                 )
                               })}
-                              {applicant.isShortlisted && (
+                              {p.isShortlisted && (
                                 <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
                                   Shortlisted
                                 </CBadge>
@@ -1330,7 +1337,8 @@ const Screening = () => {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => {
-                                    setSelectedApplicant(applicant)
+                                    console.log(p)
+                                    setSelectedApplicant(p)
                                     setScreeningFormModalVisible(true)
                                     setScreeningFormState('create')
                                   }}
@@ -1365,7 +1373,7 @@ const Screening = () => {
                               <CButton
                                 color="warning"
                                 size="sm"
-                                onClick={() => handleGotoPage(applicant._id)}
+                                onClick={() => handleGotoPage(p._id)}
                               >
                                 Manage
                               </CButton>
@@ -1714,14 +1722,25 @@ const Screening = () => {
                     <span className="text-info">update</span>
                   ) : (
                     <span className="text-success">create</span>
-                  )}{' '}
+                  )}
                   the data.
                 </label>
               </div>
             </div>
-            <CButton color="primary" onClick={() => handleUpload()} disabled={!isFormChecked}>
-              {isEdit ? 'Update' : 'Submit'}
-            </CButton>
+            {isSubmitLoading ? (
+              <CButton color="primary" disabled>
+                <CSpinner size="sm" /> Loading..
+              </CButton>
+            ) : (
+              <CButton
+                color="primary"
+                size="sm"
+                onClick={() => handleUpload()}
+                disabled={!isFormChecked}
+              >
+                {isEdit ? 'Update' : 'Submit'}
+              </CButton>
+            )}
           </CModalFooter>
         </CModal>
 

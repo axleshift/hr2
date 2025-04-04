@@ -279,10 +279,10 @@ const Interviews = () => {
                               <CTableDataCell>{trimString(rec._id, 10)}</CTableDataCell>
                             </CTooltip>
                             <CTableDataCell>
-                              {rec.applicant.lastname}, {rec.applicant.firstname}
+                              {rec.applicant?.lastname}, {rec.applicant?.firstname}
                             </CTableDataCell>
                             <CTableDataCell>
-                              {rec.interviewer.lastname}, {rec.interviewer.firstname}
+                              {rec.interviewer?.lastname}, {rec.interviewer?.firstname}
                             </CTableDataCell>
                             <CTableDataCell>{rec.type}</CTableDataCell>
                             <CTableDataCell>{formatDate(rec.date)}</CTableDataCell>

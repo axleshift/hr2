@@ -170,6 +170,7 @@ const ApplicantProfilePage = () => {
 
   useEffect(() => {
     if (applicantId) {
+      console.log('Applicant Id', applicantId)
       getApplicant(applicantId)
     }
   }, [applicantId])
@@ -264,10 +265,10 @@ const ApplicantProfilePage = () => {
                     )}
                     <CRow className="mb-3">
                       <CCol className="d-flex justify-content-center">
-                        {applicant.isShortlisted &&
-                        applicant.isInitialInterview &&
-                        applicant.isFinalInterview &&
-                        applicant.isJobOffer ? (
+                        {applicant?.isShortlisted &&
+                        applicant?.isInitialInterview &&
+                        applicant?.isFinalInterview &&
+                        applicant?.isJobOffer ? (
                           <CButton color="warning" onClick={() => handleSendData()}>
                             Send Applicant Information to Employee Management
                           </CButton>
@@ -275,10 +276,10 @@ const ApplicantProfilePage = () => {
                           <CButton
                             color="secondary"
                             disabled={
-                              applicant.isShortlisted &&
-                              applicant.isInitialInterview &&
-                              applicant.isFinalInterview &&
-                              applicant.isJobOffer
+                              applicant?.isShortlisted &&
+                              applicant?.isInitialInterview &&
+                              applicant?.isFinalInterview &&
+                              applicant?.isJobOffer
                             }
                           >
                             Can&apos;t send data to Employee Mngmt, need Checklist to be completed
