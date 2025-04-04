@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 
 import {
@@ -42,11 +42,13 @@ import {
 } from '@coreui/react'
 
 import { get } from '../../../api/axios'
-import { formatDate } from '../../../utils'
-
+import { formatCurency, formatDate } from '../../../utils'
+import JobOfferForm from '../modal/JobOfferForm'
 import AppPagination from '../../../components/AppPagination'
+import { AuthContext } from '../../../context/authContext'
 
 const Interviews = ({ applicantId }) => {
+  const { userInformation } = useContext(AuthContext)
   const [docs, setDocs] = useState([])
   const [interviews, setInterviews] = useState([])
   const [isInterviewLoading, setIsInterviewLoading] = useState(false)
@@ -56,6 +58,10 @@ const Interviews = ({ applicantId }) => {
   const [itemsPerPage, setItemsPerPage] = useState(3)
   const [totalPages, setTotalPages] = useState(0)
   const [totalItems, setTotalItems] = useState(0)
+
+  // job offer form state
+  const [jobofferFormState, setJobofferFormState] = useState('view')
+  const [jobofferFormIsVisible, setJobofferFormIsVisible] = useState(false)
 
   const getHeaderColor = (index) => {
     return index % 2 === 0 ? '' : '#6c757d'
@@ -94,7 +100,7 @@ const Interviews = ({ applicantId }) => {
     <>
       <CContainer className="mt-3 mb-3">
         <CRow className="mb-3">
-          <CCol className="d-flex justify-content-end">
+          <CCol className="d-flex justify-content-end gap-2">
             <CButton
               color="primary"
               size="sm"
@@ -111,6 +117,26 @@ const Interviews = ({ applicantId }) => {
                 'Refresh'
               )}
             </CButton>
+            {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+              <CButton
+                color="warning"
+                size="sm"
+                disabled={isInterviewLoading || interviews.length === 0}
+                onClick={() => {
+                  setJobofferFormIsVisible(true)
+                  setJobofferFormState('create')
+                }}
+              >
+                {isInterviewLoading ? (
+                  <>
+                    <CSpinner size="sm" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  'Issue Job Offer'
+                )}
+              </CButton>
+            )}
           </CCol>
         </CRow>
         {isInterviewLoading ? (
@@ -250,6 +276,19 @@ const Interviews = ({ applicantId }) => {
                         )}
                         <CRow className="mb-3">
                           <CCol>
+                            <CFormInput
+                              label="Salary Expectation"
+                              readOnly
+                              defaultValue={
+                                int.salaryExpectation
+                                  ? formatCurency(parseInt(int.salaryExpectation))
+                                  : 'No data'
+                              }
+                            />
+                          </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                          <CCol>
                             <CFormTextarea label="Strength" readOnly defaultValue={int.strength} />
                           </CCol>
                         </CRow>
@@ -295,6 +334,19 @@ const Interviews = ({ applicantId }) => {
                 onPageChange={setCurrentPage}
               />
             </div>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <JobOfferForm
+              isVisible={jobofferFormIsVisible}
+              onClose={() => {
+                setJobofferFormIsVisible(false)
+                setJobofferFormState('view')
+              }}
+              state={jobofferFormState}
+              applicantId={applicantId}
+            />
           </CCol>
         </CRow>
       </CContainer>

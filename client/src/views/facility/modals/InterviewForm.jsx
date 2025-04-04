@@ -43,14 +43,15 @@ import { formatDate } from '../../../utils'
 
 const interviewSchema = z.object({
   date: z.string().nonempty('Date is required'),
+  job: z.string().min(1, { message: 'Job is required' }),
   type: z.enum(['Phone', 'Video', 'In-Person']),
   general: z.object({
-    communication: z.number().min(1).max(5).default(1),
-    technical: z.number().min(1).max(5).default(1),
-    problemSolving: z.number().min(1).max(5).default(1), // Fixed typo
-    culturalFit: z.number().min(1).max(5).default(1),
-    workExperienceRelevance: z.number().min(1).max(5).default(1),
-    leadership: z.number().min(1).max(5).default(1),
+    communication: z.coerce.number().min(1).max(5).default(1),
+    technical: z.coerce.number().min(1).max(5).default(1),
+    problemSolving: z.coerce.number().min(1).max(5).default(1), // Fixed typo
+    culturalFit: z.coerce.number().min(1).max(5).default(1),
+    workExperienceRelevance: z.coerce.number().min(1).max(5).default(1),
+    leadership: z.coerce.number().min(1).max(5).default(1),
   }),
   questions: z
     .array(
@@ -60,17 +61,19 @@ const interviewSchema = z.object({
       }),
     )
     .optional(),
+  salaryExpectation: z.coerce.number().min(1).default(1),
   strength: z.string().optional(),
   weakness: z.string().optional(),
   recommendation: z.enum(['yes', 'no', 'need further review']),
   finalComments: z.string().optional(),
 })
 
-const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicantData }) => {
+const InterviewForm = ({ isVisible, onClose, state, eventData, applicantData }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
 
   const [interviews, setInterviews] = useState([])
+  const [interview, setInterview] = useState([])
   const [isInterviewsLoading, setIsInterviewsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -91,7 +94,11 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
     watch,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(interviewSchema),
+    resolver: async (data, context, options) => {
+      const result = await zodResolver(interviewSchema)(data, context, options)
+      console.log('Validation result:', result)
+      return result
+    },
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -134,9 +141,10 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
 
   const onSubmit = async (data) => {
     try {
-      const res = isEdit
-        ? await put(`/interviews/update/${eventData._id}`, data)
-        : await post('/interviews/create', data)
+      const res =
+        formState === 'edit'
+          ? await put(`/applicant/interview/${interview._id}`, data)
+          : await post(`/applicant/interview/${applicantData._id}/${eventData._id}`, data)
 
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Interview saved successfully', 'success')
@@ -149,8 +157,10 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
   }
 
   const handleView = (item) => {
+    setFormState('edit')
     reset({
       date: item.date ? item.date.split('T')[0] : '',
+      job: item.job ? item.job : '',
       type: item.type || 'Phone',
       general: {
         communication: item.general?.communication || 1,
@@ -161,6 +171,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
         leadership: item.general?.leadership || 1,
       },
       questions: item.questions?.length ? item.questions : [{ question: '', remark: '' }],
+      salaryExpectation: item.salaryExpectation || 1,
       strength: item.strength || '',
       weakness: item.weakness || '',
       recommendation: item.recommendation || 'yes',
@@ -172,6 +183,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
   const handleFormReset = () => {
     reset({
       applicant: '',
+      job: '',
       date: '',
       type: 'Phone',
       general: {
@@ -182,6 +194,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
         workExperienceRelevance: 1,
         leadership: 1,
       },
+      salaryExpectation: 1,
       strength: '',
       weakness: '',
       recommendation: 'yes',
@@ -210,9 +223,10 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
 
   useEffect(() => {
     if (isVisible) {
+      setFormState(state)
       getAllInterviews()
     }
-  }, [isVisible])
+  }, [isVisible, state])
 
   return (
     <CModal
@@ -224,7 +238,8 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
       size="xl"
     >
       <CModalHeader>
-        <CModalTitle>{isEdit ? 'Edit Interview' : 'Interview Form'}</CModalTitle>
+        {/* <CModalTitle>{isEdit ? 'Edit Interview' : 'Interview Form'}</CModalTitle> */}
+        <CModalTitle>{formState === 'edit' ? 'Edit Interview' : 'Interview Form'}</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CTabs activeItemKey={'form'}>
@@ -301,7 +316,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                         max={5}
                         step={1}
                         default={1}
-                        {...register(`general.${field}`)}
+                        {...register(`general.${field}`, { valueAsNumber: true })}
                         invalid={!!errors.general?.[field]}
                       />
                       {errors.general?.[field] && (
@@ -374,6 +389,27 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                 </CRow>
                 <CRow className="mb-3">
                   <CCol>
+                    <CFormInput
+                      label="Job / Position Applied For"
+                      {...register('job')}
+                      invalid={!!errors.job}
+                    ></CFormInput>
+                    {errors.job && <CFormFeedback invalid>{errors.job.message}</CFormFeedback>}
+                  </CCol>
+                  <CCol>
+                    <CFormInput
+                      type="number"
+                      label="Salary Expectations"
+                      {...register('salaryExpectation', { valueAsNumber: true })}
+                      invalid={!!errors.salaryExpectation}
+                    ></CFormInput>
+                    {errors.salaryExpectation && (
+                      <CFormFeedback invalid>{errors.salaryExpectation.message}</CFormFeedback>
+                    )}
+                  </CCol>
+                </CRow>
+                <CRow className="mb-3">
+                  <CCol>
                     <CFormSelect
                       label="Recommendation"
                       {...register('recommendation')}
@@ -407,7 +443,8 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                   <CCol className="d-flex justify-content-end">
                     {['admin', 'interviewer', 'manager'].includes(userInformation.role) ? (
                       <CButton type="submit" color="primary" size="sm">
-                        {isEdit ? 'Update' : 'Create'}
+                        {/* {isEdit ? 'Update' : 'Create'} */}
+                        {formState === 'edit' ? 'Update' : 'Create'}
                       </CButton>
                     ) : (
                       <CButton color="danger" size="sm" disabled>
@@ -429,6 +466,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                             <CTableHeaderCell>Interviewer</CTableHeaderCell>
                             <CTableHeaderCell>Type</CTableHeaderCell>
                             <CTableHeaderCell>Event Type</CTableHeaderCell>
+                            <CTableHeaderCell>Job</CTableHeaderCell>
                             <CTableHeaderCell>Recommendation</CTableHeaderCell>
                             <CTableHeaderCell>Created</CTableHeaderCell>
                             <CTableHeaderCell>Actions</CTableHeaderCell>
@@ -459,6 +497,7 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                                     </CTableDataCell>
                                     <CTableDataCell>{int.type}</CTableDataCell>
                                     <CTableDataCell>{int?.event?.type}</CTableDataCell>
+                                    <CTableDataCell>{int?.job}</CTableDataCell>
                                     <CTableDataCell className="text-capitalize">
                                       {int.recommendation}
                                     </CTableDataCell>
@@ -469,7 +508,10 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
                                       <CButton
                                         color="primary"
                                         size="sm"
-                                        onClick={() => handleView(int)}
+                                        onClick={() => {
+                                          handleView(int)
+                                          setInterview(int)
+                                        }}
                                       >
                                         View
                                       </CButton>
@@ -507,7 +549,6 @@ const InterviewForm = ({ isVisible, onClose, isEdit, state, eventData, applicant
 InterviewForm.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
-  isEdit: propTypes.bool.isRequired,
   state: propTypes.string,
   eventData: propTypes.object,
   applicantData: propTypes.object,

@@ -14,7 +14,7 @@ import {
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
-import { createInterview, getAllInterview, updateInterview } from "../../database/v1/controllers/interviewController";
+import { createInterview, getAllInterview, getAllRecentInterviews, updateInterview } from "../../database/v1/controllers/interviewController";
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
 
 router.post(
@@ -202,6 +202,26 @@ router.get(
   getAllInterview
 )
 
+router.get(
+  "/interview/recent",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllRecentInterviews
+)
+
+
+router.get(
+  "/interview/:interviewId",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  },
+    true,
+  ),
+  getAllInterview
+)
 
 export default {
   metadata: {

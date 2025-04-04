@@ -243,13 +243,13 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       interview: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Document",
+          ref: "InterviewForm",
         }
       ],
-      training: [
+      jobOffer: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Document",
+          ref: "jobOfferForm",
         }
       ],
       others: [

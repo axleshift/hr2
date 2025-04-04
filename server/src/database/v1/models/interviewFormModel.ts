@@ -1,9 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
+const RECO_STATUS = ['yes', 'no', 'need further review']
 
 interface IInterviewForm extends Document {
   applicant: mongoose.Types.ObjectId;
+  // job: mongoose.Types.ObjectId;
+  job: string;
   date: Date;
   interviewer: mongoose.Types.ObjectId;
   type: 'Phone' | 'Video' | 'In-Person';
@@ -20,8 +23,13 @@ interface IInterviewForm extends Document {
     question: string;
     remark: string;
   }[];
+  salaryExpectation: number;
   strength: string;
   weakness: string;
+  isReviewed: {
+    status: boolean,
+    by: mongoose.Types.ObjectId,
+  }
   recommendation: 'yes' | 'no' | 'need further review';
   finalComments: string;
 }
@@ -30,8 +38,15 @@ const interviewFormSchema = new Schema<IInterviewForm>(
   {
     applicant: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Applicants',
+      ref: 'Applicant',
       required: true,
+    },
+    // job: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Job',
+    // },
+    job: {
+      type: String,
     },
     date: {
       type: Date,
@@ -65,12 +80,25 @@ const interviewFormSchema = new Schema<IInterviewForm>(
         remark: { type: String, default: '' },
       },
     ],
+    salaryExpectation: {
+      type: Number,
+      default: 0,
+    },
     strength: { type: String, default: '' },
     weakness: { type: String, default: '' },
     recommendation: {
       type: String,
-      enum: ['yes', 'no', 'need further review'],
+      enum: RECO_STATUS,
       default: 'need further review',
+    },
+    isReviewed: {
+      status: {
+        type: Boolean,
+        default: false,
+      },
+      by: {
+        type: mongoose.Types.ObjectId,
+      }
     },
     finalComments: { type: String, default: '' },
   },
