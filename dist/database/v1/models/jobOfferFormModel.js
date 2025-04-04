@@ -78,6 +78,22 @@ const jobOfferFormSchema = new mongoose_1.Schema({
     responseDate: {
         type: Date,
     },
+    approvedBy: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    approvedDate: {
+        type: Date,
+    },
+    emailsent: {
+        type: Boolean,
+    },
+    emailSentDate: {
+        type: Date,
+    },
+    expires: {
+        type: Date,
+    },
     notes: {
         type: String,
         default: '',

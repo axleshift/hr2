@@ -127,6 +127,28 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false,
     },
+    statuses: {
+        isShortlisted: {
+            type: Boolean,
+            default: false,
+        },
+        isInitialInterview: {
+            type: Boolean,
+            default: false,
+        },
+        isFinalInterview: {
+            type: Boolean,
+            default: false,
+        },
+        isJobOffer: {
+            type: Boolean,
+            default: false,
+        },
+        isHired: {
+            type: Boolean,
+            default: false,
+        },
+    },
     isShortlisted: {
         type: Boolean,
         default: false,
@@ -139,7 +161,7 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false,
     },
-    isInTraining: {
+    isJobOffer: {
         type: Boolean,
         default: false,
     },
@@ -168,12 +190,10 @@ const applicantSchema = new mongoose_1.default.Schema({
                 ref: "InterviewForm",
             }
         ],
-        jobOffer: [
-            {
-                type: mongoose_1.default.Schema.Types.ObjectId,
-                ref: "jobOfferForm",
-            }
-        ],
+        jobOffer: {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "jobOfferForm",
+        },
         others: [
             {
                 type: mongoose_1.default.Schema.Types.ObjectId,

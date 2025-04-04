@@ -175,7 +175,7 @@ const getInterviewById = async (req, res) => {
             {
                 path: "applicant",
                 model: "Applicant",
-                select: "_id firstname lastname"
+                select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
             },
             {
                 path: "interviewer",
@@ -238,7 +238,7 @@ const getAllInterview = async (req, res) => {
                 {
                     path: "applicant",
                     model: "Applicant",
-                    select: "_id firstname lastname"
+                    select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
                 },
                 {
                     path: "interviewer",
@@ -299,7 +299,7 @@ const getAllRecentInterviews = async (req, res) => {
                 {
                     path: "applicant",
                     model: "Applicant",
-                    select: "_id firstname lastname"
+                    select: "_id firstname lastname isShortlisted isInitialInterview isisFinalInterview isJobOffer isHired"
                 },
                 {
                     path: "interviewer",

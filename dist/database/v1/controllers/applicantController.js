@@ -171,7 +171,7 @@ const updateStat = async (req, res) => {
             "isShortlisted",
             "isInitialInterview",
             "isFinalInterview",
-            "isInTraining",
+            "isJobOffer",
             "isHired",
         ];
         if (!validStatuses.includes(stat)) {

@@ -10,6 +10,7 @@ const applicantController_1 = require("../../database/v1/controllers/applicantCo
 const screeningController_1 = require("../../database/v1/controllers/screeningController");
 const interviewController_1 = require("../../database/v1/controllers/interviewController");
 const facilityController_1 = require("../../database/v1/controllers/facilityController");
+const jobofferController_1 = require("../../database/v1/controllers/jobofferController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager"],
 }, true), applicantController_1.addNewResume);
@@ -68,11 +69,30 @@ router.get("/interview/all/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
 }, true), interviewController_1.getAllInterview);
 router.get("/interview/recent", (0, verifySession_1.default)({
-    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
 }, true), interviewController_1.getAllRecentInterviews);
 router.get("/interview/:interviewId", (0, verifySession_1.default)({
-    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
 }, true), interviewController_1.getAllInterview);
+// job offer
+router.post("/joboffer/:applicantId/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.createJoboffer);
+router.post("/joboffer/send-email/:jobofferId", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.sendJobOfferMail);
+router.put("/joboffer/:jobofferId/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.updateJoboffer);
+router.get("/joboffer/all/:applicantId/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.getAllJoboffer);
+router.get("/joboffer/recent/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.getAllRecentJoboffer);
+router.get("/joboffer/:applicantId", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}, true), jobofferController_1.getJobofferById);
 exports.default = {
     metadata: {
         path: "/applicant",
