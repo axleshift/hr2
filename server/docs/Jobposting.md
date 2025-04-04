@@ -212,7 +212,7 @@ This API allows external HR systems to retrieve all job postings created by the 
 #### **Successful Job Fetch**
 
 ```http
-GET /request/jobposting?query=engineer&page=1&limit=5&sort=desc HTTP/1.1
+GET /request/jobposting/all?query=engineer&page=1&limit=5&sort=desc HTTP/1.1
 Host: https://backend-hr2.axleshift.com/api/v1/
 x-api-key: your-api-key
 ```
