@@ -184,12 +184,12 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
               </CButton>
             )}
             {isSubmitLoading ? (
-              <CButton color="primary" type="submit">
-                {isEdit ? 'Update' : 'Create'}
-              </CButton>
-            ) : (
               <CButton color="primary" type="submit" disabled={!isSubmitLoading}>
                 <CSpinner size="sm" /> Loading...
+              </CButton>
+            ) : (
+              <CButton color="primary" type="submit">
+                {isEdit ? 'Update' : 'Create'}
               </CButton>
             )}
           </CModalFooter>
