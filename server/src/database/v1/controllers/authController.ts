@@ -17,8 +17,6 @@ export const createUser = async (req: req, res: res) => {
   const { firstname, lastname, email, username, password } = req.body;
   if (!firstname || !lastname || !email || !username || !password) {
     return res.status(400).json({
-      statusCode: 400,
-      success: false,
       message: "Please provide all required fields",
     });
   }
@@ -55,16 +53,13 @@ export const createUser = async (req: req, res: res) => {
     });
 
     res.status(201).json({
-      statusCode: 201,
-      success: true,
       message: "User created successfully",
       user,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      statusCode: 500,
-      success: false,
+
       message: "Error creating user",
       error,
     });
@@ -80,8 +75,6 @@ export const login = async (req: req, res: res) => {
 
     if (!user) {
       return res.status(404).json({
-        statusCode: 404,
-        success: false,
         message: "User not found",
       });
     }
@@ -90,8 +83,6 @@ export const login = async (req: req, res: res) => {
 
     if (!isPasswordValid) {
       return res.status(401).json({
-        statusCode: 401,
-        success: false,
         message: "Invalid credentials",
       });
     }
@@ -119,8 +110,6 @@ export const login = async (req: req, res: res) => {
     req.session.regenerate((err) => {
       if (err) {
         return res.status(500).json({
-          statusCode: 500,
-          success: false,
           message: "Error regenerating session",
         });
       }
@@ -129,15 +118,11 @@ export const login = async (req: req, res: res) => {
       req.session.save((saveErr) => {
         if (saveErr) {
           return res.status(500).json({
-            statusCode: 500,
-            success: false,
             message: "Error saving session",
           });
         }
 
         res.status(200).json({
-          statusCode: 200,
-          success: true,
           message: "User logged in successfully",
           data: userData,
         });
@@ -146,8 +131,7 @@ export const login = async (req: req, res: res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      statusCode: 500,
-      success: false,
+
       message: "Error logging in",
       error,
     });
@@ -159,23 +143,18 @@ export const verify = async (req: req, res: res) => {
     const user = req.session.user;
     if (user) {
       res.status(200).json({
-        statusCode: 200,
-        success: true,
         message: "User verified successfully",
         data: user,
       });
     } else {
       res.status(404).json({
-        statusCode: 404,
-        success: false,
         message: "User not found",
       });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      statusCode: 500,
-      success: false,
+
       message: "Error verifying user",
       error,
     });
@@ -186,8 +165,6 @@ export const logout = async (req: req, res: res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({
-        statusCode: 500,
-        success: false,
         message: "Error destroying session",
       });
     }
@@ -200,8 +177,6 @@ export const logout = async (req: req, res: res) => {
     });
 
     res.status(200).json({
-      statusCode: 200,
-      success: true,
       message: "Logged out successfully",
     });
   });
@@ -215,8 +190,6 @@ export const verifyEmail = async (req: req, res: res) => {
 
     if (!id || !code) {
       return res.status(400).json({
-        statusCode: 400,
-        success: false,
         message: "Please provide all required fields",
       });
     }
@@ -226,8 +199,6 @@ export const verifyEmail = async (req: req, res: res) => {
     // check if user exists
     if (!user) {
       return res.status(404).json({
-        statusCode: 404,
-        success: false,
         message: "User not found",
       });
     }
@@ -240,23 +211,17 @@ export const verifyEmail = async (req: req, res: res) => {
       });
 
       res.status(200).json({
-        statusCode: 200,
-        success: true,
         message: "Email verified successfully",
         data: updated,
       });
     } else {
       return res.status(400).json({
-        statusCode: 400,
-        success: false,
         message: "Invalid or expired verification code",
       });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      statusCode: 500,
-      success: false,
       message: "Error verifying email",
       error,
     });
@@ -276,7 +241,6 @@ export const googleAuth = async (req:req, res:res) => {
     res.status(500).json({ message: error})
   }  
 }
-
 
 export const googleCallback = async (req: req, res: res) => {
   try {
@@ -320,8 +284,15 @@ export const googleCallback = async (req: req, res: res) => {
       status: user.status,
       emailVerifiedAt: user.emailVerifiedAt,
     };
+
+    const url = config.google.oauth2.clientRedirect as unknown as string
     
-    res.redirect('http://localhost:3000/dashboard'); // or your React route
+    if (!url) {
+      console.error("Missing Google OAuth client redirect URL");
+      return res.status(500).json({ message: "Missing redirect URL" });
+    }
+    
+    res.redirect(url);
     
   } catch (error) {
     console.error(500)

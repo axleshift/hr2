@@ -5,7 +5,8 @@ import { config } from '../../config';
 export const oauth2Client = new google.auth.OAuth2(
   config.google.oauth2.id,
   config.google.oauth2.secret,
-  'http://localhost:8000/api/v1/auth/google/callback',
+  config.google.oauth2.redirectURI,
+  // 'http://localhost:8000/api/v1/auth/google/callback',
 );
 
 // scopes: profile and email

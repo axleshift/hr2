@@ -46,6 +46,7 @@ export const config = {
       id: process.env.GOOGLE_CLIENT_ID,
       secret: process.env.GOOGLE_CLIENT_SECRET,
       redirectURI: process.env.GOOGLE_REDIRECT_URI,
+      clientRedirect: process.env.GOOGLE_CLIENT_REDIRECT,
     },
     smtp: {
       host: process.env.SMTP_HOST,
