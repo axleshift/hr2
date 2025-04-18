@@ -10,5 +10,8 @@ export const config = {
       siteKey: import.meta.env.VITE_REACT_GOOGLE_RECAPTCHA_SITE_KEY,
       secretKey: import.meta.env.VITE_REACT_GOOGLE_RECAPTCHA_SECRET_KEY,
     },
+    oAuth2: {
+      clientId: import.meta.env.VITE_REACT_GOOGLE_CLIENT_ID,
+    },
   },
 }

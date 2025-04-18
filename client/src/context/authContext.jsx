@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifySession = async () => {
     try {
-      const res = await get('/auth/verify')
+      const res = await get('/auth/me')
       if (res.status === 200) {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)

@@ -42,6 +42,11 @@ export const config = {
 
   google: {
     key: process.env.GOOGLE_FORMS_KEY,
+    oauth2: {
+      id: process.env.GOOGLE_CLIENT_ID,
+      secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirectURI: process.env.GOOGLE_REDIRECT_URI,
+    },
     smtp: {
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,

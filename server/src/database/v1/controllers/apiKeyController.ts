@@ -1,14 +1,9 @@
-import { Request as res, Response as req } from "express";
+import { Request as req, Response as res } from "express";
 
 import apiKey from "../models/apikeyModel";
 import logger from "../../../middlewares/logger";
 
-interface CustomRequest extends res {
-  permissions?: string[];
-  user?: { _id: string };
-}
-
-export const generateApikey = async (req: CustomRequest, res: req) => {
+export const generateApikey = async (req: req, res: res) => {
   try {
     if (!req.user) {
       return res.status(400).json({
@@ -17,7 +12,9 @@ export const generateApikey = async (req: CustomRequest, res: req) => {
         message: "User not authenticated",
       });
     }
-    const apiKeyData = await apiKey.find({ owner: req.user._id });
+
+    const userId = req.session.user?._id
+    const apiKeyData = await apiKey.find({ owner: userId });
 
     return res.status(200).json({
       statusCode: 200,
@@ -34,7 +31,7 @@ export const generateApikey = async (req: CustomRequest, res: req) => {
   }
 };
 
-export const updateApikey = async (req: CustomRequest, res: req) => {
+export const updateApikey = async (req: req, res: res) => {
   try {
     const { permissions, expiresAt } = req.body;
     const { id } = req.params;
@@ -69,14 +66,16 @@ export const updateApikey = async (req: CustomRequest, res: req) => {
   }
 };
 
-export const createApikey = async (req: CustomRequest, res: req) => {
+export const createApikey = async (req: req, res: res) => {
   try {
     const { permissions, expiresAt } = req.body;
     const key = Math.random().toString(36).substring(7);
 
+    const userId = req.session.user?._id
+
     const apiKeyData = await apiKey.create({
       key: key,
-      owner: req.user ? req.user._id : undefined,
+      owner: req.user ? userId : undefined,
       permissions: permissions || [],
       expiresAt: expiresAt || new Date(),
     });

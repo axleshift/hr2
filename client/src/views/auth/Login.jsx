@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { config } from '../../config'
 import ReCAPTCHA from 'react-google-recaptcha'
+import GoogleButton from 'react-google-button'
 import {
   CButton,
   CCard,
@@ -26,6 +27,7 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { post } from '../../api/axios'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -48,19 +50,6 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   })
-
-  // const onSubmit = (data) => {
-  //   setIsLoading(true)
-  //   const token = recaptchaRef.current.getValue()
-  //   login(data.username, data.password, (success) => {
-  //     setIsLoading(false)
-  //     if (success) {
-  //       navigate('/dashboard/overview')
-  //     } else {
-  //       setErrorMessage('Invalid username or password')
-  //     }
-  //   })
-  // }
 
   const onSubmit = (data) => {
     setIsLoading(true)
@@ -90,15 +79,19 @@ const Login = () => {
       return
     }
 
+    // Call login function and check success
     login(formData.username, formData.password, (success) => {
       setIsLoading(false)
       if (success) {
-        // navigate('/dashboard/overview')
         navigate('/recruitment/jobposting')
       } else {
         setErrorMessage('Invalid username or password')
       }
     })
+  }
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8000/api/v1/auth/google'
   }
 
   useEffect(() => {
@@ -181,7 +174,7 @@ const Login = () => {
                     </small>
                   </p>
 
-                  <div className="d-grid">
+                  <div className="d-grid mb-3">
                     <CButtonGroup>
                       {!isLoading ? (
                         <>
@@ -199,6 +192,13 @@ const Login = () => {
                       )}
                     </CButtonGroup>
                   </div>
+
+                  <div className="d-flex justify-content-center">
+                    <p className="text-muted fs-6"> OR </p>
+                  </div>
+
+                  {/* <GoogleLogin onSuccess={handleOAuth2Success} onError={handleOAuth2Error} /> */}
+                  <GoogleButton onClick={() => handleGoogleLogin()} />
                 </CForm>
               </CCardBody>
             </CCard>

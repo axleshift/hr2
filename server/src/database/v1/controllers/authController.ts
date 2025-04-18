@@ -6,6 +6,9 @@ import jwt from "jsonwebtoken";
 import { config } from "../../../config";
 import dotenv from "dotenv";
 import logger from "../../../middlewares/logger";
+import { oauth2Client } from "../../../config/v1/google";
+import { google } from 'googleapis';
+import userModel from "../models/userModel";
 dotenv.config();
 
 const salt = bcrypt.genSaltSync(10);
@@ -82,8 +85,8 @@ export const login = async (req: req, res: res) => {
         message: "User not found",
       });
     }
-
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    const userPass = user.password as string
+    const isPasswordValid = bcrypt.compareSync(password, userPass);
 
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -98,8 +101,10 @@ export const login = async (req: req, res: res) => {
       expiresIn: "1h",
     });
 
+    const userID = user._id.toString() as string;
+
     const userData = {
-      _id: user._id.toString(),
+      _id: userID,
       firstname: user.firstname,
       lastname: user.lastname,
       username: user.username,
@@ -257,3 +262,69 @@ export const verifyEmail = async (req: req, res: res) => {
     });
   }
 };
+
+export const googleAuth = async (req:req, res:res) => {
+  try {
+    const scopes = ['profile', 'email'];
+    const url = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: scopes,
+    });
+    res.redirect(url);
+  } catch (error) {
+    console.error(500)
+    res.status(500).json({ message: error})
+  }  
+}
+
+
+export const googleCallback = async (req: req, res: res) => {
+  try {
+    const code = req.query.code as string;
+
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+  
+    const oauth2 = google.oauth2({
+      auth: oauth2Client,
+      version: 'v2',
+    });
+
+    const userInfo = await oauth2.userinfo.get();
+    const googleUser = userInfo.data;
+  
+    let user = await userModel.findOne({ googleId: googleUser.id})
+
+    if (!user) {
+      user = new userModel({
+        googleId: googleUser.id,
+        email: googleUser.email,
+        name: googleUser.name,
+        firstname: googleUser.given_name || 'Google',
+        lastname: googleUser.family_name || 'User',
+        username: googleUser.email?.split('@')[0] || `user${Date.now()}`,
+        role: 'user',
+        status: 'active',
+        emailVerifiedAt: new Date(),
+      });
+      await user.save();
+    }
+    
+    req.session.user = {
+      _id: user._id.toString(),
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
+      role: user.role,
+      email: user.email,
+      status: user.status,
+      emailVerifiedAt: user.emailVerifiedAt,
+    };
+    
+    res.redirect('http://localhost:3000/dashboard'); // or your React route
+    
+  } catch (error) {
+    console.error(500)
+    res.status(500).json({ message: error})
+  }
+}

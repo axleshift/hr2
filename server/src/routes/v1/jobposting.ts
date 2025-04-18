@@ -11,9 +11,7 @@ router.post(
   "/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   createJobposting
 );
 
@@ -21,54 +19,42 @@ router.get(
   "/search",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   searchJobpostings
 );
 router.get(
   "/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getAllJobpostings
 );
 router.get(
   "/scheduled",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getAllScheduledJobpostings
 );
 router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getJobpostingById
 );
 router.put(
   "/:id",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   updateJobposting
 );
 router.delete(
   "/:id",
   verifySession({
     permissions: ["user", "admin"],
-  },
-    true,
-  ),
+  }),
   deleteJobposting
 );
 
