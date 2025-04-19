@@ -12,6 +12,7 @@ export const config = {
     },
     oAuth2: {
       clientId: import.meta.env.VITE_REACT_GOOGLE_CLIENT_ID,
+      url: import.meta.env.VITE_REACT_GOOGLE_AUTH,
     },
   },
 }

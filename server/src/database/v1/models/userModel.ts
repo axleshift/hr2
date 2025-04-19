@@ -16,6 +16,8 @@ export interface IUserBase{
     expiresAt?: Date;
   };
   rememberToken?: string;
+  otp: IOtp | null;
+  knownDevices: string[];
   googleId?: string; // Google OAuth ID
   displayName?: string; // Google display name
   googleEmail?: string; // Google email
@@ -31,7 +33,12 @@ export interface IUser extends IUserBase, Document {
   _id: Types.ObjectId,
 }
 
-const verificationSchema = new mongoose.Schema({
+export interface IOtp {
+  code: string;
+  expiresAt: Date;
+}
+
+const verificationSchema = new mongoose.Schema<IVerification>({
   code: {
     type: String,
     required: true,
@@ -41,6 +48,15 @@ const verificationSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+const OtpSchema = new mongoose.Schema<IOtp>({
+  code: {
+    type: String,
+  },
+  expiresAt: {
+    type: Date
+  }
+})
 
 const userSchema = new mongoose.Schema<IUserBase>(
   {
@@ -98,6 +114,12 @@ const userSchema = new mongoose.Schema<IUserBase>(
       type: String,
       required: false,
     },
+    otp: {
+      type: OtpSchema
+    },
+    knownDevices: [{
+      type: String,
+    }],
     // Google-related fields
     googleId: {
       type: String,

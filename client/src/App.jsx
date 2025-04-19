@@ -16,6 +16,7 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 const Login = React.lazy(() => import('./views/auth/Login'))
 const Register = React.lazy(() => import('./views/auth/Register'))
 const VerifyEmail = React.lazy(() => import('./views/auth/VerifyEmail'))
+const OTPPage = React.lazy(() => import('./views/auth/Otp'))
 
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 const Page500 = React.lazy(() => import('./views/errors/Page500'))
@@ -55,6 +56,7 @@ const App = () => {
               <Routes>
                 <Route path="/login" name="Login Page" element={<Login />} />
                 <Route path="/register" name="Register Page" element={<Register />} />
+                <Route path="/otp" name="OTP Page" element={<OTPPage />} />
                 <Route path="/404" name="Page 404" element={<Page404 />} />
                 <Route path="/500" name="Page 500" element={<Page500 />} />
                 <Route path="/PolicyTerms" name="Privacy Policy And Terms" element={<Policy />} />

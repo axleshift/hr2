@@ -24,6 +24,7 @@ import MongoStore from "connect-mongo";
 import errorHandler from "./middlewares/errorHandler";
 import verifyApiKey from "./middlewares/verifyApiKey";
 import { verifyMailConn } from "./utils/mailHandler";
+import useragent from "express-useragent"
 
 const app: Application = express();
 const host = config.server.host;
@@ -75,6 +76,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(useragent.express());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
 const env = config.env;

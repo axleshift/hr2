@@ -4,7 +4,7 @@ const router = Router();
 import dotenv from 'dotenv';
 dotenv.config();
 // import verifySession from '../../middlewares/verifySession';
-import { createUser, logout, verify, googleAuth, googleCallback, login } from '../../database/v1/controllers/authController';
+import { createUser, logout, verify, googleAuth, googleCallback, login, sendOTP, verifyOTP } from '../../database/v1/controllers/authController';
 router.post(
   '/register',
   createUser
@@ -24,6 +24,16 @@ router.get(
   '/me',
   verify
 );
+
+router.post(
+  '/send-otp',
+  sendOTP
+)
+
+router.post(
+  '/verify-otp',
+  verifyOTP
+)
 
 // Google OAuth
 router.get('/google', 
