@@ -1,34 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Application Received</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fb;
+      color: #333;
+    }
+    .email-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .email-body {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+    .email-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .email-table th, .email-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    .email-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
+  <div class="email-container">
+    <div class="email-body">
+      <p>Dear {{fullName}},</p>
 
-  <p>Dear {{fullName}},</p>
+      <p>Thank you for applying for the <strong>{{jobTitle}}</strong> position. We have received your application and appreciate your interest in joining our team.</p>
 
-  <p>Thank you for applying for the <strong>{{jobTitle}}</strong> position. We have received your application and appreciate your interest in joining our team.</p>
+      <table class="email-table">
+        <tr>
+          <th>Position Applied</th>
+          <td>{{jobTitle}}</td>
+        </tr>
+        <tr>
+          <th>Application Date</th>
+          <td>{{applicationDate}}</td>
+        </tr>
+        <tr>
+          <th>Reference Number</th>
+          <td>{{referenceNumber}}</td>
+        </tr>
+      </table>
 
-  <table>
-    <tr>
-      <td><strong>Position Applied:</strong></td>
-      <td>{{jobTitle}}</td>
-    </tr>
-    <tr>
-      <td><strong>Application Date:</strong></td>
-      <td>{{applicationDate}}</td>
-    </tr>
-    <tr>
-      <td><strong>Reference Number:</strong></td>
-      <td>{{referenceNumber}}</td>
-    </tr>
-  </table>
+      <p>Our hiring team will review your qualifications, and we will contact you if your application is shortlisted for the next stage of the selection process. If you do not hear from us within <strong>{{responseTimeframe}}</strong>, please feel free to follow up.</p>
 
-  <p>Our hiring team will review your qualifications, and we will contact you if your application is shortlisted for the next stage of the selection process. If you do not hear from us within <strong>{{responseTimeframe}}</strong>, please feel free to follow up.</p>
+      <p>We appreciate your time and effort in applying and wish you the best in your job search.</p>
 
-  <p>We appreciate your time and effort in applying and wish you the best in your job search.</p>
+      <p>Best regards,<br><strong>The HR Team</strong>
+    </div>
 
-  <p>Best regards,<br><strong>The HR Team</strong><br>{{companyName}}</p>
-
+    <div class="footer">
+      <p>If you have any issues or concerns, feel free to <a href="mailto:hr2axleshift@gmail.com">contact us</a>.</p>
+    </div>
+  </div>
 </body>
 </html>
