@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document } from 'mongoose';
-const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Technical Interview', 'Panel Interview', 'Behavioral Interview', 'Other'] as const;
+const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Technical Interview', 'Panel Interview', 'Behavioral Interview', 'Orientation', 'Other'] as const;
 
 interface IFacilityEvent extends Document {
   name: string;
   author: mongoose.Types.ObjectId;
-  type: 'Initial Interview' | 'Final Interview' | 'Technical Interview' | 'Panel Interview' | 'Behavioral Interview' | 'Other';
+  type: 'Initial Interview' | 'Final Interview' | 'Technical Interview' | 'Panel Interview' | 'Behavioral Interview' | 'Orientation' | 'Other';
   description?: string;
   date: Date;
   isAvailable: boolean;

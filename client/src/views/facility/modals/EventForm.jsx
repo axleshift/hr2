@@ -49,7 +49,15 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
   const [isEventLoading, setIsEventLoading] = useState(false)
   const [eventFormState, setEventFormState] = useState('view')
   const [isReadOnly, setIsReadOnly] = useState(true)
-  const [eventTypes, setEventTypes] = useState(['Initial Interview', 'Final Interview', 'Other'])
+  const [eventTypes, setEventTypes] = useState([
+    'Initial Interview',
+    'Final Interview',
+    'Technical Interview',
+    'Panel Interview',
+    'Behavioral Interview',
+    'Orientation',
+    'Other',
+  ])
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
   const [isRemoveLoading, setIsRemoveLoading] = useState(false)
