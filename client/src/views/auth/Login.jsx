@@ -31,7 +31,7 @@ import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-i
 const Login = () => {
   const navigate = useNavigate()
   const recaptchaRef = useRef()
-  const { login, sendOTP, otpSent, redirectToOtpPage } = useContext(AuthContext)
+  const { login, sendOTP, otpSent, isKnownDevice } = useContext(AuthContext)
   const { addToast } = useContext(AppContext)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -82,9 +82,9 @@ const Login = () => {
     login(formData.username, formData.password, (success) => {
       if (success) {
         // If OTP is needed, navigate to OTP page
-        if (redirectToOtpPage) {
+        if (isKnownDevice) {
           setIsLoading(false)
-          navigate('/otp') // Redirect to OTP page
+          navigate('/dashboard')
         } else {
           sendOTP(formData.username, (otpSuccess) => {
             setIsLoading(false)

@@ -5,13 +5,13 @@ import propTypes from 'prop-types'
 const ProtectedRoute = ({ children }) => {
   const env = import.meta.env.VITE_NODE_ENV
   console.log('ProtectedRoute.js: env: ', env)
-  const { isAuthenticated } = useContext(AuthContext)
+  const { isAuthenticated, isKnownDevice } = useContext(AuthContext)
 
   if (env === 'development') {
     return children
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isKnownDevice) {
     return <Navigate to="/login" replace />
   }
   return children

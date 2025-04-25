@@ -18,7 +18,7 @@ export const AuthContext = createContext({
   logout: () => {},
   sendOTP: () => {},
   verifyOTP: () => {},
-  redirectToOtpPage: false, // New state to handle OTP page redirection
+  isKnownDevice: false, // New state to handle OTP page redirection
 })
 
 export const AuthProvider = ({ children }) => {
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     role: '',
   })
   const [otpSent, setOtpSent] = useState(false)
-  const [redirectToOtpPage, setRedirectToOtpPage] = useState(false)
+  const [isKnownDevice, setIsKnownDevice] = useState(false)
 
   // Login function with new device detection and OTP redirection logic
   const login = async (username, password, callback) => {
@@ -43,9 +43,9 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
 
-        // If redirectToOtpPage is true, it means OTP verification is required
-        if (res.data.redirectToOtpPage) {
-          setRedirectToOtpPage(true)
+        // If isKnownDevice is false, it means OTP verification is required
+        if (!res.data.isKnownDevice) {
+          setIsKnownDevice(false)
           callback(true)
         } else {
           callback(true) // Directly authenticated
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
-        setRedirectToOtpPage(false) // OTP is verified, no need to redirect
+        setIsKnownDevice(true)
         callback(true)
       } else {
         callback(false)
@@ -118,6 +118,7 @@ export const AuthProvider = ({ children }) => {
       const res = await get('/auth/me')
       if (res.status === 200) {
         setIsAuthenticated(true)
+        setIsKnownDevice(true)
         setUserInformation(res.data.data)
       }
     } catch (error) {
@@ -139,7 +140,7 @@ export const AuthProvider = ({ children }) => {
         sendOTP,
         verifyOTP,
         otpSent,
-        redirectToOtpPage,
+        isKnownDevice,
       }}
     >
       {children}

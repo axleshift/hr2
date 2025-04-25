@@ -105,7 +105,7 @@ export const login = async (req: req, res: res) => {
     const emailText = emailTemplate
       .replace(/{{userAgent}}/g, userAgent)
       .replace(/{{userIP}}/g, userIP)
-      .replace(/{{time}}/g, new Date().toLocaleDateString())
+      .replace(/{{time}}/g, new Date().toLocaleString())
 
     const isNewDevice = !knownDevices.includes(deviceFingerprint);
     if (isNewDevice) {
@@ -116,12 +116,15 @@ export const login = async (req: req, res: res) => {
         "",
         emailText
       )
-      user.knownDevices.push(deviceFingerprint);
-      await user.save();
+      // user.knownDevices.push(deviceFingerprint);
+      // await user.save();
+
+      req.session.pendingDevice = deviceFingerprint;
 
       return res.status(200).json({
         message: "New Device detected, OTP verification is required.",
-        redirectToOtpPage: true,
+        data: userData,
+        isKnownDevice: false,
       })
     }
 
@@ -140,6 +143,7 @@ export const login = async (req: req, res: res) => {
         res.status(200).json({
           message: "User logged in successfully",
           data: userData,
+          isKnownDevice: true,
         });
       });
     });
@@ -177,9 +181,14 @@ export const sendOTP = async (req: req, res: res) => {
     //   This OTP is valid for 10 minutes.
     // `;
 
+    const userAgent = req.headers['user-agent'] || 'unknown';
+    const userIP = req.ip || req.connection.remoteAddress || 'unknown';
+
     const emailText = emailTemplate
     .replace(/{{userName}}/g, username)
     .replace(/{{otp}}/g, otp)
+    .replace(/{{ipAddress}}/g, userIP)
+    .replace(/{{userAgent}}/g, userAgent)
 
     await sendEmail(
       'OTP Verification', 
@@ -214,6 +223,7 @@ export const verifyOTP = async (req: req, res: res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Check if OTP is present and not expired
     if (!user.otp || new Date() > user.otp.expiresAt) {
       return res.status(400).json({ message: 'OTP expired or not sent' });
     }
@@ -223,11 +233,20 @@ export const verifyOTP = async (req: req, res: res) => {
       return res.status(400).json({ message: 'Invalid OTP' });
     }
 
-    // OTP is valid, you can proceed to authenticate the user
+    // OTP is valid, proceed with authentication
     // Clear OTP after successful verification
     user.otp = null;
+
+    // Add new device fingerprint (stored in session during login)
+    const fingerprint = req.session.pendingDevice;
+    if (fingerprint && !user.knownDevices.includes(fingerprint)) {
+      user.knownDevices.push(fingerprint);
+    }
+
+    req.session.pendingDevice = null; // Clear it after use
     await user.save();
 
+    // Prepare session user data
     const userID = user._id.toString();
     const userData = {
       _id: userID,
@@ -240,10 +259,25 @@ export const verifyOTP = async (req: req, res: res) => {
       emailVerifiedAt: user.emailVerifiedAt || null,
     };
 
-    res.status(200).json({
-      message: 'OTP verified successfully',
-      data: userData
+    // Regenerate session after OTP verification
+    req.session.regenerate((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Error regenerating session" });
+      }
+
+      req.session.user = userData;
+      req.session.save((saveErr) => {
+        if (saveErr) {
+          return res.status(500).json({ message: "Error saving session" });
+        }
+
+        res.status(200).json({
+          message: 'OTP verified successfully',
+          data: userData,
+        });
+      });
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error verifying OTP', error });

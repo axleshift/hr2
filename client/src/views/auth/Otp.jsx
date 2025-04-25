@@ -98,6 +98,13 @@ const OTPPage = () => {
           {successMessage && <CAlert color="success">{successMessage}</CAlert>}
           {submissionError && <CAlert color="danger">{submissionError}</CAlert>}
 
+          <small>
+            <p className="text-muted">
+              Welcome back {userInformation.username}! It seems that this device is not in our list
+              so we sent an OTP to you email to confirm your information.
+            </p>
+          </small>
+
           <CForm onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
               <CFormLabel htmlFor="otp">Enter OTP</CFormLabel>
