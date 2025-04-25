@@ -45,6 +45,13 @@
             letter-spacing: 2px;
             color: #333;
         }
+        .details {
+            background-color: #f1f3f5;
+            padding: 0.5px 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #444;
+        }
         .footer {
             margin-top: 20px;
             font-size: 0.9rem;
@@ -69,6 +76,11 @@
                 {{otp}}
             </div>
             <p>This OTP will expire in 10 minutes. If you did not request this, please disregard this email.</p>
+            <p><strong>Request Details:</strong></p>
+            <div class="details">
+                <p><strong>IP Address:</strong> {{ipAddress}}</p>
+                <p><strong>Device Info:</strong> {{userAgent}}</p>
+            </div>
         </div>
         <div class="footer">
             <p>If you have any issues or concerns, feel free to <a href="mailto:hr2axleshift@gmail.com">contact us</a>.</p>
