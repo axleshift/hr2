@@ -2,8 +2,8 @@ import { Router } from "express";
 const router = Router();
 import verifySession from "../../middlewares/verifySession";
 import {
-  addNewResume,
-  updateResume,
+  addApplicant,
+  updateApplicant,
   getAllResumeData,
   getApplicantByDocumentCategory,
   getResumeById,
@@ -17,13 +17,16 @@ import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening
 import { createInterview, getAllInterview, getAllRecentInterviews, updateInterview } from "../../database/v1/controllers/interviewController";
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
 import { createJoboffer, getAllJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
+import { upload } from "../../utils/fileUploadHandler";
+
+const uploader = upload('applicants')
 
 router.post(
   "/",
   verifySession({
     permissions: ["applicant", "admin", "manager"],
   }),
-  addNewResume
+  addApplicant
 );
 
 router.put(
@@ -31,7 +34,16 @@ router.put(
   verifySession({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
   }),
-  updateResume
+  uploader.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "medCert", maxCount: 1 },
+    { name: "birthCert", maxCount: 1 },
+    { name: "NBIClearance", maxCount: 1 },
+    { name: "policeClearance", maxCount: 1 },
+    { name: "TOR", maxCount: 1 },
+    { name: "idPhoto", maxCount: 1 },
+  ]),
+  updateApplicant
 );
 
 router.put(

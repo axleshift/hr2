@@ -22,6 +22,7 @@ import {
   CSpinner,
   CInputGroupText,
   CFormLabel,
+  CAlert,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -71,6 +72,17 @@ const ApplicantProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+
+  const APP_STATUS = [
+    { key: 'isShortlisted', label: 'Shortlisted', color: 'success' },
+    { key: 'isInitialInterview', label: 'Initial Interview', color: 'warning' },
+    { key: 'isTechnicalInterview', label: 'Technical Interview', color: 'primary' },
+    { key: 'isPanelInterview', label: 'Panel Interview', color: 'danger' },
+    { key: 'isBehavioralInterview', label: 'Behavior Interview', color: 'info' },
+    { key: 'isFinalInterview', label: 'Final Interview', color: 'warning' },
+    { key: 'isJobOffer', label: 'Job Offer', color: 'primary' },
+    { key: 'isHired', label: 'Hired', color: 'success' },
+  ]
 
   const {
     register,
@@ -201,74 +213,40 @@ const ApplicantProfilePage = () => {
                 ) : (
                   <CForm onSubmit={handleSubmit(updateApplicant)}>
                     {/* Personal Information Section */}
-                    {['admin', 'manager'].includes(userInformation.role) && (
-                      <>
-                        <h4>Application Statuses</h4>
-                        <CRow className="mb-3">
-                          <CCol>
-                            <CFormLabel>Shortlisted</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isShortlisted} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isShortlisted')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                          <CCol>
-                            <CFormLabel>Initial Interview</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isInitialInterview} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isInitialInterview')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                        </CRow>
-                        <CRow className="mb-3">
-                          <CCol>
-                            <CFormLabel>Final Interview</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isFinalInterview} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isFinalInterview')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                          <CCol>
-                            <CFormLabel>Job Offer</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isJobOffer} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isJobOffer')}
-                                disabled
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                        </CRow>
-                      </>
-                    )}
+                    <h4>Application Statuses</h4>
+                    <CRow>
+                      {APP_STATUS.map((status) => (
+                        <CCol xs={12} md={6} lg={4} className="mb-3" key={status.key}>
+                          <CAlert color={status.color} className="p-3 border-0 rounded shadow-sm">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div>
+                                <CFormLabel className="fw-bold">{status.label}</CFormLabel>
+                                <div>{applicant?.statuses?.journey[status.key] ? 'Yes' : 'No'}</div>
+                              </div>
+                              {['admin', 'manager'].includes(userInformation.role) ? (
+                                <CButton
+                                  color="info"
+                                  size="sm"
+                                  variant="outlined"
+                                  onClick={() => handleStatUpdate(status.key)}
+                                  className="ms-2"
+                                >
+                                  Update
+                                </CButton>
+                              ) : (
+                                <p>No Permission</p>
+                              )}
+                            </div>
+                          </CAlert>
+                        </CCol>
+                      ))}
+                    </CRow>
                     <CRow className="mb-3">
                       <CCol className="d-flex justify-content-center">
-                        {applicant?.isShortlisted &&
-                        applicant?.isInitialInterview &&
-                        applicant?.isFinalInterview &&
-                        applicant?.isJobOffer ? (
+                        {applicant?.statuses.isShortlisted &&
+                        applicant?.statuses.isInitialInterview &&
+                        applicant?.statuses.isFinalInterview &&
+                        applicant?.statuses.isJobOffer ? (
                           <CButton color="warning" onClick={() => handleSendData()}>
                             Send Applicant Information to Employee Management
                           </CButton>

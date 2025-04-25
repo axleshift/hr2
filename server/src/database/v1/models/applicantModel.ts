@@ -23,7 +23,6 @@ export interface IApplicant extends Document {
   /**
    * Work Experience
    */
-  resumeFileLoc?: string;
   yearsOfExperience: number;
   currentMostRecentJob?: string;
 
@@ -52,24 +51,65 @@ export interface IApplicant extends Document {
   whyInterestedInRole?: string;
 
   /**
+   * Files location. These are all saved in the local filesystem.
+   * which is why they're all string.
+   * some of this are not actual files but numbers or strings.. so thats convenient.
+   * 
+   * For several government-mandated pre-employment requirements in the Philippines, 
+   * you typically only need to provide your identification numbers, 
+   * not the physical IDs—unless the employer specifically requested them.
+   */
+  files: {
+    resume?: string;
+    medCert?: string;
+    birthCert?: string;
+    NBIClearance?: string;
+    policeClearance?: string;
+    TOR?: string; // Transcript of record
+    idPhoto?: string;
+  }
+
+  ids: {
+    TIN?: string;
+    sss?: string;
+    philHealth?: string;
+    pagIBIGFundNumber?: string;
+  }
+
+  /**
    * Statuses and Remarks for Each Stage
    */
   statuses: {
-    isShortlisted: boolean;
-    isInitialInterview: boolean;
-    isFinalInterview: boolean;
-    isJobOffer: boolean;
-    isHired: boolean;
+    journey: {
+      isShortlisted: boolean;
+      isInitialInterview: boolean;
+      isTechnicalInterview: boolean;
+      isPanelInterview: boolean;
+      isBehavioralInterview: boolean;
+      isFinalInterview: boolean;
+      isJobOffer: boolean;
+      isHired: boolean;
+    },
+    preemployment: {
+      files: {
+        medCert?: boolean;
+        birthCert?: boolean;
+        NBIClearance?: boolean;
+        policeClearance?: boolean;
+        TOR?: boolean;
+        idPhoto?: boolean;
+      },
+      ids: {
+        TIN?: boolean;
+        sss?: boolean;
+        philHealth?: boolean;
+        pagIBIGFundNumber?: boolean;
+      }
+    }
   },
 
   tags: string[];
   emailSent: boolean;
-  isShortlisted: boolean;
-  isInitialInterview: boolean;
-  isFinalInterview: boolean;
-  isJobOffer: boolean;
-  isHired: boolean;
-
   events: mongoose.Types.ObjectId[];
   emails: mongoose.Types.ObjectId[];
 
@@ -126,9 +166,6 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
     /**
      * Work Experience
      */
-    resumeFileLoc: {
-      type: String,
-    },
     yearsOfExperience: {
       type: Number,
       required: true,
@@ -215,12 +252,63 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       default: false,
     },
 
+    files: {
+      resume: {
+        type: String,
+      },
+      medCert: {
+        type: String,
+      },
+      birthCert: {
+        type: String,
+      },
+      NBIClearance: {
+        type: String,
+      },
+      policeClearance: {
+        type: String,
+      },
+      TOR: {
+        type: String,
+      },
+      idPhoto: {
+        type: String,
+      },
+    },
+
+    ids: {
+      TIN: {
+        type: String,
+      },
+      sss: {
+        type: String,
+      },
+      philHealth: {
+        type: String,
+      },
+      pagIBIGFundNumber: {
+        type: String,
+      },
+    },
+
     statuses: {
       isShortlisted: {
         type: Boolean,
         default: false,
       },
       isInitialInterview: {
+        type: Boolean,
+        default: false,
+      },
+      isTechnicalInterview: {
+        type: Boolean,
+        default: false,
+      },
+      isPanelInterview: {
+        type: Boolean,
+        default: false,
+      },
+      isBehavioralInterview: {
         type: Boolean,
         default: false,
       },
@@ -238,26 +326,6 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       },
     },
     
-    isShortlisted: {
-      type: Boolean,
-      default: false,
-    },
-    isInitialInterview: {
-      type: Boolean,
-      default: false,
-    },
-    isFinalInterview: {
-      type: Boolean,
-      default: false,
-    },
-    isJobOffer: {
-      type: Boolean,
-      default: false,
-    },
-    isHired: {
-      type: Boolean,
-      default: false,
-    },
     events: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event",
