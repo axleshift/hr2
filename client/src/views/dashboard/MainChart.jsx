@@ -1,133 +1,101 @@
-import React, { useEffect, useRef } from 'react'
-
+import React, { useEffect, useRef, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
 
-const MainChart = () => {
+const MainChart = ({ labels, datasets }) => {
   const chartRef = useRef(null)
 
-  useEffect(() => {
-    document.documentElement.addEventListener('ColorSchemeChange', () => {
-      if (chartRef.current) {
-        setTimeout(() => {
-          chartRef.current.options.scales.x.grid.borderColor = getStyle(
-            '--cui-border-color-translucent',
-          )
-          chartRef.current.options.scales.x.grid.color = getStyle('--cui-border-color-translucent')
-          chartRef.current.options.scales.x.ticks.color = getStyle('--cui-body-color')
-          chartRef.current.options.scales.y.grid.borderColor = getStyle(
-            '--cui-border-color-translucent',
-          )
-          chartRef.current.options.scales.y.grid.color = getStyle('--cui-border-color-translucent')
-          chartRef.current.options.scales.y.ticks.color = getStyle('--cui-body-color')
-          chartRef.current.update()
-        })
-      }
-    })
-  }, [chartRef])
+  // Dynamically calculate the max and stepSize for Y-axis
+  const { maxY, stepSize } = useMemo(() => {
+    const allDataPoints = datasets.flatMap(dataset => dataset.data)
+    const max = Math.max(...allDataPoints, 0)
+    const roundedMax = Math.ceil(max / 50) * 50 || 250
+    return {
+      maxY: roundedMax,
+      stepSize: Math.ceil(roundedMax / 5),
+    }
+  }, [datasets])
 
-  const random = () => Math.round(Math.random() * 100)
+  useEffect(() => {
+    const updateColors = () => {
+      if (chartRef.current) {
+        const xGrid = chartRef.current.options.scales.x.grid
+        const xTicks = chartRef.current.options.scales.x.ticks
+        const yGrid = chartRef.current.options.scales.y.grid
+        const yTicks = chartRef.current.options.scales.y.ticks
+
+        xGrid.borderColor = getStyle('--cui-border-color-translucent')
+        xGrid.color = getStyle('--cui-border-color-translucent')
+        xTicks.color = getStyle('--cui-body-color')
+
+        yGrid.borderColor = getStyle('--cui-border-color-translucent')
+        yGrid.color = getStyle('--cui-border-color-translucent')
+        yTicks.color = getStyle('--cui-body-color')
+
+        chartRef.current.update()
+      }
+    }
+
+    document.documentElement.addEventListener('ColorSchemeChange', updateColors)
+    return () => document.documentElement.removeEventListener('ColorSchemeChange', updateColors)
+  }, [])
 
   return (
-    <>
-      <CChartLine
-        ref={chartRef}
-        style={{ height: '300px', marginTop: '40px' }}
-        data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-          datasets: [
-            {
-              label: 'My First dataset',
-              backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
-              borderColor: getStyle('--cui-info'),
-              pointHoverBackgroundColor: getStyle('--cui-info'),
-              borderWidth: 2,
-              data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-              ],
-              fill: true,
+    <CChartLine
+      ref={chartRef}
+      style={{ height: '300px', marginTop: '40px' }}
+      data={{ labels, datasets }}
+      options={{
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: {
+            grid: {
+              color: getStyle('--cui-border-color-translucent'),
+              drawOnChartArea: false,
             },
-            {
-              label: 'My Second dataset',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-success'),
-              pointHoverBackgroundColor: getStyle('--cui-success'),
-              borderWidth: 2,
-              data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-              ],
-            },
-            {
-              label: 'My Third dataset',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-danger'),
-              pointHoverBackgroundColor: getStyle('--cui-danger'),
-              borderWidth: 1,
-              borderDash: [8, 5],
-              data: [65, 65, 65, 65, 65, 65, 65],
-            },
-          ],
-        }}
-        options={{
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
+            ticks: {
+              color: getStyle('--cui-body-color'),
             },
           },
-          scales: {
-            x: {
-              grid: {
-                color: getStyle('--cui-border-color-translucent'),
-                drawOnChartArea: false,
-              },
-              ticks: {
-                color: getStyle('--cui-body-color'),
-              },
+          y: {
+            beginAtZero: true,
+            max: maxY,
+            grid: {
+              color: getStyle('--cui-border-color-translucent'),
             },
-            y: {
-              beginAtZero: true,
-              border: {
-                color: getStyle('--cui-border-color-translucent'),
-              },
-              grid: {
-                color: getStyle('--cui-border-color-translucent'),
-              },
-              max: 250,
-              ticks: {
-                color: getStyle('--cui-body-color'),
-                maxTicksLimit: 5,
-                stepSize: Math.ceil(250 / 5),
-              },
+            border: {
+              color: getStyle('--cui-border-color-translucent'),
+            },
+            ticks: {
+              color: getStyle('--cui-body-color'),
+              maxTicksLimit: 5,
+              stepSize: stepSize,
             },
           },
-          elements: {
-            line: {
-              tension: 0.4,
-            },
-            point: {
-              radius: 0,
-              hitRadius: 10,
-              hoverRadius: 4,
-              hoverBorderWidth: 3,
-            },
+        },
+        elements: {
+          line: {
+            tension: 0.4,
           },
-        }}
-      />
-    </>
+          point: {
+            radius: 0,
+            hitRadius: 10,
+            hoverRadius: 4,
+            hoverBorderWidth: 3,
+          },
+        },
+      }}
+    />
   )
+}
+
+MainChart.propTypes = {
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  datasets: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default MainChart

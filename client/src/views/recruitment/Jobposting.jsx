@@ -41,7 +41,7 @@ import {
   faCoins,
 } from '@fortawesome/free-solid-svg-icons'
 import AppPagination from '../../components/AppPagination'
-import { formatDate, formatCurency, trimString } from '../../utils'
+import { formatDate, formatCurrency, trimString } from '../../utils'
 const Jobposting = () => {
   const { addToast } = useContext(AppContext)
 
@@ -643,7 +643,7 @@ const Jobposting = () => {
                               <br /> */}
                               <FontAwesomeIcon icon={faCoins} className="me-2" />
                               <small className="text-muted">
-                                {formatCurency(data.salary_min)} - {formatCurency(data.salary_max)}
+                                {formatCurrency(data.salary_min)} - {formatCurrency(data.salary_max)}
                               </small>
                             </div>
                             <br />
@@ -717,8 +717,8 @@ const Jobposting = () => {
                               <br /> */}
                                 <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
                                 <small className="text-muted">
-                                  {formatCurency(data.salary_min)} -{' '}
-                                  {formatCurency(data.salary_max)}
+                                  {formatCurrency(data.salary_min)} -{' '}
+                                  {formatCurrency(data.salary_max)}
                                 </small>
                               </div>
                               <br />

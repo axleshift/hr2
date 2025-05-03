@@ -43,7 +43,7 @@ import {
 } from '@coreui/react'
 
 import { get } from '../../../api/axios'
-import { formatCurency, formatDate } from '../../../utils'
+import { formatCurrency, formatDate } from '../../../utils'
 
 import AppPagination from '../../../components/AppPagination'
 
@@ -174,7 +174,7 @@ const Joboffers = ({ applicantId }) => {
                             <CFormInput
                               label="Salary"
                               readOnly
-                              defaultValue={formatCurency(job.salary)}
+                              defaultValue={formatCurrency(job.salary)}
                             />
                           </CCol>
                         </CRow>

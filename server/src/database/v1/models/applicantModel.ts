@@ -71,7 +71,7 @@ export interface IApplicant extends Document {
 
   ids: {
     TIN?: string;
-    sss?: string;
+    SSS?: string;
     philHealth?: string;
     pagIBIGFundNumber?: string;
   }
@@ -90,22 +90,22 @@ export interface IApplicant extends Document {
       isJobOffer: boolean;
       isHired: boolean;
     },
-    preemployment: {
-      files: {
-        medCert?: boolean;
-        birthCert?: boolean;
-        NBIClearance?: boolean;
-        policeClearance?: boolean;
-        TOR?: boolean;
-        idPhoto?: boolean;
-      },
-      ids: {
-        TIN?: boolean;
-        sss?: boolean;
-        philHealth?: boolean;
-        pagIBIGFundNumber?: boolean;
-      }
-    }
+    // preemployment: {
+    //   files: {
+    //     medCert?: boolean;
+    //     birthCert?: boolean;
+    //     NBIClearance?: boolean;
+    //     policeClearance?: boolean;
+    //     TOR?: boolean;
+    //     idPhoto?: boolean;
+    //   },
+    //   ids: {
+    //     TIN?: boolean;
+    //     SSS?: boolean;
+    //     philHealth?: boolean;
+    //     pagIBIGFundNumber?: boolean;
+    //   }
+    // }
   },
 
   tags: string[];
@@ -280,7 +280,7 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       TIN: {
         type: String,
       },
-      sss: {
+      SSS: {
         type: String,
       },
       philHealth: {
@@ -292,38 +292,90 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
     },
 
     statuses: {
-      isShortlisted: {
-        type: Boolean,
-        default: false,
+      journey: {
+        isShortlisted: {
+          type: Boolean,
+          default: false,
+        },
+        isInitialInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isTechnicalInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isPanelInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isBehavioralInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isFinalInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isJobOffer: {
+          type: Boolean,
+          default: false,
+        },
+        isHired: {
+          type: Boolean,
+          default: false,
+        },
       },
-      isInitialInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isTechnicalInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isPanelInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isBehavioralInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isFinalInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isJobOffer: {
-        type: Boolean,
-        default: false,
-      },
-      isHired: {
-        type: Boolean,
-        default: false,
-      },
+      // preemployment: {
+      //   files: {
+      //     medCert: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     birthCert: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     NBIClearance: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     policeClearance: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     TOR: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     idPhoto: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //   },
+      //   ids: {
+      //     TIN: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     SSS: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     idPhoto: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     philHealth: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     pagIBIGFundNumber: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //   }
+      // }
     },
     
     events: [{

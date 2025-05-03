@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Request as req, Response as res, NextFunction as next, Router } from "express";
 const router = Router();
 import verifySession from "../../middlewares/verifySession";
 import {
   addApplicant,
   updateApplicant,
-  getAllResumeData,
+  getAllApplicant,
   getApplicantByDocumentCategory,
-  getResumeById,
+  getApplicantById,
   deleteResume,
-  searchResume,
-  getResumeFile,
+  searchApplicant,
+  getFile,
   updateStat,
 } from "../../database/v1/controllers/applicantController";
 
@@ -18,6 +18,7 @@ import { createInterview, getAllInterview, getAllRecentInterviews, updateIntervi
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
 import { createJoboffer, getAllJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
 import { upload } from "../../utils/fileUploadHandler";
+import multer from "multer";
 
 const uploader = upload('applicants')
 
@@ -43,6 +44,18 @@ router.put(
     { name: "TOR", maxCount: 1 },
     { name: "idPhoto", maxCount: 1 },
   ]),
+  (err: { message: any; }, req: req, res: res, next: next) => {
+    if (err) {
+      // Check for specific Multer errors
+      if (err instanceof multer.MulterError) {
+        // Handle Multer specific errors
+        return res.status(400).send({ message: err.message });
+      }
+      // Handle general errors
+      return res.status(500).send({ message: "Something went wrong!" });
+    }
+    next();
+  },
   updateApplicant
 );
 
@@ -59,7 +72,7 @@ router.get(
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
   }),
-  getAllResumeData
+  getAllApplicant
 );
 
 router.get(
@@ -70,12 +83,16 @@ router.get(
   getApplicantByDocumentCategory
 );
 
+// example: 
+// GET /applicant/123456/file/resume
+// GET /applicant/123456/file/medCert
+
 router.get(
-  "/download/:id",
+  "/applicant/:id/file/:fileField",
   verifySession({
-    permissions: ["admin", "manager", "recruiter", "interviewer"],
+    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
   }),
-  getResumeFile
+  getFile
 );
 
 router.get(
@@ -83,7 +100,7 @@ router.get(
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
   }),
-  searchResume
+  searchApplicant
 );
 
 router.get(
@@ -91,7 +108,7 @@ router.get(
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
   }),
-  getResumeById
+  getApplicantById
 );
 
 router.delete(

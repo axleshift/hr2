@@ -66,30 +66,44 @@ export const updateApplicant = async (req: req, res: res) => {
       return res.status(404).json({ message: "Applicant not found" });
     }
 
+    // Handle tags, if provided
     if (req.body.tags && typeof req.body.tags === "string") {
       req.body.tags = req.body.tags.split(",").map((tag: string) => tag.trim());
     }
 
-    // Process file uploads
-    const files = req.files as { [key: string]: Express.Multer.File[] };
+    const files = req.files as { [key: string]: Express.Multer.File[] } | undefined;
+    
+    // If no files are uploaded, respond with an error
+    // if (!files) {
+    //   return res.status(400).json({ message: "No files uploaded" });
+    // }
 
-    const filePaths: Record<string, string> = {};
-    if (files) {
-      for (const field in files) {
-        if (files[field]?.[0]) {
-          filePaths[field] = files[field][0].path;
-        }
-      }
-    }
-
-    const updateData = {
-      ...req.body,
-      files: {
-        ...applicant.files, // retain old paths
-        ...filePaths,       // overwrite with new uploads
-      },
+    // Build file name map
+    const fileNames: Record<string, string | undefined> = {
+      resume: files?.resume?.[0]?.filename,
+      medCert: files?.medCert?.[0]?.filename,
+      birthCert: files?.birthCert?.[0]?.filename,
+      NBIClearance: files?.NBIClearance?.[0]?.filename,
+      policeClearance: files?.policeClearance?.[0]?.filename,
+      TOR: files?.TOR?.[0]?.filename,
+      idPhoto: files?.idPhoto?.[0]?.filename,
     };
 
+    // Merge new files with existing files (overwrite only if new files uploaded)
+    const mergedFiles = {
+      ...applicant.files,
+      ...Object.fromEntries(
+        Object.entries(fileNames).filter(([_, val]) => val !== undefined)
+      ),
+    };
+
+    // Prepare data for update
+    const updateData = {
+      ...req.body,
+      files: mergedFiles,
+    };
+
+    // Perform update operation
     const updatedApplicant = await Applicant.findByIdAndUpdate(
       req.params.id,
       updateData,
@@ -101,10 +115,12 @@ export const updateApplicant = async (req: req, res: res) => {
       data: updatedApplicant,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error(error)
     res.status(500).json({ message: "An error occurred", error });
   }
 };
+
+
 export const updateStat = async (req: req, res: res) => {
   try {
     const { applicantId, stat } = req.params;
@@ -164,7 +180,7 @@ export const updateStat = async (req: req, res: res) => {
   }
 };
 
-export const getAllResumeData = async (req: req, res: res) => {
+export const getAllApplicant = async (req: req, res: res) => {
   try {
     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
@@ -190,7 +206,7 @@ export const getAllResumeData = async (req: req, res: res) => {
   }
 };
 
-export const getResumeFile = async (req: req, res: res) => {
+export const getFile = async (req: req, res: res) => {
   try {
     // Find the applicant by ID
     const applicant = await Applicant.findById(req.params.id);
@@ -200,11 +216,21 @@ export const getResumeFile = async (req: req, res: res) => {
       });
     }
 
-    // Construct the file path
-    const filePath = `${config.fileServer.dir}/${applicant.files.resume}`;
-    logger.info(`Downloading file: ${filePath}`);
+    // Get the file field name from the request query
+    const { fileField } = req.params;
+    const fileName = applicant.files[fileField as keyof IApplicant['files']];
 
-    // Check if file exists before attempting to download
+    if (!fileName) {
+      return res.status(404).json({
+        message: `${fileField} file not found`,
+      });
+    }
+
+    // Construct the file path dynamically
+    const filePath = `${config.fileServer.dir}/${fileField}/${fileName}`;
+    logger.info(`Serving file: ${filePath}`);
+
+    // Check if the file exists before attempting to download
     res.download(filePath, (err) => {
       if (err) {
         logger.error(err);
@@ -222,7 +248,7 @@ export const getResumeFile = async (req: req, res: res) => {
   }
 };
 
-export const searchResume = async (req: req, res: res) => {
+export const searchApplicant = async (req: req, res: res) => {
   try {
     logger.info("Searching for resumes...");
     logger.info("Search Query:");
@@ -299,46 +325,35 @@ export const getApplicantByDocumentCategory = async (req: req, res: res) => {
     const category = req.params.category as string;
     const skip = (page - 1) * limit;
 
-    console.log(req.params);
     if (!category) {
-      return res.status(400).json({
-        message: "category is required",
-      });
+      return res.status(400).json({ message: "Category is required" });
     }
 
-    // Query applicants with the given status category completed as true
+    // Define the filter mapping for categories
+    const categoryFilters: Record<string, object> = {
+      screening: { "statuses.journey.screening": true },
+      shortlisted: { "statuses.journey.isShortlisted": true },
+      interview: { "documentations.interview.completed": true },
+      training: { "documentations.training.completed": true },
+      others: { "documentations.others.completed": true },
+    };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let applicants: any[];
-    switch (category) {
-      case "screening":
-        applicants = await Applicant.find({ "documentations.screening.completed": true }).skip(skip).limit(limit);
-        break;
-      case "shortlisted":
-        applicants = await Applicant.find({ isShortlisted: true }).skip(skip).limit(limit);
-        break;
-      case "interview":
-        applicants = await Applicant.find({ "documentations.interview.completed": true }).skip(skip).limit(limit);
-        break;
-      case "training":
-        applicants = await Applicant.find({ "documentations.training.completed": true }).skip(skip).limit(limit);
-        break;
-      case "others":
-        applicants = await Applicant.find({ "documentations.others.completed": true }).skip(skip).limit(limit);
-        break;
-      default:
-        return res.status(400).json({
-          message: "Invalid DocCategory",
-        });
+    // Check if the category is valid
+    const filter = categoryFilters[category];
+    if (!filter) {
+      return res.status(400).json({ message: "Invalid document category" });
     }
+
+    // Get applicants using the matching filter
+    const applicants = await Applicant.find(filter).skip(skip).limit(limit);
 
     if (!applicants || applicants.length === 0) {
-      return res.status(404).json({
-        message: "No applicants found",
-      });
+      return res.status(404).json({ message: "No applicants found" });
     }
 
-    const totalItems = await Applicant.countDocuments();
+    // Count only documents matching the category filter
+    const totalItems = await Applicant.countDocuments(filter);
+
     return res.status(200).json({
       message: "Applicants found",
       data: applicants,
@@ -348,14 +363,15 @@ export const getApplicantByDocumentCategory = async (req: req, res: res) => {
     });
   } catch (error) {
     logger.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "An error occurred",
       error,
     });
   }
 };
 
-export const getResumeById = async (req: req, res: res) => {
+
+export const getApplicantById = async (req: req, res: res) => {
   try {
     const applicant = await Applicant.findById(req.params.id);
     if (!applicant) {

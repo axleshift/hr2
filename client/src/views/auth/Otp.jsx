@@ -100,8 +100,8 @@ const OTPPage = () => {
 
           <small>
             <p className="text-muted">
-              Welcome back {userInformation.username}! It seems that this device is not in our list
-              so we sent an OTP to you email to confirm your information.
+              Welcome back {userInformation.username}! We sent an OTP to your email to confirm your
+              information.
             </p>
           </small>
 

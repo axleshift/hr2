@@ -56,6 +56,7 @@ const DocsTab = ({ applicantId }) => {
                 <CTab itemKey={'interview'}>Interviews</CTab>
                 <CTab itemKey={'screening'}>Screenings</CTab>
                 <CTab itemKey={'joboffer'}>Job Offers</CTab>
+                <CTab itemKey={'files'}>Files</CTab>
               </CTabList>
               <CTabContent>
                 <CTabPanel itemKey={'interview'}>
@@ -66,6 +67,8 @@ const DocsTab = ({ applicantId }) => {
                 </CTabPanel>
                 <CTabPanel itemKey={'joboffer'}>
                   <Joboffers applicantId={applicantId} />
+                </CTabPanel>
+                <CTabPanel itemKey={'files'}>
                 </CTabPanel>
               </CTabContent>
             </CTabs>

@@ -242,38 +242,40 @@ const Screening = () => {
   }
 
   const handleFillMockData = () => {
-    formReset({
-      id: '',
-      firstname: 'John',
-      lastname: 'Doe',
-      middlename: 'Ville',
-      suffix: 'Jr.',
-      email: 'johndoe@mail.com',
-      phone: '09493260755',
-      address: 'Quezon City, Philippines',
-      prefferedWorkLocation: 'Remote',
-      linkedInProfile: 'https://www.linkedin.com/in/johndoe',
-      portfolioLink: 'https://www.github.com/johndoe',
+    const mockData = {
+      firstname: "John",
+      lastname: "Doe",
+      middlename: "A",
+      suffix: "Jr.",
+      email: "john.doe@example.com",
+      phone: "09171234567",
+      address: "123 Mockingbird Lane",
+      preferredWorkLocation: "Manila",
+      linkedInProfile: "https://linkedin.com/in/johndoe",
+      portfolioLink: "https://johndoe.dev",
       yearsOfExperience: 5,
-      currentMostRecentJob: 'Software Developer',
-      highestQualification: 'college',
-      majorFieldOfStudy: 'Computer Science',
-      institution: 'University of Lagos',
-      graduationYear: 2021,
-      keySkills: 'React, NodeJS, MongoDB',
-      softwareProficiency: 'MS Office, Adobe Suite',
-      certifications: 'Certification 1, Certification 2',
-      coverLetter:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies.',
-      salaryExpectation: 50000,
-      availability: 'Immediate',
-      jobAppliedFor: 'Software Developer',
-      whyInterestedInRole:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies',
-
-      // tags: [],
-      // file: [],
-    })
+      currentMostRecentJob: "Frontend Developer",
+      highestQualification: "college",
+      majorFieldOfStudy: "Computer Science",
+      institution: "Mock University",
+      graduationYear: 2020,
+      keySkills: "JavaScript, React, CSS",
+      softwareProficiency: "VSCode, Git, Figma",
+      certifications: "AWS Certified Developer",
+      coverLetter: "I am excited to apply for this role...",
+      salaryExpectation: 70000,
+      availability: "Immediately",
+      jobAppliedFor: "Web Developer",
+      whyInterestedInRole: "The role aligns with my goals and experience.",
+      ids: {
+        TIN: "123-456-789",
+        SSS: "12-3456789-0",
+        philHealth: "1234-5678-9012",
+        pagIBIGFundNumber: "1234-5678-9012",
+      },
+      files: {}, // left empty — optional
+    };
+    formReset(mockData)
   }
 
   const handleUpload = async () => {
@@ -650,7 +652,7 @@ const Screening = () => {
                     <CCol>
                       <h2>Personal Information</h2>
                     </CCol>
-                    {config.env === 'development' && (
+                    {config.env === 'development' || ['admin'].includes(userInformation.role) && (
                       <CCol>
                         <CButton
                           color="primary"
@@ -1322,7 +1324,7 @@ const Screening = () => {
                                   </CBadge>
                                 )
                               })}
-                              {p.isShortlisted && (
+                              {p.statuses.journey.isShortlisted && (
                                 <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
                                   Shortlisted
                                 </CBadge>

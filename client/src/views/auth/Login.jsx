@@ -84,7 +84,7 @@ const Login = () => {
         // If OTP is needed, navigate to OTP page
         if (isKnownDevice) {
           setIsLoading(false)
-          navigate('/dashboard')
+          navigate('/dashboard/overview')
         } else {
           sendOTP(formData.username, (otpSuccess) => {
             setIsLoading(false)
