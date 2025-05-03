@@ -1,4 +1,6 @@
 server/dist
+server/dist/public/applicants
+server/src/public/applicants
 client/build
 node_modules/*
 
