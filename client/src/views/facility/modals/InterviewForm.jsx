@@ -45,6 +45,7 @@ const interviewSchema = z.object({
   date: z.string().nonempty('Date is required'),
   job: z.string().min(1, { message: 'Job is required' }),
   type: z.enum(['Phone', 'Video', 'In-Person']),
+  interviewType: z.string().optional(),
   general: z.object({
     communication: z.coerce.number().min(1).max(5).default(1),
     technical: z.coerce.number().min(1).max(5).default(1),
@@ -141,10 +142,30 @@ const InterviewForm = ({ isVisible, onClose, state, eventData, applicantData }) 
 
   const onSubmit = async (data) => {
     try {
+      const formData = {
+        date: data.date,
+        job: data.job,
+        type: data.type,
+        interviewType: eventData.type,
+        general: {
+          communication: data.general.communication,
+          technical: data.general.technical,
+          problemSolving: data.general.problemSolving,
+          culturalFit: data.general.culturalFit,
+          workExperienceRelevance: data.general.workExperienceRelevance,
+          leadership: data.general.leadership,
+        },
+        questions: data.questions || [],
+        salaryExpectation: data.salaryExpectation,
+        strength: data.strength,
+        weakness: data.weakness,
+        recommendation: data.recommendation,
+        finalComments: data.finalComments,
+      }
       const res =
         formState === 'edit'
-          ? await put(`/applicant/interview/${interview._id}`, data)
-          : await post(`/applicant/interview/${applicantData._id}/${eventData._id}`, data)
+          ? await put(`/applicant/interview/${interview._id}`, formData)
+          : await post(`/applicant/interview/${applicantData._id}/${eventData._id}`, formData)
 
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Interview saved successfully', 'success')
@@ -162,6 +183,7 @@ const InterviewForm = ({ isVisible, onClose, state, eventData, applicantData }) 
       date: item.date ? item.date.split('T')[0] : '',
       job: item.job ? item.job : '',
       type: item.type || 'Phone',
+      interviewType: eventData?.type,
       general: {
         communication: item.general?.communication || 1,
         technical: item.general?.technical || 1,
@@ -186,6 +208,7 @@ const InterviewForm = ({ isVisible, onClose, state, eventData, applicantData }) 
       job: '',
       date: '',
       type: 'Phone',
+      interviewType: 'initialInterview',
       general: {
         communication: 1,
         technical: 1,

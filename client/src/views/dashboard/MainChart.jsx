@@ -44,7 +44,7 @@ const MainChart = ({ labels, datasets }) => {
   return (
     <CChartLine
       ref={chartRef}
-      style={{ height: '300px', marginTop: '40px' }}
+      // style={{ height: '300px', marginTop: '40px' }}
       data={{ labels, datasets }}
       options={{
         maintainAspectRatio: false,

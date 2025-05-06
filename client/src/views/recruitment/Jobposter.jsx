@@ -45,7 +45,7 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../context/appContext'
 
-import { formatCurency, formatDate, trimString } from '../../utils'
+import { formatCurrency, formatDate, trimString } from '../../utils'
 
 const Jobposter = () => {
   const sectionRefs = {}
@@ -280,13 +280,13 @@ const Jobposter = () => {
                         <CFormInput
                           id="salarymin"
                           name="salarymin"
-                          value={formatCurency(data.salary_min)}
+                          value={formatCurrency(data.salary_min)}
                           readOnly
                         />
                         <CFormInput
                           id="salarymax"
                           name="salarymax"
-                          value={formatCurency(data.salary_max)}
+                          value={formatCurrency(data.salary_max)}
                           readOnly
                         ></CFormInput>
                       </CInputGroup>
@@ -382,7 +382,7 @@ const Jobposter = () => {
                       id="twitterText"
                       name="twitterText"
                       placeholder="Twitter Post description.."
-                      defaultValue={`NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurency(data.salary_min)} - ${formatCurency(data.salary_max)}\n=====\nPM me for more details!`}
+                      defaultValue={`NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurrency(data.salary_min)} - ${formatCurrency(data.salary_max)}\n=====\nPM me for more details!`}
                       {...twitterRegister('twitterText')}
                       invalid={!!twitterErrors.twitterText}
                       className="scalableCFormTextArea-200"
@@ -424,7 +424,7 @@ const Jobposter = () => {
                         name='facebookText'
                         placeholder='Facebook Post description..'
                         defaultValue={
-                          `NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurency(data.salary_min)} - ${formatCurency(data.salary_max)}\n=====\nPM me for more details!`
+                          `NOW HIRING! \n${data.title}\nLocation: ${data.location}\nSalary: ${formatCurrency(data.salary_min)} - ${formatCurrency(data.salary_max)}\n=====\nPM me for more details!`
                         }
                         {...facebookRegister('facebookText')}
                         invalid={!!errors.text}

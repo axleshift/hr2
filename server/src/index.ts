@@ -76,6 +76,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
 app.use(useragent.express());
 app.use(helmet());
 app.use(pinoHttp({ logger }));

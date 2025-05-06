@@ -30,29 +30,43 @@ import { useParams } from 'react-router-dom'
 import { get, put } from '../../api/axios'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { AppContext } from '../../context/appContext'
 
 import EventTab from './tabs/EventTab'
 import DocsTab from './tabs/DocsTab'
 import { AuthContext } from '../../context/authContext'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ACCEPTED_FILE_TYPES = ["application/pdf", "image/jpeg", "image/png"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ACCEPTED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
 
-const fileSchema = z
+const pdfFileSchema = z
   .any()
   .transform((file) => {
-    if (!file || (file instanceof FileList && file.length === 0)) return undefined;
-    if (file instanceof FileList) return file.item(0);
-    return file;
+    if (!file || (file instanceof FileList && file.length === 0)) return undefined
+    if (file instanceof FileList) return file.item(0)
+    return file
   })
   .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
-    message: "File must be 5MB or less",
+    message: 'File must be 5MB or less',
   })
-  .refine((file) => !file || ACCEPTED_FILE_TYPES.includes(file.type), {
-    message: "Unsupported file format",
-  });
+  .refine((file) => !file || ['application/pdf'].includes(file.type), {
+    message: 'Unsupported file format',
+  })
+
+const imgFileSchema = z
+  .any()
+  .transform((file) => {
+    if (!file || (file instanceof FileList && file.length === 0)) return undefined
+    if (file instanceof FileList) return file.item(0)
+    return file
+  })
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+    message: 'File must be 5MB or less',
+  })
+  .refine((file) => !file || ['image/jpeg', 'image/png'].includes(file.type), {
+    message: 'Unsupported file format',
+  })
 
 // Your full schema with file fields
 const profileSchema = z.object({
@@ -68,14 +82,7 @@ const profileSchema = z.object({
   portfolioLink: z.string().url().or(z.literal('')).optional(),
   yearsOfExperience: z.number().min(0),
   currentMostRecentJob: z.string().min(1),
-  highestQualification: z.enum([
-    'none',
-    'elementary',
-    'high school',
-    'college',
-    'masters',
-    'phd',
-  ]),
+  highestQualification: z.enum(['none', 'elementary', 'high school', 'college', 'masters', 'phd']),
   majorFieldOfStudy: z.string().min(1),
   institution: z.string().min(1),
   graduationYear: z.number().min(1900).max(new Date().getFullYear()),
@@ -91,13 +98,13 @@ const profileSchema = z.object({
   // Files
   files: z
     .object({
-      resume: fileSchema.optional(),
-      medCert: fileSchema.optional(),
-      birthCert: fileSchema.optional(),
-      NBIClearance: fileSchema.optional(),
-      policeClearance: fileSchema.optional(),
-      TOR: fileSchema.optional(),
-      idPhoto: fileSchema.optional(),
+      resume: pdfFileSchema.optional(),
+      medCert: pdfFileSchema.optional(),
+      birthCert: pdfFileSchema.optional(),
+      NBIClearance: pdfFileSchema.optional(),
+      policeClearance: pdfFileSchema.optional(),
+      TOR: pdfFileSchema.optional(),
+      idPhoto: imgFileSchema.optional(),
     })
     .optional(),
 
@@ -108,7 +115,7 @@ const profileSchema = z.object({
     philHealth: z.string().optional(),
     pagIBIGFundNumber: z.string().optional(),
   }),
-});
+})
 
 const ApplicantProfilePage = () => {
   const { applicantId } = useParams()
@@ -136,9 +143,11 @@ const ApplicantProfilePage = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(profileSchema),
+    defaultValues: { keySkills: '' },
   })
 
   const getApplicant = async (id) => {
@@ -165,63 +174,94 @@ const ApplicantProfilePage = () => {
 
   const updateApplicant = async (data) => {
     try {
-      setIsSubmitLoading(true);
-  
-      const formData = new FormData();
-  
-      formData.append("firstname", data.firstname);
-      formData.append("lastname", data.lastname);
-      formData.append("middlename", data.middlename);
-      if (data.suffix) formData.append("suffix", data.suffix);
-      formData.append("email", data.email);
-      formData.append("phone", data.phone);
-      formData.append("address", data.address);
-      formData.append("preferredWorkLocation", data.preferredWorkLocation);
-      formData.append("linkedInProfile", data.linkedInProfile || "");
-      formData.append("portfolioLink", data.portfolioLink || "");
-      formData.append("yearsOfExperience", String(data.yearsOfExperience));
-      formData.append("currentMostRecentJob", data.currentMostRecentJob);
-      formData.append("highestQualification", data.highestQualification);
-      formData.append("majorFieldOfStudy", data.majorFieldOfStudy);
-      formData.append("institution", data.institution);
-      formData.append("graduationYear", String(data.graduationYear));
-      formData.append("keySkills", data.keySkills);
-      formData.append("softwareProficiency", data.softwareProficiency);
-      if (data.certifications) formData.append("certifications", data.certifications);
-      formData.append("coverLetter", data.coverLetter);
-      formData.append("salaryExpectation", String(data.salaryExpectation));
-      formData.append("availability", data.availability);
-      formData.append("jobAppliedFor", data.jobAppliedFor);
-      formData.append("whyInterestedInRole", data.whyInterestedInRole);
-  
-      formData.append("TIN", data.ids?.TIN || "");
-      formData.append("SSS", data.ids?.SSS || "");
-      formData.append("philHealth", data.ids?.philHealth || "");
-      formData.append("pagIBIGFundNumber", data.ids?.pagIBIGFundNumber || "");
-  
-      if (data.files?.resume) formData.append("resume", data.files.resume);
-      if (data.files?.medCert) formData.append("medCert", data.files.medCert);
-      if (data.files?.birthCert) formData.append("birthCert", data.files.birthCert);
-      if (data.files?.NBIClearance) formData.append("NBIClearance", data.files.NBIClearance);
-      if (data.files?.policeClearance) formData.append("policeClearance", data.files.policeClearance);
-      if (data.files?.TOR) formData.append("TOR", data.files.TOR);
-      if (data.files?.idPhoto) formData.append("idPhoto", data.files.idPhoto);
-  
-      const result = await put(`/applicant/${applicant._id}`, formData)
-  
-      if (result.status === 200) {
-        console.log(result.data)
-        setApplicant(result.data);
-        reset(result.data);
-        addToast("Success", result.data.message, "success");
+      setIsSubmitLoading(true)
+
+      const formData = new FormData()
+
+      formData.append('firstname', data.firstname)
+      formData.append('lastname', data.lastname)
+      formData.append('middlename', data.middlename)
+      if (data.suffix) formData.append('suffix', data.suffix)
+      formData.append('email', data.email)
+      formData.append('phone', data.phone)
+      formData.append('address', data.address)
+      formData.append('preferredWorkLocation', data.preferredWorkLocation)
+      formData.append('linkedInProfile', data.linkedInProfile || '')
+      formData.append('portfolioLink', data.portfolioLink || '')
+      formData.append('yearsOfExperience', String(data.yearsOfExperience))
+      formData.append('currentMostRecentJob', data.currentMostRecentJob)
+      formData.append('highestQualification', data.highestQualification)
+      formData.append('majorFieldOfStudy', data.majorFieldOfStudy)
+      formData.append('institution', data.institution)
+      formData.append('graduationYear', String(data.graduationYear))
+      formData.append('keySkills', data.keySkills)
+      formData.append('softwareProficiency', data.softwareProficiency)
+      if (data.certifications) formData.append('certifications', data.certifications)
+      formData.append('coverLetter', data.coverLetter)
+      formData.append('salaryExpectation', String(data.salaryExpectation))
+      formData.append('availability', data.availability)
+      formData.append('jobAppliedFor', data.jobAppliedFor)
+      formData.append('whyInterestedInRole', data.whyInterestedInRole)
+
+      formData.append('TIN', data.ids?.TIN || '')
+      formData.append('SSS', data.ids?.SSS || '')
+      formData.append('philHealth', data.ids?.philHealth || '')
+      formData.append('pagIBIGFundNumber', data.ids?.pagIBIGFundNumber || '')
+
+      if (data.files?.resume) formData.append('resume', data.files.resume)
+      if (data.files?.medCert) formData.append('medCert', data.files.medCert)
+      if (data.files?.birthCert) formData.append('birthCert', data.files.birthCert)
+      if (data.files?.NBIClearance) formData.append('NBIClearance', data.files.NBIClearance)
+      if (data.files?.policeClearance)
+        formData.append('policeClearance', data.files.policeClearance)
+      if (data.files?.TOR) formData.append('TOR', data.files.TOR)
+      if (data.files?.idPhoto) formData.append('idPhoto', data.files.idPhoto)
+
+      const res = await put(`/applicant/${applicant._id}`, formData)
+
+      if (res.status === 200) {
+        console.log(res.data.data)
+        setApplicant(res.data.data)
+        // reset(res.data);
+        setValue('firstname', res.data.data.firstname)
+        setValue('lastname', res.data.data.lastname)
+        setValue('middlename', res.data.data.middlename)
+        setValue('suffix', res.data.data.suffix || '')
+        setValue('email', res.data.data.email)
+        setValue('phone', res.data.data.phone)
+        setValue('address', res.data.data.address)
+        setValue('preferredWorkLocation', res.data.data.preferredWorkLocation)
+        setValue('linkedInProfile', res.data.data.linkedInProfile || '')
+        setValue('portfolioLink', res.data.data.portfolioLink || '')
+        setValue('yearsOfExperience', res.data.data.yearsOfExperience || 0)
+        setValue('currentMostRecentJob', res.data.data.currentMostRecentJob)
+        setValue('highestQualification', res.data.data.highestQualification)
+        setValue('majorFieldOfStudy', res.data.data.majorFieldOfStudy)
+        setValue('institution', res.data.data.institution)
+        setValue('graduationYear', res.data.data.graduationYear)
+        setValue('keySkills', res.data.data.keySkills || '')
+        setValue('softwareProficiency', res.data.data.softwareProficiency || '')
+        setValue('certifications', res.data.data.certifications || '')
+        setValue('coverLetter', res.data.data.coverLetter || '')
+        setValue('salaryExpectation', res.data.data.salaryExpectation || 0)
+        setValue('availability', res.data.data.availability)
+        setValue('jobAppliedFor', res.data.data.jobAppliedFor)
+        setValue('whyInterestedInRole', res.data.data.whyInterestedInRole || '')
+
+        // For nested fields (like IDs)
+        setValue('ids.TIN', res.data.data.ids?.TIN || '')
+        setValue('ids.SSS', res.data.data.ids?.SSS || '')
+        setValue('ids.philHealth', res.data.data.ids?.philHealth || '')
+        setValue('ids.pagIBIGFundNumber', res.data.data.ids?.pagIBIGFundNumber || '')
+        addToast('Success', res.data.data.message, 'success')
       }
     } catch (error) {
-      console.error(error);
-      addToast("Error", error.message || "Something went wrong", "danger");
+      console.error(error)
+      addToast('Error', error.message || 'Something went wrong', 'danger')
     } finally {
-      setIsSubmitLoading(false);
+      setIsSubmitLoading(false)
     }
-  };
+  }
 
   const handleDelete = async (id) => {
     try {
@@ -308,11 +348,20 @@ const ApplicantProfilePage = () => {
                 ) : (
                   <CForm onSubmit={handleSubmit(updateApplicant)}>
                     {/* Personal Information Section */}
-                    <h4 className='mb-3'>Personal Information</h4>
+                    <div className="d-flex justify-content-between">
+                      <h4 className="mb-3">Personal Information</h4>
+                      <CButton size="sm" color="info" onClick={() => getApplicant(applicant._id)}>
+                        Refresh
+                      </CButton>
+                    </div>
 
                     <CRow xs={12} md={6} className="mb-3">
                       {/* Avatar Column */}
-                      <CCol xs={12} md={6} className="d-flex justify-content-center align-items-center">
+                      <CCol
+                        xs={12}
+                        md={6}
+                        className="d-flex justify-content-center align-items-center"
+                      >
                         <img
                           className="user-image"
                           src={`https://ui-avatars.com/api/?name=${applicant?.firstname}+${applicant?.lastname}`}
@@ -360,7 +409,6 @@ const ApplicantProfilePage = () => {
                         )}
                       </CCol>
                     </CRow>
-
 
                     <CRow className="mb-3">
                       <CCol>
@@ -426,18 +474,23 @@ const ApplicantProfilePage = () => {
                     <CRow>
                       {APP_STATUS.journey.map((status) => (
                         <CCol xs={12} md={6} lg={4} className="mb-3" key={status.key}>
-                          <CAlert color={applicant?.statuses?.journey &&
-                            status.key in applicant.statuses.journey
-                            ? applicant.statuses.journey[status.key]
-                              ? 'success'
-                              : 'danger'
-                            : 'info'} className="p-3 border-0 rounded shadow-sm">
+                          <CAlert
+                            color={
+                              applicant?.statuses?.journey &&
+                              status.key in applicant.statuses.journey
+                                ? applicant.statuses.journey[status.key]
+                                  ? 'success'
+                                  : 'danger'
+                                : 'info'
+                            }
+                            className="p-3 border-0 rounded shadow-sm"
+                          >
                             <div className="d-flex justify-content-between align-items-center">
                               <div>
                                 <CFormLabel className="fw-bold">{status.label}</CFormLabel>
                                 <div>
                                   {applicant?.statuses?.journey &&
-                                    status.key in applicant.statuses.journey
+                                  status.key in applicant.statuses.journey
                                     ? applicant.statuses.journey[status.key]
                                       ? 'Yes'
                                       : 'No'
@@ -649,12 +702,13 @@ const ApplicantProfilePage = () => {
                     {['admin', 'manager', 'recruiters'].includes(userInformation.role) && (
                       <>
                         <h4>Pre-employment Requirements</h4>
-                        <CRow className='mb-3'>
+                        <CRow className="mb-3">
                           <CCol>
                             <CFormInput
                               label="TIN"
                               invalid={!!errors.ids?.TIN}
-                              {...register('ids.TIN')} />
+                              {...register('ids.TIN')}
+                            />
                             {errors.ids?.TIN && (
                               <CFormFeedback invalid>{errors.ids.TIN.message}</CFormFeedback>
                             )}
@@ -663,18 +717,20 @@ const ApplicantProfilePage = () => {
                             <CFormInput
                               label="SSS"
                               invalid={!!errors.ids?.SSS}
-                              {...register('ids.SSS')} />
+                              {...register('ids.SSS')}
+                            />
                             {errors.ids?.SSS && (
                               <CFormFeedback invalid>{errors.ids.SSS.message}</CFormFeedback>
                             )}
                           </CCol>
                         </CRow>
-                        <CRow className='mb-3'>
+                        <CRow className="mb-3">
                           <CCol>
                             <CFormInput
                               label="PhilHealth"
                               invalid={!!errors.ids?.philHealth}
-                              {...register('ids.philHealth')} />
+                              {...register('ids.philHealth')}
+                            />
                             {errors.ids?.philHealth && (
                               <CFormFeedback invalid>{errors.ids.philHealth.message}</CFormFeedback>
                             )}
@@ -683,74 +739,89 @@ const ApplicantProfilePage = () => {
                             <CFormInput
                               label="PagIBIG Fund Number"
                               invalid={!!errors.ids?.pagIBIGFundNumber}
-                              {...register('ids.pagIBIGFundNumber')} />
+                              {...register('ids.pagIBIGFundNumber')}
+                            />
                             {errors.ids?.pagIBIGFundNumber && (
-                              <CFormFeedback invalid>{errors.ids.pagIBIGFundNumber.message}</CFormFeedback>
+                              <CFormFeedback invalid>
+                                {errors.ids.pagIBIGFundNumber.message}
+                              </CFormFeedback>
                             )}
                           </CCol>
                         </CRow>
                         <h5>Required Documents</h5>
-                        <CRow className='mb-3'>
+                        <CRow className="mb-3">
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="Resume"
                               invalid={!!errors.files?.resume}
-                              {...register('files.resume')} />
+                              {...register('files.resume')}
+                            />
                             {errors.files?.resume && (
                               <CFormFeedback invalid>{errors.files.resume.message}</CFormFeedback>
                             )}
                           </CCol>
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="Medical Certificate"
                               invalid={!!errors.files?.medCert}
-                              {...register('files.medCert')} />
+                              {...register('files.medCert')}
+                            />
                             {errors.files?.medCert && (
                               <CFormFeedback invalid>{errors.files.medCert.message}</CFormFeedback>
                             )}
                           </CCol>
                         </CRow>
-                        <CRow className='mb-3'>
+                        <CRow className="mb-3">
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="Birth Certificate"
                               invalid={!!errors.files?.birthCert}
-                              {...register('files.birthCert')} />
+                              {...register('files.birthCert')}
+                            />
                             {errors.files?.birthCert && (
-                              <CFormFeedback invalid>{errors.files.birthCert.message}</CFormFeedback>
+                              <CFormFeedback invalid>
+                                {errors.files.birthCert.message}
+                              </CFormFeedback>
                             )}
                           </CCol>
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="NBI Clearance"
                               invalid={!!errors.files?.NBIClearance}
-                              {...register('files.NBIClearance')} />
+                              {...register('files.NBIClearance')}
+                            />
                             {errors.files?.NBIClearance && (
-                              <CFormFeedback invalid>{errors.files.NBIClearance.message}</CFormFeedback>
+                              <CFormFeedback invalid>
+                                {errors.files.NBIClearance.message}
+                              </CFormFeedback>
                             )}
                           </CCol>
                         </CRow>
-                        <CRow className='mb-3'>
+                        <CRow className="mb-3">
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="Police Clearance"
                               invalid={!!errors.files?.policeClearance}
-                              {...register('files.policeClearance')} />
+                              {...register('files.policeClearance')}
+                            />
                             {errors.files?.policeClearance && (
-                              <CFormFeedback invalid>{errors.files.policeClearance.message}</CFormFeedback>
+                              <CFormFeedback invalid>
+                                {errors.files.policeClearance.message}
+                              </CFormFeedback>
                             )}
                           </CCol>
                           <CCol>
                             <CFormInput
-                              type='file'
+                              type="file"
                               label="Transcript of Record"
                               invalid={!!errors.files?.TOR}
-                              {...register('files.TOR')} />
+                              {...register('files.TOR')}
+                            />
                             {errors.files?.TOR && (
                               <CFormFeedback invalid>{errors.files.TOR.message}</CFormFeedback>
                             )}
@@ -760,7 +831,7 @@ const ApplicantProfilePage = () => {
                     )}
                     <CRow>
                       <CCol className="d-flex justify-content-between d-flex-column gap-2">
-                        <div className='d-flex gap-2'>
+                        <div className="d-flex gap-2">
                           {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
                             <CButton
                               color="danger"
@@ -774,7 +845,7 @@ const ApplicantProfilePage = () => {
                             <CButton
                               color="warning"
                               size="sm"
-                            // onClick={() => handleDelete(applicant._id)}
+                              // onClick={() => handleDelete(applicant._id)}
                             >
                               Reject
                             </CButton>
@@ -796,12 +867,20 @@ const ApplicantProfilePage = () => {
                 )}
               </CContainer>
             </CTabPanel>
-            <CTabPanel itemKey={'event'}>
-              <EventTab applicantId={applicantId} />
-            </CTabPanel>
-            <CTabPanel itemKey={'docs'}>
-              <DocsTab applicantId={applicantId} />
-            </CTabPanel>
+            {applicant && (
+              <>
+                <CTabPanel itemKey={'event'}>
+                  <EventTab applicantId={applicantId} />
+                </CTabPanel>
+                <CTabPanel itemKey={'docs'}>
+                  <DocsTab
+                    applicantId={applicantId}
+                    applicantFiles={applicant?.files}
+                    applicantInterviews={applicant?.interviews}
+                  />
+                </CTabPanel>
+              </>
+            )}
           </CTabContent>
         </CTabs>
       </CRow>

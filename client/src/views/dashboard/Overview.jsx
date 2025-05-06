@@ -135,21 +135,48 @@ const Overview = () => {
     }
   }
 
-  const prepareJourneyData = (journeyProgression) => {
-    const labels = journeyProgression.map(item => item._id);
+  const prepareEventData = (eventsPerDay) => {
+    const now = new Date()
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
 
-    const datasets = APP_STATUS.journey.map((stage) => {
-      return {
-        label: stage.label,
-        data: journeyProgression.map(item => item[stage.key]),
-        borderColor: stage.color,
-        fill: false,
-        tension: 0.1, // Optional: for smooth curves
-      };
-    });
+    const dayMap = {}
+    eventsPerDay.forEach(entry => {
+      const date = new Date(entry._id)
+      const day = date.getDate()
+      dayMap[day] = entry.count
+    })
 
-    return { labels, datasets };
-  };
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`)
+    const data = labels.map(day => dayMap[parseInt(day)] || 0)
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Events per Day',
+          backgroundColor: `rgba(255, 99, 132, 0.1)`,
+          borderColor: '#ff6384',
+          pointHoverBackgroundColor: '#ff6384',
+          borderWidth: 2,
+          data,
+          fill: true,
+        },
+      ],
+    }
+  }
+
+  const combineChartData = (applicantsPerDay, eventsPerDay) => {
+    const applicantsData = prepareChartData(applicantsPerDay)
+    const eventsData = prepareEventData(eventsPerDay)
+
+    return {
+      labels: applicantsData.labels, // Same labels for both
+      datasets: [
+        ...applicantsData.datasets, // Add applicants dataset
+        ...eventsData.datasets,     // Add events dataset
+      ],
+    }
+  }
 
   // Extract actual data
   const {
@@ -158,7 +185,6 @@ const Overview = () => {
       recentApplicants,
       applicantsPerDay,
       applicantsThisMonth,
-      journeyProgression,
       currentStages
     },
     jobpostings: {
@@ -168,15 +194,28 @@ const Overview = () => {
       expiredJobPostings,
       jobTypes,
     },
-    histograms
+    events: {
+      totalEvents,
+      recentEvents,
+      eventsPerDay,
+      eventsThisMonth,
+      eventTypes,
+      eventApprovalStatus,
+      eventParticipants,
+      eventCapacityUtilization
+    }
   } = data
 
 
   // Prepare progress data based on actual data
   const progress = [
-    { title: 'Total Applicants', value: `${totalApplicants} Applicants`, percent: (totalApplicants / 1000) * 100, color: 'success' }, // assuming 1000 is your goal
-    { title: 'Recent Applicants', value: `${recentApplicants.length} Applicants`, percent: (recentApplicants.length / totalApplicants) * 100, color: 'success' },
+    { title: 'Total Applicants', value: `${totalApplicants} Applicants`, color: 'success' }, // assuming 1000 is your goal
+    { title: 'Recent Applicants', value: `${recentApplicants.length} Applicants`, percent: (recentApplicants.length / totalApplicants) * 100, color: 'warning' },
     { title: 'Applicants This Month', value: `${applicantsThisMonth} Applicants`, percent: (applicantsThisMonth / totalApplicants) * 100, color: 'info' },
+
+    { title: 'Total Events', value: `${totalEvents} Events`, color: 'warning' },
+    { title: 'Recent Events', value: `${recentEvents.length} Recent Events`, percent: (recentEvents.length / totalApplicants) * 100, color: 'success' },
+    { title: 'Events This Month', value: `${eventsThisMonth} Events`, percent: (eventsThisMonth / totalEvents) * 100, color: 'info' },
   ];
 
   // Extract user data dynamically from recentApplicants
@@ -253,7 +292,7 @@ const Overview = () => {
               <CRow>
                 <CCol sm={5}>
                   <h4 id="traffic" className="card-title mb-0">
-                    Applicant Overview
+                    Applicant and Events Overview
                   </h4>
                   <div className="small text-body-secondary">
                     {`${startOfMonth.toLocaleString('default', { month: 'long' })} ${startOfMonth.getFullYear()}`}
@@ -266,9 +305,8 @@ const Overview = () => {
                   </CButton>
                 </CCol>
               </CRow>
-              <MainChart {...prepareChartData(applicantsPerDay)} />
-            </CCardBody>
-            <CCardFooter>
+              <MainChart {...combineChartData(applicantsPerDay, eventsPerDay)} />
+              <hr />
               <CRow
                 xs={{ cols: 1, gutter: 4 }}
                 sm={{ cols: 2 }}
@@ -285,13 +323,17 @@ const Overview = () => {
                   >
                     <div className="text-body-secondary">{item.title}</div>
                     <div className="fw-semibold text-truncate">
-                      {item.value} ({item.percent.toFixed(0)}%)
+                      {item.value} {item.percent ? `(` + item.percent.toFixed(0) + `%)` : ''}
                     </div>
-                    <CProgress thin className="mt-2" color={item.color} value={item.percent} />
+                    {
+                      item.percent
+                        ? <CProgress thin className="mt-2" color={item.color} value={item.percent} />
+                        : <CProgress thin className="mt-2" color={item.color} value={100} />
+                    }
                   </CCol>
                 ))}
               </CRow>
-            </CCardFooter>
+            </CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -485,7 +527,6 @@ const Overview = () => {
           </CCard>
         </CCol>
       </CRow>
-
       <CRow>
         <CCol>
           <h6>Recent Job Postings</h6>
@@ -518,6 +559,49 @@ const Overview = () => {
                     Manage
                   </CButton>
                 </CTableDataCell>
+              </CTableRow>
+            ))}
+          </CTableBody>
+        </CTable>
+      </CRow>
+
+      <CRow className='mt-4'>
+        <CCol>
+          <h4>Events Overview</h4>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol>
+          <h6>Upcoming / Recent Events</h6>
+        </CCol>
+      </CRow>
+      <CRow className="mb-3">
+        <CTable align="middle" className="mb-0 border rounded" hover responsive>
+          <CTableHead className="text-nowrap">
+            <CTableRow>
+              <CTableHeaderCell className="bg-body-tertiary">Name</CTableHeaderCell>
+              <CTableHeaderCell className="bg-body-tertiary">Type</CTableHeaderCell>
+              <CTableHeaderCell className="bg-body-tertiary">Date</CTableHeaderCell>
+              <CTableHeaderCell className="bg-body-tertiary">Available</CTableHeaderCell>
+              <CTableHeaderCell className="bg-body-tertiary">Facility</CTableHeaderCell>
+              <CTableHeaderCell className="bg-body-tertiary">Created At</CTableHeaderCell>
+              {/* <CTableHeaderCell className="bg-body-tertiary">Actions</CTableHeaderCell> */}
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {recentEvents.map((job, index) => (
+              <CTableRow key={index}>
+                <CTableDataCell>{job.name}</CTableDataCell>
+                <CTableDataCell>{job.type}</CTableDataCell>
+                <CTableDataCell>{formatDate(job.date)}</CTableDataCell>
+                <CTableDataCell>{job.isAvailable ? 'Yes' : 'No'}</CTableDataCell>
+                <CTableDataCell>{job.facility.name}</CTableDataCell>
+                <CTableDataCell>{formatDate(job.createdAt)}</CTableDataCell>
+                {/* <CTableDataCell>
+                  <CButton size="sm" color="info">
+                    Manage
+                  </CButton>
+                </CTableDataCell> */}
               </CTableRow>
             ))}
           </CTableBody>

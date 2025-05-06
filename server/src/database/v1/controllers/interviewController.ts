@@ -36,7 +36,7 @@ export const createInterview = async (req: req, res: res) => {
     if (!interviewerId) {
       return res.status(400).json({ message: "Interviewer ID is required" });
     }
-    
+
     // Guard clause for missing interview data
     if (!data) {
       return res.status(400).json({ message: "Interview data is required" });
@@ -68,6 +68,7 @@ export const createInterview = async (req: req, res: res) => {
       date: data.date,
       interviewer: new mongoose.Types.ObjectId(interviewerId),
       type: data.type,
+      interviewType: data.interviewType,
       event: new mongoose.Types.ObjectId(eventId),
       general: data.general,
       questions: data.questions || [],
@@ -81,11 +82,35 @@ export const createInterview = async (req: req, res: res) => {
     const interview = await Interview.create(newData)
 
     if (!interview) {
-      return res.status(400).json({ message: "Failed to save interview form"})
+      return res.status(400).json({ message: "Failed to save interview form" })
     }
 
     const interviewId = interview._id as mongoose.Types.ObjectId;
     applicant.documentations.interview.push(interviewId)
+
+    switch (data.interviewType) {
+      case 'Initial Interview':
+        applicant.statuses.journey.isInitialInterview = true
+        break;
+      case 'Final Interview':
+        applicant.statuses.journey.isFinalInterview = true
+        break;
+      case 'Technical Interview':
+        applicant.statuses.journey.isTechnicalInterview = true
+        break;
+      case 'Panel Interview':
+        applicant.statuses.journey.isPanelInterview = true
+        break;
+      case 'Behavioral Interview':
+        applicant.statuses.journey.isBehavioralInterview = true
+        break;
+      case 'Orientation':
+        applicant.statuses.journey.isHired = true
+        break;
+      default:
+        break;
+    }
+
     applicant.save()
 
     // Respond with success
@@ -144,6 +169,7 @@ export const updateInterview = async (req: req, res: res) => {
     if (data.date) interview.date = data.date;
     if (data.job) interview.job = data.job;
     if (data.type) interview.type = data.type;
+    if (data.interviewType) interview.interviewType = data.interviewType;
     if (data.recommendation) interview.recommendation = data.recommendation;
     if (data.general) interview.general = data.general;
     if (data.questions) interview.questions = data.questions;
@@ -177,7 +203,7 @@ export const getInterviewById = async (req: req, res: res) => {
     const { interviewId } = req.params;
 
     if (!interviewId) {
-      return res.status(400).json({ message: "Interview Id is required"})
+      return res.status(400).json({ message: "Interview Id is required" })
     }
 
     if (!mongoose.Types.ObjectId.isValid(interviewId)) {
@@ -252,8 +278,8 @@ export const getAllInterview = async (req: req, res: res) => {
     };
 
     // Initialize with required applicant filter
-    const searchFilter: InterviewSearchFilter = { 
-      applicant: new mongoose.Types.ObjectId(applicantId) 
+    const searchFilter: InterviewSearchFilter = {
+      applicant: new mongoose.Types.ObjectId(applicantId)
     };
 
     // Add search conditions if query exists
@@ -289,7 +315,7 @@ export const getAllInterview = async (req: req, res: res) => {
         .skip(skip)
         .limit(limit)
         .lean(),
-      
+
       Interview.countDocuments(searchFilter)
     ]);
 

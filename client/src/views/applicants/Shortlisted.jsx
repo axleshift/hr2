@@ -177,6 +177,52 @@ const Shortlisted = () => {
                                   </CBadge>
                                 )
                               })}
+                              {app.statuses.journey.isShortlisted && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Shortlisted
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isInitialInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isTechnicalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Technical Interview
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isPanelInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Panel Interview
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isBehavioralInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Behavioral Interview
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isFinalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Final Interview
+                                </CBadge>
+                              )}
+
+                              {app.statuses.journey.isJobOffer && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Job Offered
+                                </CBadge>
+                              )}
+                              {app.statuses.journey.isHired && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
+                                </CBadge>
+                              )}
                             </div>
                           </CTableDataCell>
                           <CTableDataCell>

@@ -11,9 +11,9 @@ import fs from "fs/promises"
 
 export const createFacility = async (req: req, res: res) => {
   try {
-    const { name, type, description, location } = req.body;
+    const { name, type, description, location, requirements } = req.body;
 
-    if (!name || !type || !description || !location) {
+    if (!name || !type || !location) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -22,6 +22,7 @@ export const createFacility = async (req: req, res: res) => {
       type,
       description,
       location,
+      requirements: requirements || [],
     };
 
     const newFacility = await Facility.create(facilityData);
@@ -39,7 +40,7 @@ export const createFacility = async (req: req, res: res) => {
 export const updateFacility = async (req: req, res: res) => {
   try {
     const { facilityId } = req.params;
-    const { name, type, description, location } = req.body;
+    const { name, type, description, requirements, location } = req.body;
 
     if (!facilityId) {
       return res.status(400).json({ message: "Facility id is required" });
@@ -57,6 +58,7 @@ export const updateFacility = async (req: req, res: res) => {
     facility.name = name;
     facility.type = type;
     facility.description = description;
+    facility.requirements = requirements;
     facility.location = location;
 
     const updatedFacility = await facility.save();
@@ -232,9 +234,9 @@ export const createFacilityTimeslot = async (req: req, res: res) => {
     if (!facilityId) {
       return res.status(400).json({ message: "Facility id is required" });
     }
-
+    
     if (!date || !start || !end) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required", date, start, end, facilityId });
     }
 
     const facility = await Facility.findById(facilityId);
@@ -737,8 +739,7 @@ export const getUpcomingEvents = async (req: req, res: res) => {
 
 export const bookApplicantToEvent = async (req: req, res: res) => {
   try {
-    const { eventId } = req.params;
-    const { applicantId } = req.body;
+    const { eventId, applicantId } = req.params;
 
     // Validate input
     if (!eventId) {
@@ -903,7 +904,7 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
 
     for (const participant of participants) {
       if (!participant.email) {
-        const id = participant._id as string
+        const id = participant._id as unknown as string
         failedEmails.push({ applicant: id, reason: "No email provided" });
         participantUpdates.push({
           applicant: participant._id,
@@ -939,7 +940,7 @@ export const SendEmailToFacilityEventParticipants = async (req: req, res: res) =
       logger.info(JSON.stringify(emailResult, null, 2));
 
       if (!emailResult.success) {
-        const id = participant._id as string
+        const id = participant._id as unknown as string
         failedEmails.push({ applicant: id, reason: emailResult.message });
         participantUpdates.push({
           applicant: participant._id,

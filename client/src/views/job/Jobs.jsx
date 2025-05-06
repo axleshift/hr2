@@ -62,7 +62,7 @@ const JobPage = () => {
           setIsJobLoading(false)
           setJobs(res.data.data)
           setCurrentPage(res.data.currentPage)
-          setItemsPerPage(res.data.itemsPerPage)
+          setTotalItems(res.data.totalItems)
           setTotalPages(res.data.totalPages)
           break
         case 404:

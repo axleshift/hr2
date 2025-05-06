@@ -7,16 +7,18 @@ import {
   getAllApplicant,
   getApplicantByDocumentCategory,
   getApplicantById,
-  deleteResume,
+  deleteApplicant,
   searchApplicant,
   getFile,
   updateStat,
+  getEligibleForJobOffer,
+  uploadFile,
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
 import { createInterview, getAllInterview, getAllRecentInterviews, updateInterview } from "../../database/v1/controllers/interviewController";
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
-import { createJoboffer, getAllJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
+import { createJoboffer, getApplicantJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
 import { upload } from "../../utils/fileUploadHandler";
 import multer from "multer";
 
@@ -44,7 +46,7 @@ router.put(
     { name: "TOR", maxCount: 1 },
     { name: "idPhoto", maxCount: 1 },
   ]),
-  (err: { message: any; }, req: req, res: res, next: next) => {
+  (err: { message: unknown; }, req: req, res: res, next: next) => {
     if (err) {
       // Check for specific Multer errors
       if (err instanceof multer.MulterError) {
@@ -83,18 +85,6 @@ router.get(
   getApplicantByDocumentCategory
 );
 
-// example: 
-// GET /applicant/123456/file/resume
-// GET /applicant/123456/file/medCert
-
-router.get(
-  "/applicant/:id/file/:fileField",
-  verifySession({
-    permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
-  }),
-  getFile
-);
-
 router.get(
   "/search",
   verifySession({
@@ -116,7 +106,7 @@ router.delete(
   verifySession({
     permissions: ["admin", "manager"],
   }),
-  deleteResume
+  deleteApplicant
 );
 
 // Events
@@ -239,11 +229,19 @@ router.put(
 )
 
 router.get(
+  "/joboffer/all/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  }),
+  getEligibleForJobOffer
+)
+
+router.get(
   "/joboffer/all/:applicantId/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
   }),
-  getAllJoboffer
+  getApplicantJoboffer
 )
 
 router.get(
@@ -261,6 +259,25 @@ router.get(
   }),
   getJobofferById
 )
+
+//
+
+router.get(
+  "/:applicantId/file/:fileType",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+  }),
+  getFile
+);
+
+router.post(
+  "/file/:applicantId/interview/:fileType",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+  }),
+  upload('applicants').single('file'),
+  uploadFile
+);
 
 export default {
   metadata: {

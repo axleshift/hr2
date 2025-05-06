@@ -12,8 +12,7 @@ import fs from "fs/promises"
 export const createJoboffer = async (req: req, res: res) => {
   try {
     const { applicantId } = req.params;
-    const { position, salary, startDate, benefits, notes } = req.body;
-
+    const { position, salary, startDate, benefits, notes, jobType, contractDuration, location } = req.body;
     if (!applicantId) {
       return res.status(400).json({ message: 'Applicant Id is required.', applicantId })
     }
@@ -31,14 +30,17 @@ export const createJoboffer = async (req: req, res: res) => {
 
     const data = {
       applicant: applicantId,
-      position: position,
-      salary: salary,
-      startDate: startDate,
-      benefits: benefits,
+      position,
+      salary,
+      startDate,
+      benefits,
       status: 'Pending',
       issuedBy: userId,
       issuedDate: new Date(),
-      notes: notes,
+      notes,
+      jobType,  // New field for job type
+      contractDuration,  // New field for contract duration (optional)
+      location,  // New field for location
     }
 
     const joboffer = await Joboffer.create(data);
@@ -48,7 +50,7 @@ export const createJoboffer = async (req: req, res: res) => {
     }
 
     const jobofferId = joboffer._id as mongoose.Types.ObjectId;
-    applicant.isJobOffer = true
+    applicant.statuses.journey.isJobOffer = true
     applicant.documentations.jobOffer = jobofferId
 
     await applicant.save();
@@ -57,7 +59,7 @@ export const createJoboffer = async (req: req, res: res) => {
     await joboffer.populate({
       path: 'applicant',
       model: 'Applicant',
-      select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
+      select: "_id firstname lastname statuses"
     });
 
     res.status(201).json({
@@ -74,7 +76,7 @@ export const createJoboffer = async (req: req, res: res) => {
 export const updateJoboffer = async (req: req, res: res) => {
   try {
     const { jobofferId } = req.params;
-    const { position, salary, startDate, benefits, status, notes } = req.body;
+    const { position, salary, startDate, benefits, notes, jobType, contractDuration, location, status } = req.body;
     const { isApproved } = req.query;
 
     if (!jobofferId) {
@@ -93,12 +95,30 @@ export const updateJoboffer = async (req: req, res: res) => {
 
     const userId = req.session.user?._id
 
+    // const data = {
+    //   applicant: applicantId,
+    //   position,
+    //   salary,
+    //   startDate,
+    //   benefits,
+    //   status: 'Pending',
+    //   issuedBy: userId,
+    //   issuedDate: new Date(),
+    //   notes,
+    //   jobType,  // New field for job type
+    //   contractDuration,  // New field for contract duration (optional)
+    //   location,  // New field for location
+    // }
+
     joboffer.position = position;
     joboffer.salary = salary;
     joboffer.startDate = new Date(startDate);
     joboffer.benefits = benefits;
     joboffer.status = status;
     joboffer.notes = notes;
+    joboffer.jobType = jobType;
+    joboffer.contractDuration = contractDuration;
+    joboffer.location = location;
 
     if (isApproved !== undefined) {
       joboffer.approvedBy = new mongoose.Types.ObjectId(userId);
@@ -166,7 +186,7 @@ export const getJobofferById = async (req: req, res: res) => {
   }
 }
 
-export const getAllJoboffer = async (req: req, res: res) => {
+export const getApplicantJoboffer = async (req: req, res: res) => {
   try {
     const { applicantId } = req.params;
 
@@ -214,7 +234,7 @@ export const getAllJoboffer = async (req: req, res: res) => {
           {
             path: "applicant",
             model: "Applicant",
-            select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
+            select: "_id firstname lastname statuses"
           },
           {
             path: "issuedBy",

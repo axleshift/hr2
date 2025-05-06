@@ -243,38 +243,38 @@ const Screening = () => {
 
   const handleFillMockData = () => {
     const mockData = {
-      firstname: "John",
-      lastname: "Doe",
-      middlename: "A",
-      suffix: "Jr.",
-      email: "john.doe@example.com",
-      phone: "09171234567",
-      address: "123 Mockingbird Lane",
-      preferredWorkLocation: "Manila",
-      linkedInProfile: "https://linkedin.com/in/johndoe",
-      portfolioLink: "https://johndoe.dev",
+      firstname: 'John',
+      lastname: 'Doe',
+      middlename: 'A',
+      suffix: 'Jr.',
+      email: 'john.doe@example.com',
+      phone: '09171234567',
+      address: '123 Mockingbird Lane',
+      preferredWorkLocation: 'Manila',
+      linkedInProfile: 'https://linkedin.com/in/johndoe',
+      portfolioLink: 'https://johndoe.dev',
       yearsOfExperience: 5,
-      currentMostRecentJob: "Frontend Developer",
-      highestQualification: "college",
-      majorFieldOfStudy: "Computer Science",
-      institution: "Mock University",
+      currentMostRecentJob: 'Frontend Developer',
+      highestQualification: 'college',
+      majorFieldOfStudy: 'Computer Science',
+      institution: 'Mock University',
       graduationYear: 2020,
-      keySkills: "JavaScript, React, CSS",
-      softwareProficiency: "VSCode, Git, Figma",
-      certifications: "AWS Certified Developer",
-      coverLetter: "I am excited to apply for this role...",
+      keySkills: 'JavaScript, React, CSS',
+      softwareProficiency: 'VSCode, Git, Figma',
+      certifications: 'AWS Certified Developer',
+      coverLetter: 'I am excited to apply for this role...',
       salaryExpectation: 70000,
-      availability: "Immediately",
-      jobAppliedFor: "Web Developer",
-      whyInterestedInRole: "The role aligns with my goals and experience.",
+      availability: 'Immediately',
+      jobAppliedFor: 'Web Developer',
+      whyInterestedInRole: 'The role aligns with my goals and experience.',
       ids: {
-        TIN: "123-456-789",
-        SSS: "12-3456789-0",
-        philHealth: "1234-5678-9012",
-        pagIBIGFundNumber: "1234-5678-9012",
+        TIN: '123-456-789',
+        SSS: '12-3456789-0',
+        philHealth: '1234-5678-9012',
+        pagIBIGFundNumber: '1234-5678-9012',
       },
       files: {}, // left empty — optional
-    };
+    }
     formReset(mockData)
   }
 
@@ -652,19 +652,20 @@ const Screening = () => {
                     <CCol>
                       <h2>Personal Information</h2>
                     </CCol>
-                    {config.env === 'development' || ['admin'].includes(userInformation.role) && (
-                      <CCol>
-                        <CButton
-                          color="primary"
-                          size="sm"
-                          onClick={() => {
-                            handleFillMockData()
-                          }}
-                        >
-                          Fill Mock Data
-                        </CButton>
-                      </CCol>
-                    )}
+                    {config.env === 'development' ||
+                      (['admin'].includes(userInformation.role) && (
+                        <CCol>
+                          <CButton
+                            color="primary"
+                            size="sm"
+                            onClick={() => {
+                              handleFillMockData()
+                            }}
+                          >
+                            Fill Mock Data
+                          </CButton>
+                        </CCol>
+                      ))}
                   </CRow>
                   <CRow>
                     <CCol className="d-flex justify-content-end">
@@ -1327,6 +1328,47 @@ const Screening = () => {
                               {p.statuses.journey.isShortlisted && (
                                 <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
                                   Shortlisted
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isInitialInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isTechnicalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Technical Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isPanelInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Panel Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isBehavioralInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Behavioral Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isFinalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Final Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isJobOffer && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Job Offered
+                                </CBadge>
+                              )}
+                              {p.statuses.journey.isHired && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
                                 </CBadge>
                               )}
                             </div>

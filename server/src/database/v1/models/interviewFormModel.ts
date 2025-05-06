@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
+const INTERVIEW_MODE_TYPES = ['Phone', 'Video', 'In-Person'];
 const RECO_STATUS = ['yes', 'no', 'need further review']
 
 interface IInterviewForm extends Document {
@@ -10,6 +10,7 @@ interface IInterviewForm extends Document {
   date: Date;
   interviewer: mongoose.Types.ObjectId;
   type: 'Phone' | 'Video' | 'In-Person';
+  interviewType: string;
   event: mongoose.Types.ObjectId;
   general: {
     communication: number;
@@ -59,8 +60,11 @@ const interviewFormSchema = new Schema<IInterviewForm>(
     },
     type: {
       type: String,
-      enum: INTERVIEW_TYPES,
+      enum: INTERVIEW_MODE_TYPES,
       default: 'Phone',
+    },
+    interviewType: {
+      type: String,
     },
     event: {
       type: mongoose.Schema.Types.ObjectId,

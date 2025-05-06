@@ -10,6 +10,7 @@ import logger from "../../../middlewares/logger";
 import Applicant, { IApplicant } from "../models/applicantModel";
 import { config } from "../../../config";
 import jobpostingModel from "../models/jobpostingModel";
+import FacilityEvent from "../models/facilityEventModel";
 
 export const statistics = async (req: req, res: res) => {
   try {
@@ -262,9 +263,9 @@ export const statistics = async (req: req, res: res) => {
     });
 
     const recentJobs = await jobpostingModel.find()
-    .sort({ createdAt: -1 })
-    .limit(10)
-    .select('title type location salary_min salary_max schedule_start schedule_end status createdAt');
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .select('title type location salary_min salary_max schedule_start schedule_end status createdAt');
 
     // Job postings grouped by type (e.g., full-time, part-time)
     const jobTypes = await jobpostingModel.aggregate([
@@ -280,6 +281,90 @@ export const statistics = async (req: req, res: res) => {
           avgMaxSalary: { $avg: "$salary_max" },
         },
       },
+    ]);
+
+    // Events
+    const totalEvents = await FacilityEvent.countDocuments();
+
+    const recentEvents = await FacilityEvent.find({
+      createdAt: { $gte: lastWeek }
+    })
+      .sort({ createdAt: -1 })
+      .limit(10) // Optional: limit to top 10 most recent events
+      .select('name type date facility capacity isAvailable isApproved createdAt')
+      .populate({
+        path: "facility",
+        model: "Facility"
+      })
+
+    const eventsPerDay = await FacilityEvent.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfMonth,
+            $lte: endOfMonth
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    const eventsThisMonth = await FacilityEvent.countDocuments({
+      createdAt: {
+        $gte: startOfMonth,
+        $lte: endOfMonth
+      }
+    });
+
+    const eventTypes = await FacilityEvent.aggregate([
+      {
+        $group: {
+          _id: "$type",
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+
+    const eventApprovalStatus = await FacilityEvent.aggregate([
+      {
+        $group: {
+          _id: "$isApproved.status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const eventParticipants = await FacilityEvent.aggregate([
+      { $unwind: "$participants" },
+      {
+        $group: {
+          _id: "$participants.applicant",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Event capacity utilization (how many slots are filled)
+    const eventCapacityUtilization = await FacilityEvent.aggregate([
+      {
+        $project: {
+          name: 1,
+          capacity: 1,
+          participantsCount: { $size: "$participants" },
+          utilization: {
+            $divide: [{ $size: "$participants" }, "$capacity"]
+          }
+        }
+      }
     ]);
 
     res.json({
@@ -312,6 +397,16 @@ export const statistics = async (req: req, res: res) => {
         activeJobPostings,
         expiredJobPostings,
         jobTypes,
+      },
+      events: {
+        totalEvents,
+        recentEvents,
+        eventsPerDay,
+        eventsThisMonth,
+        eventTypes,
+        eventApprovalStatus,
+        eventParticipants,
+        eventCapacityUtilization
       }
     });
   } catch (error) {

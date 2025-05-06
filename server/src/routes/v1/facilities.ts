@@ -159,7 +159,7 @@ router.get(
 
 // Booking
 router.post(
-  "/events/:eventId/book",
+  "/events/:eventId/book/applicant/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
   }),

@@ -3,9 +3,10 @@
  * @description Applicant model schema
  */
 
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
-export interface IApplicant extends Document {
+export interface IApplicantBase extends Document {
+  status: string;
   /**
    * Basic Information
    */
@@ -69,6 +70,14 @@ export interface IApplicant extends Document {
     idPhoto?: string;
   }
 
+  interviews: {
+    InitialInterview: string;
+    TechnicalInterview: string;
+    PanelInterview: string;
+    BehavioralInterview: string;
+    FinalInterview: string;
+  }
+
   ids: {
     TIN?: string;
     SSS?: string;
@@ -89,6 +98,7 @@ export interface IApplicant extends Document {
       isFinalInterview: boolean;
       isJobOffer: boolean;
       isHired: boolean;
+      withdrawn: boolean;
     },
     // preemployment: {
     //   files: {
@@ -120,6 +130,10 @@ export interface IApplicant extends Document {
     others: mongoose.Types.ObjectId[];
   }
   expiresAt: Date;
+}
+
+export interface IApplicant extends IApplicantBase, Document {
+  _id: Types.ObjectId,
 }
 
 const applicantSchema = new mongoose.Schema<IApplicant>(
@@ -276,6 +290,24 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       },
     },
 
+    interviews: {
+      InitialInterview: {
+        type: String,
+      },
+      TechnicalInterview: {
+        type: String,
+      },
+      PanelInterview: {
+        type: String,
+      },
+      BehavioralInterview: {
+        type: String,
+      },
+      FinalInterview: {
+        type: String,
+      },
+    },
+  
     ids: {
       TIN: {
         type: String,
@@ -322,6 +354,10 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
           default: false,
         },
         isHired: {
+          type: Boolean,
+          default: false,
+        },
+        withdrawn: {
           type: Boolean,
           default: false,
         },
@@ -377,7 +413,7 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       //   }
       // }
     },
-    
+
     events: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event",

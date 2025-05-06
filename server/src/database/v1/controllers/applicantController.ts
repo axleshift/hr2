@@ -72,7 +72,7 @@ export const updateApplicant = async (req: req, res: res) => {
     }
 
     const files = req.files as { [key: string]: Express.Multer.File[] } | undefined;
-    
+
     // If no files are uploaded, respond with an error
     // if (!files) {
     //   return res.status(400).json({ message: "No files uploaded" });
@@ -93,6 +93,7 @@ export const updateApplicant = async (req: req, res: res) => {
     const mergedFiles = {
       ...applicant.files,
       ...Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Object.entries(fileNames).filter(([_, val]) => val !== undefined)
       ),
     };
@@ -206,48 +207,6 @@ export const getAllApplicant = async (req: req, res: res) => {
   }
 };
 
-export const getFile = async (req: req, res: res) => {
-  try {
-    // Find the applicant by ID
-    const applicant = await Applicant.findById(req.params.id);
-    if (!applicant) {
-      return res.status(404).json({
-        message: "Applicant not found",
-      });
-    }
-
-    // Get the file field name from the request query
-    const { fileField } = req.params;
-    const fileName = applicant.files[fileField as keyof IApplicant['files']];
-
-    if (!fileName) {
-      return res.status(404).json({
-        message: `${fileField} file not found`,
-      });
-    }
-
-    // Construct the file path dynamically
-    const filePath = `${config.fileServer.dir}/${fileField}/${fileName}`;
-    logger.info(`Serving file: ${filePath}`);
-
-    // Check if the file exists before attempting to download
-    res.download(filePath, (err) => {
-      if (err) {
-        logger.error(err);
-        return res.status(500).json({
-          message: "Failed to download file",
-        });
-      }
-    });
-  } catch (error) {
-    logger.error(error);
-    res.status(500).json({
-      message: "An error occurred",
-      error,
-    });
-  }
-};
-
 export const searchApplicant = async (req: req, res: res) => {
   try {
     logger.info("Searching for resumes...");
@@ -333,7 +292,7 @@ export const getApplicantByDocumentCategory = async (req: req, res: res) => {
     const categoryFilters: Record<string, object> = {
       screening: { "statuses.journey.screening": true },
       shortlisted: { "statuses.journey.isShortlisted": true },
-      interview: { "documentations.interview.completed": true },
+      interview: { "statuses.journey.completed": true },
       training: { "documentations.training.completed": true },
       others: { "documentations.others.completed": true },
     };
@@ -370,7 +329,6 @@ export const getApplicantByDocumentCategory = async (req: req, res: res) => {
   }
 };
 
-
 export const getApplicantById = async (req: req, res: res) => {
   try {
     const applicant = await Applicant.findById(req.params.id);
@@ -392,31 +350,30 @@ export const getApplicantById = async (req: req, res: res) => {
   }
 };
 
-export const deleteResume = async (req: req, res: res) => {
+export const getEligibleForJobOffer = async (req: req, res: res) => {
   try {
-    const applicant = await Applicant.findById(req.params.id);
-    if (!applicant) {
-      return res.status(404).json({
-        message: "Applicant not found",
-      });
-    }
+    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
+    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 10;
+    const skip = (page - 1) * limit;
 
-    const filePath = path.join(config.fileServer.dir, applicant.files.resume || "");
+    const filter = {
+      "statuses.journey.isFinalInterview": true,
+      "statuses.journey.isJobOffer": false,
+    };
 
-    try {
-      await fs.access(filePath); // Check if the file exists
-      await fs.unlink(filePath); // Delete the file
-    } catch (fileError) {
-      logger.error("Error deleting file: ", fileError);
-      return res.status(500).json({
-        message: "Error deleting the file",
-        error: fileError,
-      });
-    }
+    const applicants = await Applicant.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({ updatedAt: -1 });
 
-    await Applicant.findByIdAndDelete(req.params.id);
+    const totalItems = await Applicant.countDocuments(filter);
+
     return res.status(200).json({
-      message: "Applicant deleted successfully",
+      message: "Eligible applicants found",
+      data: applicants,
+      totalItems,
+      totalPages: Math.ceil(totalItems / limit),
+      currentPage: page,
     });
   } catch (error) {
     logger.error(error);
@@ -424,5 +381,177 @@ export const deleteResume = async (req: req, res: res) => {
       message: "An error occurred",
       error,
     });
+  }
+}
+
+export const deleteApplicant = async (req: req, res: res) => {
+  try {
+    const applicant = await Applicant.findById(req.params.id);
+
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
+    }
+
+    // Delete all files in the applicant.files object
+    if (applicant.files) {
+      for (const [key, filePathValue] of Object.entries(applicant.files)) {
+        if (filePathValue) {
+          const filePath = path.join(config.fileServer.dir, filePathValue);
+          try {
+            await fs.access(filePath);
+            await fs.unlink(filePath);
+            logger.info(`Deleted file: ${filePath}`);
+          } catch (err) {
+            logger.warn(`Failed to delete ${key}: ${err}`);
+          }
+        }
+      }
+    }
+
+    // Overwrite PII fields with dummy or null values
+    applicant.firstname = "Deleted";
+    applicant.lastname = "User";
+    applicant.middlename = undefined;
+    applicant.suffix = undefined;
+    applicant.email = "deleted@example.com";
+    applicant.phone = undefined;
+    applicant.address = undefined;
+    applicant.linkedInProfile = undefined;
+    applicant.portfolioLink = undefined;
+
+    applicant.coverLetter = undefined;
+    applicant.whyInterestedInRole = undefined;
+    applicant.ids = {};
+    applicant.files = {};
+
+    // Save the obfuscated reccord
+    await applicant.save();
+
+    return res.status(200).json({
+      message: "Applicant data anonymized successfully",
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({
+      message: "An error occurred",
+      error,
+    });
+  }
+};
+
+const validFileFields = [
+  'resume', 'medCert', 'birthCert',
+  'NBIClearance', 'policeClearance', 'TOR', 'idPhoto',
+] as const;
+
+const validInterviewFields = [
+  'InitialInterview', 'TechnicalInterview',
+  'PanelInterview', 'BehavioralInterview', 'FinalInterview',
+] as const;
+
+type FileField = typeof validFileFields[number];
+type InterviewField = typeof validInterviewFields[number];
+
+export const getFile = async (req: req, res: res) => {
+  try {
+    const { applicantId, fileType } = req.params;
+
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({ message: "Applicant not found" });
+    }
+
+    let fileName: string | undefined;
+    let filePath: string;
+
+    const baseDir = config.fileServer.dir;
+
+    if ((validFileFields as readonly string[]).includes(fileType)) {
+      fileName = applicant.files[fileType as FileField];
+      if (!fileName) return res.status(404).json({ error: 'File not uploaded' });
+
+      filePath = path.join(baseDir, 'applicants', fileType, fileName);
+    } else if ((validInterviewFields as readonly string[]).includes(fileType)) {
+      fileName = applicant.interviews[fileType as InterviewField];
+      if (!fileName) return res.status(404).json({ error: 'File not uploaded' });
+
+      filePath = path.join(baseDir, 'applicants', 'file', fileName);
+    } else {
+      return res.status(400).json({ error: 'Invalid file type' });
+    }
+
+    res.download(filePath, fileName, (err) => {
+      logger.error(err);
+      if (!res.headersSent) {
+        res.status(500).end();
+      }
+    });
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({
+      message: "An error occurred",
+      error,
+    });
+  }
+};
+
+export const uploadFile = async (req: req, res: res) => {
+  try {
+    const { applicantId, fileType } = req.params;
+    const applicant = await Applicant.findById(applicantId);
+
+    if (!applicant) {
+      return res.status(404).json({ message: 'Applicant not found' });
+    }
+
+    const validFileFields = [
+      'resume', 'medCert', 'birthCert',
+      'NBIClearance', 'policeClearance', 'TOR', 'idPhoto',
+    ] as const;
+
+    const validInterviewFields = [
+      'InitialInterview', 'TechnicalInterview',
+      'PanelInterview', 'BehavioralInterview', 'FinalInterview',
+    ] as const;
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    if ((validFileFields as readonly string[]).includes(fileType)) {
+      type FileKey = typeof validFileFields[number];
+      applicant.files[fileType as FileKey] = file.filename;
+    } else if ((validInterviewFields as readonly string[]).includes(fileType)) {
+      type InterviewKey = typeof validInterviewFields[number];
+      applicant.interviews[fileType as InterviewKey] = file.filename;
+
+      // Update journey status
+      const interviewStatusMap: Record<string, keyof typeof applicant.statuses.journey> = {
+        InitialInterview: 'isInitialInterview',
+        TechnicalInterview: 'isTechnicalInterview',
+        PanelInterview: 'isPanelInterview',
+        BehavioralInterview: 'isBehavioralInterview',
+        FinalInterview: 'isFinalInterview',
+      };
+
+      const journeyKey = interviewStatusMap[fileType];
+      if (journeyKey) {
+        applicant.statuses.journey[journeyKey] = true;
+      }
+    } else {
+      return res.status(400).json({ message: 'Invalid file type' });
+    }
+
+    await applicant.save();
+
+    res.status(200).json({
+      message: 'File uploaded successfully',
+      fileName: file.filename,
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ message: 'An error occurred', error });
   }
 };
