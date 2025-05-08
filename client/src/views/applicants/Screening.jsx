@@ -75,6 +75,7 @@ const Screening = () => {
   // Search states
   const [searchInput, setSearchInput] = useState('')
   const [isSearchMode, setSearchMode] = useState(false)
+  const [isAllowReject, setIsAllowReject] = useState(false)
 
   // Form Elements states
   const [isEdit, setIsEdit] = useState(false)
@@ -337,7 +338,9 @@ const Screening = () => {
       setIsLoading(true)
       const res = isSearchMode
         ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}&tags=`)
-        : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
+        : await get(`/applicant/all?page=${page}&limit=${limit}&showRejected=${isAllowReject}`)
+
+      console.log(res.data)
       if (res.status === 200 || res.status === 201) {
         setApplicants(res.data.data)
         setCurrentPage(res.data.currentPage)
@@ -1268,6 +1271,16 @@ const Screening = () => {
               </CTooltip> */}
             </CInputGroup>
           </CForm>
+        </CCol>
+      </CRow>
+      <CRow className="mb-3">
+        <CCol className="d-flex justify-content-end">
+          <CButton
+            color={isAllowReject ? 'danger' : 'primary'}
+            onClick={() => setIsAllowReject((prev) => !prev)}
+          >
+            {isAllowReject ? 'Hide Rejected' : 'Allow Reject'}
+          </CButton>
         </CCol>
       </CRow>
       <CRow className="mt-2">

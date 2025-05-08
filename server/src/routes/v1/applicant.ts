@@ -13,6 +13,7 @@ import {
   updateStat,
   getEligibleForJobOffer,
   uploadFile,
+  rejectApplicant,
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
@@ -100,6 +101,15 @@ router.get(
   }),
   getApplicantById
 );
+
+router.get(
+  "/:id/reject",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  }),
+  rejectApplicant
+);
+
 
 router.delete(
   "/:id",

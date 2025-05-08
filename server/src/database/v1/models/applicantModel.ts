@@ -3,6 +3,8 @@
  * @description Applicant model schema
  */
 
+const APPLICANT_STATUS = ['Rejected', 'Hired', 'Active']
+
 import mongoose, { Document, Types } from "mongoose";
 
 export interface IApplicantBase extends Document {
@@ -141,6 +143,13 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
     /**
      * Basic Information
      */
+    status: {
+      type: String,
+      enum: APPLICANT_STATUS,
+      default: 'Active',
+      required: true,
+    },
+
     firstname: {
       type: String,
       required: true,

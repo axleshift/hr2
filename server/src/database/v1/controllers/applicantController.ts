@@ -9,6 +9,7 @@ import { Request as req, Response as res } from "express";
 import logger from "../../../middlewares/logger";
 import Applicant, { IApplicant } from "../models/applicantModel";
 import { config } from "../../../config";
+import { sendEmail } from "../../../utils/mailHandler";
 
 export const addApplicant = async (req: req, res: res) => {
   try {
@@ -181,22 +182,96 @@ export const updateStat = async (req: req, res: res) => {
   }
 };
 
+export const rejectApplicant = async (req: req, res: res) => {
+  try {
+    const applicantId = req.params.id;
+
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      return res.status(404).json({
+        message: "Applicant not found",
+      });
+    }
+
+    const isCurrentlyRejected = applicant.status.toLowerCase() === 'Rejected';
+    const newStatus = isCurrentlyRejected ? 'Active' : 'Rejected';
+
+    applicant.status = newStatus;
+    await applicant.save();
+
+    if (newStatus === 'Rejected') {
+      const fullName = `${applicant.firstname} ${applicant.lastname}`;
+      const templatePath = path.join(__dirname, '../../../public/templates/rejectionEmail.html');
+      const emailTemplate = await fs.readFile(templatePath, 'utf-8');
+
+      const emailText = emailTemplate
+        .replace(/{{fullName}}/g, fullName)
+        .replace(/{{jobTitle}}/g, applicant.jobAppliedFor);
+
+      const emailResult = await sendEmail(
+        'Application Update',
+        applicant.email,
+        'Your Application with AxleShift',
+        '',
+        emailText
+      );
+
+      if (!emailResult.success) {
+        return res.status(500).json({
+          message: `Applicant rejected, but email failed to send to ${applicant.email}`,
+          error: emailResult.message,
+          data: applicant
+        });
+      }
+
+      return res.status(200).json({
+        message: "Applicant rejected and email sent successfully",
+        data: applicant,
+      });
+
+    } else {
+      return res.status(200).json({
+        message: "Applicant status reverted to Active",
+        data: applicant,
+      });
+    }
+
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({
+      message: "An error occurred",
+      error,
+    });
+  }
+};
+
+
 export const getAllApplicant = async (req: req, res: res) => {
   try {
     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1;
     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 9;
     const skip = (page - 1) * limit;
+    const showRejected = req.query.showRejected === "true";
 
-    const applicants = await Applicant.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const filter = showRejected
+      ? { status: { $in: ["Active", "Rejected"] } }
+      : { status: "Active" };
 
-    const totalItems = await Applicant.countDocuments();
+    const applicants = await Applicant.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalItems = await Applicant.countDocuments(filter);
     const totalPages = Math.ceil(totalItems / limit);
+
     return res.status(200).json({
       message: "Applicants found",
       data: applicants,
       totalItems,
       totalPages,
       currentPage: page,
+      showRejected,
     });
   } catch (error) {
     logger.error(error);
@@ -206,6 +281,7 @@ export const getAllApplicant = async (req: req, res: res) => {
     });
   }
 };
+
 
 export const searchApplicant = async (req: req, res: res) => {
   try {

@@ -24,6 +24,7 @@ import {
   CFormLabel,
   CAlert,
   CAvatar,
+  CBadge,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -125,6 +126,7 @@ const ApplicantProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+  const [isRejectLoading, setIsRejectLoading] = useState(false)
 
   const APP_STATUS = {
     journey: [
@@ -300,6 +302,26 @@ const ApplicantProfilePage = () => {
     }
   }
 
+  const handleReject = async () => {
+    try {
+      if (!confirm(`Are you sure you want to reject this applicant?`)) {
+        return
+      }
+      setIsRejectLoading(true)
+      const res = await get(`/applicant/${applicantId}/reject`)
+
+      if (res.status === 200) {
+        reset(res.data.data)
+        setApplicant(res.data.data)
+        addToast('Success', res.data.message, 'success')
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsRejectLoading(false)
+    }
+  }
+
   const handleSendData = async () => {
     try {
       if (!confirm('Are you sure you want to send this to Employee Management?')) {
@@ -329,6 +351,22 @@ const ApplicantProfilePage = () => {
           <CCol>Applicant ID: {applicantId}</CCol>
         </CRow>
       )}
+      <CRow>
+        <CCol>
+          Status:{' '}
+          <CBadge
+            color={
+              applicant?.status === 'Active'
+                ? 'success'
+                : applicant?.status === 'rejected'
+                  ? 'danger'
+                  : 'secondary'
+            }
+          >
+            {applicant?.status}
+          </CBadge>
+        </CCol>
+      </CRow>
       <CRow className="mb-3 mt-3">
         <CTabs activeItemKey={'form'}>
           <CTabList variant="tabs">
@@ -845,9 +883,10 @@ const ApplicantProfilePage = () => {
                             <CButton
                               color="warning"
                               size="sm"
-                              // onClick={() => handleDelete(applicant._id)}
+                              onClick={() => handleReject(applicant._id)}
+                              disabled={isRejectLoading}
                             >
-                              Reject
+                              {isRejectLoading ? 'Loading...' : 'Reject'}
                             </CButton>
                           )}
                         </div>
