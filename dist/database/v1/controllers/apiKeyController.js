@@ -8,14 +8,15 @@ const apikeyModel_1 = __importDefault(require("../models/apikeyModel"));
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const generateApikey = async (req, res) => {
     try {
-        if (!req.user) {
+        if (!req.session.user) {
             return res.status(400).json({
                 statusCode: 400,
                 success: false,
                 message: "User not authenticated",
             });
         }
-        const apiKeyData = await apikeyModel_1.default.find({ owner: req.user._id });
+        const userId = req.session.user?._id;
+        const apiKeyData = await apikeyModel_1.default.find({ owner: userId });
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -67,9 +68,10 @@ const createApikey = async (req, res) => {
     try {
         const { permissions, expiresAt } = req.body;
         const key = Math.random().toString(36).substring(7);
+        const userId = req.session.user?._id;
         const apiKeyData = await apikeyModel_1.default.create({
             key: key,
-            owner: req.user ? req.user._id : undefined,
+            owner: req.session.user ? userId : undefined,
             permissions: permissions || [],
             expiresAt: expiresAt || new Date(),
         });

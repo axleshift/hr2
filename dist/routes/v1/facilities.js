@@ -12,61 +12,61 @@ const facilityController_1 = require("../../database/v1/controllers/facilityCont
 // Facility Management
 router.post("/create", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.createFacility);
+}), facilityController_1.createFacility);
 router.put("/update/:facilityId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.updateFacility);
+}), facilityController_1.updateFacility);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), facilityController_1.getAllFacilities);
+}), facilityController_1.getAllFacilities);
 router.get("/:facilityId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), facilityController_1.getFacilityById);
+}), facilityController_1.getFacilityById);
 router.delete("/delete/:facilityId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.removeFacility);
+}), facilityController_1.removeFacility);
 // Timeslots
 router.post("/timeslot/create/:facilityId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.createFacilityTimeslot);
+}), facilityController_1.createFacilityTimeslot);
 router.get("/timeslot/:facilityId/:date", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
 }, true), facilityController_1.getAllFacilityTimeslotsForDate);
 router.delete("/timeslot/delete/:timeslotId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.removeFacilityTimeslot);
+}), facilityController_1.removeFacilityTimeslot);
 // Event Management
 router.post("/event/:timeslotId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), facilityController_1.createFacilityEvent);
+}), facilityController_1.createFacilityEvent);
 router.put("/event/:timeslotId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"]
-}, true), facilityController_1.updateFacilityEvent);
+}), facilityController_1.updateFacilityEvent);
 router.delete("/event/:timeslotId", (0, verifySession_1.default)({
     permissions: ["admin", "manager"]
-}, true), facilityController_1.deleteFacilityEvent);
+}), facilityController_1.deleteFacilityEvent);
 router.get("/events/:eventId/calendar-states", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), facilityController_1.getFacilityCalendarStates);
+}), facilityController_1.getFacilityCalendarStates);
 router.get("/event/:eventId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"]
-}, true), facilityController_1.getFacilityEventByID);
+}), facilityController_1.getFacilityEventByID);
 router.get("/events/:eventId/:date", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), facilityController_1.getFacilityEventsForDate);
+}), facilityController_1.getFacilityEventsForDate);
 router.get("/events/upcoming", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), facilityController_1.getUpcomingEvents);
+}), facilityController_1.getUpcomingEvents);
 // Booking
-router.post("/events/:eventId/book", (0, verifySession_1.default)({
+router.post("/events/:eventId/book/applicant/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), facilityController_1.bookApplicantToEvent);
+}), facilityController_1.bookApplicantToEvent);
 router.post("/events/:eventId/send-email", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), facilityController_1.SendEmailToFacilityEventParticipants);
+}), facilityController_1.SendEmailToFacilityEventParticipants);
 router.delete("/events/:eventId/unbook", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), facilityController_1.unbookApplicantFromEvent);
+}), facilityController_1.unbookApplicantFromEvent);
 exports.default = {
     metadata: {
         path: "/facilities",

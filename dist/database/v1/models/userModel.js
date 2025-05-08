@@ -14,26 +14,14 @@ const verificationSchema = new mongoose_1.default.Schema({
         required: true,
     },
 });
-// const developerSchema = new mongoose.Schema(
-//   {
-//     apKey: {
-//       type: String,
-//       required: true,
-//     },
-//     permissions: {
-//       type: [String],
-//       required: true,
-//     },
-//     expiresAt: {
-//       type: Date,
-//       required: true,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//     updateAt: true,
-//   }
-// );
+const OtpSchema = new mongoose_1.default.Schema({
+    code: {
+        type: String,
+    },
+    expiresAt: {
+        type: Date
+    }
+});
 const userSchema = new mongoose_1.default.Schema({
     firstname: {
         type: String,
@@ -55,7 +43,7 @@ const userSchema = new mongoose_1.default.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false, // Password is optional for Google users
     },
     emailVerifiedAt: {
         type: Date,
@@ -82,15 +70,37 @@ const userSchema = new mongoose_1.default.Schema({
             type: String,
         },
         expiresAt: {
-            type: Date
-        }
+            type: Date,
+        },
     },
     rememberToken: {
         type: String,
         required: false,
     },
+    otp: {
+        type: OtpSchema
+    },
+    knownDevices: [{
+            type: String,
+        }],
+    // Google-related fields
+    googleId: {
+        type: String,
+        required: false, // Not required unless the user logged in with Google
+    },
+    displayName: {
+        type: String,
+        required: false, // Not required unless the user logged in with Google
+    },
+    googleEmail: {
+        type: String,
+        required: false, // Not required unless the user logged in with Google
+    },
+    googleAvatar: {
+        type: String,
+        required: false, // Optional avatar URL for Google users
+    },
 }, {
     timestamps: true,
-    updateAt: true,
 });
 exports.default = mongoose_1.default.model("User", userSchema);

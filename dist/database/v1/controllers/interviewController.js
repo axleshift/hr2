@@ -61,6 +61,7 @@ const createInterview = async (req, res) => {
             date: data.date,
             interviewer: new mongoose_1.default.Types.ObjectId(interviewerId),
             type: data.type,
+            interviewType: data.interviewType,
             event: new mongoose_1.default.Types.ObjectId(eventId),
             general: data.general,
             questions: data.questions || [],
@@ -76,6 +77,28 @@ const createInterview = async (req, res) => {
         }
         const interviewId = interview._id;
         applicant.documentations.interview.push(interviewId);
+        switch (data.interviewType) {
+            case 'Initial Interview':
+                applicant.statuses.journey.isInitialInterview = true;
+                break;
+            case 'Final Interview':
+                applicant.statuses.journey.isFinalInterview = true;
+                break;
+            case 'Technical Interview':
+                applicant.statuses.journey.isTechnicalInterview = true;
+                break;
+            case 'Panel Interview':
+                applicant.statuses.journey.isPanelInterview = true;
+                break;
+            case 'Behavioral Interview':
+                applicant.statuses.journey.isBehavioralInterview = true;
+                break;
+            case 'Orientation':
+                applicant.statuses.journey.isHired = true;
+                break;
+            default:
+                break;
+        }
         applicant.save();
         // Respond with success
         return res.status(201).json({ message: "Interview created successfully", data: interview });
@@ -128,6 +151,8 @@ const updateInterview = async (req, res) => {
             interview.job = data.job;
         if (data.type)
             interview.type = data.type;
+        if (data.interviewType)
+            interview.interviewType = data.interviewType;
         if (data.recommendation)
             interview.recommendation = data.recommendation;
         if (data.general)

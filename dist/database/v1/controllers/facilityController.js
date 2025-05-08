@@ -15,8 +15,8 @@ const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const createFacility = async (req, res) => {
     try {
-        const { name, type, description, location } = req.body;
-        if (!name || !type || !description || !location) {
+        const { name, type, description, location, requirements } = req.body;
+        if (!name || !type || !location) {
             return res.status(400).json({ message: "All fields are required" });
         }
         const facilityData = {
@@ -24,6 +24,7 @@ const createFacility = async (req, res) => {
             type,
             description,
             location,
+            requirements: requirements || [],
         };
         const newFacility = await facilityModel_1.default.create(facilityData);
         if (!newFacility) {
@@ -40,7 +41,7 @@ exports.createFacility = createFacility;
 const updateFacility = async (req, res) => {
     try {
         const { facilityId } = req.params;
-        const { name, type, description, location } = req.body;
+        const { name, type, description, requirements, location } = req.body;
         if (!facilityId) {
             return res.status(400).json({ message: "Facility id is required" });
         }
@@ -54,6 +55,7 @@ const updateFacility = async (req, res) => {
         facility.name = name;
         facility.type = type;
         facility.description = description;
+        facility.requirements = requirements;
         facility.location = location;
         const updatedFacility = await facility.save();
         if (!updatedFacility) {
@@ -199,7 +201,7 @@ const createFacilityTimeslot = async (req, res) => {
             return res.status(400).json({ message: "Facility id is required" });
         }
         if (!date || !start || !end) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ message: "All fields are required", date, start, end, facilityId });
         }
         const facility = await facilityModel_1.default.findById(facilityId);
         if (!facility) {
@@ -641,8 +643,7 @@ const getUpcomingEvents = async (req, res) => {
 exports.getUpcomingEvents = getUpcomingEvents;
 const bookApplicantToEvent = async (req, res) => {
     try {
-        const { eventId } = req.params;
-        const { applicantId } = req.body;
+        const { eventId, applicantId } = req.params;
         // Validate input
         if (!eventId) {
             return res.status(400).json({ message: 'Event ID is required.' });

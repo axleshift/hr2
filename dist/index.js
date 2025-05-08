@@ -1,9 +1,4 @@
 "use strict";
-/**
- * @file index.ts
- * @description Entry point for the server
- * @access public
- */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -41,6 +36,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @file index.ts
+ * @description Entry point for the server
+ * @access public
+ */
+require("module-alias/register");
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
@@ -60,6 +61,7 @@ const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const verifyApiKey_1 = __importDefault(require("./middlewares/verifyApiKey"));
 const mailHandler_1 = require("./utils/mailHandler");
+const express_useragent_1 = __importDefault(require("express-useragent"));
 const app = (0, express_1.default)();
 const host = config_1.config.server.host;
 const port = config_1.config.server.port;
@@ -92,14 +94,16 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
-        secure: config_1.config.env === 'production',
+        secure: false,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: "strict",
+        sameSite: "lax",
     },
     store: mongoStore,
 }));
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_useragent_1.default.express());
 app.use((0, helmet_1.default)());
 app.use((0, pino_http_1.default)({ logger: logger_1.default }));
 const env = config_1.config.env;

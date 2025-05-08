@@ -38,7 +38,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-// Schema definition for the Facility model
+const requirementSchema = new mongoose_1.Schema({
+    title: { type: String, required: true, trim: true },
+    description: { type: String, trim: true },
+});
+// Facility schema definition
 const facilitySchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -54,6 +58,7 @@ const facilitySchema = new mongoose_1.Schema({
         type: String,
         trim: true,
     },
+    requirements: [requirementSchema],
     location: {
         type: String,
         required: true,

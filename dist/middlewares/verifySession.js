@@ -1,8 +1,4 @@
 "use strict";
-/**
- * @file /middlewares/verifySession.ts
- * @description Middleware to verify user session
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 // sendError helper function
 const sendError = (res, statusCode, message) => {
@@ -13,33 +9,22 @@ const sendError = (res, statusCode, message) => {
         message,
     });
 };
-/**
- * verifySession middleware
- * @param metadata - Metadata object containing permissions
- * @param allowGuest - Boolean to allow guest access without session (default: false)
- * @returns Express middleware
- *
- * @description This middleware verifies the user session and permissions based on the metadata object provided
- * It also validates the CSRF token if enabled
- * It allows guest access if enabled
- */
 const verifySession = (metadata, allowGuest = false) => {
     return (req, res, next) => {
-        if (!req.session) {
-            return sendError(res, 401, "Unauthorized: Session not initialized");
-        }
-        const user = req.session.user;
+        const user = req.session.user; // Use Passport's way of accessing the authenticated user
+        console.info("User: ", user);
         if (!user) {
-            if (allowGuest) {
-                return next(); // Allow access if guest access is enabled
-            }
-            return sendError(res, 401, "Unauthorized: Invalid or missing user session");
+            if (allowGuest)
+                return next();
+            return sendError(res, 401, "Unauthorized: No user logged in");
         }
-        if (!user.role || typeof user.role !== "string") {
-            return sendError(res, 401, "Unauthorized: User role is invalid");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const userRole = user.role;
+        if (!userRole || typeof userRole !== "string") {
+            return sendError(res, 401, "Unauthorized: Invalid user role");
         }
         const permissions = metadata.permissions;
-        if (permissions.length > 0 && !permissions.includes(user.role)) {
+        if (permissions.length > 0 && !permissions.includes(userRole)) {
             return sendError(res, 403, "Forbidden: Insufficient permissions");
         }
         next();

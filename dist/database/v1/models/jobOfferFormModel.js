@@ -35,6 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const OFFER_STATUSES = ['Pending', 'Accepted', 'Declined'];
+const JOB_TYPES = ['Contractual', 'Regular', 'Temporary', 'Freelance']; // New Enum for job types
 const jobOfferFormSchema = new mongoose_1.Schema({
     applicant: {
         type: mongoose_1.default.Schema.Types.ObjectId,
@@ -47,12 +48,17 @@ const jobOfferFormSchema = new mongoose_1.Schema({
             validator(value) {
                 return mongoose_1.default.Types.ObjectId.isValid(value) || typeof value === 'string';
             },
-            message: 'Author must be a valid ObjectId or a string.',
+            message: 'Position must be a valid ObjectId or a string.',
         },
     },
     salary: {
         type: Number,
         required: true,
+    },
+    salaryType: {
+        type: String,
+        enum: ['Hourly', 'Annual'],
+        default: 'Annual',
     },
     startDate: {
         type: Date,
@@ -60,6 +66,22 @@ const jobOfferFormSchema = new mongoose_1.Schema({
     },
     benefits: {
         type: String,
+    },
+    contractDuration: {
+        type: String,
+        default: null,
+    },
+    location: {
+        type: String,
+        required: true,
+    },
+    workHours: {
+        type: String,
+    },
+    jobType: {
+        type: String,
+        enum: JOB_TYPES,
+        required: true, // This field is now required
     },
     status: {
         type: String,
@@ -87,6 +109,7 @@ const jobOfferFormSchema = new mongoose_1.Schema({
     },
     emailsent: {
         type: Boolean,
+        default: false,
     },
     emailSentDate: {
         type: Date,
@@ -97,6 +120,10 @@ const jobOfferFormSchema = new mongoose_1.Schema({
     notes: {
         type: String,
         default: '',
+    },
+    probationPeriod: {
+        type: String,
+        default: null,
     },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model('JobOfferForm', jobOfferFormSchema);

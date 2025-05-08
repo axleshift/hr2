@@ -11,88 +11,120 @@ const screeningController_1 = require("../../database/v1/controllers/screeningCo
 const interviewController_1 = require("../../database/v1/controllers/interviewController");
 const facilityController_1 = require("../../database/v1/controllers/facilityController");
 const jobofferController_1 = require("../../database/v1/controllers/jobofferController");
+const fileUploadHandler_1 = require("../../utils/fileUploadHandler");
+const multer_1 = __importDefault(require("multer"));
+const uploader = (0, fileUploadHandler_1.upload)('applicants');
 router.post("/", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager"],
-}, true), applicantController_1.addNewResume);
+}), applicantController_1.addApplicant);
 router.put("/:id", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
-}, true), applicantController_1.updateResume);
+}), uploader.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "medCert", maxCount: 1 },
+    { name: "birthCert", maxCount: 1 },
+    { name: "NBIClearance", maxCount: 1 },
+    { name: "policeClearance", maxCount: 1 },
+    { name: "TOR", maxCount: 1 },
+    { name: "idPhoto", maxCount: 1 },
+]), (err, req, res, next) => {
+    if (err) {
+        // Check for specific Multer errors
+        if (err instanceof multer_1.default.MulterError) {
+            // Handle Multer specific errors
+            return res.status(400).send({ message: err.message });
+        }
+        // Handle general errors
+        return res.status(500).send({ message: "Something went wrong!" });
+    }
+    next();
+}, applicantController_1.updateApplicant);
 router.put("/status/:applicantId/:stat", (0, verifySession_1.default)({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
-}, true), applicantController_1.updateStat);
+}), applicantController_1.updateStat);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), applicantController_1.getAllResumeData);
+}), applicantController_1.getAllApplicant);
 router.get("/category/:category", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), applicantController_1.getApplicantByDocumentCategory);
-router.get("/download/:id", (0, verifySession_1.default)({
-    permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), applicantController_1.getResumeFile);
+}), applicantController_1.getApplicantByDocumentCategory);
 router.get("/search", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), applicantController_1.searchResume);
+}), applicantController_1.searchApplicant);
 router.get("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), applicantController_1.getResumeById);
+}), applicantController_1.getApplicantById);
+router.get("/:id/reject", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+}), applicantController_1.rejectApplicant);
 router.delete("/:id", (0, verifySession_1.default)({
     permissions: ["admin", "manager"],
-}, true), applicantController_1.deleteResume);
+}), applicantController_1.deleteApplicant);
 // Events
 router.get("/events/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), facilityController_1.getAllApplicantFacilityEvents);
+}), facilityController_1.getAllApplicantFacilityEvents);
 // Screening
 router.post("/screen/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), screeningController_1.createScreening);
+}), screeningController_1.createScreening);
 router.put("/screen/:screeningId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), screeningController_1.updateScreening);
+}), screeningController_1.updateScreening);
 router.get("/screen/ai/:applicantId/:jobId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), screeningController_1.screenApplicantViaAI);
+}), screeningController_1.screenApplicantViaAI);
 router.get("/screen/ai/:applicantId/:jobId/:screeningId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), screeningController_1.screenApplicantViaAI);
+}), screeningController_1.screenApplicantViaAI);
 router.get("/screen/all/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), screeningController_1.getAllScreening);
+}), screeningController_1.getAllScreening);
 // interview
 router.post("/interview/:applicantId/:eventId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), interviewController_1.createInterview);
+}), interviewController_1.createInterview);
 router.put("/interview/:interviewId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), interviewController_1.updateInterview);
+}), interviewController_1.updateInterview);
 router.get("/interview/all/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-}, true), interviewController_1.getAllInterview);
+}), interviewController_1.getAllInterview);
 router.get("/interview/recent", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), interviewController_1.getAllRecentInterviews);
+}), interviewController_1.getAllRecentInterviews);
 router.get("/interview/:interviewId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-}, true), interviewController_1.getAllInterview);
+}), interviewController_1.getAllInterview);
 // job offer
 router.post("/joboffer/:applicantId/", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.createJoboffer);
+}), jobofferController_1.createJoboffer);
 router.post("/joboffer/send-email/:jobofferId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.sendJobOfferMail);
+}), jobofferController_1.sendJobOfferMail);
 router.put("/joboffer/:jobofferId/", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.updateJoboffer);
+}), jobofferController_1.updateJoboffer);
+router.get("/joboffer/all/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}), applicantController_1.getEligibleForJobOffer);
 router.get("/joboffer/all/:applicantId/", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.getAllJoboffer);
+}), jobofferController_1.getApplicantJoboffer);
 router.get("/joboffer/recent/", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.getAllRecentJoboffer);
+}), jobofferController_1.getAllRecentJoboffer);
 router.get("/joboffer/:applicantId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobofferController_1.getJobofferById);
+}), jobofferController_1.getJobofferById);
+//
+router.get("/:applicantId/file/:fileType", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+}), applicantController_1.getFile);
+router.post("/file/:applicantId/interview/:fileType", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+}), (0, fileUploadHandler_1.upload)('applicants').single('file'), applicantController_1.uploadFile);
 exports.default = {
     metadata: {
         path: "/applicant",

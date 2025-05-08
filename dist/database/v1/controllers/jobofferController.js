@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendJobOfferMail = exports.getAllRecentJoboffer = exports.getAllJoboffer = exports.getJobofferById = exports.updateJoboffer = exports.createJoboffer = void 0;
+exports.sendJobOfferMail = exports.getAllRecentJoboffer = exports.getApplicantJoboffer = exports.getJobofferById = exports.updateJoboffer = exports.createJoboffer = void 0;
 const logger_1 = __importDefault(require("../../../middlewares/logger"));
 const applicantModel_1 = __importDefault(require("../models/applicantModel"));
 const jobOfferFormModel_1 = __importDefault(require("../models/jobOfferFormModel"));
@@ -14,7 +14,7 @@ const promises_1 = __importDefault(require("fs/promises"));
 const createJoboffer = async (req, res) => {
     try {
         const { applicantId } = req.params;
-        const { position, salary, startDate, benefits, notes } = req.body;
+        const { position, salary, startDate, benefits, notes, jobType, contractDuration, location } = req.body;
         if (!applicantId) {
             return res.status(400).json({ message: 'Applicant Id is required.', applicantId });
         }
@@ -28,28 +28,31 @@ const createJoboffer = async (req, res) => {
         const userId = req.session.user?._id;
         const data = {
             applicant: applicantId,
-            position: position,
-            salary: salary,
-            startDate: startDate,
-            benefits: benefits,
+            position,
+            salary,
+            startDate,
+            benefits,
             status: 'Pending',
             issuedBy: userId,
             issuedDate: new Date(),
-            notes: notes,
+            notes,
+            jobType, // New field for job type
+            contractDuration, // New field for contract duration (optional)
+            location, // New field for location
         };
         const joboffer = await jobOfferFormModel_1.default.create(data);
         if (!joboffer) {
             return res.status(400).json({ message: 'Failed to save job offer' });
         }
         const jobofferId = joboffer._id;
-        applicant.isJobOffer = true;
+        applicant.statuses.journey.isJobOffer = true;
         applicant.documentations.jobOffer = jobofferId;
         await applicant.save();
         // Optionally, populate applicant details if needed:
         await joboffer.populate({
             path: 'applicant',
             model: 'Applicant',
-            select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
+            select: "_id firstname lastname statuses"
         });
         res.status(201).json({
             message: 'Job offer successfully created.',
@@ -65,7 +68,7 @@ exports.createJoboffer = createJoboffer;
 const updateJoboffer = async (req, res) => {
     try {
         const { jobofferId } = req.params;
-        const { position, salary, startDate, benefits, status, notes } = req.body;
+        const { position, salary, startDate, benefits, notes, jobType, contractDuration, location, status } = req.body;
         const { isApproved } = req.query;
         if (!jobofferId) {
             return res.status(400).json({ message: 'Job offer ID is required.', jobofferId });
@@ -78,12 +81,29 @@ const updateJoboffer = async (req, res) => {
             return res.status(404).json({ message: 'Job offer not found', jobofferId });
         }
         const userId = req.session.user?._id;
+        // const data = {
+        //   applicant: applicantId,
+        //   position,
+        //   salary,
+        //   startDate,
+        //   benefits,
+        //   status: 'Pending',
+        //   issuedBy: userId,
+        //   issuedDate: new Date(),
+        //   notes,
+        //   jobType,  // New field for job type
+        //   contractDuration,  // New field for contract duration (optional)
+        //   location,  // New field for location
+        // }
         joboffer.position = position;
         joboffer.salary = salary;
         joboffer.startDate = new Date(startDate);
         joboffer.benefits = benefits;
         joboffer.status = status;
         joboffer.notes = notes;
+        joboffer.jobType = jobType;
+        joboffer.contractDuration = contractDuration;
+        joboffer.location = location;
         if (isApproved !== undefined) {
             joboffer.approvedBy = new mongoose_1.default.Types.ObjectId(userId);
             joboffer.approvedDate = new Date();
@@ -144,7 +164,7 @@ const getJobofferById = async (req, res) => {
     }
 };
 exports.getJobofferById = getJobofferById;
-const getAllJoboffer = async (req, res) => {
+const getApplicantJoboffer = async (req, res) => {
     try {
         const { applicantId } = req.params;
         const searchQuery = req.query.query;
@@ -176,7 +196,7 @@ const getAllJoboffer = async (req, res) => {
                 {
                     path: "applicant",
                     model: "Applicant",
-                    select: "_id firstname lastname isShortlisted isInitialInterview isFinalInterview isJobOffer isHired"
+                    select: "_id firstname lastname statuses"
                 },
                 {
                     path: "issuedBy",
@@ -208,7 +228,7 @@ const getAllJoboffer = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
-exports.getAllJoboffer = getAllJoboffer;
+exports.getApplicantJoboffer = getApplicantJoboffer;
 const getAllRecentJoboffer = async (req, res) => {
     try {
         const { status, approvedJoboffer } = req.query;

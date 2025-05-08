@@ -6,16 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const verifySession_1 = __importDefault(require("../../middlewares/verifySession"));
-const apiKeyController_1 = require("../../database/v1/controllers/apiKeyController");
-router.get("/update/:id", (0, verifySession_1.default)({
-    permissions: ["admin"],
-}), apiKeyController_1.updateApikey);
+const statisticController_1 = require("../../database/v1/controllers/statisticController");
+dotenv_1.default.config();
+router.get("/", (0, verifySession_1.default)({
+    permissions: ["admin", "manager", "recruiter"],
+}), statisticController_1.statistics);
 exports.default = {
     metadata: {
-        path: "/api",
-        description: "This route is used to add, update, delete, get all, get by id and search test data",
+        path: "/stats",
+        description: "Test route",
     },
     router,
 };

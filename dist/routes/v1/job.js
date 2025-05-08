@@ -9,19 +9,19 @@ const verifySession_1 = __importDefault(require("../../middlewares/verifySession
 const jobController_1 = require("../../database/v1/controllers/jobController");
 router.post("/", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobController_1.createJob);
+}), jobController_1.createJob);
 router.put("/:jobId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobController_1.updateJob);
+}), jobController_1.updateJob);
 router.get("/all", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobController_1.getAllJob);
+}), jobController_1.getAllJob);
 router.get("/:jobId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), jobController_1.getJobById);
+}), jobController_1.getJobById);
 router.delete("/:jobId", (0, verifySession_1.default)({
     permissions: ["admin", "manager", "recruiter"],
-}, true), (req, res) => {
+}), (req, res) => {
     res.send("OK");
 });
 exports.default = {

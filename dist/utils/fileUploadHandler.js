@@ -18,11 +18,10 @@ if (!fs_1.default.existsSync(dest)) {
     fs_1.default.mkdirSync(dest, { recursive: true });
 }
 // Setup storage engine for uploaded files
-const upload = (childDir) => {
+const upload = (baseDir) => {
     const storage = multer_1.default.diskStorage({
         destination: (req, file, cb) => {
-            const uploadPath = path_1.default.join(dest, childDir);
-            // Create the child directory if it doesn't exist
+            const uploadPath = path_1.default.join(dest, baseDir, file.fieldname);
             if (!fs_1.default.existsSync(uploadPath)) {
                 fs_1.default.mkdirSync(uploadPath, { recursive: true });
             }
@@ -33,9 +32,9 @@ const upload = (childDir) => {
         },
     });
     return (0, multer_1.default)({
-        storage: storage,
+        storage,
         fileFilter: (req, file, cb) => {
-            const filetypes = /pdf|doc|docx/;
+            const filetypes = /pdf|doc|docx|jpg|jpeg|png/;
             const extname = filetypes.test(path_1.default.extname(file.originalname).toLowerCase());
             const mimetype = filetypes.test(file.mimetype);
             if (extname && mimetype) {

@@ -34,7 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const INTERVIEW_TYPES = ['Phone', 'Video', 'In-Person'];
+const INTERVIEW_MODE_TYPES = ['Phone', 'Video', 'In-Person'];
 const RECO_STATUS = ['yes', 'no', 'need further review'];
 const interviewFormSchema = new mongoose_1.Schema({
     applicant: {
@@ -60,8 +60,11 @@ const interviewFormSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: INTERVIEW_TYPES,
+        enum: INTERVIEW_MODE_TYPES,
         default: 'Phone',
+    },
+    interviewType: {
+        type: String,
     },
     event: {
         type: mongoose_1.default.Schema.Types.ObjectId,

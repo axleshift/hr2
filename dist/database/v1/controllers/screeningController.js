@@ -243,10 +243,10 @@ const createScreening = async (req, res) => {
             }
         };
         if (status === 'shorlisted') {
-            applicant.isShortlisted = true;
+            applicant.statuses.journey.isShortlisted = true;
         }
         else {
-            applicant.isShortlisted = false;
+            applicant.statuses.journey.isShortlisted = false;
         }
         await applicant.save();
         // Save screening
@@ -330,10 +330,10 @@ const updateScreening = async (req, res) => {
         logger_1.default.info("Status");
         logger_1.default.info(updateData.status);
         if (updateData.status === 'shortlisted') {
-            applicant.isShortlisted = true;
+            applicant.statuses.journey.isShortlisted = true;
         }
         else {
-            applicant.isShortlisted = false;
+            applicant.statuses.journey.isShortlisted = false;
         }
         // Save the updated applicant data
         await applicant.save();

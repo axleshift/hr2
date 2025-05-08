@@ -34,8 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-// I hate that I need to do this
-const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Other'];
+const EVENT_TYPES = ['Initial Interview', 'Final Interview', 'Technical Interview', 'Panel Interview', 'Behavioral Interview', 'Orientation', 'Other'];
 const facilityEventsSchema = new mongoose_1.Schema({
     name: {
         type: String,

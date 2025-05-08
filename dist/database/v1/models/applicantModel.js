@@ -7,11 +7,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const APPLICANT_STATUS = ['Rejected', 'Hired', 'Active'];
 const mongoose_1 = __importDefault(require("mongoose"));
 const applicantSchema = new mongoose_1.default.Schema({
     /**
      * Basic Information
      */
+    status: {
+        type: String,
+        enum: APPLICANT_STATUS,
+        default: 'Active',
+        required: true,
+    },
     firstname: {
         type: String,
         required: true,
@@ -50,9 +57,6 @@ const applicantSchema = new mongoose_1.default.Schema({
     /**
      * Work Experience
      */
-    resumeFileLoc: {
-        type: String,
-    },
     yearsOfExperience: {
         type: Number,
         required: true,
@@ -127,47 +131,149 @@ const applicantSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false,
     },
+    files: {
+        resume: {
+            type: String,
+        },
+        medCert: {
+            type: String,
+        },
+        birthCert: {
+            type: String,
+        },
+        NBIClearance: {
+            type: String,
+        },
+        policeClearance: {
+            type: String,
+        },
+        TOR: {
+            type: String,
+        },
+        idPhoto: {
+            type: String,
+        },
+    },
+    interviews: {
+        InitialInterview: {
+            type: String,
+        },
+        TechnicalInterview: {
+            type: String,
+        },
+        PanelInterview: {
+            type: String,
+        },
+        BehavioralInterview: {
+            type: String,
+        },
+        FinalInterview: {
+            type: String,
+        },
+    },
+    ids: {
+        TIN: {
+            type: String,
+        },
+        SSS: {
+            type: String,
+        },
+        philHealth: {
+            type: String,
+        },
+        pagIBIGFundNumber: {
+            type: String,
+        },
+    },
     statuses: {
-        isShortlisted: {
-            type: Boolean,
-            default: false,
+        journey: {
+            isShortlisted: {
+                type: Boolean,
+                default: false,
+            },
+            isInitialInterview: {
+                type: Boolean,
+                default: false,
+            },
+            isTechnicalInterview: {
+                type: Boolean,
+                default: false,
+            },
+            isPanelInterview: {
+                type: Boolean,
+                default: false,
+            },
+            isBehavioralInterview: {
+                type: Boolean,
+                default: false,
+            },
+            isFinalInterview: {
+                type: Boolean,
+                default: false,
+            },
+            isJobOffer: {
+                type: Boolean,
+                default: false,
+            },
+            isHired: {
+                type: Boolean,
+                default: false,
+            },
+            withdrawn: {
+                type: Boolean,
+                default: false,
+            },
         },
-        isInitialInterview: {
-            type: Boolean,
-            default: false,
-        },
-        isFinalInterview: {
-            type: Boolean,
-            default: false,
-        },
-        isJobOffer: {
-            type: Boolean,
-            default: false,
-        },
-        isHired: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    isShortlisted: {
-        type: Boolean,
-        default: false,
-    },
-    isInitialInterview: {
-        type: Boolean,
-        default: false,
-    },
-    isFinalInterview: {
-        type: Boolean,
-        default: false,
-    },
-    isJobOffer: {
-        type: Boolean,
-        default: false,
-    },
-    isHired: {
-        type: Boolean,
-        default: false,
+        // preemployment: {
+        //   files: {
+        //     medCert: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     birthCert: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     NBIClearance: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     policeClearance: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     TOR: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     idPhoto: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //   },
+        //   ids: {
+        //     TIN: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     SSS: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     idPhoto: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     philHealth: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //     pagIBIGFundNumber: {
+        //       type: Boolean,
+        //       default: false,
+        //     },
+        //   }
+        // }
     },
     events: [{
             type: mongoose_1.default.Schema.Types.ObjectId,
