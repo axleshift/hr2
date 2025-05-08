@@ -19,17 +19,17 @@ export const formatDate = (date, format = 'MMM DD, YYYY') => {
  * @returns formatted currency string in PHP (Philippine Peso) format
  */
 export const formatCurrency = (value) => {
-  const number = Number(value);
+  const number = Number(value)
 
-  if (isNaN(number)) return '₱0';
+  if (isNaN(number)) return '₱0'
 
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(number);
-};
+  }).format(number)
+}
 
 /**
  * Trim string to a certain length

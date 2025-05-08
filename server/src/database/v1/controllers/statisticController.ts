@@ -3,12 +3,9 @@
  * @description Controller for handling applicant data
  */
 
-import fs from "fs/promises";
-import path from "path";
 import { Request as req, Response as res } from "express";
 import logger from "../../../middlewares/logger";
-import Applicant, { IApplicant } from "../models/applicantModel";
-import { config } from "../../../config";
+import Applicant from "../models/applicantModel";
 import jobpostingModel from "../models/jobpostingModel";
 import FacilityEvent from "../models/facilityEventModel";
 
@@ -273,15 +270,6 @@ export const statistics = async (req: req, res: res) => {
     ]);
 
     // Average salary ranges (min and max)
-    const salaryStats = await jobpostingModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          avgMinSalary: { $avg: "$salary_min" },
-          avgMaxSalary: { $avg: "$salary_max" },
-        },
-      },
-    ]);
 
     // Events
     const totalEvents = await FacilityEvent.countDocuments();
