@@ -75,7 +75,7 @@ export const formSubmit = async (req: req, res: res) => {
 
     const fullName = `${firstname} ${lastname}`;
     const applicationDate = new Date().toLocaleDateString();
-    const referenceNumber = newApplicant._id as string
+    const referenceNumber = newApplicant._id as unknown as string
 
     // Fixing typo in template file name
     const templatePath = path.join(__dirname, "../../../public/template/applicationReceived.html");

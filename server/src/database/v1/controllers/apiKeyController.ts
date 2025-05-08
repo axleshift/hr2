@@ -5,7 +5,7 @@ import logger from "../../../middlewares/logger";
 
 export const generateApikey = async (req: req, res: res) => {
   try {
-    if (!req.user) {
+    if (!req.session.user) {
       return res.status(400).json({
         statusCode: 400,
         success: false,
@@ -75,7 +75,7 @@ export const createApikey = async (req: req, res: res) => {
 
     const apiKeyData = await apiKey.create({
       key: key,
-      owner: req.user ? userId : undefined,
+      owner: req.session.user ? userId : undefined,
       permissions: permissions || [],
       expiresAt: expiresAt || new Date(),
     });
