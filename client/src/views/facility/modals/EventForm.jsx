@@ -24,13 +24,15 @@ import {
   CFormLabel,
   CFormSelect,
   CFormSwitch,
+  CInputGroupText,
+  CInputGroup,
 } from '@coreui/react'
 
 import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { del, get, post, put } from '../../../api/axios'
 import { config } from '../../../config'
@@ -41,6 +43,29 @@ import InterviewForm from './InterviewForm'
 
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
 
+const EVENT_TYPES = [
+  'Initial Interview',
+  'Final Interview',
+  'Technical Interview',
+  'Panel Interview',
+  'Behavioral Interview',
+  'Orientation',
+  'Other',
+]
+
+const EventSchema = z.object({
+  name: z.string().min(3).max(50),
+  description: z.string().optional(),
+  capacity: z.number().int().positive(),
+  type: z.enum(EVENT_TYPES, {
+    errorMap: () => ({ message: 'Invalid Event Type' }),
+  }),
+  isApproved: z
+    .union([z.boolean(), z.object({ status: z.boolean() })])
+    .transform((val) => (typeof val === 'boolean' ? val : val.status))
+    .default(false),
+})
+
 const EventForm = ({ isVisible, onClose, slot, state }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
@@ -49,7 +74,6 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
   const [isEventLoading, setIsEventLoading] = useState(false)
   const [eventFormState, setEventFormState] = useState('view')
   const [isReadOnly, setIsReadOnly] = useState(true)
-  const [eventTypes, setEventTypes] = useState(['Initial Interview', 'Final Interview', 'Other'])
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
   const [isRemoveLoading, setIsRemoveLoading] = useState(false)
@@ -95,21 +119,9 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
     }
   }
 
-  const EventSchema = z.object({
-    name: z.string().min(3).max(50),
-    description: z.string().optional(),
-    capacity: z.number().int().positive(),
-    type: z.enum(eventTypes, {
-      errorMap: () => ({ message: 'Invalid Event Type' }),
-    }),
-    isApproved: z
-      .union([z.boolean(), z.object({ status: z.boolean() })])
-      .transform((val) => (typeof val === 'boolean' ? val : val.status))
-      .default(false),
-  })
-
   const {
     register,
+    control,
     watch,
     handleSubmit,
     reset: formReset,
@@ -130,12 +142,21 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
   const handleEventSubmit = async (data) => {
     try {
       setIsSubmitLoading(true)
-      const formData = new FormData()
-      formData.append('name', data.name)
-      formData.append('description', data.description)
-      formData.append('capacity', data.capacity)
-      formData.append('type', data.type)
-      formData.append('isApproved', data.isApproved)
+      // const formData = new FormData()
+      // formData.append('name', data.name)
+      // formData.append('description', data.description)
+      // formData.append('capacity', data.capacity)
+      // formData.append('type', data.type)
+      // formData.append('isApproved', data.isApproved)
+
+      const formData = {
+        name: data.name,
+        description: data.description,
+        requirements: data.requirements,
+        capacity: data.capacity,
+        type: data.type,
+        isApproved: data.isApproved,
+      }
 
       console.log('Event Form', formData)
 
@@ -406,7 +427,7 @@ const EventForm = ({ isVisible, onClose, slot, state }) => {
                                 disabled={isReadOnly}
                               >
                                 <option value="">Select an event type</option>
-                                {eventTypes.map((eventType) => (
+                                {EVENT_TYPES.map((eventType) => (
                                   <option key={eventType} value={eventType}>
                                     {eventType}
                                   </option>

@@ -10,30 +10,25 @@ import { createJobposter, getJobposterByRefId, getAllJobposters, removeJobposter
 router.post("/:id/post",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   createJobposter);
+
 router.get("/all",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getAllJobposters);
+
 router.get("/:id",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getJobposterByRefId);
+  
 router.delete("/:id",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   removeJobposter);
 
 export default {

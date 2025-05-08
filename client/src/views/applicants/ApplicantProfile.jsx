@@ -22,19 +22,54 @@ import {
   CSpinner,
   CInputGroupText,
   CFormLabel,
+  CAlert,
+  CAvatar,
+  CBadge,
 } from '@coreui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { get, put } from '../../api/axios'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { AppContext } from '../../context/appContext'
 
 import EventTab from './tabs/EventTab'
 import DocsTab from './tabs/DocsTab'
 import { AuthContext } from '../../context/authContext'
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ACCEPTED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
+
+const pdfFileSchema = z
+  .any()
+  .transform((file) => {
+    if (!file || (file instanceof FileList && file.length === 0)) return undefined
+    if (file instanceof FileList) return file.item(0)
+    return file
+  })
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+    message: 'File must be 5MB or less',
+  })
+  .refine((file) => !file || ['application/pdf'].includes(file.type), {
+    message: 'Unsupported file format',
+  })
+
+const imgFileSchema = z
+  .any()
+  .transform((file) => {
+    if (!file || (file instanceof FileList && file.length === 0)) return undefined
+    if (file instanceof FileList) return file.item(0)
+    return file
+  })
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+    message: 'File must be 5MB or less',
+  })
+  .refine((file) => !file || ['image/jpeg', 'image/png'].includes(file.type), {
+    message: 'Unsupported file format',
+  })
+
+// Your full schema with file fields
 const profileSchema = z.object({
   firstname: z.string().min(1).max(50),
   lastname: z.string().min(1).max(50),
@@ -44,11 +79,10 @@ const profileSchema = z.object({
   phone: z.string().min(10).max(15),
   address: z.string().min(1),
   preferredWorkLocation: z.string().min(1),
-  linkedInProfile: z.string().url().optional(),
-  portfolioLink: z.string().url().optional(),
+  linkedInProfile: z.string().url().or(z.literal('')).optional(),
+  portfolioLink: z.string().url().or(z.literal('')).optional(),
   yearsOfExperience: z.number().min(0),
   currentMostRecentJob: z.string().min(1),
-  // highestQualification: z.string().min(1),
   highestQualification: z.enum(['none', 'elementary', 'high school', 'college', 'masters', 'phd']),
   majorFieldOfStudy: z.string().min(1),
   institution: z.string().min(1),
@@ -61,6 +95,27 @@ const profileSchema = z.object({
   availability: z.string().min(1),
   jobAppliedFor: z.string().min(1),
   whyInterestedInRole: z.string().min(1),
+
+  // Files
+  files: z
+    .object({
+      resume: pdfFileSchema.optional(),
+      medCert: pdfFileSchema.optional(),
+      birthCert: pdfFileSchema.optional(),
+      NBIClearance: pdfFileSchema.optional(),
+      policeClearance: pdfFileSchema.optional(),
+      TOR: pdfFileSchema.optional(),
+      idPhoto: imgFileSchema.optional(),
+    })
+    .optional(),
+
+  // IDs
+  ids: z.object({
+    TIN: z.string().optional(),
+    SSS: z.string().optional(),
+    philHealth: z.string().optional(),
+    pagIBIGFundNumber: z.string().optional(),
+  }),
 })
 
 const ApplicantProfilePage = () => {
@@ -71,14 +126,30 @@ const ApplicantProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
+  const [isRejectLoading, setIsRejectLoading] = useState(false)
+
+  const APP_STATUS = {
+    journey: [
+      { key: 'isShortlisted', label: 'Shortlisted', color: 'success' },
+      { key: 'isInitialInterview', label: 'Initial Interview', color: 'warning' },
+      { key: 'isTechnicalInterview', label: 'Technical Interview', color: 'primary' },
+      { key: 'isPanelInterview', label: 'Panel Interview', color: 'danger' },
+      { key: 'isBehavioralInterview', label: 'Behavior Interview', color: 'info' },
+      { key: 'isFinalInterview', label: 'Final Interview', color: 'warning' },
+      { key: 'isJobOffer', label: 'Job Offer', color: 'primary' },
+      { key: 'isHired', label: 'Hired / Deployment', color: 'success' },
+    ],
+  }
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(profileSchema),
+    defaultValues: { keySkills: '' },
   })
 
   const getApplicant = async (id) => {
@@ -106,16 +177,89 @@ const ApplicantProfilePage = () => {
   const updateApplicant = async (data) => {
     try {
       setIsSubmitLoading(true)
-      const res = await put(`/applicant/${applicant._id}`, data)
+
+      const formData = new FormData()
+
+      formData.append('firstname', data.firstname)
+      formData.append('lastname', data.lastname)
+      formData.append('middlename', data.middlename)
+      if (data.suffix) formData.append('suffix', data.suffix)
+      formData.append('email', data.email)
+      formData.append('phone', data.phone)
+      formData.append('address', data.address)
+      formData.append('preferredWorkLocation', data.preferredWorkLocation)
+      formData.append('linkedInProfile', data.linkedInProfile || '')
+      formData.append('portfolioLink', data.portfolioLink || '')
+      formData.append('yearsOfExperience', String(data.yearsOfExperience))
+      formData.append('currentMostRecentJob', data.currentMostRecentJob)
+      formData.append('highestQualification', data.highestQualification)
+      formData.append('majorFieldOfStudy', data.majorFieldOfStudy)
+      formData.append('institution', data.institution)
+      formData.append('graduationYear', String(data.graduationYear))
+      formData.append('keySkills', data.keySkills)
+      formData.append('softwareProficiency', data.softwareProficiency)
+      if (data.certifications) formData.append('certifications', data.certifications)
+      formData.append('coverLetter', data.coverLetter)
+      formData.append('salaryExpectation', String(data.salaryExpectation))
+      formData.append('availability', data.availability)
+      formData.append('jobAppliedFor', data.jobAppliedFor)
+      formData.append('whyInterestedInRole', data.whyInterestedInRole)
+
+      formData.append('TIN', data.ids?.TIN || '')
+      formData.append('SSS', data.ids?.SSS || '')
+      formData.append('philHealth', data.ids?.philHealth || '')
+      formData.append('pagIBIGFundNumber', data.ids?.pagIBIGFundNumber || '')
+
+      if (data.files?.resume) formData.append('resume', data.files.resume)
+      if (data.files?.medCert) formData.append('medCert', data.files.medCert)
+      if (data.files?.birthCert) formData.append('birthCert', data.files.birthCert)
+      if (data.files?.NBIClearance) formData.append('NBIClearance', data.files.NBIClearance)
+      if (data.files?.policeClearance)
+        formData.append('policeClearance', data.files.policeClearance)
+      if (data.files?.TOR) formData.append('TOR', data.files.TOR)
+      if (data.files?.idPhoto) formData.append('idPhoto', data.files.idPhoto)
+
+      const res = await put(`/applicant/${applicant._id}`, formData)
+
       if (res.status === 200) {
+        console.log(res.data.data)
         setApplicant(res.data.data)
-        reset(res.data.data)
-        addToast('Success', res.data.message, 'success')
-      } else {
-        addToast('Error', res.message.message, 'danger')
+        // reset(res.data);
+        setValue('firstname', res.data.data.firstname)
+        setValue('lastname', res.data.data.lastname)
+        setValue('middlename', res.data.data.middlename)
+        setValue('suffix', res.data.data.suffix || '')
+        setValue('email', res.data.data.email)
+        setValue('phone', res.data.data.phone)
+        setValue('address', res.data.data.address)
+        setValue('preferredWorkLocation', res.data.data.preferredWorkLocation)
+        setValue('linkedInProfile', res.data.data.linkedInProfile || '')
+        setValue('portfolioLink', res.data.data.portfolioLink || '')
+        setValue('yearsOfExperience', res.data.data.yearsOfExperience || 0)
+        setValue('currentMostRecentJob', res.data.data.currentMostRecentJob)
+        setValue('highestQualification', res.data.data.highestQualification)
+        setValue('majorFieldOfStudy', res.data.data.majorFieldOfStudy)
+        setValue('institution', res.data.data.institution)
+        setValue('graduationYear', res.data.data.graduationYear)
+        setValue('keySkills', res.data.data.keySkills || '')
+        setValue('softwareProficiency', res.data.data.softwareProficiency || '')
+        setValue('certifications', res.data.data.certifications || '')
+        setValue('coverLetter', res.data.data.coverLetter || '')
+        setValue('salaryExpectation', res.data.data.salaryExpectation || 0)
+        setValue('availability', res.data.data.availability)
+        setValue('jobAppliedFor', res.data.data.jobAppliedFor)
+        setValue('whyInterestedInRole', res.data.data.whyInterestedInRole || '')
+
+        // For nested fields (like IDs)
+        setValue('ids.TIN', res.data.data.ids?.TIN || '')
+        setValue('ids.SSS', res.data.data.ids?.SSS || '')
+        setValue('ids.philHealth', res.data.data.ids?.philHealth || '')
+        setValue('ids.pagIBIGFundNumber', res.data.data.ids?.pagIBIGFundNumber || '')
+        addToast('Success', res.data.data.message, 'success')
       }
     } catch (error) {
       console.error(error)
+      addToast('Error', error.message || 'Something went wrong', 'danger')
     } finally {
       setIsSubmitLoading(false)
     }
@@ -158,6 +302,26 @@ const ApplicantProfilePage = () => {
     }
   }
 
+  const handleReject = async () => {
+    try {
+      if (!confirm(`Are you sure you want to reject this applicant?`)) {
+        return
+      }
+      setIsRejectLoading(true)
+      const res = await get(`/applicant/${applicantId}/reject`)
+
+      if (res.status === 200) {
+        reset(res.data.data)
+        setApplicant(res.data.data)
+        addToast('Success', res.data.message, 'success')
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsRejectLoading(false)
+    }
+  }
+
   const handleSendData = async () => {
     try {
       if (!confirm('Are you sure you want to send this to Employee Management?')) {
@@ -182,6 +346,27 @@ const ApplicantProfilePage = () => {
           <h1>Applicant Profile</h1>
         </CCol>
       </CRow>
+      {['admin'].includes(userInformation.role) && (
+        <CRow>
+          <CCol>Applicant ID: {applicantId}</CCol>
+        </CRow>
+      )}
+      <CRow>
+        <CCol>
+          Status:{' '}
+          <CBadge
+            color={
+              applicant?.status === 'Active'
+                ? 'success'
+                : applicant?.status === 'rejected'
+                  ? 'danger'
+                  : 'secondary'
+            }
+          >
+            {applicant?.status}
+          </CBadge>
+        </CCol>
+      </CRow>
       <CRow className="mb-3 mt-3">
         <CTabs activeItemKey={'form'}>
           <CTabList variant="tabs">
@@ -201,95 +386,31 @@ const ApplicantProfilePage = () => {
                 ) : (
                   <CForm onSubmit={handleSubmit(updateApplicant)}>
                     {/* Personal Information Section */}
-                    {['admin', 'manager'].includes(userInformation.role) && (
-                      <>
-                        <h4>Application Statuses</h4>
-                        <CRow className="mb-3">
-                          <CCol>
-                            <CFormLabel>Shortlisted</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isShortlisted} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isShortlisted')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                          <CCol>
-                            <CFormLabel>Initial Interview</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isInitialInterview} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isInitialInterview')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                        </CRow>
-                        <CRow className="mb-3">
-                          <CCol>
-                            <CFormLabel>Final Interview</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isFinalInterview} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isFinalInterview')}
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                          <CCol>
-                            <CFormLabel>Job Offer</CFormLabel>
-                            <CInputGroup>
-                              <CFormInput readOnly defaultValue={applicant?.isJobOffer} />
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => handleStatUpdate('isJobOffer')}
-                                disabled
-                              >
-                                Update
-                              </CButton>
-                            </CInputGroup>
-                          </CCol>
-                        </CRow>
-                      </>
-                    )}
-                    <CRow className="mb-3">
-                      <CCol className="d-flex justify-content-center">
-                        {applicant?.isShortlisted &&
-                        applicant?.isInitialInterview &&
-                        applicant?.isFinalInterview &&
-                        applicant?.isJobOffer ? (
-                          <CButton color="warning" onClick={() => handleSendData()}>
-                            Send Applicant Information to Employee Management
-                          </CButton>
-                        ) : (
-                          <CButton
-                            color="secondary"
-                            disabled={
-                              applicant?.isShortlisted &&
-                              applicant?.isInitialInterview &&
-                              applicant?.isFinalInterview &&
-                              applicant?.isJobOffer
-                            }
-                          >
-                            Can&apos;t send data to Employee Mngmt, need Checklist to be completed
-                          </CButton>
-                        )}
+                    <div className="d-flex justify-content-between">
+                      <h4 className="mb-3">Personal Information</h4>
+                      <CButton size="sm" color="info" onClick={() => getApplicant(applicant._id)}>
+                        Refresh
+                      </CButton>
+                    </div>
+
+                    <CRow xs={12} md={6} className="mb-3">
+                      {/* Avatar Column */}
+                      <CCol
+                        xs={12}
+                        md={6}
+                        className="d-flex justify-content-center align-items-center"
+                      >
+                        <img
+                          className="user-image"
+                          src={`https://ui-avatars.com/api/?name=${applicant?.firstname}+${applicant?.lastname}`}
+                          alt="Applicant Avatar"
+                          loading="lazy"
+                          style={{ width: '100%', height: 'auto', maxWidth: '200px' }} // Ensure image fits correctly
+                        />
                       </CCol>
-                    </CRow>
-                    <h4>Personal Information</h4>
-                    <CRow className="mb-3">
-                      <CCol>
+
+                      {/* Form Column */}
+                      <CCol xs={12} md={6} className="mb-3">
                         <CFormInput
                           label="Firstname"
                           invalid={!!errors.firstname}
@@ -298,8 +419,6 @@ const ApplicantProfilePage = () => {
                         {errors.firstname && (
                           <CFormFeedback invalid>{errors.firstname.message}</CFormFeedback>
                         )}
-                      </CCol>
-                      <CCol>
                         <CFormInput
                           label="Lastname"
                           invalid={!!errors.lastname}
@@ -308,10 +427,7 @@ const ApplicantProfilePage = () => {
                         {errors.lastname && (
                           <CFormFeedback invalid>{errors.lastname.message}</CFormFeedback>
                         )}
-                      </CCol>
-                    </CRow>
-                    <CRow className="mb-3">
-                      <CCol>
+
                         <CFormInput
                           label="Middlename"
                           invalid={!!errors.middlename}
@@ -320,8 +436,7 @@ const ApplicantProfilePage = () => {
                         {errors.middlename && (
                           <CFormFeedback invalid>{errors.middlename.message}</CFormFeedback>
                         )}
-                      </CCol>
-                      <CCol>
+
                         <CFormInput
                           label="Suffix"
                           invalid={!!errors.suffix}
@@ -332,6 +447,7 @@ const ApplicantProfilePage = () => {
                         )}
                       </CCol>
                     </CRow>
+
                     <CRow className="mb-3">
                       <CCol>
                         <CFormInput label="Email" invalid={!!errors.email} {...register('email')} />
@@ -392,7 +508,51 @@ const ApplicantProfilePage = () => {
                         )}
                       </CCol>
                     </CRow>
-
+                    <h4>Application Status</h4>
+                    <CRow>
+                      {APP_STATUS.journey.map((status) => (
+                        <CCol xs={12} md={6} lg={4} className="mb-3" key={status.key}>
+                          <CAlert
+                            color={
+                              applicant?.statuses?.journey &&
+                              status.key in applicant.statuses.journey
+                                ? applicant.statuses.journey[status.key]
+                                  ? 'success'
+                                  : 'danger'
+                                : 'info'
+                            }
+                            className="p-3 border-0 rounded shadow-sm"
+                          >
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div>
+                                <CFormLabel className="fw-bold">{status.label}</CFormLabel>
+                                <div>
+                                  {applicant?.statuses?.journey &&
+                                  status.key in applicant.statuses.journey
+                                    ? applicant.statuses.journey[status.key]
+                                      ? 'Yes'
+                                      : 'No'
+                                    : 'N/A'}
+                                </div>
+                              </div>
+                              {['admin', 'manager'].includes(userInformation.role) ? (
+                                <CButton
+                                  color="info"
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => handleStatUpdate(status.key)}
+                                  className="ms-2"
+                                >
+                                  Update
+                                </CButton>
+                              ) : (
+                                <p>No Permission</p>
+                              )}
+                            </div>
+                          </CAlert>
+                        </CCol>
+                      ))}
+                    </CRow>
                     {/* Work Information Section */}
                     <h4>Work Information</h4>
                     <CRow className="mb-3">
@@ -577,18 +737,159 @@ const ApplicantProfilePage = () => {
                         )}
                       </CCol>
                     </CRow>
-
+                    {['admin', 'manager', 'recruiters'].includes(userInformation.role) && (
+                      <>
+                        <h4>Pre-employment Requirements</h4>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CFormInput
+                              label="TIN"
+                              invalid={!!errors.ids?.TIN}
+                              {...register('ids.TIN')}
+                            />
+                            {errors.ids?.TIN && (
+                              <CFormFeedback invalid>{errors.ids.TIN.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              label="SSS"
+                              invalid={!!errors.ids?.SSS}
+                              {...register('ids.SSS')}
+                            />
+                            {errors.ids?.SSS && (
+                              <CFormFeedback invalid>{errors.ids.SSS.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CFormInput
+                              label="PhilHealth"
+                              invalid={!!errors.ids?.philHealth}
+                              {...register('ids.philHealth')}
+                            />
+                            {errors.ids?.philHealth && (
+                              <CFormFeedback invalid>{errors.ids.philHealth.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              label="PagIBIG Fund Number"
+                              invalid={!!errors.ids?.pagIBIGFundNumber}
+                              {...register('ids.pagIBIGFundNumber')}
+                            />
+                            {errors.ids?.pagIBIGFundNumber && (
+                              <CFormFeedback invalid>
+                                {errors.ids.pagIBIGFundNumber.message}
+                              </CFormFeedback>
+                            )}
+                          </CCol>
+                        </CRow>
+                        <h5>Required Documents</h5>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="Resume"
+                              invalid={!!errors.files?.resume}
+                              {...register('files.resume')}
+                            />
+                            {errors.files?.resume && (
+                              <CFormFeedback invalid>{errors.files.resume.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="Medical Certificate"
+                              invalid={!!errors.files?.medCert}
+                              {...register('files.medCert')}
+                            />
+                            {errors.files?.medCert && (
+                              <CFormFeedback invalid>{errors.files.medCert.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="Birth Certificate"
+                              invalid={!!errors.files?.birthCert}
+                              {...register('files.birthCert')}
+                            />
+                            {errors.files?.birthCert && (
+                              <CFormFeedback invalid>
+                                {errors.files.birthCert.message}
+                              </CFormFeedback>
+                            )}
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="NBI Clearance"
+                              invalid={!!errors.files?.NBIClearance}
+                              {...register('files.NBIClearance')}
+                            />
+                            {errors.files?.NBIClearance && (
+                              <CFormFeedback invalid>
+                                {errors.files.NBIClearance.message}
+                              </CFormFeedback>
+                            )}
+                          </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="Police Clearance"
+                              invalid={!!errors.files?.policeClearance}
+                              {...register('files.policeClearance')}
+                            />
+                            {errors.files?.policeClearance && (
+                              <CFormFeedback invalid>
+                                {errors.files.policeClearance.message}
+                              </CFormFeedback>
+                            )}
+                          </CCol>
+                          <CCol>
+                            <CFormInput
+                              type="file"
+                              label="Transcript of Record"
+                              invalid={!!errors.files?.TOR}
+                              {...register('files.TOR')}
+                            />
+                            {errors.files?.TOR && (
+                              <CFormFeedback invalid>{errors.files.TOR.message}</CFormFeedback>
+                            )}
+                          </CCol>
+                        </CRow>
+                      </>
+                    )}
                     <CRow>
                       <CCol className="d-flex justify-content-between d-flex-column gap-2">
-                        {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
-                          <CButton
-                            color="danger"
-                            size="sm"
-                            onClick={() => handleDelete(applicant._id)}
-                          >
-                            Delete
-                          </CButton>
-                        )}
+                        <div className="d-flex gap-2">
+                          {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+                            <CButton
+                              color="danger"
+                              size="sm"
+                              onClick={() => handleDelete(applicant._id)}
+                            >
+                              Delete
+                            </CButton>
+                          )}
+                          {['admin', 'manager', 'recruiter'].includes(userInformation.role) && (
+                            <CButton
+                              color="warning"
+                              size="sm"
+                              onClick={() => handleReject(applicant._id)}
+                              disabled={isRejectLoading}
+                            >
+                              {isRejectLoading ? 'Loading...' : 'Reject'}
+                            </CButton>
+                          )}
+                        </div>
                         <CButton type="submit" color="primary" size="sm" disabled={isSubmitLoading}>
                           {isSubmitLoading ? (
                             <>
@@ -605,12 +906,20 @@ const ApplicantProfilePage = () => {
                 )}
               </CContainer>
             </CTabPanel>
-            <CTabPanel itemKey={'event'}>
-              <EventTab applicantId={applicantId} />
-            </CTabPanel>
-            <CTabPanel itemKey={'docs'}>
-              <DocsTab applicantId={applicantId} />
-            </CTabPanel>
+            {applicant && (
+              <>
+                <CTabPanel itemKey={'event'}>
+                  <EventTab applicantId={applicantId} />
+                </CTabPanel>
+                <CTabPanel itemKey={'docs'}>
+                  <DocsTab
+                    applicantId={applicantId}
+                    applicantFiles={applicant?.files}
+                    applicantInterviews={applicant?.interviews}
+                  />
+                </CTabPanel>
+              </>
+            )}
           </CTabContent>
         </CTabs>
       </CRow>

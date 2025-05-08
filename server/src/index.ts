@@ -3,6 +3,7 @@
  * @description Entry point for the server
  * @access public
  */
+import 'module-alias/register';
 
 import express, { Application } from "express";
 import session from "express-session";
@@ -23,6 +24,7 @@ import MongoStore from "connect-mongo";
 import errorHandler from "./middlewares/errorHandler";
 import verifyApiKey from "./middlewares/verifyApiKey";
 import { verifyMailConn } from "./utils/mailHandler";
+import useragent from "express-useragent"
 
 const app: Application = express();
 const host = config.server.host;
@@ -64,15 +66,18 @@ app.use(
     resave: false,
     saveUninitialized: true, // Save new sessions
     cookie: {
-      secure: config.env === 'production',
+      secure: false,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "strict",
+      sameSite: "lax",
     },
     store: mongoStore,
   })
 );
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
+app.use(useragent.express());
 app.use(helmet());
 app.use(pinoHttp({ logger }));
 const env = config.env;
@@ -92,6 +97,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 app.use(sanitize);
+
 const timestamp = new Date().toISOString();
 process.on("unhandledRejection", (reason) => {
   logger.error(`Unhandled Rejection: ${reason}`);

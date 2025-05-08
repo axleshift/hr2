@@ -1,20 +1,23 @@
 import "express-session";
 
 export interface SessionUser {
-    _id: string;
-    username: string;
-    role: string;
-    email: string;
-    status: string;
-    token: string;
-    emailVerifiedAt: Date | null;
-    // permissions: string[];
+  _id: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  role: string;
+  email: string;
+  status: string;
+  emailVerifiedAt?: Date | null;
 }
+
+// Represents a pending device fingerprint (user-agent + IP hash or string)
+export type PendingDevice = string | null;
 
 // Extend the express-session SessionData interface
 declare module "express-session" {
-    interface SessionData {
-        user?: SessionUser; // Use `user?` to make it optional since it may not exist in some cases (e.g., if not logged in)
-        csrfToken?: string; // Optional CSRF token in session
-    }
+  interface SessionData {
+    user?: SessionUser;
+    pendingDevice?: PendingDevice;
+  }
 }

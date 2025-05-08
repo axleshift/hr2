@@ -48,8 +48,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: client/build
-          destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
-          destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
+          destination-github-username: 'axleshift'
+          destination-repository-name: 'hr2'
           target-branch: "hr2-frontend"
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build client"
@@ -85,8 +85,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: server
-          destination-github-username: ${{secrets.DESTINATION_GITHUB_USERNAME}}
-          destination-repository-name: ${{secrets.DESTINATION_REPOSITORY_NAME}}
+          destination-github-username: 'axleshift'
+          destination-repository-name: 'hr2'
           target-branch: "hr2-backend"
           user-email: "pedjovensindol.edu@gmail.com"
           commit-message: "Build server"

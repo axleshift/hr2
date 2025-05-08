@@ -75,6 +75,7 @@ const Screening = () => {
   // Search states
   const [searchInput, setSearchInput] = useState('')
   const [isSearchMode, setSearchMode] = useState(false)
+  const [isAllowReject, setIsAllowReject] = useState(false)
 
   // Form Elements states
   const [isEdit, setIsEdit] = useState(false)
@@ -242,38 +243,40 @@ const Screening = () => {
   }
 
   const handleFillMockData = () => {
-    formReset({
-      id: '',
+    const mockData = {
       firstname: 'John',
       lastname: 'Doe',
-      middlename: 'Ville',
+      middlename: 'A',
       suffix: 'Jr.',
-      email: 'johndoe@mail.com',
-      phone: '09493260755',
-      address: 'Quezon City, Philippines',
-      prefferedWorkLocation: 'Remote',
-      linkedInProfile: 'https://www.linkedin.com/in/johndoe',
-      portfolioLink: 'https://www.github.com/johndoe',
+      email: 'john.doe@example.com',
+      phone: '09171234567',
+      address: '123 Mockingbird Lane',
+      preferredWorkLocation: 'Manila',
+      linkedInProfile: 'https://linkedin.com/in/johndoe',
+      portfolioLink: 'https://johndoe.dev',
       yearsOfExperience: 5,
-      currentMostRecentJob: 'Software Developer',
+      currentMostRecentJob: 'Frontend Developer',
       highestQualification: 'college',
       majorFieldOfStudy: 'Computer Science',
-      institution: 'University of Lagos',
-      graduationYear: 2021,
-      keySkills: 'React, NodeJS, MongoDB',
-      softwareProficiency: 'MS Office, Adobe Suite',
-      certifications: 'Certification 1, Certification 2',
-      coverLetter:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies.',
-      salaryExpectation: 50000,
-      availability: 'Immediate',
-      jobAppliedFor: 'Software Developer',
-      whyInterestedInRole:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies',
-
-      // tags: [],
-      // file: [],
-    })
+      institution: 'Mock University',
+      graduationYear: 2020,
+      keySkills: 'JavaScript, React, CSS',
+      softwareProficiency: 'VSCode, Git, Figma',
+      certifications: 'AWS Certified Developer',
+      coverLetter: 'I am excited to apply for this role...',
+      salaryExpectation: 70000,
+      availability: 'Immediately',
+      jobAppliedFor: 'Web Developer',
+      whyInterestedInRole: 'The role aligns with my goals and experience.',
+      ids: {
+        TIN: '123-456-789',
+        SSS: '12-3456789-0',
+        philHealth: '1234-5678-9012',
+        pagIBIGFundNumber: '1234-5678-9012',
+      },
+      files: {}, // left empty — optional
+    }
+    formReset(mockData)
   }
 
   const handleUpload = async () => {
@@ -335,7 +338,9 @@ const Screening = () => {
       setIsLoading(true)
       const res = isSearchMode
         ? await get(`/applicant/search?query=${searchInput}&page=${page}&limit=${limit}&tags=`)
-        : await get(`/applicant/all?page=${currentPage}&limit=${itemsPerPage}`)
+        : await get(`/applicant/all?page=${page}&limit=${limit}&showRejected=${isAllowReject}`)
+
+      console.log(res.data)
       if (res.status === 200 || res.status === 201) {
         setApplicants(res.data.data)
         setCurrentPage(res.data.currentPage)
@@ -650,19 +655,20 @@ const Screening = () => {
                     <CCol>
                       <h2>Personal Information</h2>
                     </CCol>
-                    {config.env === 'development' && (
-                      <CCol>
-                        <CButton
-                          color="primary"
-                          size="sm"
-                          onClick={() => {
-                            handleFillMockData()
-                          }}
-                        >
-                          Fill Mock Data
-                        </CButton>
-                      </CCol>
-                    )}
+                    {config.env === 'development' ||
+                      (['admin'].includes(userInformation.role) && (
+                        <CCol>
+                          <CButton
+                            color="primary"
+                            size="sm"
+                            onClick={() => {
+                              handleFillMockData()
+                            }}
+                          >
+                            Fill Mock Data
+                          </CButton>
+                        </CCol>
+                      ))}
                   </CRow>
                   <CRow>
                     <CCol className="d-flex justify-content-end">
@@ -1267,6 +1273,16 @@ const Screening = () => {
           </CForm>
         </CCol>
       </CRow>
+      <CRow className="mb-3">
+        <CCol className="d-flex justify-content-end">
+          <CButton
+            color={isAllowReject ? 'danger' : 'primary'}
+            onClick={() => setIsAllowReject((prev) => !prev)}
+          >
+            {isAllowReject ? 'Hide Rejected' : 'Allow Reject'}
+          </CButton>
+        </CCol>
+      </CRow>
       <CRow className="mt-2">
         <CContainer>
           <CCard>
@@ -1322,9 +1338,50 @@ const Screening = () => {
                                   </CBadge>
                                 )
                               })}
-                              {p.isShortlisted && (
+                              {p.statuses.journey.isShortlisted && (
                                 <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
                                   Shortlisted
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isInitialInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isTechnicalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Technical Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isPanelInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Panel Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isBehavioralInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Behavioral Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isFinalInterview && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Final Interview
+                                </CBadge>
+                              )}
+
+                              {p.statuses.journey.isJobOffer && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Job Offered
+                                </CBadge>
+                              )}
+                              {p.statuses.journey.isHired && (
+                                <CBadge shape="rounded-pill" color="success" className="me-1 mb-1">
+                                  Initial Interview
                                 </CBadge>
                               )}
                             </div>

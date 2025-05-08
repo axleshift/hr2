@@ -100,9 +100,10 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
     console.log('Parsing States', JSON.stringify(facilityData, null, 2))
     if (facilityData.timeslots) {
       const dates = facilityData.timeslots.map((slot) => new Date(slot.date))
-      const hasSlots = dates.map(
-        (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
-      )
+      // const hasSlots = dates.map(
+      //   (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
+      // )
+      const hasSlots = dates.map((date) => new Date(date))
       setHasSlots(hasSlots)
     }
   }
@@ -186,12 +187,20 @@ const ManageFacilityForm = ({ isVisible, onClose, facility = {} }) => {
   const handleTimeslotSubmit = async (data) => {
     try {
       setIsSubmitLoading(true)
-      const formdata = new FormData()
-      formdata.append('date', new Date(defaultDate))
-      formdata.append('start', data.start)
-      formdata.append('end', data.end)
+      // const formData = new FormData()
+      // formData.append('date', new Date(defaultDate))
+      // formData.append('start', data.start)
+      // formData.append('end', data.end)
 
-      const res = await post(`/facilities/timeslot/create/${facilityData._id}`, formdata)
+      // console.info(formData)
+
+      const formData = {
+        date: new Date(defaultDate),
+        start: data.start,
+        end: data.end,
+      }
+
+      const res = await post(`/facilities/timeslot/create/${facilityData._id}`, formData)
       if (res.status === 404) {
         setIsSubmitLoading(false)
         getFacilityData()

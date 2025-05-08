@@ -11,9 +11,7 @@ router.get(
   verifySession(
     {
       permissions: ["user", "admin"],
-    },
-    true,
-  ),
+    }),
   (req, res) => {
     res.send("OK");
   }

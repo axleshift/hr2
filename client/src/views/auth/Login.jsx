@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { config } from '../../config'
 import ReCAPTCHA from 'react-google-recaptcha'
+import GoogleButton from 'react-google-button'
 import {
   CButton,
   CCard,
@@ -30,7 +31,7 @@ import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-i
 const Login = () => {
   const navigate = useNavigate()
   const recaptchaRef = useRef()
-  const { login, isAuthenticated } = useContext(AuthContext)
+  const { login, sendOTP, otpSent, isKnownDevice } = useContext(AuthContext)
   const { addToast } = useContext(AppContext)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -49,20 +50,7 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   })
 
-  // const onSubmit = (data) => {
-  //   setIsLoading(true)
-  //   const token = recaptchaRef.current.getValue()
-  //   login(data.username, data.password, (success) => {
-  //     setIsLoading(false)
-  //     if (success) {
-  //       navigate('/dashboard/overview')
-  //     } else {
-  //       setErrorMessage('Invalid username or password')
-  //     }
-  //   })
-  // }
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setIsLoading(true)
 
     if (recaptchaRef.current) {
@@ -90,22 +78,33 @@ const Login = () => {
       return
     }
 
+    // Send OTP after login success
     login(formData.username, formData.password, (success) => {
-      setIsLoading(false)
       if (success) {
-        // navigate('/dashboard/overview')
-        navigate('/recruitment/jobposting')
+        // If OTP is needed, navigate to OTP page
+        if (isKnownDevice) {
+          setIsLoading(false)
+          navigate('/dashboard/overview')
+        } else {
+          sendOTP(formData.username, (otpSuccess) => {
+            setIsLoading(false)
+            if (otpSuccess) {
+              navigate('/otp') // Redirect to OTP page after sending OTP
+            } else {
+              setErrorMessage('Failed to send OTP. Please try again.')
+            }
+          })
+        }
       } else {
-        setErrorMessage('Invalid username or password')
+        setIsLoading(false)
+        setErrorMessage('Login failed. Please check your credentials.')
       }
     })
   }
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard')
-    }
-  }, [isAuthenticated, navigate])
+  const handleGoogleLogin = () => {
+    window.location.href = config.google.oAuth2.url
+  }
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -165,33 +164,12 @@ const Login = () => {
                     )}
                   </CInputGroup>
 
-                  <p>
-                    <small>
-                      By continuing, you agree to our
-                      <a onClick={() => navigate('/PolicyTerms')} className="link-primary">
-                        {' '}
-                        Privacy Policy{' '}
-                      </a>
-                      and
-                      <a onClick={() => navigate('/PolicyTerms')} className="link-primary">
-                        {' '}
-                        Terms of Service
-                      </a>
-                      .
-                    </small>
-                  </p>
-
-                  <div className="d-grid">
+                  <div className="d-grid mb-3">
                     <CButtonGroup>
                       {!isLoading ? (
-                        <>
-                          <CButton type="submit" color="primary">
-                            Login
-                          </CButton>
-                          <CButton color="outline-primary" onClick={() => navigate('/register')}>
-                            Signup
-                          </CButton>
-                        </>
+                        <CButton type="submit" color="primary">
+                          Login
+                        </CButton>
                       ) : (
                         <CButton color="outline-info" disabled>
                           <CSpinner size="sm" /> <span>Logging in...</span>
@@ -199,25 +177,15 @@ const Login = () => {
                       )}
                     </CButtonGroup>
                   </div>
+
+                  <div className="d-flex justify-content-center">
+                    <p className="text-muted fs-6"> OR </p>
+                  </div>
+
+                  <GoogleButton onClick={() => handleGoogleLogin()} />
                 </CForm>
               </CCardBody>
             </CCard>
-          </CCol>
-        </CRow>
-        {config.env === 'development' && (
-          <CRow>
-            <CCol>
-              <div className="text-center mt-3">Developer Build</div>
-            </CCol>
-          </CRow>
-        )}
-        <CRow>
-          <CCol>
-            <div className="text-center mt-3">
-              <small>
-                <span className="text-muted">{config.appVersion}</span>
-              </small>
-            </div>
           </CCol>
         </CRow>
       </CContainer>

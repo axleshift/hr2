@@ -1,12 +1,7 @@
-/**
- * @file /middlewares/verifySession.ts
- * @description Middleware to verify user session
- */
-
-import { Request, Response, NextFunction } from "express";
+import { Request as req, Response as res, NextFunction } from "express";
 
 // sendError helper function
-const sendError = (res: Response, statusCode: number, message: string) => {
+const sendError = (res: res, statusCode: number, message: string) => {
   console.error(`Error ${statusCode}: ${message}`);
   return res.status(statusCode).json({
     statusCode,
@@ -19,38 +14,25 @@ interface Metadata {
   permissions: string[];
 }
 
-/**
- * verifySession middleware
- * @param metadata - Metadata object containing permissions
- * @param allowGuest - Boolean to allow guest access without session (default: false)
- * @returns Express middleware
- * 
- * @description This middleware verifies the user session and permissions based on the metadata object provided
- * It also validates the CSRF token if enabled
- * It allows guest access if enabled
- */
-
 const verifySession = (metadata: Metadata, allowGuest = false) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.session) {
-      return sendError(res, 401, "Unauthorized: Session not initialized");
-    }
-    
-    const user = req.session.user;
+  return (req: req, res: res, next: NextFunction) => {
+    const user = req.session.user; // Use Passport's way of accessing the authenticated user
+    console.info("User: ", user)
+
 
     if (!user) {
-      if (allowGuest) {
-        return next(); // Allow access if guest access is enabled
-      }
-      return sendError(res, 401, "Unauthorized: Invalid or missing user session");
+      if (allowGuest) return next();
+      return sendError(res, 401, "Unauthorized: No user logged in");
     }
 
-    if (!user.role || typeof user.role !== "string") {
-      return sendError(res, 401, "Unauthorized: User role is invalid");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userRole = (user as any).role;
+    if (!userRole || typeof userRole !== "string") {
+      return sendError(res, 401, "Unauthorized: Invalid user role");
     }
 
     const permissions = metadata.permissions;
-    if (permissions.length > 0 && !permissions.includes(user.role)) {
+    if (permissions.length > 0 && !permissions.includes(userRole)) {
       return sendError(res, 403, "Forbidden: Insufficient permissions");
     }
 

@@ -1,50 +1,72 @@
-import { Router } from "express";
+import { Request as req, Response as res, NextFunction as next, Router } from "express";
 const router = Router();
 import verifySession from "../../middlewares/verifySession";
 import {
-  addNewResume,
-  updateResume,
-  getAllResumeData,
+  addApplicant,
+  updateApplicant,
+  getAllApplicant,
   getApplicantByDocumentCategory,
-  getResumeById,
-  deleteResume,
-  searchResume,
-  getResumeFile,
+  getApplicantById,
+  deleteApplicant,
+  searchApplicant,
+  getFile,
   updateStat,
+  getEligibleForJobOffer,
+  uploadFile,
+  rejectApplicant,
 } from "../../database/v1/controllers/applicantController";
 
 import { createScreening, getAllScreening, screenApplicantViaAI, updateScreening } from "../../database/v1/controllers/screeningController";
 import { createInterview, getAllInterview, getAllRecentInterviews, updateInterview } from "../../database/v1/controllers/interviewController";
 import { getAllApplicantFacilityEvents } from "../../database/v1/controllers/facilityController";
-import { createJoboffer, getAllJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
+import { createJoboffer, getApplicantJoboffer, getAllRecentJoboffer, getJobofferById, sendJobOfferMail, updateJoboffer } from "../../database/v1/controllers/jobofferController";
+import { upload } from "../../utils/fileUploadHandler";
+import multer from "multer";
+
+const uploader = upload('applicants')
 
 router.post(
   "/",
   verifySession({
     permissions: ["applicant", "admin", "manager"],
-  },
-    true,
-  ),
-  addNewResume
+  }),
+  addApplicant
 );
 
 router.put(
   "/:id",
   verifySession({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
+  }),
+  uploader.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "medCert", maxCount: 1 },
+    { name: "birthCert", maxCount: 1 },
+    { name: "NBIClearance", maxCount: 1 },
+    { name: "policeClearance", maxCount: 1 },
+    { name: "TOR", maxCount: 1 },
+    { name: "idPhoto", maxCount: 1 },
+  ]),
+  (err: { message: unknown; }, req: req, res: res, next: next) => {
+    if (err) {
+      // Check for specific Multer errors
+      if (err instanceof multer.MulterError) {
+        // Handle Multer specific errors
+        return res.status(400).send({ message: err.message });
+      }
+      // Handle general errors
+      return res.status(500).send({ message: "Something went wrong!" });
+    }
+    next();
   },
-    true,
-  ),
-  updateResume
+  updateApplicant
 );
 
 router.put(
   "/status/:applicantId/:stat",
   verifySession({
     permissions: ["applicant", "admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   updateStat
 )
 
@@ -52,60 +74,49 @@ router.get(
   "/all",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
-  getAllResumeData
+  }),
+  getAllApplicant
 );
 
 router.get(
   "/category/:category",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getApplicantByDocumentCategory
-);
-
-router.get(
-  "/download/:id",
-  verifySession({
-    permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
-  getResumeFile
 );
 
 router.get(
   "/search",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
-  searchResume
+  }),
+  searchApplicant
 );
 
 router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
-  getResumeById
+  }),
+  getApplicantById
 );
+
+router.get(
+  "/:id/reject",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
+  }),
+  rejectApplicant
+);
+
 
 router.delete(
   "/:id",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
-  deleteResume
+  }),
+  deleteApplicant
 );
 
 // Events
@@ -113,9 +124,7 @@ router.get(
   "/events/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   getAllApplicantFacilityEvents
 )
 
@@ -125,9 +134,7 @@ router.post(
   "/screen/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   createScreening
 )
 
@@ -135,9 +142,7 @@ router.put(
   "/screen/:screeningId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   updateScreening
 )
 
@@ -145,9 +150,7 @@ router.get(
   "/screen/ai/:applicantId/:jobId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   screenApplicantViaAI
 )
 
@@ -155,9 +158,7 @@ router.get(
   "/screen/ai/:applicantId/:jobId/:screeningId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   screenApplicantViaAI
 )
 
@@ -165,9 +166,7 @@ router.get(
   "/screen/all/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   getAllScreening
 )
 
@@ -177,9 +176,7 @@ router.post(
   "/interview/:applicantId/:eventId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   createInterview
 )
 
@@ -187,9 +184,7 @@ router.put(
   "/interview/:interviewId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   updateInterview
 )
 
@@ -197,9 +192,7 @@ router.get(
   "/interview/all/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer", "applicant"],
-  },
-    true,
-  ),
+  }),
   getAllInterview
 )
 
@@ -207,9 +200,7 @@ router.get(
   "/interview/recent",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   getAllRecentInterviews
 )
 
@@ -218,9 +209,7 @@ router.get(
   "/interview/:interviewId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   getAllInterview
 )
 
@@ -229,9 +218,7 @@ router.post(
   "/joboffer/:applicantId/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   createJoboffer
 )
 
@@ -239,9 +226,7 @@ router.post(
   "/joboffer/send-email/:jobofferId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   sendJobOfferMail
 )
 
@@ -249,29 +234,31 @@ router.put(
   "/joboffer/:jobofferId/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   updateJoboffer
+)
+
+router.get(
+  "/joboffer/all/",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter"],
+  }),
+  getEligibleForJobOffer
 )
 
 router.get(
   "/joboffer/all/:applicantId/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
-  getAllJoboffer
+  }),
+  getApplicantJoboffer
 )
 
 router.get(
   "/joboffer/recent/",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getAllRecentJoboffer
 )
 
@@ -279,11 +266,28 @@ router.get(
   "/joboffer/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getJobofferById
 )
+
+//
+
+router.get(
+  "/:applicantId/file/:fileType",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+  }),
+  getFile
+);
+
+router.post(
+  "/file/:applicantId/interview/:fileType",
+  verifySession({
+    permissions: ["admin", "manager", "recruiter", "interviewer"],
+  }),
+  upload('applicants').single('file'),
+  uploadFile
+);
 
 export default {
   metadata: {

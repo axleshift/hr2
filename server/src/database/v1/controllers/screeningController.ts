@@ -245,7 +245,6 @@ export const screenApplicantViaAI = async (req: req, res: res) => {
   }
 };
 
-
 export const createScreening = async (req: req, res: res) => {
   try {
     const { applicantId } = req.params;
@@ -307,9 +306,9 @@ export const createScreening = async (req: req, res: res) => {
     };
 
     if (status === 'shorlisted') {
-      applicant.isShortlisted = true;
+      applicant.statuses.journey.isShortlisted = true;
     } else {
-      applicant.isShortlisted = false;
+      applicant.statuses.journey.isShortlisted = false;
     }
 
     await applicant.save();
@@ -416,9 +415,9 @@ export const updateScreening = async (req: req, res: res) => {
     logger.info(updateData.status)
 
     if (updateData.status === 'shortlisted') {
-      applicant.isShortlisted = true;
+      applicant.statuses.journey.isShortlisted = true;
     } else {
-      applicant.isShortlisted = false;
+      applicant.statuses.journey.isShortlisted = false;
     }
 
     // Save the updated applicant data

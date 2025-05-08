@@ -3,9 +3,12 @@
  * @description Applicant model schema
  */
 
-import mongoose, { Document } from "mongoose";
+const APPLICANT_STATUS = ['Rejected', 'Hired', 'Active']
 
-export interface IApplicant extends Document {
+import mongoose, { Document, Types } from "mongoose";
+
+export interface IApplicantBase extends Document {
+  status: string;
   /**
    * Basic Information
    */
@@ -23,7 +26,6 @@ export interface IApplicant extends Document {
   /**
    * Work Experience
    */
-  resumeFileLoc?: string;
   yearsOfExperience: number;
   currentMostRecentJob?: string;
 
@@ -52,24 +54,74 @@ export interface IApplicant extends Document {
   whyInterestedInRole?: string;
 
   /**
+   * Files location. These are all saved in the local filesystem.
+   * which is why they're all string.
+   * some of this are not actual files but numbers or strings.. so thats convenient.
+   * 
+   * For several government-mandated pre-employment requirements in the Philippines, 
+   * you typically only need to provide your identification numbers, 
+   * not the physical IDs—unless the employer specifically requested them.
+   */
+  files: {
+    resume?: string;
+    medCert?: string;
+    birthCert?: string;
+    NBIClearance?: string;
+    policeClearance?: string;
+    TOR?: string; // Transcript of record
+    idPhoto?: string;
+  }
+
+  interviews: {
+    InitialInterview: string;
+    TechnicalInterview: string;
+    PanelInterview: string;
+    BehavioralInterview: string;
+    FinalInterview: string;
+  }
+
+  ids: {
+    TIN?: string;
+    SSS?: string;
+    philHealth?: string;
+    pagIBIGFundNumber?: string;
+  }
+
+  /**
    * Statuses and Remarks for Each Stage
    */
   statuses: {
-    isShortlisted: boolean;
-    isInitialInterview: boolean;
-    isFinalInterview: boolean;
-    isJobOffer: boolean;
-    isHired: boolean;
+    journey: {
+      isShortlisted: boolean;
+      isInitialInterview: boolean;
+      isTechnicalInterview: boolean;
+      isPanelInterview: boolean;
+      isBehavioralInterview: boolean;
+      isFinalInterview: boolean;
+      isJobOffer: boolean;
+      isHired: boolean;
+      withdrawn: boolean;
+    },
+    // preemployment: {
+    //   files: {
+    //     medCert?: boolean;
+    //     birthCert?: boolean;
+    //     NBIClearance?: boolean;
+    //     policeClearance?: boolean;
+    //     TOR?: boolean;
+    //     idPhoto?: boolean;
+    //   },
+    //   ids: {
+    //     TIN?: boolean;
+    //     SSS?: boolean;
+    //     philHealth?: boolean;
+    //     pagIBIGFundNumber?: boolean;
+    //   }
+    // }
   },
 
   tags: string[];
   emailSent: boolean;
-  isShortlisted: boolean;
-  isInitialInterview: boolean;
-  isFinalInterview: boolean;
-  isJobOffer: boolean;
-  isHired: boolean;
-
   events: mongoose.Types.ObjectId[];
   emails: mongoose.Types.ObjectId[];
 
@@ -82,11 +134,22 @@ export interface IApplicant extends Document {
   expiresAt: Date;
 }
 
+export interface IApplicant extends IApplicantBase, Document {
+  _id: Types.ObjectId,
+}
+
 const applicantSchema = new mongoose.Schema<IApplicant>(
   {
     /**
      * Basic Information
      */
+    status: {
+      type: String,
+      enum: APPLICANT_STATUS,
+      default: 'Active',
+      required: true,
+    },
+
     firstname: {
       type: String,
       required: true,
@@ -126,9 +189,6 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
     /**
      * Work Experience
      */
-    resumeFileLoc: {
-      type: String,
-    },
     yearsOfExperience: {
       type: Number,
       required: true,
@@ -215,49 +275,154 @@ const applicantSchema = new mongoose.Schema<IApplicant>(
       default: false,
     },
 
+    files: {
+      resume: {
+        type: String,
+      },
+      medCert: {
+        type: String,
+      },
+      birthCert: {
+        type: String,
+      },
+      NBIClearance: {
+        type: String,
+      },
+      policeClearance: {
+        type: String,
+      },
+      TOR: {
+        type: String,
+      },
+      idPhoto: {
+        type: String,
+      },
+    },
+
+    interviews: {
+      InitialInterview: {
+        type: String,
+      },
+      TechnicalInterview: {
+        type: String,
+      },
+      PanelInterview: {
+        type: String,
+      },
+      BehavioralInterview: {
+        type: String,
+      },
+      FinalInterview: {
+        type: String,
+      },
+    },
+  
+    ids: {
+      TIN: {
+        type: String,
+      },
+      SSS: {
+        type: String,
+      },
+      philHealth: {
+        type: String,
+      },
+      pagIBIGFundNumber: {
+        type: String,
+      },
+    },
+
     statuses: {
-      isShortlisted: {
-        type: Boolean,
-        default: false,
+      journey: {
+        isShortlisted: {
+          type: Boolean,
+          default: false,
+        },
+        isInitialInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isTechnicalInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isPanelInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isBehavioralInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isFinalInterview: {
+          type: Boolean,
+          default: false,
+        },
+        isJobOffer: {
+          type: Boolean,
+          default: false,
+        },
+        isHired: {
+          type: Boolean,
+          default: false,
+        },
+        withdrawn: {
+          type: Boolean,
+          default: false,
+        },
       },
-      isInitialInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isFinalInterview: {
-        type: Boolean,
-        default: false,
-      },
-      isJobOffer: {
-        type: Boolean,
-        default: false,
-      },
-      isHired: {
-        type: Boolean,
-        default: false,
-      },
+      // preemployment: {
+      //   files: {
+      //     medCert: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     birthCert: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     NBIClearance: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     policeClearance: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     TOR: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     idPhoto: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //   },
+      //   ids: {
+      //     TIN: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     SSS: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     idPhoto: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     philHealth: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //     pagIBIGFundNumber: {
+      //       type: Boolean,
+      //       default: false,
+      //     },
+      //   }
+      // }
     },
-    
-    isShortlisted: {
-      type: Boolean,
-      default: false,
-    },
-    isInitialInterview: {
-      type: Boolean,
-      default: false,
-    },
-    isFinalInterview: {
-      type: Boolean,
-      default: false,
-    },
-    isJobOffer: {
-      type: Boolean,
-      default: false,
-    },
-    isHired: {
-      type: Boolean,
-      default: false,
-    },
+
     events: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event",

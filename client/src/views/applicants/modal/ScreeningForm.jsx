@@ -218,11 +218,11 @@ const ScreeningForm = ({ isVisible, onClose, state, applicant }) => {
 
       const res = JSearchQuery
         ? await get(
-            `/applicant/screen/all/${applicant._id}?query=${JSearchQuery}&page=${currentPage}&limit=${itemsPerPage}&sort=desc`,
-          )
+          `/applicant/screen/all/${applicant._id}?query=${JSearchQuery}&page=${currentPage}&limit=${itemsPerPage}&sort=desc`,
+        )
         : await get(
-            `/applicant/screen/all/${applicant._id}?page=${currentPage}&limit=${itemsPerPage}&sort=desc`,
-          )
+          `/applicant/screen/all/${applicant._id}?page=${currentPage}&limit=${itemsPerPage}&sort=desc`,
+        )
       const sce = res.data
       setScreenings(sce.data)
       setTotalItems(sce.totalItems)
@@ -781,17 +781,25 @@ const ScreeningForm = ({ isVisible, onClose, state, applicant }) => {
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">{j.title}</div>
                                         <small>
-                                          <strong>Responsibilities:</strong>{' '}
+                                          <strong>Author:</strong>
+                                          {typeof job.author === 'string'
+                                            ? job.author // If it's a string, display it as is
+                                            : job.author && job.author.firstname // If it's an object, display full name
+                                              ? `${job.author.firstname} ${job.author.lastname}`
+                                              : 'Unknown'}
+                                        </small>
+                                        <small>
+                                          <strong>Responsibilities:</strong>
                                           {trimString(j.responsibilities, 50)}
                                         </small>
                                         <br />
                                         <small>
-                                          <strong>Requirements:</strong>{' '}
+                                          <strong>Requirements:</strong>
                                           {trimString(j.requirements, 50)}
                                         </small>
                                         <br />
                                         <small>
-                                          <strong>Qualifications:</strong>{' '}
+                                          <strong>Qualifications:</strong>
                                           {trimString(j.qualifications, 50)}
                                         </small>
                                         <br />
@@ -863,7 +871,7 @@ const ScreeningForm = ({ isVisible, onClose, state, applicant }) => {
                                 <CRow>
                                   <CCol className="mb-3">
                                     <CFormLabel>
-                                      Custom Prompt{' '}
+                                      Custom Prompt
                                       <small className="text-muted text-danger">
                                         (Do not use if possible)
                                       </small>

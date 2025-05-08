@@ -38,9 +38,7 @@ router.post(
   "/create",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   createFacility
 );
 
@@ -48,9 +46,7 @@ router.put(
   "/update/:facilityId",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   updateFacility
 );
 
@@ -58,9 +54,7 @@ router.get(
   "/all",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getAllFacilities
 );
 
@@ -68,9 +62,7 @@ router.get(
   "/:facilityId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   getFacilityById
 );
 
@@ -78,9 +70,7 @@ router.delete(
   "/delete/:facilityId",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   removeFacility
 );
 
@@ -89,9 +79,7 @@ router.post(
   "/timeslot/create/:facilityId",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   createFacilityTimeslot
 );
 
@@ -108,9 +96,7 @@ router.delete(
   "/timeslot/delete/:timeslotId",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   removeFacilityTimeslot
 );
 
@@ -119,9 +105,7 @@ router.post(
   "/event/:timeslotId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   createFacilityEvent
 );
 
@@ -129,9 +113,7 @@ router.put(
   "/event/:timeslotId",
   verifySession({
     permissions: ["admin", "manager"]
-  },
-    true,
-  ),
+  }),
   updateFacilityEvent
 );
 
@@ -139,9 +121,7 @@ router.delete(
   "/event/:timeslotId",
   verifySession({
     permissions: ["admin", "manager"]
-  },
-    true,
-  ),
+  }),
   deleteFacilityEvent
 );
 
@@ -149,9 +129,7 @@ router.get(
   "/events/:eventId/calendar-states",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   getFacilityCalendarStates
 );
 
@@ -159,9 +137,7 @@ router.get(
   "/event/:eventId",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"]
-  },
-    true,
-  ),
+  }),
   getFacilityEventByID
 );
 
@@ -169,9 +145,7 @@ router.get(
   "/events/:eventId/:date",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   getFacilityEventsForDate
 );
 
@@ -179,20 +153,16 @@ router.get(
   "/events/upcoming",
   verifySession({
     permissions: ["admin", "manager", "recruiter", "interviewer"],
-  },
-    true,
-  ),
+  }),
   getUpcomingEvents
 );
 
 // Booking
 router.post(
-  "/events/:eventId/book",
+  "/events/:eventId/book/applicant/:applicantId",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   bookApplicantToEvent
 );
 
@@ -200,9 +170,7 @@ router.post(
   "/events/:eventId/send-email",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   SendEmailToFacilityEventParticipants
 );
 
@@ -210,9 +178,7 @@ router.delete(
   "/events/:eventId/unbook",
   verifySession({
     permissions: ["admin", "manager", "recruiter"],
-  },
-    true,
-  ),
+  }),
   unbookApplicantFromEvent
 );
 

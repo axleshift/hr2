@@ -107,9 +107,7 @@ const ScheduleForm = ({ isVisible, onClose, isDarkMode, applicantData }) => {
   const handleBookApplicantToEvent = async (eventId) => {
     try {
       setIsBookingLoading(true)
-      const formData = new FormData()
-      formData.append('applicantId', applicantData._id)
-      const res = await post(`/facilities/events/${eventId}/book`, formData)
+      const res = await post(`/facilities/events/${eventId}/book/applicant/${applicantData._id}`)
       console.log('Response', res.data)
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Applicant has been booked to the event', 'success')

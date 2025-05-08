@@ -42,7 +42,7 @@ import {
 } from '@coreui/react'
 
 import { get } from '../../../api/axios'
-import { formatCurency, formatDate } from '../../../utils'
+import { formatCurrency, formatDate } from '../../../utils'
 import JobOfferForm from '../modal/JobOfferForm'
 import AppPagination from '../../../components/AppPagination'
 import { AuthContext } from '../../../context/authContext'
@@ -285,7 +285,7 @@ const Interviews = ({ applicantId }) => {
                               readOnly
                               defaultValue={
                                 int.salaryExpectation
-                                  ? formatCurency(parseInt(int.salaryExpectation))
+                                  ? formatCurrency(parseInt(int.salaryExpectation))
                                   : 'No data'
                               }
                             />

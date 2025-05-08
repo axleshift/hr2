@@ -8,32 +8,50 @@ const instance = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
     'X-API-KEY': apiKey,
   },
 })
 
 const handleError = (error) => {
   if (axios.isAxiosError(error)) {
-    // This is an Axios error
     return {
       status: error.response ? error.response.status : null,
       message: error.response ? error.response.data : error.message,
     }
   } else {
-    // This is a non-Axios error
     return { status: null, message: error.message }
   }
 }
 
 const post = async (url, data) => {
   try {
-    const response = await instance.post(url, data)
+    const isFormData = data instanceof FormData
+
+    const response = await instance.post(url, data, {
+      headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
+    })
+
     return response
   } catch (error) {
     const handledError = handleError(error)
     console.error('POST Error:', handledError)
-    return handledError // return error information
+    return handledError
+  }
+}
+
+const put = async (url, data) => {
+  try {
+    const isFormData = data instanceof FormData
+
+    const response = await instance.put(url, data, {
+      headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
+    })
+
+    return response
+  } catch (error) {
+    const handledError = handleError(error)
+    console.error('PUT Error:', handledError)
+    return handledError
   }
 }
 
@@ -44,18 +62,7 @@ const get = async (url) => {
   } catch (error) {
     const handledError = handleError(error)
     console.error('GET Error:', handledError)
-    return handledError // return error information
-  }
-}
-
-const put = async (url, data) => {
-  try {
-    const response = await instance.put(url, data)
-    return response
-  } catch (error) {
-    const handledError = handleError(error)
-    console.error('PUT Error:', handledError)
-    return handledError // return error information
+    return handledError
   }
 }
 
@@ -66,11 +73,10 @@ const del = async (url) => {
   } catch (error) {
     const handledError = handleError(error)
     console.error('DELETE Error:', handledError)
-    return handledError // return error information
+    return handledError
   }
 }
 
-// for fetching files from the server
 const getFile = async (url, options = {}) => {
   const { responseType = 'blob', headers = {} } = options
 
@@ -83,7 +89,7 @@ const getFile = async (url, options = {}) => {
   } catch (error) {
     const handledError = handleError(error)
     console.error('Error fetching file:', handledError)
-    return handledError // return error information
+    return handledError
   }
 }
 

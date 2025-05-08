@@ -62,7 +62,7 @@ const JobPage = () => {
           setIsJobLoading(false)
           setJobs(res.data.data)
           setCurrentPage(res.data.currentPage)
-          setItemsPerPage(res.data.itemsPerPage)
+          setTotalItems(res.data.totalItems)
           setTotalPages(res.data.totalPages)
           break
         case 404:
@@ -171,7 +171,7 @@ const JobPage = () => {
                               ? job.author // If it's a string, display it as is
                               : job.author && job.author.firstname // If it's an object, display full name
                                 ? `${job.author.firstname} ${job.author.lastname}`
-                                : 'Unknown'}{' '}
+                                : 'Unknown'}
                           </CTableDataCell>
                           <CTableDataCell>
                             <div className="d-flex flex-row gap-2">

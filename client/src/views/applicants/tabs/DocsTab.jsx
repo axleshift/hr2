@@ -44,8 +44,9 @@ import {
 import Interviews from './Interviews'
 import Screenings from './Screenings'
 import Joboffers from './Joboffers'
+import FilesTab from './FilesTab'
 
-const DocsTab = ({ applicantId }) => {
+const DocsTab = ({ applicantId, applicantFiles, applicantInterviews }) => {
   return (
     <>
       <CContainer className="mt-3">
@@ -56,6 +57,7 @@ const DocsTab = ({ applicantId }) => {
                 <CTab itemKey={'interview'}>Interviews</CTab>
                 <CTab itemKey={'screening'}>Screenings</CTab>
                 <CTab itemKey={'joboffer'}>Job Offers</CTab>
+                <CTab itemKey={'files'}>Files</CTab>
               </CTabList>
               <CTabContent>
                 <CTabPanel itemKey={'interview'}>
@@ -66,6 +68,13 @@ const DocsTab = ({ applicantId }) => {
                 </CTabPanel>
                 <CTabPanel itemKey={'joboffer'}>
                   <Joboffers applicantId={applicantId} />
+                </CTabPanel>
+                <CTabPanel itemKey={'files'}>
+                  <FilesTab
+                    applicantId={applicantId}
+                    files={applicantFiles}
+                    interviews={applicantInterviews}
+                  />
                 </CTabPanel>
               </CTabContent>
             </CTabs>
@@ -78,6 +87,8 @@ const DocsTab = ({ applicantId }) => {
 
 DocsTab.propTypes = {
   applicantId: propTypes.string,
+  applicantFiles: propTypes.object,
+  applicantInterviews: propTypes.object,
 }
 
 export default DocsTab

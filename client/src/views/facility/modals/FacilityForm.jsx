@@ -24,56 +24,84 @@ import {
   CModalBody,
   CModalFooter,
   CFormTextarea,
+  CFormLabel,
 } from '@coreui/react'
 
 import React, { useContext, useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import { AppContext } from '../../../context/appContext'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { post, put } from '../../../api/axios'
 import { config } from '../../../config'
+import { AuthContext } from '../../../context/authContext'
+
+const RequirementSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+})
+
+const formSchema = z.object({
+  name: z.string().nonempty('Name is required'),
+  type: z.string().nonempty('Type is required'),
+  description: z.string().nonempty('Description is required'),
+  requirements: z.array(RequirementSchema).optional(),
+  location: z.string().nonempty('Location is required'),
+})
 
 const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
   const { addToast } = useContext(AppContext)
+  const { userInformation } = useContext(AuthContext)
 
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
 
-  const formSchema = z.object({
-    name: z.string().nonempty('Name is required'),
-    type: z.string().nonempty('Type is required'),
-    description: z.string().nonempty('Description is required'),
-    location: z.string().nonempty('Location is required'),
-  })
-
   const {
     register,
+    control,
     handleSubmit,
+    setValue,
     reset: formReset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: facilityData || { requirements: [] }, // Ensure default values are set on load
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'requirements',
   })
 
   const handleFormSubmit = async (data) => {
     console.log('Form data:', data)
     try {
       setIsSubmitLoading(true)
-      const formData = new FormData()
-      formData.append('name', data.name)
-      formData.append('type', data.type)
-      formData.append('description', data.description)
-      formData.append('location', data.location)
+
+      const formData = {
+        name: data.name,
+        type: data.type,
+        description: data.description,
+        requirements: data.requirements || [],
+        location: data.location,
+      }
 
       const res = isEdit
         ? await put(`/facilities/update/${facilityData._id}`, formData)
-        : await post('/facilities/create', data)
+        : await post('/facilities/create', formData)
+
       if (res.status === 200 || res.status === 201) {
         addToast('Success', 'Facility Added Successfully', 'success')
       }
+
+      // Update form values with the response data
+      setValue('name', res.data.data.name)
+      setValue('type', res.data.data.type)
+      setValue('description', res.data.data.description)
+      setValue('requirements', res.data.data.requirements || [])
+      setValue('location', res.data.data.location)
+
       setIsSubmitLoading(false)
-      formReset()
       onClose()
     } catch (error) {
       console.error(error)
@@ -87,6 +115,7 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
       type: 'Facility Type',
       description: 'Facility Description',
       location: 'Facility Location',
+      requirements: [{ title: 'Requirement 1', description: 'Description 1' }],
     })
   }
 
@@ -95,15 +124,16 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
       formReset()
     }
 
-    if (isEdit) {
+    if (isEdit && facilityData) {
       formReset({
         name: facilityData?.name,
         type: facilityData?.type,
         description: facilityData?.description,
         location: facilityData?.location,
+        requirements: facilityData?.requirements || [], // Default empty array if no requirements
       })
     }
-  }, [isVisible, isEdit])
+  }, [isVisible, isEdit, facilityData, formReset])
 
   return (
     <CModal
@@ -129,7 +159,6 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 label="Facility Name"
                 placeholder="Facility Name"
                 {...register('name')}
-                defaultValue={facilityData?.name}
                 invalid={!!errors?.name}
               />
               {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
@@ -142,7 +171,6 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 label="Type"
                 placeholder="Type"
                 {...register('type')}
-                defaultValue={facilityData?.type}
                 invalid={!!errors?.type}
               />
               {errors.type && <div className="invalid-feedback">{errors.type.message}</div>}
@@ -156,11 +184,56 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 label="Description"
                 placeholder="Description"
                 {...register('description')}
-                defaultValue={facilityData?.description}
                 invalid={!!errors?.description}
               />
               {errors.description && (
                 <div className="invalid-feedback">{errors.description.message}</div>
+              )}
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol>
+              <CFormLabel>Requirements</CFormLabel>
+            </CCol>
+          </CRow>
+          <CRow className="mb-3">
+            <CCol className="d-flex gap-2 flex-column">
+              {fields.map((item, index) => (
+                <div key={item.id} className="d-flex gap-3 flex-column">
+                  <div>
+                    <CFormLabel>Title</CFormLabel>
+                    <CInputGroup>
+                      <CFormInput
+                        type="text"
+                        placeholder="Title"
+                        {...register(`requirements.${index}.title`)}
+                      />
+                      {['admin', 'manager', 'interviewer'].includes(userInformation.role) && (
+                        <CButton color="danger" onClick={() => remove(index)}>
+                          Remove
+                        </CButton>
+                      )}
+                    </CInputGroup>
+                  </div>
+                  <div>
+                    <CFormTextarea
+                      type="text"
+                      label="Description"
+                      placeholder="Description"
+                      {...register(`requirements.${index}.description`)}
+                    />
+                  </div>
+                </div>
+              ))}
+
+              {['admin', 'manager', 'interviewer'].includes(userInformation.role) && (
+                <CButton
+                  color="success"
+                  size="sm"
+                  onClick={() => append({ title: '', description: '' })}
+                >
+                  Add Requirement
+                </CButton>
               )}
             </CCol>
           </CRow>
@@ -171,7 +244,6 @@ const FacilityForm = ({ isVisible, onClose, isEdit, facilityData }) => {
                 label="Location"
                 placeholder="Location"
                 {...register('location')}
-                defaultValue={facilityData?.location}
                 invalid={!!errors?.location}
               />
               {errors.location && <div className="invalid-feedback">{errors.location.message}</div>}

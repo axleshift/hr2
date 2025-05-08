@@ -1,11 +1,13 @@
 import React, { Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import AuthProvider from './context/authContext'
 import AppProvider from './context/appContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
+import { config } from './config'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -14,14 +16,12 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 const Login = React.lazy(() => import('./views/auth/Login'))
 const Register = React.lazy(() => import('./views/auth/Register'))
 const VerifyEmail = React.lazy(() => import('./views/auth/VerifyEmail'))
+const OTPPage = React.lazy(() => import('./views/auth/Otp'))
 
 const Page404 = React.lazy(() => import('./views/errors/Page404'))
 const Page500 = React.lazy(() => import('./views/errors/Page500'))
 
-// const Terms = React.lazy(() => import('./views/legal/Terms'))
 const Policy = React.lazy(() => import('./views/legal/PolicyTerms'))
-
-// const ApplicantProfilePage = React.lazy(() => import('./views/applicants/ApplicantProfile'))
 
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('theme')
@@ -42,7 +42,7 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <>
+    <GoogleOAuthProvider clientId={config.google.oAuth2.clientId}>
       <AuthProvider>
         <AppProvider>
           <BrowserRouter>
@@ -56,12 +56,10 @@ const App = () => {
               <Routes>
                 <Route path="/login" name="Login Page" element={<Login />} />
                 <Route path="/register" name="Register Page" element={<Register />} />
+                <Route path="/otp" name="OTP Page" element={<OTPPage />} />
                 <Route path="/404" name="Page 404" element={<Page404 />} />
                 <Route path="/500" name="Page 500" element={<Page500 />} />
                 <Route path="/PolicyTerms" name="Privacy Policy And Terms" element={<Policy />} />
-
-                {/* <Route path="/terms" name="Terms of Service" element={<Terms />} />
-                <Route path="/policy" name="Privacy Policy" element={<Policy />} /> */}
 
                 {/* Protect DefaultLayout route */}
                 <Route
@@ -78,7 +76,7 @@ const App = () => {
           </BrowserRouter>
         </AppProvider>
       </AuthProvider>
-    </>
+    </GoogleOAuthProvider>
   )
 }
 

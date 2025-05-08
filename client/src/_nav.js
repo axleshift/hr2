@@ -31,16 +31,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
-  // {
-  //   component: CNavItem,
-  //   name: 'Overview',
-  //   to: '/dashboard/overview',
-  //   icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
-  //   badge: {
-  //     color: 'danger',
-  //     text: 'unfinished',
-  //   },
-  // },
+  {
+    component: CNavItem,
+    name: 'Overview',
+    to: '/dashboard/overview',
+    icon: <FontAwesomeIcon icon={faDashboard} className="nav-icon" />,
+    badge: {
+      color: 'danger',
+      text: 'unfinished',
+    },
+  },
   {
     component: CNavTitle,
     name: 'Recruitment',
@@ -63,12 +63,12 @@ const _nav = [
     to: '/recruitment/jobposts',
     icon: <FontAwesomeIcon icon={faAt} className="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Request',
-    to: '/recruitment/jobposting/request',
-    icon: <FontAwesomeIcon icon={faFileAlt} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Request',
+  //   to: '/recruitment/jobposting/request',
+  //   icon: <FontAwesomeIcon icon={faFileAlt} className="nav-icon" />,
+  // },
   {
     component: CNavTitle,
     name: 'Application Tracking',

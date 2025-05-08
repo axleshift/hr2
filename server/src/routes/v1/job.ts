@@ -14,9 +14,7 @@ router.post(
   verifySession(
     {
       permissions: ["admin", "manager", "recruiter"],
-    },
-    true,
-  ),
+    }),
   createJob
 );
 
@@ -25,9 +23,7 @@ router.put(
   verifySession(
     {
       permissions: ["admin", "manager", "recruiter"],
-    },
-    true,
-  ),
+    }),
   updateJob
 );
 
@@ -36,9 +32,7 @@ router.get(
   verifySession(
     {
       permissions: ["admin", "manager", "recruiter"],
-    },
-    true,
-  ),
+    }),
   getAllJob
 );
 
@@ -47,9 +41,7 @@ router.get(
   verifySession(
     {
       permissions: ["admin", "manager", "recruiter"],
-    },
-    true,
-  ),
+    }),
   getJobById
 );
 
@@ -58,9 +50,7 @@ router.delete(
   verifySession(
     {
       permissions: ["admin", "manager", "recruiter"],
-    },
-    true,
-  ),
+    }),
   (req, res) => {
     res.send("OK");
   }

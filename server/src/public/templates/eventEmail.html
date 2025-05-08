@@ -1,65 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Event Invitation</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #e6f0f9; /* Light blue background */
+      color: #333;
+    }
+    .email-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .email-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .email-header h2 {
+      color: #1e88e5; /* Blue color for header */
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .email-body {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .event-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .event-table th, .event-table td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    .event-table th {
+      background-color: #1e88e5; /* Blue background for headers */
+      color: white;
+    }
+    .event-table td {
+      background-color: #f1f8ff; /* Light blue for the table rows */
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+    .footer a {
+      color: #1e88e5; /* Blue color for footer links */
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "name": "{{eventName}}",
-    "startDate": "{{eventDate}}T{{startTime}}:00",
-    "endDate": "{{eventDate}}T{{endTime}}:00",
-    "location": {
-      "@type": "Place",
-      "name": "{{facilityName}}",
-      "address": "{{facilityLocation}}"
-    },
-    "description": "You are invited to attend {{eventName}}.",
-    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-    "organizer": {
-      "@type": "Organization",
-      "name": "HR Team",
-      "email": "hr2axleshift@gmail.com"
-    }
-  }
-  </script>
+  <div class="email-container">
+    <div class="email-header">
+      <h2>Event Invitation: {{eventName}}</h2>
+    </div>
 
-  <p>Dear {{fullName}},</p>
+    <div class="email-body">
+      <p>Dear {{fullName}},</p>
 
-  <p>We are pleased to invite you to <strong>{{eventName}}</strong> on <strong>{{eventDate}}</strong>. Below are the event details:</p>
+      <p>We are pleased to invite you to attend <strong>{{eventName}}</strong> on <strong>{{eventDate}}</strong>. Below are the event details:</p>
 
-  <table>
-    <tr>
-      <td><strong>Event Name:</strong></td>
-      <td>{{eventName}}</td>
-    </tr>
-    <tr>
-      <td><strong>Date:</strong></td>
-      <td>{{eventDate}}</td>
-    </tr>
-    <tr>
-      <td><strong>Time:</strong></td>
-      <td>{{startTime}} - {{endTime}}</td>
-    </tr>
-    <tr>
-      <td><strong>Venue:</strong></td>
-      <td>{{facilityName}}</td>
-    </tr>
-    <tr>
-      <td><strong>Address:</strong></td>
-      <td>{{facilityLocation}}</td>
-    </tr>
-    <tr>
-      <td><strong>Type:</strong></td>
-      <td>{{eventType}}</td>
-    </tr>
-  </table>
+      <table class="event-table">
+        <tr>
+          <th>Event Name</th>
+          <td>{{eventName}}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{eventDate}}</td>
+        </tr>
+        <tr>
+          <th>Time</th>
+          <td>{{startTime}} - {{endTime}}</td>
+        </tr>
+        <tr>
+          <th>Venue</th>
+          <td>{{facilityName}}</td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td>{{facilityLocation}}</td>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <td>{{eventType}}</td>
+        </tr>
+      </table>
 
-  <p>Please confirm your attendance at your earliest convenience.</p>
+      <p>Please confirm your attendance at your earliest convenience.</p>
+    </div>
 
-  <p>Best regards,<br><strong>The HR Team</strong></p>
-
+    <div class="footer">
+      <p>Best regards,<br><strong>The HR Team</strong></p>
+      <p>If you have any issues or concerns, feel free to <a href="mailto:hr2axleshift@gmail.com">contact us</a>.</p>
+    </div>
+  </div>
 </body>
 </html>

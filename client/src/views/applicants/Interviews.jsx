@@ -176,7 +176,7 @@ const Interviews = () => {
                           <CTableDataCell>
                             {event.author.lastname}, {event.author.firstname}
                           </CTableDataCell>
-                          <CTableDataCell>{event.type}</CTableDataCell>
+                          <CTableDataCell className="text-info">{event.type}</CTableDataCell>
                           <CTableDataCell>{formatDate(event.date)}</CTableDataCell>
                           <CTableDataCell>
                             {formatTime(event.timeslot?.start)} - {formatTime(event.timeslot?.end)}{' '}
@@ -232,7 +232,7 @@ const Interviews = () => {
             </CCard>
           </CCol>
         </CRow>
-        <hr />
+        {/* <hr />
         <CRow>
           <CCol>
             <h2>Recent Interviews</h2>
@@ -299,7 +299,7 @@ const Interviews = () => {
                                   setIsInterviewFormVisible(true)
                                 }}
                               >
-                                Manage
+                                Issue a Job Offer?
                               </CButton>
                             </CTableDataCell>
                           </CTableRow>
@@ -311,7 +311,8 @@ const Interviews = () => {
               </CCardBody>
             </CCard>
           </CCol>
-        </CRow>
+        </CRow> */}
+
         <CRow>
           <CCol>
             <EventForm

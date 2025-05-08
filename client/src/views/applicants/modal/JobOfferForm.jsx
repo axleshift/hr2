@@ -25,44 +25,35 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { get, post, put } from '../../../api/axios'
 import { AppContext } from '../../../context/appContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faMailForward } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { formatDate } from '../../../utils'
 
 const OFFER_STATUSES = ['Pending', 'Accepted', 'Declined']
+const JOB_TYPES = ['Contractual', 'Regular', 'Temporary', 'Freelance']
 
 const jobofferSchema = z.object({
   position: z.string().min(1).max(30),
   salary: z.coerce.number().min(1).default(1),
-  // startDate: z.date(),
   startDate: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
-  benefits: z.string().min(1, { message: 'Benefits is required' }),
-  status: z.enum(['Pending', 'Accepted', 'Declined']),
+  benefits: z.string().min(1, { message: 'Benefits are required' }),
+  jobType: z.enum(JOB_TYPES),
+  contractDuration: z.string().optional(),
+  location: z.string().min(1, { message: 'Location is required' }),
+  status: z.enum(OFFER_STATUSES),
   notes: z.string().optional(),
-  approvedBy: z.string().optional(),
-  // approvedDate: z.string().optional(),
-  approvedDate: z
-    .string()
-    .optional()
-    .refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
 })
 
-const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
+const JobOfferForm = ({ isVisible, onClose, state, joboffer, applicantData }) => {
   const { addToast } = useContext(AppContext)
   const { userInformation } = useContext(AuthContext)
-
+  const [applicant, setApplicant] = useState([])
   const [isConfirmed, setIsConfirmed] = useState(false)
-
   const [jobofferData, setJobofferData] = useState({})
-  const [interviewData, setInterviewData] = useState({})
-
   const [isSubmitLoading, setIsSubmitLoading] = useState(false)
-
   const [isEmailLoading, setIsEmailLoading] = useState(false)
-
   const [isFormLoading, setIsFormLoading] = useState(false)
-
   const [formState, setFormState] = useState('view')
   const [isFormVisible, setIsFormVisible] = useState(false)
-
   const [isApproved, setIsApproved] = useState(false)
 
   const {
@@ -70,7 +61,6 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
     handleSubmit,
     reset,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: async (data, context, options) => {
@@ -82,29 +72,36 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
 
   const jobofferSubmit = async (data) => {
     try {
+      console.log('clicked', data)
       setIsSubmitLoading(true)
-      const appId = interviewData.applicant?._id
+
+      const formData = {
+        position: data.position,
+        salary: data.salary,
+        startDate: data.startDate,
+        benefits: data.benefits,
+        notes: data.notes,
+        jobType: data.jobType,
+        contractDuration: data.contractDuration,
+        location: data.location,
+        status: data.status,
+      }
+
+      const appId = applicant._id
       const res =
         formState === 'edit'
-          ? await put(`/applicant/joboffer/${jobofferData._id}?isApproved=${isApproved}`, data)
-          : await post(`/applicant/joboffer/${appId}`, data)
+          ? await put(`/applicant/joboffer/${jobofferData._id}?isApproved=${isApproved}`, formData)
+          : await post(`/applicant/joboffer/${appId}`, formData)
 
-      console.log('res', JSON.stringify(res.data, null, 2))
-
-      switch (res.status) {
-        case 201:
-          addToast('Success', res.data.message, 'success')
-          setJobofferData(res.data.data)
-          break
-        case 200:
-          addToast('Success', res.data.message, 'success')
-          setJobofferData(res.data.data)
-          break
-
-        default:
-          addToast('Error', res.message.message, 'danger')
-          break
+      if (res.status === 200 || res.status === 201) {
+        addToast('Success', res.data.message, 'success')
+        setFormState('edit')
+        setJobofferData(res.data.data)
+        reset(res.data.data)
+      } else {
+        addToast('Error', res.message.message, 'danger')
       }
+
       onClose()
     } catch (error) {
       console.error(error)
@@ -113,28 +110,10 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
     }
   }
 
-  const getJoboffer = async (joboffer) => {
-    try {
-      setIsFormLoading(true)
-      const res = await get(`/applicant/joboffer/${joboffer._id}`)
-      if (res.status === 200) {
-        setJobofferData(res.data.data)
-        reset(res.data.data)
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsFormLoading(false)
-    }
-  }
-
   const handleSendEmail = async (jobofferId) => {
     try {
       setIsEmailLoading(true)
-      console.log(jobofferId)
       const res = await post(`/applicant/joboffer/send-email/${jobofferId}`)
-      console.log('job Offer Email', JSON.stringify(res.data, null, 2))
-
       if (res.status === 200) {
         addToast('Success', res.data.message, 'success')
       }
@@ -147,46 +126,36 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
 
   useEffect(() => {
     if (isVisible) {
-      console.log('Stae', JSON.stringify(formState))
       setIsFormVisible(isVisible)
 
-      if (interview) {
-        setInterviewData(interview)
-        reset({
-          position: interview.job ?? 'No Data',
-          startDate: new Date(interview.date).toISOString().split('T')[0],
-          salary: interview.salaryExpectation,
-          status: 'Pending',
-        })
+      if (applicant) {
+        setApplicant(applicantData)
       }
 
       if (joboffer) {
         setJobofferData(joboffer)
+        setApplicant(joboffer.applicant)
         reset({
           position: joboffer.position ?? 'No Data',
-          startDate: new Date(joboffer.startDate).toISOString().split('T')[0],
+          startDate: joboffer.startDate
+            ? new Date(joboffer.startDate).toISOString().split('T')[0]
+            : 'No Data',
           salary: joboffer.salary,
-          status: joboffer.status,
+          status: joboffer.status ?? 'Pending', // Ensuring default value
           benefits: joboffer.benefits,
           notes: joboffer.notes,
-          approvedBy: joboffer.approvedBy
-            ? `${joboffer.approvedBy.lastname}, ${joboffer.approvedBy.firstname}`
-            : '',
-          approvedDate: joboffer.approvedDate
-            ? new Date(joboffer.approvedDate).toISOString().split('T')[0]
-            : new Date(),
+          jobType: joboffer.jobType ?? 'Regular', // New field for job type
+          contractDuration: joboffer.contractDuration ?? '',
+          location: joboffer.location ?? '',
+        })
+      } else {
+        reset({
+          position: applicant.jobAppliedFor,
+          location: applicant.preferredWorkLocation,
         })
       }
     }
-  }, [isVisible, interview, joboffer, formState])
-
-  useForm(() => {
-    if (formState) {
-      if (formState === 'edit' || formState === 'create') {
-        setIsReadOnly(false)
-      }
-    }
-  }, [formState])
+  }, [isVisible, joboffer, formState])
 
   useEffect(() => {
     if (state) {
@@ -220,10 +189,18 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
           <CRow>
             <CCol>
               <CForm onSubmit={handleSubmit(jobofferSubmit)}>
+                <CRow>
+                  <CCol>
+                    <h4>
+                      {applicant.lastname}, {applicant.firstname} {applicant.middlename}{' '}
+                      {applicant.suffix && applicant.suffix}
+                    </h4>
+                  </CCol>
+                </CRow>
                 <CRow className="mb-3">
                   <CCol>
                     <CFormInput
-                      label="Position / job Applied For?"
+                      label="Position / Job Applied For"
                       {...register('position')}
                       invalid={!!errors.position}
                       readOnly={['view', 'edit', 'create'].includes(formState)}
@@ -235,7 +212,7 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                   <CCol>
                     <CFormInput
                       type="number"
-                      label="Salary"
+                      label="Salary per month"
                       {...register('salary', { valueAsNumber: true })}
                       invalid={!!errors.salary}
                       readOnly={['view'].includes(formState)}
@@ -250,7 +227,6 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                     <CTooltip placement="top" content="When the new hire is expected to start.">
                       <CFormLabel>Start Date</CFormLabel>
                     </CTooltip>
-
                     <CFormInput
                       type="date"
                       {...register('startDate')}
@@ -262,47 +238,52 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                   </CCol>
                   <CCol>
                     <CFormSelect
-                      label="Job Offer Status"
+                      label="Job Type"
+                      {...register('jobType')}
+                      invalid={!!errors.jobType}
+                      disabled={['view'].includes(formState)}
+                    >
+                      {JOB_TYPES.map((type, index) => (
+                        <option key={index} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </CFormSelect>
+                    {errors.jobType && (
+                      <CFormFeedback invalid>{errors.jobType.message}</CFormFeedback>
+                    )}
+                  </CCol>
+                </CRow>
+                <CRow className="mb-3">
+                  <CCol>
+                    <CFormSelect
+                      label="Offer Status"
                       {...register('status')}
                       invalid={!!errors.status}
                       disabled={['view'].includes(formState)}
                     >
-                      {OFFER_STATUSES.map((o, index) => {
-                        return (
-                          <option key={index} value={o}>
-                            {o}
-                          </option>
-                        )
-                      })}
+                      {OFFER_STATUSES.map((status, index) => (
+                        <option key={index} value={status}>
+                          {status}
+                        </option>
+                      ))}
                     </CFormSelect>
+                    {errors.status && (
+                      <CFormFeedback invalid>{errors.status.message}</CFormFeedback>
+                    )}
+                  </CCol>
+                  <CCol>
+                    <CFormInput
+                      label="Location"
+                      {...register('location')}
+                      invalid={!!errors.location}
+                      readOnly={['view'].includes(formState)}
+                    />
+                    {errors.location && (
+                      <CFormFeedback invalid>{errors.location.message}</CFormFeedback>
+                    )}
                   </CCol>
                 </CRow>
-                {jobofferData?.approvedBy && (
-                  <CRow className="mb-3">
-                    <CCol>
-                      <CFormInput
-                        label="Approved By"
-                        {...register('approvedBy')}
-                        invalid={!!errors.approvedBy}
-                        readOnly
-                      />
-                      {errors.approvedBy && (
-                        <CFormFeedback invalid>{errors.approvedBy.message}</CFormFeedback>
-                      )}
-                    </CCol>
-                    <CCol>
-                      <CFormInput
-                        type="date"
-                        label="Approved Date"
-                        {...register('approvedDate')}
-                        readOnly
-                      />
-                      {errors.approvedDate && (
-                        <CFormFeedback invalid>{errors.approvedDate.message}</CFormFeedback>
-                      )}
-                    </CCol>
-                  </CRow>
-                )}
                 <CRow className="mb-3">
                   <CCol>
                     <CFormTextarea
@@ -328,7 +309,7 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                     {errors.notes && <CFormFeedback invalid>{errors.notes.message}</CFormFeedback>}
                   </CCol>
                 </CRow>
-                {!joboffer.approvedBy && (
+                {!joboffer?.approvedBy && (
                   <CRow>
                     <CCol>
                       <CButton
@@ -336,7 +317,7 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                         size="sm"
                         onClick={() => setIsApproved(!isApproved)}
                       >
-                        {isApproved ? 'Approve' : 'Disapproved'}
+                        {isApproved ? 'Approve' : 'Disapprove'}
                       </CButton>
                     </CCol>
                   </CRow>
@@ -351,8 +332,18 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                   </CCol>
                 </CRow>
                 <CRow>
+                  {joboffer?.approvedBy && (
+                    <CCol>
+                      <p>
+                        Approved Date: {formatDate(jobofferData.approvedDate)}
+                        <br />
+                        Approved By:{' '}
+                        {(jobofferData.approvedBy.lastname, jobofferData.approvedBy.firstname)}
+                      </p>
+                    </CCol>
+                  )}
                   <CCol className="d-flex justify-content-end gap-2">
-                    {!joboffer.emailSent && joboffer.approvedBy && (
+                    {!joboffer?.emailSent && joboffer?.approvedBy && (
                       <CButton
                         color="info"
                         size="sm"
@@ -373,10 +364,10 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
                         <>
                           <CSpinner size="sm" /> Loading...
                         </>
-                      ) : formState === 'create' ? (
-                        'Issue Job Offer'
+                      ) : formState === 'edit' ? (
+                        'Update'
                       ) : (
-                        'Update Job Offer'
+                        'Submit'
                       )}
                     </CButton>
                   </CCol>
@@ -393,9 +384,9 @@ const JobOfferForm = ({ isVisible, onClose, state, interview, joboffer }) => {
 JobOfferForm.propTypes = {
   isVisible: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
-  state: propTypes.string.isRequired,
-  interview: propTypes.object,
+  state: propTypes.string,
   joboffer: propTypes.object,
+  applicantData: propTypes.object,
 }
 
 export default JobOfferForm

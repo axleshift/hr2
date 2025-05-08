@@ -1,6 +1,44 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
-const verificationSchema = new mongoose.Schema({
+export interface IUserBase{
+  firstname: string;
+  lastname: string;
+  email: string;
+  username: string;
+  password?: string;
+  emailVerifiedAt?: Date;
+  verification?: IVerification;
+  role: string;
+  status: string;
+  suspension: {
+    status: boolean;
+    reason?: string;
+    expiresAt?: Date;
+  };
+  rememberToken?: string;
+  otp: IOtp | null;
+  knownDevices: string[];
+  googleId?: string; // Google OAuth ID
+  displayName?: string; // Google display name
+  googleEmail?: string; // Google email
+  googleAvatar?: string; // Google avatar URL (optional)
+}
+
+export interface IVerification extends Document {
+  code: string;
+  expiresAt: Date;
+}
+
+export interface IUser extends IUserBase, Document {
+  _id: Types.ObjectId,
+}
+
+export interface IOtp {
+  code: string;
+  expiresAt: Date;
+}
+
+const verificationSchema = new mongoose.Schema<IVerification>({
   code: {
     type: String,
     required: true,
@@ -11,28 +49,16 @@ const verificationSchema = new mongoose.Schema({
   },
 });
 
-// const developerSchema = new mongoose.Schema(
-//   {
-//     apKey: {
-//       type: String,
-//       required: true,
-//     },
-//     permissions: {
-//       type: [String],
-//       required: true,
-//     },
-//     expiresAt: {
-//       type: Date,
-//       required: true,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//     updateAt: true,
-//   }
-// );
+const OtpSchema = new mongoose.Schema<IOtp>({
+  code: {
+    type: String,
+  },
+  expiresAt: {
+    type: Date
+  }
+})
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<IUserBase>(
   {
     firstname: {
       type: String,
@@ -54,7 +80,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false, // Password is optional for Google users
     },
     emailVerifiedAt: {
       type: Date,
@@ -81,18 +107,40 @@ const userSchema = new mongoose.Schema(
         type: String,
       },
       expiresAt: {
-        type: Date
-      }
+        type: Date,
+      },
     },
     rememberToken: {
       type: String,
       required: false,
     },
+    otp: {
+      type: OtpSchema
+    },
+    knownDevices: [{
+      type: String,
+    }],
+    // Google-related fields
+    googleId: {
+      type: String,
+      required: false, // Not required unless the user logged in with Google
+    },
+    displayName: {
+      type: String,
+      required: false, // Not required unless the user logged in with Google
+    },
+    googleEmail: {
+      type: String,
+      required: false, // Not required unless the user logged in with Google
+    },
+    googleAvatar: {
+      type: String,
+      required: false, // Optional avatar URL for Google users
+    },
   },
   {
     timestamps: true,
-    updateAt: true,
   }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model<IUserBase>("User", userSchema);

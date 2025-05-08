@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
 import { post, get } from '../api/axios'
+
 export const AuthContext = createContext({
   userInformation: {
     _id: '',
@@ -15,6 +16,9 @@ export const AuthContext = createContext({
   isAuthenticated: false,
   login: () => {},
   logout: () => {},
+  sendOTP: () => {},
+  verifyOTP: () => {},
+  isKnownDevice: false, // New state to handle OTP page redirection
 })
 
 export const AuthProvider = ({ children }) => {
@@ -27,15 +31,56 @@ export const AuthProvider = ({ children }) => {
     username: '',
     status: '',
     role: '',
-    token: '',
   })
+  const [otpSent, setOtpSent] = useState(false)
+  const [isKnownDevice, setIsKnownDevice] = useState(false)
 
+  // Login function with new device detection and OTP redirection logic
   const login = async (username, password, callback) => {
     try {
       const res = await post('/auth/login', { username, password })
       if (res.status === 200) {
         setIsAuthenticated(true)
         setUserInformation(res.data.data)
+
+        // If isKnownDevice is false, it means OTP verification is required
+        if (!res.data.isKnownDevice) {
+          setIsKnownDevice(false)
+          callback(true)
+        } else {
+          callback(true) // Directly authenticated
+        }
+      } else {
+        callback(false)
+      }
+    } catch (error) {
+      callback(false)
+      console.error(error)
+    }
+  }
+
+  const sendOTP = async (username, callback) => {
+    try {
+      const res = await post('/auth/send-otp', { username })
+      if (res.status === 200) {
+        setOtpSent(true)
+        callback(true)
+      } else {
+        callback(false)
+      }
+    } catch (error) {
+      callback(false)
+      console.error(error)
+    }
+  }
+
+  const verifyOTP = async (otp, callback) => {
+    try {
+      const res = await post('/auth/verify-otp', { otp })
+      if (res.status === 200) {
+        setIsAuthenticated(true)
+        setUserInformation(res.data.data)
+        setIsKnownDevice(true)
         callback(true)
       } else {
         callback(false)
@@ -59,7 +104,6 @@ export const AuthProvider = ({ children }) => {
           username: '',
           status: '',
           role: '',
-          token: '',
         })
         callback(true)
       }
@@ -71,9 +115,10 @@ export const AuthProvider = ({ children }) => {
 
   const verifySession = async () => {
     try {
-      const res = await get('/auth/verify')
+      const res = await get('/auth/me')
       if (res.status === 200) {
         setIsAuthenticated(true)
+        setIsKnownDevice(true)
         setUserInformation(res.data.data)
       }
     } catch (error) {
@@ -86,11 +131,23 @@ export const AuthProvider = ({ children }) => {
   }, [isAuthenticated])
 
   return (
-    <AuthContext.Provider value={{ userInformation, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        userInformation,
+        isAuthenticated,
+        login,
+        logout,
+        sendOTP,
+        verifyOTP,
+        otpSent,
+        isKnownDevice,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
 }
+
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 }

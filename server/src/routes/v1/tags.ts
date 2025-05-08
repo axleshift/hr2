@@ -11,63 +11,55 @@ router.post(
   "/",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   createTag
 );
+
 router.get(
   "/all",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   getAllTags
 );
+
 router.get(
   "/search",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   searchTags
 );
+
 router.get(
   "/category/:category",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   getTagByCategory
 );
+
 router.get(
   "/:id",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   getTagById
 );
+
 router.put(
   "/:id",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   updateTag
 );
+
 router.delete(
   "/:id",
   verifySession({
     permissions: ["admin", "manager"],
-  },
-    true,
-  ),
+  }),
   deleteTag
 );
 

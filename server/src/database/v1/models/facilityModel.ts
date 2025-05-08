@@ -6,15 +6,34 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 // Interface representing a Facility document
-interface IFacility extends Document {
+
+interface IRequirement {
+  title: string;
+  description?: string;
+}
+
+interface IFacilityBase {
   name: string;
   type: string;
   description?: string;
+  requirements?: IRequirement[];
   location: string;
   timeslots: Types.ObjectId[];
 }
 
-// Schema definition for the Facility model
+export interface IFacility extends IFacilityBase, Document {
+  _id: Types.ObjectId;
+}
+
+const requirementSchema = new Schema<IRequirement>(
+  {
+    title: { type: String, required: true, trim: true },
+    description: { type: String, trim: true },
+  },
+  // { _id: false } // This avoids adding _id to each requirement document. Re-enable if want. kek.
+);
+
+// Facility schema definition
 const facilitySchema = new Schema<IFacility>(
   {
     name: {
@@ -31,6 +50,7 @@ const facilitySchema = new Schema<IFacility>(
       type: String,
       trim: true,
     },
+    requirements: [requirementSchema],
     location: {
       type: String,
       required: true,

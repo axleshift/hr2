@@ -12,7 +12,6 @@ router.get(
   verifySession({
     permissions: ["admin"],
   },
-  true,
 ),
   updateApikey
 );

@@ -26,7 +26,10 @@ import { formatDate, trimString } from '../../utils'
 
 import JobForm from '../job/modals/JobForm'
 import JobOfferForm from './modal/JobOfferForm'
+import InterviewForm from './modal/InterviewForm'
+
 import AppPagination from '../../components/AppPagination'
+import EligibleForJobOffer from './components/EligibleForJobOffer'
 
 const Joboffers = () => {
   const [joboffers, setJoboffers] = useState([])
@@ -43,6 +46,17 @@ const Joboffers = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3)
   const [totalPages, setTotalPages] = useState(0)
   const [totalItems, setTotalItems] = useState(0)
+
+  // Recent
+  const [applicants, setApplicants] = useState([])
+  const [isApplicantsLoading, setApplicantsLoading] = useState(false)
+
+  // Interview Form
+  const [isInterviewFormVisible, setIsInterviewFormVisible] = useState(false)
+  const [interview, setInterview] = useState({})
+  const [interviewFormState, setInterviewFormState] = useState('view')
+  const [applicant, setApplicant] = useState({})
+  const [event, setEvent] = useState({})
 
   const getAllJoboffers = async () => {
     try {
@@ -64,13 +78,42 @@ const Joboffers = () => {
     }
   }
 
+  const getAllApplicants = async () => {
+    try {
+      setApplicantsLoading(true)
+      const res = await get('/applicant/joboffer/all')
+      console.log(res.data.data)
+      if (res.status === 200) {
+        setApplicants(res.data.data)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setApplicantsLoading(false)
+    }
+  }
+
   useEffect(() => {
     getAllJoboffers()
+    getAllApplicants()
   }, [currentPage, itemsPerPage, totalPages, totalItems])
 
   return (
     <>
       <CContainer>
+        <CRow>
+          <CCol>
+            <EligibleForJobOffer
+              applicants={applicants}
+              loading={isApplicantsLoading}
+              onIssueOffer={(applicant) => {
+                setApplicant(applicant)
+                setJobofferFormState('create')
+                setJobofferFormIsVisible(true)
+              }}
+            />
+          </CCol>
+        </CRow>
         <CRow className="mb-3">
           <CCol>
             <h2>Joboffers</h2>
@@ -210,6 +253,7 @@ const Joboffers = () => {
               }}
               state={jobofferFormState}
               joboffer={jobOffer}
+              applicantData={applicant}
             />
           </CCol>
         </CRow>
